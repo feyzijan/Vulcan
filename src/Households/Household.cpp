@@ -1,16 +1,17 @@
 #include "Household.hpp"
 #include <iostream>
 #include <numeric>
+#include "Public_Info_Board.hpp"
 using namespace std;
 
 
 
 // Constructor
-Household_Agent::Household_Agent(int initial_savings, int max_unemp_dur)
+Household_Agent::Household_Agent(Public_Info_Board*  pPublic_Board,int initial_savings, int max_unemp_dur)
 {
     initial_savings = initial_savings;
     unemp_duration_upper_bound = max_unemp_dur;
-
+    pPublic_Info_Board = pPublic_Board;
 }
 
 
@@ -67,7 +68,7 @@ function only adds this to the income figure if household is unemployed
 */
 void Household_Agent::Assign_Unemployment_Benefits(int unemployment_benefit_amount)
 {
-    income_unemployment_benefit = unemployment_benefit_amount;
+    income_unemployment_benefit = pPublic_Info_Board->Get_Unemployment_Benefit();
 }
 
 
@@ -115,15 +116,36 @@ void Household_Agent::Determine_Consumer_Sentiment()
     // 10% chance it adops majority 
     bool majority_adoption = (rand() % 100) < 10;
     if (majority_adoption){
-        //positive_sentiment = (GetHouseHoldSentiment() > 50); 
-        
+        positive_sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 50); 
     }
 
+    // set saving propensities
 
-
-
+    if (positive_sentiment){
+        saving_propensity = saving_propensity_optimist;
+    } else{
+        saving_propensity = saving_propensity_pessimist;
+    }
 }
 
+
+void Household_Agent::Determine_Consumption_Budget()
+{
+    
+}
+
+
+
+
+/* Function to update financial wealth based on income, consumption, and 
+interest earned
+- Check to ensure the data types are sufficient to calculate
+*/
+void Household_Agent::Update_Wealth()
+{
+    wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
+
+}
 
 
 
@@ -167,16 +189,6 @@ void Household_Agent::Seek_Jobs(Job_Board* job_board)
     }
 }
 
-
-/* Function to update financial wealth based on income, consumption, and 
-interest earned
-- Check to ensure the data types are sufficient to calculate
-*/
-void Household_Agent::Update_Wealth()
-{
-    wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
-
-}
 
 
 

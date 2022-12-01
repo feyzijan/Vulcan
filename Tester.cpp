@@ -24,7 +24,6 @@ int main() {
     my_int +=my_sentiment;
 
     cout << my_int << endl;
-    
 
     return 0;
 }

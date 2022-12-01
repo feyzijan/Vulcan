@@ -8,7 +8,7 @@
 class Household_Agent{
 
     public:
-    Household_Agent(int initial_savings, int max_unemp_dur); //Constructor
+    Household_Agent(Public_Info_Board*  pPublic_Board, int initial_savings, int max_unemp_dur); //Constructor
 
     Household_Agent(Household_Agent&); //Copy constructor
     
@@ -27,7 +27,7 @@ class Household_Agent{
     void Determine_Consumer_Sentiment();
 
     // Determine consumption budget (eq 18)
-    void Determine_Consumption_Budget(int financial_wealth, int human_wealth);
+    void Determine_Consumption_Budget();
     
     // Determine goods to buy
     void Determine_Consumption_Goods();
@@ -53,6 +53,9 @@ class Household_Agent{
     //Current job
     Job_Offer * current_job;
     Consumer_Firm_Agent * owned_consumer_firm;
+
+    // Public info board
+    Public_Info_Board* pPublic_Info_Board;
 
     // Wealth
     int wealth_financial; //W_f in equations

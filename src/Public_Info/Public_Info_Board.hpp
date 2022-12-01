@@ -12,7 +12,6 @@ class Public_Info_Board{
     ~Public_Info_Board(); // Destructor
 
 
-
     int Get_Household_Sentiment() {return household_sentiment_percentage;}
 
     void Update_Household_Sentiment();
@@ -24,6 +23,8 @@ class Public_Info_Board{
     void Update_Firm_Sentiment();
 
     void Add_Firm_Sentiment(bool positive_sentiment);
+
+    int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
 
 
     private:
@@ -50,6 +51,9 @@ class Public_Info_Board{
     
     long firm_sentiment_percentage; // Percentage of firms who are optimist
 
+    // Unemployment benefits
+
+    int public_unemployment_benefit;
 
 
 };
