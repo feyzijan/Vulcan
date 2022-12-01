@@ -1,5 +1,5 @@
 #include "Job_Offer.hpp"
-#include "Public_Info.hpp"
+#include "Public_Info_Board.hpp"
 #include <numeric>
 #include "Job_Board.hpp"
 #include "Capital_Firm.hpp"
@@ -14,29 +14,36 @@ class Household_Agent{
     
     ~Household_Agent(); // Destructor
 
-    // Receive Income from wages or unemp benefits
+    // Update current total income from all sources
     void Update_Income();
 
-    // Calculate new financial wealth (eq 6-7)
-    void Update_Wealth();
+    // Assign a value to the unemployment benefits
+    void Assign_Unemployment_Benefits(int unemployment_benefit_amount);
 
     // Calculate average income over the past n_periods
     void Update_Average_Income();
-
-    // Determine consumption budget (eq 18)
-    void Determine_Consumption_Budget(int financial_wealth, int human_wealth);
-
-    // Determine goods to buy
-    void Determine_Consumption_Goods();
     
     // Determine consumer sentiment
     void Determine_Consumer_Sentiment();
 
-    // Update reservation wage
-    void Update_Reservation_Wage();
+    // Determine consumption budget (eq 18)
+    void Determine_Consumption_Budget(int financial_wealth, int human_wealth);
+    
+    // Determine goods to buy
+    void Determine_Consumption_Goods();
+
+    // Calculate new financial wealth (eq 6-7)
+    void Update_Wealth();
+    
+
+
+
 
     // Compare two job offers and pick the best one
     void Seek_Jobs(Job_Board* job_board);
+
+    // Update reservation wage
+    void Update_Reservation_Wage();
 
 
 
@@ -86,7 +93,7 @@ class Household_Agent{
 
 
     // Sentiment 
-    bool sentiment; // pessimistic, optimistic
+    bool positive_sentiment; // pessimistic, optimistic
 
     // Pre-set constants
     bool business_owner; // If True will receive dividend income

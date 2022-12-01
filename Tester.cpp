@@ -16,5 +16,15 @@ int main() {
 
     cout << (pMyint == 0) << endl;
 
+
+    bool my_sentiment = true;
+
+    int my_int = 4;
+
+    my_int +=my_sentiment;
+
+    cout << my_int << endl;
+    
+
     return 0;
 }
