@@ -1,4 +1,6 @@
-class Capital_Firm_Agent{
+#include "Firm.hpp"
+
+class Capital_Firm_Agent: public Firm_Agent{
 
     public:
     

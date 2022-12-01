@@ -10,10 +10,8 @@ Household_Agent::Household_Agent(int initial_savings, int max_unemp_dur)
 {
     initial_savings = initial_savings;
     unemp_duration_upper_bound = max_unemp_dur;
+
 }
-
-
-
 
 
 //Copy constructor
@@ -29,6 +27,28 @@ Household_Agent::~Household_Agent()
 {
 
 } 
+
+void Household_Agent::Update_Income()
+{
+   
+    income_current = 0; // Initialize to zero
+    // if employed set the income equal to wage + any transfers
+    if (current_job != 0)
+    {
+        income_current += income_wage;
+    } else{
+        income_current += income_unemployment_benefit;
+    }
+    // Add any additional transfers
+    income_current += income_gov_transfers;
+    
+    // If business owner add dividends
+    if (business_owner){
+        income_current += income_firm_owner_dividend;
+    }
+}
+
+
 
 /* Function to update reservation wage
  If unemployed for longer than upper bound randomly reduce wage

@@ -1,4 +1,6 @@
-class Consumer_Firm_Agent{
+#include "Firm.hpp"
+
+class Consumer_Firm_Agent: public Firm_Agent{
 
     public:
     

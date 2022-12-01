@@ -14,11 +14,13 @@ class Household_Agent{
     
     ~Household_Agent(); // Destructor
 
+    // Receive Income from wages or unemp benefits
+    void Update_Income();
 
-    /* Calculate new financial wealth (eq 6-7) */
+    // Calculate new financial wealth (eq 6-7)
     void Update_Wealth();
 
-    /* Calculate average income over the past n_periods*/
+    // Calculate average income over the past n_periods
     void Update_Average_Income();
 
     // Determine consumption budget (eq 18)
@@ -43,6 +45,7 @@ class Household_Agent{
     private:
     //Current job
     Job_Offer * current_job;
+    Consumer_Firm_Agent * owned_consumer_firm;
 
     // Wealth
     int wealth_financial; //W_f in equations
@@ -65,7 +68,8 @@ class Household_Agent{
 
     // Income variables
     int income_current;
-    int income_average; 
+    int income_average;
+    int income_wage; 
     int income_unemployment_benefit;
     int income_gov_transfers;
     int income_firm_owner_dividend;

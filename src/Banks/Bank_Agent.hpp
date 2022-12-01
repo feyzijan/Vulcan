@@ -4,13 +4,13 @@ For simplicity the model will include only one bank that handles
 the credit origination.
 
 */
-class Financial_Sector_Agent{
+class Bank_Agent{
 
     public:
 
-    Financial_Sector_Agent(); //Constructor
-    Financial_Sector_Agent(Financial_Sector_Agent&); //Copy constructor
-    ~Financial_Sector_Agent(); //Destructor
+    Bank_Agent(); //Constructor
+    Bank_Agent(Bank_Agent&); //Copy constructor
+    ~Bank_Agent(); //Destructor
 
 
     private:

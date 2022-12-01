@@ -12,5 +12,9 @@ int main() {
     cout << past_data[0] << endl;
     cout << ( past_data[1] == 0 )<< endl;
 
+    int * pMyint = 0;
+
+    cout << (pMyint == 0) << endl;
+
     return 0;
 }
