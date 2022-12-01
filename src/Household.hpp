@@ -1,5 +1,6 @@
 #include "Job_Offer.hpp"
 #include "Public_Info.hpp"
+#include <numeric>
 
 
 class Household_Agent{
@@ -50,11 +51,13 @@ class Household_Agent{
 
     // Savings
     int new_savings;
+    int saving_desired_total; //m_targeted
+    int saving_desired_current; // m_actual
+    
+    // Savings constants
     float saving_propensity; //s
     float saving_propensity_pessimist; //s_h
     float saving_propensity_optimist; //s_l
-    int targeted_money_holding; //m_targeted
-    int actual_money_holding; // m_actual
 
     // Income variables
     int income_current;
@@ -63,6 +66,7 @@ class Household_Agent{
     int income_gov_transfers;
     int income_firm_owner_dividend;
 
+    // Initialize this to all zeros
     int income_past[10]; // must equal average_income_lookback_period
 
 

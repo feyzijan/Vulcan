@@ -1,6 +1,8 @@
 #include "Household.hpp"
 #include <iostream>
-#include <string>
+#include <numeric>
+using namespace std;
+
 
 int main(){
     return 0;
@@ -51,13 +53,29 @@ void Household_Agent::Update_Wealth()
     wealth_financial = new_wealth;
 }
 
+
+/* Function to update the average income of the past n period
+ - Check this works
+*/
 void Household_Agent::Update_Average_Income()
 {
     int n = average_income_lookback_period;
-    // Check if past income array is full
-    for (int i=0;i++; i< n)
+    int i;
+    bool unfilled_array;
+    // If past income array has not yet been filled
+    for (i=0;i++; i< n)
     {
-        
+        if (income_past[i] == 0){
+            income_past[i] = income_current;
+            unfilled_array =  true;
+            break;
+        }
+    }
+    if (!unfilled_array)
+    {
+        income_past[0] = income_current;
+
     }
 
+    income_average= accumulate(income_past, income_past + n, income_average);
 }
