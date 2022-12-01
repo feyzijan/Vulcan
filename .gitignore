@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+#ignore data fiels in wrk
+wrk/vulcan
+wrk/*.log
