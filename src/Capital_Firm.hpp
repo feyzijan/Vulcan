@@ -1,16 +1,17 @@
-class Consumer_Firm_Agent{
+class Capital_Firm_Agent{
 
     public:
     
-    Consumer_Firm_Agent(); // Constructor
-    Consumer_Firm_Agent(Consumer_Firm_Agent&); //Copy Constructor
-    ~Consumer_Firm_Agent(); // Destructor
+    Capital_Firm_Agent(); // Constructor
+    Capital_Firm_Agent(Capital_Firm_Agent&); //Copy Constructor
+    ~Capital_Firm_Agent(); // Destructor
 
 
     private:
     //----Outflows
     int labor_wage_bill;
     int capital_costs;
+    int energy_costs; // may exclude
     int tax_payments;
     int debt_payments;
     int interest_payments;
@@ -18,8 +19,8 @@ class Consumer_Firm_Agent{
     //int research_spending;
 
     //----Inflows
-    int consumer_good_revenue;
-    int consumer_goods_sold;
+    int capital_good_revenue;
+    int capital_goods_sold; //quantity
     int new_loans;
     int subsidies;
     //int total_carbon_emissions;
@@ -33,6 +34,10 @@ class Consumer_Firm_Agent{
     int total_employee_count;
     int leverage_ratio;
     //int research_spending_ratio;
+
+
+    bool sentiment; // pessimistic, optimistic
+    
 
 
 
