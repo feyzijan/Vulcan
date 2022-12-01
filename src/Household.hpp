@@ -1,12 +1,14 @@
 #include "Job_Offer.hpp"
 #include "Public_Info.hpp"
 #include <numeric>
-
+#include "Job_Board.hpp"
+#include "Capital_Firm.hpp"
+#include <random>
 
 class Household_Agent{
 
     public:
-    Household_Agent(int initial_savings); //Constructor
+    Household_Agent(int initial_savings, int max_unemp_dur); //Constructor
 
     Household_Agent(Household_Agent&); //Copy constructor
     
@@ -32,13 +34,15 @@ class Household_Agent{
     void Update_Reservation_Wage();
 
     // Compare two job offers and pick the best one
-    void Compare_Job_Offers();
+    void Seek_Jobs(Job_Board* job_board);
 
 
 
     //Household variables
 
     private:
+    //Current job
+    Job_Offer * current_job;
 
     // Wealth
     int wealth_financial; //W_f in equations
@@ -74,7 +78,7 @@ class Household_Agent{
     bool unemployed;
     int reservation_wage;
     int unemp_duration;
-    const int unemp_duration_upper_bound;
+    int unemp_duration_upper_bound;
 
 
     // Sentiment 
