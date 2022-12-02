@@ -1,5 +1,8 @@
-#include "Consumer_Firm.hpp"
 
+#ifndef CONSUMER_FIRM_HPP
+#define CONSUMER_FIRM_HPP
+
+#endif
 
 class Consumer_Good{
 
@@ -8,8 +11,14 @@ class Consumer_Good{
     Consumer_Good(Consumer_Good&);
     ~Consumer_Good();
 
+    // Getters
     int GetPrice() const {return price;}
+    int GetQuantity() const { return quantity;}
     Consumer_Firm_Agent * GetSeller() {return pSeller;}
+    // Setters
+    void SetPrice(int new_price) { price = new_price;}
+    void SetQuantity(int new_quantity)  { quantity = new_quantity;}
+
 
     protected:
     int price;

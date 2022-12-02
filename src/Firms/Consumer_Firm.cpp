@@ -11,6 +11,7 @@ int main(){
 // Constructor
 Consumer_Firm_Agent::Consumer_Firm_Agent()
 {
+    loan_book = {NULL}; // sett all elements to null
 
 }
 
@@ -33,7 +34,63 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent()
 } 
 
 
+/* Function to check sales in the preceeding period,
+Update inventory, sales figure, etc.
 
+*/
+void Consumer_Firm_Agent::Check_Sales()
+{
+    production_past = production_current; // The then current production is now past
+    production_current = 0; // initialize current prod to zero
+    quantity_sold = production_past - int goods_on_market->GetQuantity(); // determine how much has been sold
+    consumer_goods_inventory += int goods_on_market->GetQuantity(); // determine how much is in inventory
+
+    good_price_past = good_price_current;// The then current price is now past
+    good_price_current = 0; // initialize current price to zero
+
+    consumer_good_revenue =  quantity_sold * good_price_past;
+
+}
+
+/* Function to pay liabilities and seek loans or go bankrupt if necessary
+
+*/
+
+void Consumer_Firm_Agent::Pay_Liabilities(){
+    //Initialize debt payments to zero
+    debt_principal_payments, debt_interest_payments = 0;
+    
+    //Sum up all needed debt repayments
+    for (int i = 0; i++; i<sizeof(loan_book))
+    {
+        if (loan_book[i] != NULL){
+            debt_principal_payments += loan_book[i]->Calculate_Principal_Repayment();
+            debt_interest_payments += loan_book[i]->Calculate_Interest_Repayment();
+        }
+    }
+
+    //Sum up wage bill
+
+
+
+
+    
+
+
+
+
+}
+
+
+
+
+
+
+
+
+/* Function that sets desired production for next timestep
+
+*/
 void Consumer_Firm_Agent::Plan_Production()
 {
     int n_uniform = 1; //Update this to be from uniform dist

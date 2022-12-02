@@ -7,6 +7,7 @@
 #include <random>
 #include "Consumer_Goods_Market.hpp"
 
+//TODO: Decide how to initialize
 
 class Household_Agent{
 
@@ -35,8 +36,9 @@ class Household_Agent{
     // Determine consumption budget (eq 18)
     void Determine_Consumption_Budget();
     
-    // Determine goods to buy
-    void Buy_Consumption_Goods();
+    // Determine goods to buy - TO IMPLEMENT
+    void Buy_Consumer_Goods(Consumer_Goods_Market* market);
+
 
     // Calculate new financial wealth (eq 6-7)
     void Update_Wealth();

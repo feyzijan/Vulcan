@@ -1,4 +1,8 @@
 #include "Firm.hpp"
+#include "Consumer_Good.hpp"
+#include "Consumer_Goods_Market.hpp"
+#include "Loan.hpp"
+#include "Household.hpp"
 
 class Consumer_Firm_Agent: public Firm_Agent{
 
@@ -7,6 +11,18 @@ class Consumer_Firm_Agent: public Firm_Agent{
     Consumer_Firm_Agent(); // Constructor
     Consumer_Firm_Agent(Consumer_Firm_Agent&); //Copy Constructor
     ~Consumer_Firm_Agent(); // Destructor
+
+    // Put up Consumer Goods for Sale
+
+
+
+
+    // Check sales and update revenue and inventory
+    void Check_Sales();
+
+    // Pay liabilities and if necessary seek loans
+    void Pay_Liabilities();
+
 
     // Plan the production for the next time step
     void Plan_Production();
@@ -26,19 +42,40 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 
 
-    private:
+    protected:
 
-    // Production
-    int current_production;
-    int planned_production;
+    Consumer_Good* goods_on_market;
+
+    // Production and sales figures
+    int production_current;
+    int production_planned;
+    int production_past;
+    int quantity_sold;
+
 
     // Expenditures
+    int total_liabilities;
     int labor_wage_bill;
     int capital_costs;
     int tax_payments;
-    int debt_payments;
-    int interest_payments;
+    int debt_principal_payments;
+    int debt_interest_payments;
     int dividend_payments;
+
+
+    // List of loans taken out
+    Loan* loan_book[100];
+
+    // Employee list
+    Household* employee_list[1000];
+
+
+
+    // Savings
+    int cash_savings;
+
+
+
 
     //Labor
     int wage_offer;
@@ -49,15 +86,10 @@ class Consumer_Firm_Agent: public Firm_Agent{
     int w_target; //Desired labor capacity utilization
     int w_current; //Current labor capacity utilization
 
-    
-
-
-    //int research_spending;
 
     //----Inflows
     int consumer_good_revenue;
-    int consumer_goods_sold;
-    int new_loans;
+    int new_loan_issuance;
     int subsidies;
     //int total_carbon_emissions;
 
@@ -71,7 +103,8 @@ class Consumer_Firm_Agent: public Firm_Agent{
     int leverage_ratio;
 
     // price level
-    float good_price;
+    float good_price_current;
+    float good_price_past
 
 
 

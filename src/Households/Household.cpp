@@ -158,7 +158,14 @@ void Household_Agent::Determine_Consumption_Budget()
 
 }
 
+/* Function to buy consumer goods off the market
+ TODO: Implement function after adding methods to Goods market
 
+*/
+void Household_Agent::Buy_Consumer_Goods(Consumer_Goods_Market* market){
+
+
+}
 
 
 
@@ -172,6 +179,8 @@ void Household_Agent::Update_Wealth()
 {
     wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
 }
+
+
 
 
 /* Function to check if the household is willing to take the 
