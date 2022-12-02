@@ -161,6 +161,9 @@ void Household_Agent::Determine_Consumption_Budget()
 
 
 
+
+
+
 /* Function to update financial wealth based on income, consumption, and 
 interest earned
 - Check to ensure the data types are sufficient to calculate
@@ -169,25 +172,6 @@ void Household_Agent::Update_Wealth()
 {
     wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
 }
-
-
-
-
-
-/* Function to update reservation wage
- If unemployed for longer than upper bound randomly reduce wage
- - Check what the uniform dist upper bounds should be
-*/
-void Household_Agent::Update_Reservation_Wage()
-{
-    if( unemp_duration > unemp_duration_upper_bound)
-    {
-        std::random_device rd;  // Obtain a seed for the random number engine
-        std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
-        std::uniform_real_distribution<> dis(0.0, 0.2);
-        reservation_wage = reservation_wage * (1-dis(gen));  
-    }
-} 
 
 
 /* Function to check if the household is willing to take the 
@@ -211,6 +195,22 @@ void Household_Agent::Seek_Jobs(Job_Board* job_board)
         Update_Reservation_Wage();
     }
 }
+
+
+/* Function to update reservation wage
+ If unemployed for longer than upper bound randomly reduce wage
+ - Check what the uniform dist upper bounds should be
+*/
+void Household_Agent::Update_Reservation_Wage()
+{
+    if( unemp_duration > unemp_duration_upper_bound)
+    {
+        std::random_device rd;  // Obtain a seed for the random number engine
+        std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+        std::uniform_real_distribution<> dis(0.0, 0.2);
+        reservation_wage = reservation_wage * (1-dis(gen));  
+    }
+} 
 
 
 

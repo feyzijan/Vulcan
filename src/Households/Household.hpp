@@ -3,7 +3,10 @@
 #include <numeric>
 #include "Job_Board.hpp"
 #include "Capital_Firm.hpp"
+#include "Firm.hpp"
 #include <random>
+#include "Consumer_Goods_Market.hpp"
+
 
 class Household_Agent{
 
@@ -33,7 +36,7 @@ class Household_Agent{
     void Determine_Consumption_Budget();
     
     // Determine goods to buy
-    void Determine_Consumption_Goods();
+    void Buy_Consumption_Goods();
 
     // Calculate new financial wealth (eq 6-7)
     void Update_Wealth();
@@ -53,9 +56,11 @@ class Household_Agent{
     //Household variables
 
     private:
-    //Current job
-    Job_Offer * current_job;
-    Consumer_Firm_Agent * owned_consumer_firm;
+    // Relevant pointers for interaction with other classes
+    Job_Offer * current_job; 
+    Firm_Agent * owned_firm; // for firm owners
+    
+
 
     // Public info board
     Public_Info_Board* pPublic_Info_Board;
