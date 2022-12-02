@@ -26,6 +26,9 @@ class Household_Agent{
     // Determine consumer sentiment
     void Determine_Consumer_Sentiment();
 
+    // Get price level info
+    void Get_Price_Level_Info();
+
     // Determine consumption budget (eq 18)
     void Determine_Consumption_Budget();
     
@@ -68,8 +71,10 @@ class Household_Agent{
 
     // Savings
     int new_savings;
-    int saving_desired_total; //m_targeted
-    int saving_desired_current; // m_actual
+
+    int cash_on_hand_real_desired; // M_Total
+    int cash_on_hand_desired; //m_targeted
+    int cash_on_hand_current; //m_actual
     
     // Savings constants
     float saving_propensity; //s
@@ -94,6 +99,8 @@ class Household_Agent{
     int unemp_duration;
     int unemp_duration_upper_bound;
 
+    //Public Info
+    int price_level;
 
     // Sentiment 
     bool positive_sentiment; // pessimistic, optimistic
@@ -102,6 +109,7 @@ class Household_Agent{
     bool business_owner; // If True will receive dividend income
     float c_f; // propensity to consume financial wealth
     float c_h; // propensity to consume human wealth
+    float c_excess_money; // propensity yo consume excess money balance 
     float p_majority_op_adoption; // mu^m : probablility of adopting majority opinion
     int average_income_lookback_period;
 

@@ -26,6 +26,7 @@ class Public_Info_Board{
 
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
 
+    int Get_Price_Level() { return price_level;}
 
     private:
 

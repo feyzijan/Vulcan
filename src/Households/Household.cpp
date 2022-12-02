@@ -100,7 +100,7 @@ void Household_Agent::Update_Average_Income()
 }
 
 
-/* Determine Household sentiment, and thereby the desired savings rate
+/* Determine Household sentiment, and thereby savings propensity and desired cash on hand
 Households randomly adopt majority opinion, otherwise check employment status
 - TODO: Update the random probability here
 */
@@ -113,25 +113,49 @@ void Household_Agent::Determine_Consumer_Sentiment()
         positive_sentiment = true;
     }
     
-    // 10% chance it adops majority 
-    bool majority_adoption = (rand() % 100) < 10;
+    // some chance it adops majority  - UPDATE METHOD HERE
+    bool majority_adoption = (rand() % 100) < p_majority_op_adoption*100;
     if (majority_adoption){
         positive_sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 50); 
     }
 
     // set saving propensities
-
     if (positive_sentiment){
         saving_propensity = saving_propensity_optimist;
     } else{
         saving_propensity = saving_propensity_pessimist;
     }
+
+    // Set targets for cash on hand
+    cash_on_hand_desired = saving_propensity * income_average;
 }
 
 
+void Household_Agent::Get_Price_Level_Info()
+{
+    price_level = pPublic_Info_Board->Get_Price_Level();
+    
+}
+
+
+
+/* Function to determine consumption budget
+ - Determine based on how the current income compares to average past income
+ - Incorporate savings rate and sentiment
+*/
 void Household_Agent::Determine_Consumption_Budget()
 {
-    
+    if (income_current > income_average)
+    {
+        expenditure_consumption = (1-saving_propensity) * income_current;
+    } else {
+        int new_c = (1-c_excess_money) * (1-consumption_propensity) + consumption_propensity;
+        cash_on_hand_real_desired = cash_on_hand_desired * price_level;
+        int consumption_from_income = new_c * income_current;
+        int consumption_from_excess_savings = c_excess_money * cash_on_hand_real_desired;
+        expenditure_consumption = consumption_from_income + consumption_from_excess_savings ; 
+    }
+
 }
 
 
@@ -144,7 +168,6 @@ interest earned
 void Household_Agent::Update_Wealth()
 {
     wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
-
 }
 
 
