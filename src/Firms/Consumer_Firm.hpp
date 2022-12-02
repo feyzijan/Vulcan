@@ -23,6 +23,8 @@ class Consumer_Firm_Agent: public Firm_Agent{
     // Pay liabilities and if necessary seek loans
     void Pay_Liabilities();
 
+    int Seek_Loans();
+
 
     // Plan the production for the next time step
     void Plan_Production();
@@ -79,8 +81,8 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
     //Labor
     int wage_offer;
-    int count_worker_desired;
-    int count_worker_actual;
+    int worker_count_desired;
+    int worker_count_actual;
     bool need_worker;
 
     int w_target; //Desired labor capacity utilization
@@ -88,7 +90,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 
     //----Inflows
-    int consumer_good_revenue;
+    int revenue_current;
     int new_loan_issuance;
     int subsidies;
     //int total_carbon_emissions;
@@ -104,12 +106,19 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
     // price level
     float good_price_current;
-    float good_price_past
+    float good_price_past;
+
+    // Dividends
+    float dividend_ratio;
 
 
 
     // Sentiment
     bool sentiment; // pessimistic, optimistic
+
+
+    // Bankruptcy
+    bool bankrupt = True;
 
     // Constants, characteristics
     int desired_inventory_factor; 

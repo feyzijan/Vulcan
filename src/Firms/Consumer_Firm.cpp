@@ -48,7 +48,7 @@ void Consumer_Firm_Agent::Check_Sales()
     good_price_past = good_price_current;// The then current price is now past
     good_price_current = 0; // initialize current price to zero
 
-    consumer_good_revenue =  quantity_sold * good_price_past;
+    revenue_current =  quantity_sold * good_price_past;
 
 }
 
@@ -70,13 +70,34 @@ void Consumer_Firm_Agent::Pay_Liabilities(){
     }
 
     //Sum up wage bill
+    labor_wage_bill = 0;
+    worker_count_actual = 0;
 
+    for (int i = 0; i++; i<sizeof(employee_list))
+    {
+        if (employee_list[i] != NULL){
+            labor_wage_bill += employee_list[i]->GetWage();
+            worker_count_actual += 1;
+        }
+    }
 
+    total_liabilities = labor_wage_bill + debt_principal_payments + debt_interest_payments;
 
+    int money_on_hand = revenue_current + cash_savings < total_liabilties; 
+    if (money_on_hand  < 0)
+    {
+        new_loan_issuance = Seek_Loans(money_on_hand); // implement this method, have it update new_loan_issuance
+    }
 
-    
+    money_on_hand += new_loan_issuance;
 
+    if (money_on_hand  < 0)
+    {
+       bankrupt = True;
 
+    } else {
+        dividend_payments = money_on_hand * dividend_ratio;
+    }
 
 
 }

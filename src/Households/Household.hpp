@@ -42,7 +42,6 @@ class Household_Agent{
 
     // Calculate new financial wealth (eq 6-7)
     void Update_Wealth();
-    
 
 
 
@@ -52,6 +51,11 @@ class Household_Agent{
 
     // Update reservation wage
     void Update_Reservation_Wage();
+
+
+
+    //Getters
+    int GetWage() const {return current_job->Get_Wage_Offer()};
 
 
 
