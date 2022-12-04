@@ -1,8 +1,7 @@
-#include "Firm.hpp"
+#include "Firm_Agent.hpp"
 #include "Consumer_Good.hpp"
 #include "Consumer_Goods_Market.hpp"
 #include "Loan.hpp"
-#include "Household.hpp"
 
 class Consumer_Firm_Agent: public Firm_Agent{
 

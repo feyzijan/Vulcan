@@ -1,7 +1,4 @@
-#include "Capital_Firm.hpp"
-
-
-#include "Capital_Firm.hpp"
+#include "Capital_Firm_Agent.hpp"
 
 
 class Capital_Good{

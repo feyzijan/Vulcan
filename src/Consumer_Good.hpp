@@ -25,7 +25,4 @@ class Consumer_Good{
     int quantity;
     Consumer_Firm_Agent *  pSeller;
 
-
-
-
 };
