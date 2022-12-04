@@ -1,4 +1,4 @@
-#include "Consumer_Firm.hpp"
+#include "Firm_Agent.hpp"
 
 class Job_Offer{
 

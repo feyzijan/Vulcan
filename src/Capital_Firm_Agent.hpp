@@ -1,4 +1,9 @@
-#include "Firm.hpp"
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+
+#endif
+
+#include "Firm_Agent.hpp"
 
 class Capital_Firm_Agent: public Firm_Agent{
 

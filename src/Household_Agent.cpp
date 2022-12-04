@@ -1,7 +1,8 @@
-#include "Household.hpp"
+#include "Household_Agent.hpp"
 #include <iostream>
 #include <numeric>
-#include "Public_Info_Board.hpp"
+
+
 using namespace std;
 
 
@@ -158,14 +159,7 @@ void Household_Agent::Determine_Consumption_Budget()
 
 }
 
-/* Function to buy consumer goods off the market
- TODO: Implement function after adding methods to Goods market
 
-*/
-void Household_Agent::Buy_Consumer_Goods(Consumer_Goods_Market* market){
-
-
-}
 
 
 
@@ -188,10 +182,11 @@ highest paying job in the job board
 - *** Check the job offer pointer assignment works
 - Need to assign new income somewhere
 */
-void Household_Agent::Seek_Jobs(Job_Board* job_board)
+/*
+void Household_Agent::Seek_Jobs(Public_Info_Board* public_board)
 {
     // Get the top job offer
-    Job_Offer * job_offer = job_board->Get_Job_List(); 
+    Job_Offer * job_offer = public_board->Get_Job_List(); 
 
     // Compare against reservation wage
     if (job_offer->Get_Wage_Offer() > reservation_wage)
@@ -204,7 +199,7 @@ void Household_Agent::Seek_Jobs(Job_Board* job_board)
         Update_Reservation_Wage();
     }
 }
-
+*/
 
 /* Function to update reservation wage
  If unemployed for longer than upper bound randomly reduce wage

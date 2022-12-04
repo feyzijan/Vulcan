@@ -1,11 +1,12 @@
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+
+#endif
+
 #include "Job_Offer.hpp"
-#include "Public_Info_Board.hpp"
 #include <numeric>
-#include "Job_Board.hpp"
-#include "Capital_Firm.hpp"
-#include "Firm.hpp"
 #include <random>
-#include "Consumer_Goods_Market.hpp"
+
 
 //TODO: Decide how to initialize
 
@@ -37,7 +38,7 @@ class Household_Agent{
     void Determine_Consumption_Budget();
     
     // Determine goods to buy - TO IMPLEMENT
-    void Buy_Consumer_Goods(Consumer_Goods_Market* market);
+    //void Buy_Consumer_Goods(Consumer_Goods_Market* market);
 
 
     // Calculate new financial wealth (eq 6-7)
@@ -47,7 +48,7 @@ class Household_Agent{
 
 
     // Compare two job offers and pick the best one
-    void Seek_Jobs(Job_Board* job_board);
+    void Seek_Jobs(Public_Info_Board* public_board);
 
     // Update reservation wage
     void Update_Reservation_Wage();
@@ -55,7 +56,7 @@ class Household_Agent{
 
 
     //Getters
-    int GetWage() const {return current_job->Get_Wage_Offer()};
+    int GetWage() const {return current_job->Get_Wage_Offer();}
 
 
 

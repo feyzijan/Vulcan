@@ -1,6 +1,12 @@
+#ifndef CONSUMER_GOOD_HPP
+#define CONSUMER_GOOD_HPP
+#endif
+
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+#endif
+
 #include "Firm_Agent.hpp"
-#include "Consumer_Good.hpp"
-#include "Consumer_Goods_Market.hpp"
 #include "Loan.hpp"
 
 class Consumer_Firm_Agent: public Firm_Agent{

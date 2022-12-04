@@ -4,6 +4,13 @@ For simplicity the model will include only one bank that handles
 the credit origination.
 
 */
+
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+
+#endif
+
+
 class Bank_Agent{
 
     public:

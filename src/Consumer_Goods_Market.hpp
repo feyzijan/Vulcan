@@ -1,5 +1,9 @@
 #include "Consumer_Good.hpp"
-#include "Consumer_Firm.hpp" 
+#include "Consumer_Firm_Agent.hpp" 
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+
+#endif
  
  
 class Consumer_Goods_Market{

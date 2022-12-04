@@ -1,3 +1,8 @@
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+
+#endif
+
 /* Class declaration for the government,
 A single instance of this class will decide on 
 tax policy, subsidies, unemployment benefits, etc.

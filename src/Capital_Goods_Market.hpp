@@ -1,5 +1,10 @@
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+
+#endif
+
 #include "Capital_Good.hpp"
-#include "Capital_Firm.hpp" 
+#include "Capital_Firm_Agent.hpp" 
 
 
  

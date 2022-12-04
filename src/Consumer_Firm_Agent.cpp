@@ -1,4 +1,5 @@
 #include "Consumer_Firm.hpp"
+
 #include <iostream>
 
 int main(){

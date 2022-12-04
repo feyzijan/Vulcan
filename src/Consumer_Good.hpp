@@ -1,8 +1,13 @@
 
-#ifndef CONSUMER_FIRM_HPP
-#define CONSUMER_FIRM_HPP
+#ifndef CONSUMER_FIRM_AGENT_HPP
+#define CONSUMER_FIRM_AGENT_HPP
 
 #endif
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+
+#endif
+
 
 class Consumer_Good{
 
