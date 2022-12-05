@@ -1,8 +1,10 @@
 
+#include "Job_Market.hpp"
+
 class Public_Info_Board{
 
     public:
-    Public_Info_Board(int initial_savings); //Constructor
+    Public_Info_Board(); //Constructor
 
     Public_Info_Board(Public_Info_Board&); //Copy constructor
     
@@ -10,7 +12,7 @@ class Public_Info_Board{
 
 
 
-    // Functions for gathering and reading public sentiment
+    //---------- Functions for gathering and reading public sentiment----//
 
     int Get_Household_Sentiment() {return household_sentiment_percentage;}
 
@@ -23,6 +25,22 @@ class Public_Info_Board{
     int Get_Firm_Sentiment() {return firm_sentiment_percentage;}
     
     void Update_Firm_Sentiment();
+    //--------------------------------------------------------//
+
+
+    //--- Job Market ---//
+    Job_Offer* Get_Top_Job();
+
+    Job_Market* Get_Job_List();
+
+    void Remove_Top_Job_Offer();
+    
+    void Add_Job_Offer(Job_Offer * pJob_Offer);
+
+
+
+
+
 
     
 

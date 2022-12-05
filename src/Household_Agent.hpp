@@ -1,9 +1,11 @@
 #ifndef PUBLIC_INFO_BOARD_HPP
 #define PUBLIC_INFO_BOARD_HPP
-
 #endif
 
-#include "Job_Offer.hpp"
+#ifndef JOB_OFFER_HPP
+#define JOB_OFFER_HPP
+#endif
+
 #include <numeric>
 #include <random>
 
@@ -13,11 +15,23 @@
 class Household_Agent{
 
     public:
-    Household_Agent(Public_Info_Board*  pPublic_Board, int initial_savings, int max_unemp_dur); //Constructor
+    // Constructors//
+    Household_Agent(int initial_savings, 
+    int max_unemp_dur, bool unemployed, bool positive_sentiment, int reservation_wage,
+    float saving_propensity_pessimist, float saving_propensity_optimist); //Constructor
 
     Household_Agent(Household_Agent&); //Copy constructor
     
     ~Household_Agent(); // Destructor
+
+    //--------------------------------//
+    void Print();
+
+
+
+
+    // ---- Printing Class contents ----//
+
 
     // Update current total income from all sources
     void Update_Income();
@@ -30,9 +44,6 @@ class Household_Agent{
     
     // Determine consumer sentiment
     void Determine_Consumer_Sentiment();
-
-    // Get price level info
-    void Get_Price_Level_Info();
 
     // Determine consumption budget (eq 18)
     void Determine_Consumption_Budget();
@@ -48,7 +59,7 @@ class Household_Agent{
 
 
     // Compare two job offers and pick the best one
-    void Seek_Jobs(Public_Info_Board* public_board);
+    void Seek_Jobs();
 
     // Update reservation wage
     void Update_Reservation_Wage();
@@ -56,21 +67,21 @@ class Household_Agent{
 
 
     //Getters
-    int GetWage() const {return current_job->Get_Wage_Offer();}
+    int Get_Wage_Dividend() {};
 
 
 
     //Household variables
-
-    private:
-    // Relevant pointers for interaction with other classes
-    Job_Offer * current_job; 
-    Firm_Agent * owned_firm; // for firm owners
+    protected:
+    
     
 
 
     // Public info board
     Public_Info_Board* pPublic_Info_Board;
+
+    //Job offer
+    Job_Offer * current_job;
 
     // Wealth
     int wealth_financial; //W_f in equations
@@ -78,7 +89,7 @@ class Household_Agent{
     
     // Consumption and Expenditure
     int expenditure_consumption;
-    int tax_payment;
+    int expenditure_tax;
     float consumption_propensity; //c eq(17)
 
     // Savings
@@ -110,9 +121,6 @@ class Household_Agent{
     int reservation_wage;
     int unemp_duration;
     int unemp_duration_upper_bound;
-
-    //Public Info
-    int price_level;
 
     // Sentiment 
     bool positive_sentiment; // pessimistic, optimistic

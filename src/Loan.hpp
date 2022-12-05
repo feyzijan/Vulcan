@@ -1,3 +1,7 @@
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
+#endif
+
 class Loan {
 
     public:

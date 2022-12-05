@@ -1,5 +1,6 @@
 #include "Firm_Agent.hpp"
 
+
 class Job_Offer{
 
     public:

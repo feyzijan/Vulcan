@@ -1,12 +1,14 @@
 #include <iostream>
 #include "Job_Offer.hpp"
 
-class Job_Board{
+
+
+class Job_Market{
 
     public:
-    Job_Board();
-    Job_Board(Job_Board&);
-    ~Job_Board();
+    Job_Market();
+    Job_Market(Job_Market&);
+    ~Job_Market();
 
     
     // Getter that returns pointer to first instance in Job list

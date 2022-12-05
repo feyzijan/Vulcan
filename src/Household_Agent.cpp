@@ -8,11 +8,17 @@ using namespace std;
 
 
 // Constructor
-Household_Agent::Household_Agent(Public_Info_Board*  pPublic_Board,int initial_savings, int max_unemp_dur)
+Household_Agent::Household_Agent( int initial_savings, 
+    int max_unemp_dur, bool unemployed, bool positive_sentiment, int reservation_wage,
+    float saving_propensity_pessimist, float saving_propensity_optimist)
 {
-    initial_savings = initial_savings;
-    unemp_duration_upper_bound = max_unemp_dur;
-    pPublic_Info_Board = pPublic_Board;
+    this->wealth_financial = initial_savings;
+    this->unemp_duration_upper_bound = max_unemp_dur; 
+    this->unemployed =  unemployed;
+    this->positive_sentiment = positive_sentiment;
+    this->reservation_wage = reservation_wage;
+    this->saving_propensity_pessimist = saving_propensity_pessimist;
+    this->saving_propensity_optimist = saving_propensity_optimist;
 }
 
 
@@ -31,6 +37,19 @@ Household_Agent::~Household_Agent()
 } 
 
 
+void Household_Agent::Print() {
+    cout << "Household Agent at address : " << this << endl;
+    cout << "Savings: " << wealth_financial << endl;
+    cout << "Current income: " << income_current <<endl;
+    cout << "Unemployment: "<< unemployed << " Firm Ownership: " << business_owner; 
+    cout << "Consumer Sentiment: " << positive_sentiment << endl;
+    cout << "Reservation Wage: " << reservation_wage << endl;
+    cout << " --- Unique Characteristics ---" <<endl;
+    cout << "Savings propensity - optimist:" << saving_propensity_optimist << endl;
+    cout << "Savings propensity - pessimist:" << saving_propensity_pessimist << endl;
+}
+
+
 //------------------------------------------------///
 
 /* Function to update the income_current variable to sum of all incomes received
@@ -44,9 +63,9 @@ void Household_Agent::Update_Income()
     income_current = 0; // Initialize to zero
 
     // Check if the person is employed, if so get Wage
-    if (current_job != 0)
+    if (!unemployed)
     {
-        income_wage = current_job->Get_Wage_Offer();
+        //income_wage = current_job->Get_Wage_Offer();
         income_current += income_wage;
     } else {
         //If unemployed add the unemp_benefits
@@ -117,7 +136,7 @@ void Household_Agent::Determine_Consumer_Sentiment()
     // some chance it adops majority  - UPDATE METHOD HERE
     bool majority_adoption = (rand() % 100) < p_majority_op_adoption*100;
     if (majority_adoption){
-        positive_sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 50); 
+        positive_sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); 
     }
 
     // set saving propensities
@@ -129,13 +148,6 @@ void Household_Agent::Determine_Consumer_Sentiment()
 
     // Set targets for cash on hand
     cash_on_hand_desired = saving_propensity * income_average;
-}
-
-
-void Household_Agent::Get_Price_Level_Info()
-{
-    price_level = pPublic_Info_Board->Get_Price_Level();
-    
 }
 
 
@@ -151,6 +163,7 @@ void Household_Agent::Determine_Consumption_Budget()
         expenditure_consumption = (1-saving_propensity) * income_current;
     } else {
         int new_c = (1-c_excess_money) * (1-consumption_propensity) + consumption_propensity;
+        int price_level = pPublic_Info_Board->Get_Price_Level();
         cash_on_hand_real_desired = cash_on_hand_desired * price_level;
         int consumption_from_income = new_c * income_current;
         int consumption_from_excess_savings = c_excess_money * cash_on_hand_real_desired;
@@ -171,7 +184,7 @@ interest earned
 */
 void Household_Agent::Update_Wealth()
 {
-    wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
+    //wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
 }
 
 
@@ -182,24 +195,24 @@ highest paying job in the job board
 - *** Check the job offer pointer assignment works
 - Need to assign new income somewhere
 */
-/*
-void Household_Agent::Seek_Jobs(Public_Info_Board* public_board)
+
+void Household_Agent::Seek_Jobs()
 {
     // Get the top job offer
-    Job_Offer * job_offer = public_board->Get_Job_List(); 
+    Job_Offer * job_offer = pPublic_Info_Board->Get_Top_Job(); 
 
     // Compare against reservation wage
     if (job_offer->Get_Wage_Offer() > reservation_wage)
     {
         current_job = job_offer; // set pointers equal
         unemployed = false; // now employed
-        job_board->Remove_Top_Job_Offer(); // Remove job offer form board
+        pPublic_Info_Board->Remove_Top_Job_Offer(); // Remove job offer form board
     } else{
         // Update reservation wage and seek job in next period
         Update_Reservation_Wage();
     }
 }
-*/
+
 
 /* Function to update reservation wage
  If unemployed for longer than upper bound randomly reduce wage
