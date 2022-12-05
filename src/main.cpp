@@ -16,7 +16,7 @@ int main()
 
     //Household_Agent* Household_1 = new Household_Agent(1000, 10, false, false, 500, 0.4,0.2);
 
-    Household_Agent* Household_1 = new Household_Agent(1000, 10, false, false, 500, 0.4,0.2);
+    //Household_Agent* Household_1 = new Household_Agent(1000, 10, false, false, 500, 0.4,0.2);
 
     // Household_1->Print();
     

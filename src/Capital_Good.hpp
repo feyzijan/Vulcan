@@ -1,7 +1,6 @@
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
+#ifndef CAPITAL_GOOD_HPP
+#define CAPITAL_GOOD_HPP
 
-#endif
 
 #include "Capital_Firm_Agent.hpp"
 
@@ -25,3 +24,4 @@ class Capital_Good{
 
 
 };
+#endif

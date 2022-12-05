@@ -1,3 +1,5 @@
+#ifndef PUBLIC_INFO_BOARD_HPP
+#define PUBLIC_INFO_BOARD_HPP
 
 #include "Job_Market.hpp"
 
@@ -76,3 +78,4 @@ class Public_Info_Board{
 
 
 };
+#endif

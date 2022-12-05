@@ -1,7 +1,7 @@
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
+#ifndef GOVERNMENT_AGENT_HPP
+#define GOVERNMENT_AGENT_HPP
 
-#endif
+
 
 /* Class declaration for the government,
 A single instance of this class will decide on 
@@ -42,3 +42,4 @@ class Government{
 
 
 };
+#endif

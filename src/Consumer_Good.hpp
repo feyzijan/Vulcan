@@ -1,12 +1,8 @@
+#ifndef CONSUMER_GOOD_HPP
+#define CONSUMER_GOOD_HPP
 
-#ifndef CONSUMER_FIRM_AGENT_HPP
-#define CONSUMER_FIRM_AGENT_HPP
-
-#endif
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
-
-#endif
+ 
+ 
 
 
 class Consumer_Good{
@@ -31,3 +27,4 @@ class Consumer_Good{
     Consumer_Firm_Agent *  pSeller;
 
 };
+#endif

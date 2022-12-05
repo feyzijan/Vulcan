@@ -1,7 +1,6 @@
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
+#ifndef CAPITAL_FIRM_AGENT_HPP
+#define CAPITAL_FIRM_AGENT_HPP
 
-#endif
 
 #include "Firm_Agent.hpp"
 
@@ -50,3 +49,5 @@ class Capital_Firm_Agent: public Firm_Agent{
 
 };
 
+
+#endif

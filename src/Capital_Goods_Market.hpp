@@ -1,7 +1,7 @@
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
 
-#endif
+#ifndef CAPITAL_GOODS_MARKET_HPP
+#define CAPITAL_GOODS_MARKET_HPP
+
 
 #include "Capital_Good.hpp"
 #include "Capital_Firm_Agent.hpp" 
@@ -25,3 +25,4 @@ class Capital_Goods_Market{
 
 
 };
+#endif

@@ -1,10 +1,7 @@
-#ifndef CONSUMER_GOOD_HPP
-#define CONSUMER_GOOD_HPP
-#endif
+#ifndef CONSUMER_FIRM_AGENT_HPP
+#define CONSUMER_FIRM_AGENT_HPP
 
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
-#endif
+
 
 #include "Firm_Agent.hpp"
 #include "Loan.hpp"
@@ -74,7 +71,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     Loan* loan_book[100];
 
     // Employee list
-    Household* employee_list[1000];
+    //Household_Agent* employee_list[1000];
 
 
 
@@ -133,3 +130,4 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 };
 
+#endif

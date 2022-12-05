@@ -1,3 +1,9 @@
+#ifndef JOB_OFFER_HPP
+#define JOB_OFFER_HPP
+
+
+
+
 #include "Firm_Agent.hpp"
 
 
@@ -22,3 +28,5 @@ class Job_Offer{
 
 
 };
+
+#endif

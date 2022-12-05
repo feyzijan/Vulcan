@@ -1,3 +1,8 @@
+#ifndef JOB_MARKET_HPP
+#define JOB_MARKET_HPP
+
+
+
 #include <iostream>
 #include "Job_Offer.hpp"
 
@@ -28,3 +33,5 @@ class Job_Market{
 
 
 };
+
+#endif

@@ -5,10 +5,9 @@ the credit origination.
 
 */
 
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
+#ifndef BANK_AGENT_HPP
+#define BANK_AGENT_HPP
 
-#endif
 
 
 class Bank_Agent{
@@ -52,3 +51,4 @@ class Bank_Agent{
 
 
 };
+#endif

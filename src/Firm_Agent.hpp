@@ -1,4 +1,5 @@
-
+#ifndef FIRM_AGENT_HPP
+#define FIRM_AGENT_HPP
 
 class Firm_Agent{
 
@@ -12,3 +13,5 @@ class Firm_Agent{
     protected:
 
 };
+
+#endif

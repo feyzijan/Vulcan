@@ -1,6 +1,6 @@
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
-#endif
+#ifndef LOAN_HPP
+#define LAON_HPP
+
 
 class Loan {
 
@@ -36,3 +36,5 @@ class Loan {
 
 
 };
+
+#endif

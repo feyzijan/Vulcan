@@ -1,10 +1,6 @@
-#ifndef PUBLIC_INFO_BOARD_HPP
-#define PUBLIC_INFO_BOARD_HPP
-#endif
+#ifndef HOUSEHOLD_AGENT_HPP
+#define HOUSEHOLD_AGENT_HPP
 
-#ifndef JOB_OFFER_HPP
-#define JOB_OFFER_HPP
-#endif
 
 #include <numeric>
 #include <random>
@@ -140,3 +136,5 @@ class Household_Agent{
 
 
 };
+
+#endif
