@@ -2,14 +2,17 @@
 #define INITIALIZATION_PARAMETERS_HPP
 
 
-//Job Market dynamics
-extern int job_market_size;
+#define job_market_size 100
 
 
-// Agent numbers
-extern int n_households;
-extern int n_consumer_firms;
-extern int n_capital_firms;
+namespace constants
+{
+    // since the actual variables are inside a namespace, the forward declarations need to be inside a namespace as well
+    //extern const int job_market_size;
+    extern const int n_households;
+    extern const int n_consumer_firms;
+    extern const int n_capital_firms;
+}
 
 
 #endif

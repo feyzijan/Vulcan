@@ -4,7 +4,6 @@
 Job_Offer* Public_Info_Board::Get_Top_Job() {
     Job_Offer * job_pointer = new Job_Offer();
     return job_pointer;
-    
 }
 
 

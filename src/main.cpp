@@ -2,20 +2,16 @@
 #include "Public_Info_Board.hpp"
 #include "Household_Agent.hpp"
 
+#include "Initialization_Parameters.hpp"
 
 
+using namespace std;
 
 int main()
 {
-    // Parameter list //
-    int n_households = 100;
-    int n_consumer_firms = 10;
-    int n_capital_firms = 5;
-
-    int job_market_size = n_households/5;
 
 
-
+    cout << job_market_size << endl;
 
 
     //Public_Info_Board* pPublic_Info_Board = new Public_Info_Board();

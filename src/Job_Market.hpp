@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "Job_Offer.hpp"
+#include "Initialization_Parameters.hpp"
+
 
 
 class Job_Market{
@@ -25,7 +27,6 @@ class Job_Market{
     
 
     private:
-    int job_market_size;
     Job_Offer job_list[job_market_size]; // Change this number
 
 

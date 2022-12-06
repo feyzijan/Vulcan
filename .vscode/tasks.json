@@ -11,6 +11,7 @@
 				"${file}",
 				"-o",
 				"${fileDirname}\\${fileBasenameNoExtension}.exe",
+				"${fileDirname}\\Initialization_Parameters.cpp",
 				"${fileDirname}\\Household_Agent.cpp",
 				"${fileDirname}\\Public_Info_Board.cpp",
 				"${fileDirname}\\Job_Offer.cpp"
