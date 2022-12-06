@@ -41,7 +41,7 @@ class Public_Info_Board{
 
     //---------------------------//
 
-    
+
 
 
 
@@ -74,6 +74,9 @@ class Public_Info_Board{
     // Unemployment benefits
 
     int public_unemployment_benefit;
+
+    //timestep
+    int time_step; // timestep in days
 
 
 };
