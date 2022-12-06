@@ -39,12 +39,11 @@ class Public_Info_Board{
     
     void Add_Job_Offer(Job_Offer * pJob_Offer);
 
-
-
-
-
+    //---------------------------//
 
     
+
+
 
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
 

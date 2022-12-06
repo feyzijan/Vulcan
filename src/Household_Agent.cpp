@@ -38,15 +38,13 @@ Household_Agent::~Household_Agent()
 
 
 void Household_Agent::Print() {
-    cout << "Household Agent at address : " << this << endl;
-    cout << "Savings: " << wealth_financial << endl;
-    cout << "Current income: " << income_current <<endl;
-    cout << "Unemployment: "<< unemployed << " Firm Ownership: " << business_owner; 
-    cout << "Consumer Sentiment: " << positive_sentiment << endl;
-    cout << "Reservation Wage: " << reservation_wage << endl;
+    cout << "\n------ Household Agent at address : " << this << endl;
+    cout << "Savings: " << wealth_financial << " Current income: " << income_current << " Reservation Wage: " << reservation_wage << endl;
+    cout << "Unemployment: "<< unemployed << " Firm Ownership: " << business_owner << " Consumer Sentiment: " << positive_sentiment << endl; 
     cout << " --- Unique Characteristics ---" <<endl;
-    cout << "Savings propensity - optimist:" << saving_propensity_optimist << endl;
-    cout << "Savings propensity - pessimist:" << saving_propensity_pessimist << endl;
+    cout << "Savings propensity - optimist: " << saving_propensity_optimist << endl;
+    cout << "Savings propensity - pessimist: " << saving_propensity_pessimist << endl;
+    cout << "--------------------------------------" << endl;
 }
 
 
@@ -200,7 +198,7 @@ void Household_Agent::Seek_Jobs()
 {
     // Get the top job offer
     Job_Offer * job_offer = pPublic_Info_Board->Get_Top_Job(); 
-
+    
     // Compare against reservation wage
     if (job_offer->Get_Wage_Offer() > reservation_wage)
     {

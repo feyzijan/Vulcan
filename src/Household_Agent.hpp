@@ -5,6 +5,8 @@
 #include <numeric>
 #include <random>
 
+#include "Public_Info_Board.hpp"
+#include "Job_Offer.hpp"
 
 //TODO: Decide how to initialize
 

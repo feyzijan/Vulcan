@@ -2,16 +2,6 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "Live Preview",
-			"workspacePath": "c:\\Users\\feyzi\\OneDrive - Imperial College London\\Programming\\GithubRepos\\Vulcan",
-			"problemMatcher": [],
-			"label": "Live Preview: Run Server",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
 			"type": "cppbuild",
 			"label": "C/C++: g++.exe build active file",
 			"command": "C:\\MinGW\\bin\\g++.exe",
@@ -20,7 +10,11 @@
 				"-g",
 				"${file}",
 				"-o",
-				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+				"${fileDirname}\\${fileBasenameNoExtension}.exe",
+				"${fileDirname}\\Household_Agent.cpp",
+				"${fileDirname}\\Public_Info_Board.cpp",
+				"${fileDirname}\\Job_Offer.cpp"
+				
 			],
 			"options": {
 				"cwd": "${fileDirname}"
