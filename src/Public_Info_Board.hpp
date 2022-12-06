@@ -7,11 +7,18 @@
 class Public_Info_Board{
 
     public:
-    Public_Info_Board(); //Constructor
+
+    //-------- Constructors ----------- //
+    Public_Info_Board(); //Default Constructor
 
     Public_Info_Board(Public_Info_Board&); //Copy constructor
     
     ~Public_Info_Board(); // Destructor
+
+    // --- Data Logging and Debugging ---//
+
+    void Print();
+
 
 
 

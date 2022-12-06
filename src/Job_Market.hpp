@@ -27,7 +27,7 @@ class Job_Market{
     
 
     private:
-    Job * head_job;
+    Job * head_null_job;
    
 
 };

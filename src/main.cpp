@@ -3,7 +3,7 @@
 #include "Household_Agent.hpp"
 
 #include "Initialization_Parameters.hpp"
-
+#include "Job.hpp"
 
 using namespace std;
 
@@ -21,10 +21,15 @@ int main()
     Household_1->Print();
 
 
+    Job* job_1 = new Job(nullptr,10,1);
+    job_1->Print();
+
+
+
     
     
 
-    std::cout << "Hello World :-)\n";
+    cout << "Program end :-)\n";
     return 0;
 }
 

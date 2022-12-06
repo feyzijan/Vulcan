@@ -120,7 +120,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 
     // Bankruptcy
-    bool bankrupt = True;
+    bool bankrupt = true;
 
     // Constants, characteristics
     int desired_inventory_factor; 

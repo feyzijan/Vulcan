@@ -2,6 +2,7 @@
 #define JOB_HPP
 
 #include "Firm_Agent.hpp"
+#include <iostream>
 
 //TODO: Convert Job into a LinkedList struct
 
@@ -14,14 +15,21 @@ and a pointer to the previous or next job offer iin the market
 class Job{
 
     public:
+    // Constructors
     Job();
+    
 
-    // Constructor
     Job(Firm_Agent*  firm, int wage_offer, int posting_date); //Constructor
+
+
+    Job(Firm_Agent*  firm, int wage_offer, int posting_date, Job* prev); //Constructor
 
     Job(Job&); //Copy constructor 
     
     ~Job(); // Destructor
+
+    //Print
+    void Print() const;
 
     //Getters
     int Get_Wage_Offer() const {return wage_offer;} 
