@@ -27,8 +27,8 @@ class Job_Market{
     
 
     private:
-    Job_Offer job_list[job_market_size]; // Change this number
-
+    Job_Offer * head_job;
+   
 
 };
 

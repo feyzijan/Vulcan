@@ -53,7 +53,10 @@ class Public_Info_Board{
 
 
 
-    private:
+    protected:
+
+
+
 
     // General price level
     int price_level;
