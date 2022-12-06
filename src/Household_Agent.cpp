@@ -197,7 +197,7 @@ highest paying job in the job board
 void Household_Agent::Seek_Jobs()
 {
     // Get the top job offer
-    Job_Offer * job_offer = pPublic_Info_Board->Get_Top_Job(); 
+    Job * job_offer = pPublic_Info_Board->Get_Top_Job(); 
     
     // Compare against reservation wage
     if (job_offer->Get_Wage_Offer() > reservation_wage)

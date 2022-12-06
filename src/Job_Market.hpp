@@ -2,7 +2,7 @@
 #define JOB_MARKET_HPP
 
 #include <iostream>
-#include "Job_Offer.hpp"
+#include "Job.hpp"
 #include "Initialization_Parameters.hpp"
 
 
@@ -16,18 +16,18 @@ class Job_Market{
 
     
     // Getter that returns pointer to first instance in Job list
-    Job_Offer* Get_Job_List() const; 
+    Job* Get_Job_List() const; 
 
     // Remove the highest paying Job offer once its taken
     void Remove_Top_Job_Offer();
 
     // Add New Job Offer to list, place in proper order
-    void Add_Job_Offer(Job_Offer* job_offer);
+    void Add_Job_Offer(Job* job_offer);
 
     
 
     private:
-    Job_Offer * head_job;
+    Job * head_job;
    
 
 };

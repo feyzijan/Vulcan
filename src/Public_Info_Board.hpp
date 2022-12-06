@@ -32,13 +32,13 @@ class Public_Info_Board{
 
 
     //--- Job Market ---//
-    Job_Offer* Get_Top_Job();
+    Job* Get_Top_Job();
 
     Job_Market* Get_Job_List();
 
     void Remove_Top_Job_Offer();
     
-    void Add_Job_Offer(Job_Offer * pJob_Offer);
+    void Add_Job_Offer(Job * pJob_Offer);
 
     //---------------------------//
 

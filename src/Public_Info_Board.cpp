@@ -1,8 +1,8 @@
 #include "Public_Info_Board.hpp"
 
 
-Job_Offer* Public_Info_Board::Get_Top_Job() {
-    Job_Offer * job_pointer = new Job_Offer();
+Job* Public_Info_Board::Get_Top_Job() {
+    Job * job_pointer = new Job();
     return job_pointer;
 }
 

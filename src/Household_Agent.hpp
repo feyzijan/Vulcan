@@ -6,7 +6,7 @@
 #include <random>
 
 #include "Public_Info_Board.hpp"
-#include "Job_Offer.hpp"
+#include "Job.hpp"
 
 //TODO: Decide how to initialize
 
@@ -79,7 +79,7 @@ class Household_Agent{
     Public_Info_Board* pPublic_Info_Board;
 
     //Job offer
-    Job_Offer * current_job;
+    Job * current_job;
 
     // Wealth
     int wealth_financial; //W_f in equations
