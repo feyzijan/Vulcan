@@ -3,12 +3,16 @@
 #include "Household_Agent.hpp"
 
 
+
+
 int main()
 {
     // Parameter list //
     int n_households = 100;
     int n_consumer_firms = 10;
     int n_capital_firms = 5;
+
+    int job_market_size = n_households/5;
 
 
 
@@ -20,7 +24,7 @@ int main()
 
     Household_1->Print();
 
-    
+
     
     
 

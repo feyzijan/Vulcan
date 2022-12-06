@@ -2,6 +2,7 @@
 #define PUBLIC_INFO_BOARD_HPP
 
 #include "Job_Market.hpp"
+#include "Initialization_Parameters.hpp"
 
 class Public_Info_Board{
 

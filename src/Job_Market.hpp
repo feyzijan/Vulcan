@@ -1,11 +1,8 @@
 #ifndef JOB_MARKET_HPP
 #define JOB_MARKET_HPP
 
-
-
 #include <iostream>
 #include "Job_Offer.hpp"
-
 
 
 class Job_Market{
@@ -28,8 +25,8 @@ class Job_Market{
     
 
     private:
-
-    Job_Offer job_list[1000]; // Change this number
+    int job_market_size;
+    Job_Offer job_list[job_market_size]; // Change this number
 
 
 };
