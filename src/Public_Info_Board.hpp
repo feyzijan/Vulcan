@@ -3,6 +3,7 @@
 
 #include "Job_Market.hpp"
 #include "Initialization_Parameters.hpp"
+#include <iostream>
 
 class Public_Info_Board{
 
@@ -17,7 +18,7 @@ class Public_Info_Board{
 
     // --- Data Logging and Debugging ---//
 
-    void Print();
+    void Print() const;
 
 
 
