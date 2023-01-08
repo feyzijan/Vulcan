@@ -1,8 +1,9 @@
 #ifndef JOB_HPP
 #define JOB_HPP
 
-#include "Firm_Agent.hpp"
+
 #include <iostream>
+#include "Firm_Agent.hpp"
 
 //TODO: Convert Job into a LinkedList struct
 
@@ -10,6 +11,7 @@
 /* Job offer objects will hold info on the date of posting, wage, employer, 
 and a pointer to the previous or next job offer iin the market
 */
+
 
 
 class Job{

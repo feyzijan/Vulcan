@@ -1,12 +1,12 @@
 #ifndef CAPITAL_GOOD_HPP
 #define CAPITAL_GOOD_HPP
 
+// Forward Declaration of Capital Firm Agent
 
 #include "General_Good.hpp"
 #include "Capital_Firm_Agent.hpp"
 
-// Forward Declaration of Capital Firm Agent
-class Capital_Firm_Agent;
+
 
 class Capital_Good: public General_Good{
 

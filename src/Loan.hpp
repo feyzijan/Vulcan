@@ -1,7 +1,6 @@
 #ifndef LOAN_HPP
-#define LAON_HPP
+#define LOAN_HPP
  
-
 #include "Firm_Agent.hpp"
 
 class Loan {

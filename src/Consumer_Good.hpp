@@ -5,8 +5,6 @@
 #include "General_Good.hpp"
 #include "Consumer_Firm_Agent.hpp" 
 
-// Forward Declaration of Consumer Firm Agent
-class Consumer_Firm_Agent;
 
 class Consumer_Good: public General_Good{
 

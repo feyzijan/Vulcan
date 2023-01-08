@@ -16,8 +16,18 @@
 				"${fileDirname}\\Public_Info_Board.cpp",
 				"${fileDirname}\\Firm_Agent.cpp",
 				"${fileDirname}\\Job.cpp",
+
+				"${fileDirname}\\Firm_Agent.cpp",
+				"${fileDirname}\\Consumer_Firm_Agent.cpp",
+				"${fileDirname}\\Capital_Firm_Agent.cpp",
+
+				
 				"${fileDirname}\\Loan.cpp",
+				
+				"${fileDirname}\\General_Good.cpp",
 				"${fileDirname}\\Consumer_Good.cpp",
+				"${fileDirname}\\Capital_Good.cpp",
+
 				//"${fileDirname}\\Consumer_Firm_Agent.cpp"
 
 				
