@@ -67,6 +67,7 @@ class Household_Agent{
 
     //Getters
     int Get_Wage_Dividend() {};
+    int Get_Wage() {return income_wage;};
 
 
 

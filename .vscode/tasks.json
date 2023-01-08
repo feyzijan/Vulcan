@@ -14,7 +14,12 @@
 				"${fileDirname}\\Initialization_Parameters.cpp",
 				"${fileDirname}\\Household_Agent.cpp",
 				"${fileDirname}\\Public_Info_Board.cpp",
-				"${fileDirname}\\Job.cpp"
+				"${fileDirname}\\Firm_Agent.cpp",
+				"${fileDirname}\\Job.cpp",
+				"${fileDirname}\\Loan.cpp",
+				"${fileDirname}\\Consumer_Good.cpp",
+				//"${fileDirname}\\Consumer_Firm_Agent.cpp"
+
 				
 			],
 			"options": {

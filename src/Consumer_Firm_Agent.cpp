@@ -1,4 +1,4 @@
-#include "Consumer_Firm.hpp"
+#include "Consumer_Firm_Agent.hpp"
 
 #include <iostream>
 
@@ -10,9 +10,35 @@ int main(){
 
 
 // Constructor
-Consumer_Firm_Agent::Consumer_Firm_Agent()
+Consumer_Firm_Agent::Consumer_Firm_Agent(int employee_count, int savings, int wage,int assets,
+    float dividend_ratio_opt, float dividend_ratio_pes, int desired_inventory_factor, bool sentiment)
 {
-    loan_book = {NULL}; // sett all elements to null
+    this->employee_count = employee_count;
+    this->cash_on_hand = savings;
+    this->wage_offer = wage;
+    this->total_assets = assets;
+    this->dividend_ratio_optimist = dividend_ratio_opt;
+    this->dividend_ratio_pessimist = dividend_ratio_pes;
+    this->desired_inventory_factor = desired_inventory_factor;
+    this->sentiment = sentiment;
+
+    // Some other stuff need to be initialized as well, not sure what to
+    /*
+    this->production_past;
+    this->good_price_past;
+    this->quantity_sold;
+    this->consumer_goods_inventory;
+    this->capital_goods_inventory;
+    */
+
+    // Some stuff is clear to initialize
+    this->bankrupt = false;
+
+
+
+
+
+    //loan_book = {NULL}; // sett all elements to null
 
 }
 
@@ -43,13 +69,13 @@ void Consumer_Firm_Agent::Check_Sales()
 {
     production_past = production_current; // The then current production is now past
     production_current = 0; // initialize current prod to zero
-    quantity_sold = production_past - int goods_on_market->GetQuantity(); // determine how much has been sold
-    consumer_goods_inventory += int goods_on_market->GetQuantity(); // determine how much is in inventory
+    quantity_sold = production_past -  goods_on_market->GetQuantity(); // determine how much has been sold
+    consumer_goods_inventory += goods_on_market->GetQuantity(); // determine how much is in inventory
 
     good_price_past = good_price_current;// The then current price is now past
     good_price_current = 0; // initialize current price to zero
 
-    revenue_current =  quantity_sold * good_price_past;
+    revenue_sales =  quantity_sold * good_price_past;
 
 }
 
@@ -72,29 +98,29 @@ void Consumer_Firm_Agent::Pay_Liabilities(){
 
     //Sum up wage bill
     labor_wage_bill = 0;
-    worker_count_actual = 0;
+    employee_count = 0;
 
     for (int i = 0; i++; i<sizeof(employee_list))
     {
         if (employee_list[i] != NULL){
-            labor_wage_bill += employee_list[i]->GetWage();
-            worker_count_actual += 1;
+            labor_wage_bill += employee_list[i]->Get_Wage();
+            employee_count += 1;
         }
     }
 
     total_liabilities = labor_wage_bill + debt_principal_payments + debt_interest_payments;
 
-    int money_on_hand = revenue_current + cash_savings < total_liabilties; 
+    int money_on_hand = revenue_sales + cash_on_hand < total_liabilities; 
     if (money_on_hand  < 0)
     {
-        new_loan_issuance = Seek_Loans(money_on_hand); // implement this method, have it update new_loan_issuance
+        new_loan_issuance = Seek_Loans(); // implement this method, have it update new_loan_issuance
     }
 
     money_on_hand += new_loan_issuance;
 
     if (money_on_hand  < 0)
     {
-       bankrupt = True;
+       bankrupt = true;
 
     } else {
         dividend_payments = money_on_hand * dividend_ratio;
@@ -119,9 +145,9 @@ void Consumer_Firm_Agent::Plan_Production()
 
     if (Inventory_Above_Desire())
     {
-        planned_production = current_production *  (1 + n_uniform);
+        production_planned = production_current *  (1 + n_uniform);
     } else {
-        good_price = current_production *  (1 - n_uniform);
+        good_price_current = production_current *  (1 - n_uniform);
     }
 
 }
@@ -135,9 +161,9 @@ void Consumer_Firm_Agent::Update_Price()
 
     if (Inventory_Above_Desire())
     {
-        good_price *= (1 + n_uniform);
+        good_price_current *= (1 + n_uniform);
     } else{
-        good_price *= (1 - n_uniform);
+        good_price_current *= (1 - n_uniform);
     }
 
 

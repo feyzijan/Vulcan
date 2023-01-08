@@ -1,13 +1,11 @@
 #include <iostream>
+
+
 #include "Public_Info_Board.hpp"
 #include "Household_Agent.hpp"
-
-
-#include "Consumer_Firm_Agent.hpp"
-
-
+//#include "Consumer_Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
-#include "Job.hpp"
+
 
 using namespace std;
 
@@ -31,7 +29,7 @@ int main()
     cout << "Initializing " << n_households << " households" << endl;
 
     // Allocate memory for the array to hold the households
-    Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent)* n_households);
+    Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent) * n_households);
 
     // TODO: Make the initialization parameters random according to some rule
     for (int i=0; i<n_households; i++) {
@@ -47,13 +45,15 @@ int main()
 
 
     // STEP 0.12: Initialize Consumer Firms
-    Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent)* n_consumer_firms);
+    //Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
     // TODO: Make the initialization parameters random according to some rule
     for (int i=0; i<n_consumer_firms; i++) {
-        //Cons_Firm_array[i] = Consumer_Firm_Agent();
+        //Cons_Firm_array[i] = Consumer_Firm_Agent(i, i*1000, 1000 + i, i*5000,
+        //0.1, 0.05, 2, true);
 
         //Household_array[i].Print();
     }
+    //Consumer_Firm_Agent  my_cons = Consumer_Firm_Agent(1, 1000, 1000 , 5000, 0.1, 0.05, 2, true);
 
 
 

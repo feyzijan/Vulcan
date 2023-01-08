@@ -3,6 +3,7 @@
 
 #include "Initialization_Parameters.hpp"
 
+const int n_max_employees = 100;
 
 
 /*
@@ -13,5 +14,7 @@ namespace constants
     extern const int n_households {100};
     extern const int n_consumer_firms {10};
     extern const int n_capital_firms{2};
+    extern const int n_max_employees{100};
 }
 */
+

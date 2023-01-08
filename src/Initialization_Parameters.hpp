@@ -4,9 +4,13 @@
 
 #define job_market_size 100
 
+
 extern int n_households;
 extern int n_consumer_firms;
 extern int n_capital_firms;
+
+extern const int n_max_employees;
+
 
 /*
 namespace constants
@@ -16,7 +20,9 @@ namespace constants
     extern const int n_households;
     extern const int n_consumer_firms;
     extern const int n_capital_firms;
+    extern const int n_max_employees;
 }
 */
+
 
 #endif

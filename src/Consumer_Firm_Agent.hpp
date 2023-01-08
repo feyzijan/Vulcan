@@ -6,15 +6,29 @@
 #include "Firm_Agent.hpp"
 #include "Loan.hpp"
 #include "Consumer_Good.hpp"
+#include "Household_Agent.hpp"
+
+//Forward Declaration
+//class Consumer_Good;
 
 
 class Consumer_Firm_Agent: public Firm_Agent{
 
     public:
     
-    Consumer_Firm_Agent(); // Constructor
+    Consumer_Firm_Agent(int employee_count, int savings, int wage,int assets,
+    float dividend_ratio_opt, float dividend_ratio_pes, int desired_inventory_factor, bool sentiment); // Constructor
+    
     Consumer_Firm_Agent(Consumer_Firm_Agent&); //Copy Constructor
     ~Consumer_Firm_Agent(); // Destructor
+
+    void Print(); // Print all variables
+
+    // Initialize employee list
+    void InitializeEmployees();
+
+    //
+
 
     // Put up Consumer Goods for Sale
 
@@ -53,14 +67,22 @@ class Consumer_Firm_Agent: public Firm_Agent{
     Consumer_Good* goods_on_market;
 
     // Production and sales figures
-    int production_current;
-    int production_planned;
-    int production_past;
-    int quantity_sold;
+    int production_current; // Actual production at t
+    int production_planned; // Production plan for t
+    int production_past; // Production at t-1
+    int quantity_sold; // Sales at t-1
 
+
+    // Inflows
+    int total_income;
+    int revenue_sales;
+    int new_loan_issuance;
+    int subsidies;
+    float good_price_current; // good price set for t
+    float good_price_past; // good price at t-1
 
     // Expenditures
-    int total_liabilities;
+    int total_liabilities; //Comprises of evt below
     int labor_wage_bill;
     int capital_costs;
     int tax_payments;
@@ -68,64 +90,47 @@ class Consumer_Firm_Agent: public Firm_Agent{
     int debt_interest_payments;
     int dividend_payments;
 
-
-    // List of loans taken out
-    Loan* loan_book[100];
-
-    // Employee list
-    //Household_Agent* employee_list[1000];
-
-
-
-    // Savings
-    int cash_savings;
-
-
-
-
-    //Labor
-    int wage_offer;
-    int worker_count_desired;
-    int worker_count_actual;
-    bool need_worker;
-
-    int w_target; //Desired labor capacity utilization
-    int w_current; //Current labor capacity utilization
-
-
-    //----Inflows
-    int revenue_current;
-    int new_loan_issuance;
-    int subsidies;
-    //int total_carbon_emissions;
-
-    //----State variables
-    int consumer_goods_inventory;
-    //int carbon_intensity_of_production;
-    int capital_goods_inventory;
+    // Assets and Liabilities
     int total_assets;
     int total_debts_liabilities;
     int total_employee_count;
     int leverage_ratio;
+    int cash_on_hand;
 
-    // price level
-    float good_price_current;
-    float good_price_past;
 
-    // Dividends
     float dividend_ratio;
+    float dividend_ratio_optimist; // characteristic
+    float dividend_ratio_pessimist; // characteristic
 
+
+
+    // List of loans taken out
+    Loan* loan_book[100]; // Define this globally for
+
+    // Employees
+    Household_Agent* employee_list[100]; // Define this globally 
+
+    int employee_count; 
+    int wage_offer;
+    int employee_count_desired;
+    bool need_worker;
+    int w_target; //Desired labor capacity utilization
+    int w_current; //Current labor capacity utilization
+
+
+    // Inventories
+    int consumer_goods_inventory;
+    int capital_goods_inventory;
+    int desired_inventory_factor; // a characteristic
 
 
     // Sentiment
     bool sentiment; // pessimistic, optimistic
 
-
     // Bankruptcy
-    bool bankrupt = true;
+    bool bankrupt;;
 
-    // Constants, characteristics
-    int desired_inventory_factor; 
+
 
 
 
