@@ -8,15 +8,16 @@
 #include "Public_Info_Board.hpp"
 #include "Job.hpp"
 
-//TODO: Decide how to initialize
+
 
 class Household_Agent{
 
     public:
     // Constructors//
     Household_Agent(int initial_savings, 
-    int max_unemp_dur, bool unemployed, bool positive_sentiment, int reservation_wage,
-    float saving_propensity_pessimist, float saving_propensity_optimist); //Constructor
+    int max_unemp_dur, int reservation_wage,
+    float saving_propensity_pessimist, float saving_propensity_optimist,
+    bool unemployed, bool positive_sentiment); //Constructor
 
     Household_Agent(Household_Agent&); //Copy constructor
     

@@ -4,7 +4,11 @@
 
 #define job_market_size 100
 
+extern int n_households;
+extern int n_consumer_firms;
+extern int n_capital_firms;
 
+/*
 namespace constants
 {
     // since the actual variables are inside a namespace, the forward declarations need to be inside a namespace as well
@@ -13,6 +17,6 @@ namespace constants
     extern const int n_consumer_firms;
     extern const int n_capital_firms;
 }
-
+*/
 
 #endif

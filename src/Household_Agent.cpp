@@ -9,8 +9,9 @@ using namespace std;
 
 // Constructor
 Household_Agent::Household_Agent( int initial_savings, 
-    int max_unemp_dur, bool unemployed, bool positive_sentiment, int reservation_wage,
-    float saving_propensity_pessimist, float saving_propensity_optimist)
+    int max_unemp_dur, int reservation_wage,
+    float saving_propensity_pessimist, float saving_propensity_optimist,
+    bool unemployed, bool positive_sentiment)
 {
     this->wealth_financial = initial_savings;
     this->unemp_duration_upper_bound = max_unemp_dur; 

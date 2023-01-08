@@ -2,20 +2,23 @@
 #define CONSUMER_GOOD_HPP
 
  
- 
+#include "Consumer_Firm_Agent.hpp" 
 
+// Forward Declaration of Consumer Firm Agent
+
+class Consumer_Firm_Agent;
 
 class Consumer_Good{
 
     public:
-    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, int seller_price, int seller_quantity);
+    Consumer_Good(Consumer_Firm_Agent*  seller_pointer, int seller_price, int seller_quantity);
     Consumer_Good(Consumer_Good&);
     ~Consumer_Good();
 
     // Getters
     int GetPrice() const {return price;}
     int GetQuantity() const { return quantity;}
-    Consumer_Firm_Agent * GetSeller() {return pSeller;}
+    Consumer_Firm_Agent* GetSeller() {return pSeller;}
     // Setters
     void SetPrice(int new_price) { price = new_price;}
     void SetQuantity(int new_quantity)  { quantity = new_quantity;}
@@ -24,7 +27,7 @@ class Consumer_Good{
     protected:
     int price;
     int quantity;
-    Consumer_Firm_Agent *  pSeller;
+    Consumer_Firm_Agent*  pSeller;
 
 };
 #endif

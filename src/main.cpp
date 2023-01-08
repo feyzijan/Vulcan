@@ -2,17 +2,69 @@
 #include "Public_Info_Board.hpp"
 #include "Household_Agent.hpp"
 
+
+#include "Consumer_Firm_Agent.hpp"
+
+
 #include "Initialization_Parameters.hpp"
 #include "Job.hpp"
 
 using namespace std;
 
+// Global variables for initialization
+int n_households;
+int n_consumer_firms;
+int n_capital_firms;
+
 int main()
 {
-//  -------- STEP 0 INITIALIZATION -------------------
+//  ------------------ STEP 0 INITIALIZATION ---------------------
+    // STEP 0.01: Initalize global variables
+    n_households = 10;
+    n_consumer_firms = 10;
+    n_capital_firms = 2;
     
-    // STEP 0.1: Initilaize market size, households, etc..
-    cout << job_market_size << endl;
+    // STEP 0.1: Initialize market size, households, etc.
+    
+    // STEP 0.11: Initialize Households
+
+    cout << "Initializing " << n_households << " households" << endl;
+
+    // Allocate memory for the array to hold the households
+    Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent)* n_households);
+
+    // TODO: Make the initialization parameters random according to some rule
+    for (int i=0; i<n_households; i++) {
+        Household_array[i] = Household_Agent(100*i,i, 100*(i* 11/10), 
+        i/n_households + 0.1, i/n_households,
+        i%2 == 0, i%2 == 0);
+
+        Household_array[i].Print();
+    }
+
+    // TODO: Still need to give households jobs and initialize income, firm_ownership, etc.
+
+
+
+    // STEP 0.12: Initialize Consumer Firms
+    Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent)* n_consumer_firms);
+    // TODO: Make the initialization parameters random according to some rule
+    for (int i=0; i<n_consumer_firms; i++) {
+        //Cons_Firm_array[i] = Consumer_Firm_Agent();
+
+        //Household_array[i].Print();
+    }
+
+
+
+    
+
+
+
+
+
+
+
 
     // STEP 0.2: Initialize the Public Board
         //Public_Info_Board* pPublic_Info_Board = new Public_Info_Board();
@@ -56,7 +108,6 @@ int main()
     // InfoBoard(n+1) = JobMarket(n+1),CapitalGoodMarket(n+1),CapitalGoodMarket(n+1)
 
 
-//  -------- STEP 1 MAIN LOOP -------------------
 
 
 

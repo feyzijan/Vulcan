@@ -11,10 +11,12 @@ RUNDIR = ../wrk
 
 EXE= vulcan
 
-OBJ = main.o Household_Agent.o Job.o Public_Info_Board.o Initialization_Parameters.o
+OBJ = main.o Household_Agent.o Job.o Public_Info_Board.o Initialization_Parameters.o 
+Firm_Agent.o Consumer_Firm_Agent.o Consumer_Good.o Loan.o
 
-#libary rules
-$(OBJ): Household_Agent.hpp Job.hpp Public_Info_Board.hpp Initialization_Parameters.hpp
+#library rules
+$(OBJ): Household_Agent.hpp Job.hpp Public_Info_Board.hpp Initialization_Parameters.hpp 
+Firm_Agent.hpp Consumer_Firm_Agent.hpp Consumer_Good.hpp Loan.hpp
 
 
 #options

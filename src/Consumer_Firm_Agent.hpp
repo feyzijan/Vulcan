@@ -5,6 +5,8 @@
 
 #include "Firm_Agent.hpp"
 #include "Loan.hpp"
+#include "Consumer_Good.hpp"
+
 
 class Consumer_Firm_Agent: public Firm_Agent{
 
