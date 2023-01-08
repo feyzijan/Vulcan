@@ -2,11 +2,11 @@
 
 
 
-Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, int seller_price, int seller_quantity)
+Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, int price, int quantity)
 {
     pSeller = seller_pointer;
-    price = seller_price;
-    quantity = seller_quantity;
+    this->price = price;
+    this->quantity = quantity;
 }
 
 
