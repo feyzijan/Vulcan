@@ -16,6 +16,7 @@
 				"${fileDirname}\\Household_Agent.cpp",
 
 				"${fileDirname}\\Job.cpp",
+				"${fileDirname}\\Job_Market.cpp",
 
 
 				
@@ -27,8 +28,8 @@
 				"${fileDirname}\\Consumer_Good.cpp",
 				
 				
-				//"${fileDirname}\\Capital_Firm_Agent.cpp",
-				//"${fileDirname}\\Capital_Good.cpp"
+				"${fileDirname}\\Capital_Firm_Agent.cpp",
+				"${fileDirname}\\Capital_Good.cpp",
 
 
 				

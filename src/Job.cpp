@@ -2,14 +2,9 @@
 
 using namespace std;
 
-Job::Job(){
-
-    
-}
 
 
 Job::Job(Firm_Agent*  employer, Household_Agent* employee, int wage_offer, int posting_date){
-    
     this->employer = employer;
     this->employee = employee;
     this->wage_offer = wage_offer;
@@ -21,7 +16,11 @@ Job::Job(Firm_Agent*  employer, Household_Agent* employee, int wage_offer, int p
 
 void Job::Print() const{
     cout << "\n------ Job Object at address : " << this << endl;
-    cout << "Employer: " << employer << "Employee: " << employee <<  "Post Date: " << posting_date<< " Wage Offer: " << wage_offer << endl;
+    cout << "Employer address: " << employer << "Employee address: " << employee <<  "Post Date: " << posting_date<< " Wage Offer: " << wage_offer << endl;
     cout << "--------------------------------------" << endl;
 
+}
+
+void Job::Update_Wage(int new_wage){
+    this->wage_offer = new_wage;
 }

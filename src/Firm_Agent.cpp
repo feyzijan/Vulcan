@@ -7,7 +7,7 @@
 
 void Firm_Agent::Print(){
     using namespace std;
-    cout << "\n------ Firm Agent at address : " << this << endl;
+    cout << "------ Firm Agent at address : " << this << endl;
 
     // Employee info
     cout << "Number of employees: " << employee_count << 

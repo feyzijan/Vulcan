@@ -1,6 +1,8 @@
 #ifndef PUBLIC_INFO_BOARD_HPP
 #define PUBLIC_INFO_BOARD_HPP
 
+
+class Job_Market;
 #include "Job_Market.hpp"
 #include "Initialization_Parameters.hpp"
 #include <iostream>

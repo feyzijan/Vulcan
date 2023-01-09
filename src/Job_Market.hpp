@@ -5,9 +5,9 @@
 class Job;
 #include <iostream>
 #include "Job.hpp"
-//#include "Initialization_Parameters.hpp"
+#include "Initialization_Parameters.hpp"
 
-
+//#define job_market_size 1000
 
 class Job_Market{
 
@@ -29,7 +29,7 @@ class Job_Market{
     
 
     private:
-    Job * head_null_job;
+    Job * job_offers[job_market_size];
    
 
 };
