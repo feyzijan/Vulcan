@@ -1,10 +1,15 @@
 #include <iostream>
 
-
-#include "Public_Info_Board.hpp"
-#include "Household_Agent.hpp"
-//#include "Consumer_Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
+#include "Public_Info_Board.hpp"
+
+#include "Household_Agent.hpp"
+#include "Job.hpp"
+
+#include "Firm_Agent.hpp"
+#include "Loan.hpp"
+#include "General_Good.hpp"
+
 
 
 using namespace std;

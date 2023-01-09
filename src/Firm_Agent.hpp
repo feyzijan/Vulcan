@@ -6,7 +6,7 @@
 
 #include "Loan.hpp"
 #include "General_Good.hpp"
-#include "Household_Agent.hpp"
+#include "Job.hpp"
 
 /* TODO:
 - Replace the numerical values in Loan and employee list with global constants
@@ -112,7 +112,8 @@ class Firm_Agent{
     Loan* loan_book[100]; // 
 
     // Employees
-    Household_Agent* employee_list[100]; // Define this globally 
+    Job* employee_jobs[100]; // Define this globally 
+
     int employee_count; 
     int wage_offer;
     int employee_count_desired;
