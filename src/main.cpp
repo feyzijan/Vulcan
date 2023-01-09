@@ -32,9 +32,9 @@ int main()
     n_consumer_firms = 5;
     n_capital_firms = 2;
     
-    // STEP 0.1: Initialize market size, households, etc.
+    //---- STEP 0.1: Initialize market size, households, etc.
     
-    // STEP 0.11: Initialize Households
+    //------- STEP 0.11: Initialize Households
     cout << "\n Initializing " << n_households << " households" << endl;
 
     // Allocate memory for the array to hold the households
@@ -42,19 +42,36 @@ int main()
 
     // TODO: Make the initialization parameters random according to some rule
     for (int i=0; i<n_households; i++) {
-        Household_array[i] = Household_Agent(100*i,i, 100*(i* 11/10), 
-        i/n_households + 0.1, i/n_households,
-        i%2 == 0, i%2 == 0);
+        float propensities[] = { 
+            float(n_households)/float(i), // consumption propensity
+            0.3, // saving_propensity_optimist 
+            0.4, // saving_propensity_pessimist
+            0.1, // c_f
+            0.2, // c_h
+            0.1, // c_excess_money
+            0.25, // p_majority_op_adoption
+         };
 
+        int wealth = 1000 *i;
+        int unemployment_tolerance = 10;
+
+        Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth);
+
+        //Household_array[i] = Household_Agent(100*i,i, 100*(i* 11/10), i/n_households + 0.1, i/n_households,i%2 == 0, i%2 == 0);
+
+        cout << "Iteration: " << i << endl;
         Household_array[i].Print();
+        Household_array[i].Print_Characteristics();
     }
+
     //Household_array[1].Print();
 
     // TODO: Still need to give households jobs and initialize income, firm_ownership, etc.
 
 
 
-    // STEP 0.12: Initialize Consumer Firms
+    //-------- STEP 0.12: Initialize Consumer Firms
+    /*
     cout << "\n Initializing " << n_consumer_firms << " consumer firms" << endl;
 
     // Allocate memory for the array to hold the firms
@@ -67,9 +84,11 @@ int main()
 
         Cons_Firm_array[i].Print();
     }
+    */
     //Cons_Firm_array[1].Print();
 
-    // STEP 0.12: Initialize Capital Firms
+    //---------- STEP 0.12: Initialize Capital Firms
+    /*
     cout << "\n Initializing " << n_capital_firms << " capital firms" << endl;
 
     // Allocate memory for the array to hold the firms
@@ -82,10 +101,13 @@ int main()
 
         Cap_Firm_array[i].Print();
     }
+    */
+
     //Cap_Firm_array[1].Print();
 
 
     // STEP 0.13 Assign jobs to households
+
 
 
     // STEP 0.14 Assign firm owners

@@ -11,16 +11,22 @@ class Public_Info_Board;
 #include "Job.hpp"
 //#include "Firm_Agent.hpp"
 
+#define income_lookback_period 10
 
 
 class Household_Agent{
 
     public:
     // Constructors//
+
     Household_Agent(int initial_savings, 
     int max_unemp_dur, int reservation_wage,
     float saving_propensity_pessimist, float saving_propensity_optimist,
-    bool unemployed, bool positive_sentiment); //Constructor
+    bool unemployed, bool positive_sentiment); 
+
+    //Full on Constructor
+    Household_Agent(float propensities[7], int unemployment_tolerance, int wealth );
+    
 
     Household_Agent(Household_Agent&); //Copy constructor
     
@@ -28,6 +34,8 @@ class Household_Agent{
 
     //--------------------------------//
     void Print();
+    void Print_Characteristics();
+
 
 
 
@@ -87,8 +95,8 @@ class Household_Agent{
     Job * current_job;
 
     // Wealth
-    int wealth_financial; //W_f in equations
-    int wealth_human; //W_h in equations
+    int wealth_financial; //W_f in equations 
+    int wealth_human; //W_h in equations * Unsure if this is needed
     
     // Consumption and Expenditure
     int expenditure_consumption;
@@ -116,7 +124,7 @@ class Household_Agent{
     int income_firm_owner_dividend;
 
     // Initialize this to all zeros
-    int income_past[10]; // must equal average_income_lookback_period
+    int income_past[income_lookback_period]; // must equal average_income_lookback_period
 
 
     // Unemployment status
@@ -134,7 +142,6 @@ class Household_Agent{
     float c_h; // propensity to consume human wealth
     float c_excess_money; // propensity yo consume excess money balance 
     float p_majority_op_adoption; // mu^m : probablility of adopting majority opinion
-    int average_income_lookback_period;
 
 
 

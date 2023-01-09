@@ -23,6 +23,40 @@ Household_Agent::Household_Agent( int initial_savings,
 }
 
 
+// New Constructor to use
+Household_Agent::Household_Agent(float propensities[7], int unemployment_tolerance, int wealth )
+{
+
+    wealth_financial = wealth;
+    unemp_duration_upper_bound = unemployment_tolerance;
+
+    consumption_propensity = propensities[0];
+    saving_propensity_optimist = propensities[1];
+    saving_propensity_pessimist = propensities[2];
+    c_f = propensities[3];
+    c_h = propensities[4];
+    c_excess_money = propensities[5];
+    p_majority_op_adoption = propensities[6];
+
+    // Set default initialization values
+    income_past[income_lookback_period] = {};
+
+    unemployed = true;
+    positive_sentiment = true;
+    business_owner = false;
+    saving_propensity = saving_propensity_optimist;
+
+    // Set everything else to zero initially
+    wealth_human, expenditure_consumption, expenditure_tax, new_savings = 0,0,0,0;
+    cash_on_hand_real_desired, cash_on_hand_desired, cash_on_hand_current = 0,0,0;
+    income_current, income_average, income_wage,income_unemployment_benefit, 
+    income_gov_transfers, income_firm_owner_dividend = 0,0,0,0,0,0;
+    reservation_wage = 0;
+    unemp_duration = 0;
+}
+
+
+
 //Copy constructor
 Household_Agent::Household_Agent(Household_Agent&)
 {
@@ -38,6 +72,17 @@ Household_Agent::~Household_Agent()
 } 
 
 
+void Household_Agent::Print_Characteristics() {
+    cout << "\n------ Household Agent at address : " << this << endl;
+    cout << "Consumption Propensity; " << consumption_propensity << " Savings propensities- optimist: " << saving_propensity_optimist << 
+     " pessimist: " << saving_propensity_pessimist << endl;
+    cout << "Propensity to consume - financial wealth: " << c_f << " human wealth: " << c_h << " excess money: " << c_excess_money << endl;
+    cout << "Majority conformity: " << p_majority_op_adoption << endl;
+    cout << "--------------------------------------" << endl;
+}
+
+
+
 void Household_Agent::Print() {
     cout << "\n------ Household Agent at address : " << this << endl;
     cout << "Savings: " << wealth_financial << " Current income: " << income_current << " Reservation Wage: " << reservation_wage << endl;
@@ -47,6 +92,7 @@ void Household_Agent::Print() {
     cout << "Savings propensity - pessimist: " << saving_propensity_pessimist << endl;
     cout << "--------------------------------------" << endl;
 }
+
 
 
 //------------------------------------------------///
@@ -97,7 +143,7 @@ void Household_Agent::Assign_Unemployment_Benefits(int unemployment_benefit_amou
 */
 void Household_Agent::Update_Average_Income()
 {
-    int n = average_income_lookback_period;
+    int n = income_lookback_period;
     int i;
     bool unfilled_array;
     // If past income array has not yet been filled
