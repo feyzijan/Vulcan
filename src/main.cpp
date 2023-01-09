@@ -10,6 +10,8 @@
 #include "Loan.hpp"
 #include "General_Good.hpp"
 
+#include "Consumer_Firm_Agent.hpp"
+
 
 
 using namespace std;
@@ -24,7 +26,7 @@ int main()
 //  ------------------ STEP 0 INITIALIZATION ---------------------
     // STEP 0.01: Initalize global variables
     n_households = 10;
-    n_consumer_firms = 10;
+    n_consumer_firms = 5;
     n_capital_firms = 2;
     
     // STEP 0.1: Initialize market size, households, etc.
@@ -50,17 +52,15 @@ int main()
 
 
     // STEP 0.12: Initialize Consumer Firms
-    //Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
+    Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
     // TODO: Make the initialization parameters random according to some rule
     for (int i=0; i<n_consumer_firms; i++) {
-        //Cons_Firm_array[i] = Consumer_Firm_Agent(i, i*1000, 1000 + i, i*5000,
-        //0.1, 0.05, 2, true);
+        Cons_Firm_array[i] = Consumer_Firm_Agent(i, i*1000, 1000 + i, i*5000,
+        0.1, 0.05, 2, true);
 
-        //Household_array[i].Print();
+        Cons_Firm_array[i].Print();
     }
-    //Consumer_Firm_Agent  my_cons = Consumer_Firm_Agent(1, 1000, 1000 , 5000, 0.1, 0.05, 2, true);
-
-
+    
 
     
 
