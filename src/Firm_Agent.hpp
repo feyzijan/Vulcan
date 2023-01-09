@@ -45,7 +45,7 @@ class Firm_Agent{
     void Pay_Liabilities();
 
     // Seek Loans if needed to pay liabilities
-    int Seek_Loans();
+    int Seek_Loans(int shortfall);
 
 
     // Inventory check

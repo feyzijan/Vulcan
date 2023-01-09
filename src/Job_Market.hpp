@@ -1,6 +1,8 @@
 #ifndef JOB_MARKET_HPP
 #define JOB_MARKET_HPP
 
+
+class Job;
 #include <iostream>
 #include "Job.hpp"
 //#include "Initialization_Parameters.hpp"

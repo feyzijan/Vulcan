@@ -11,9 +11,25 @@ void Firm_Agent::Print(){
 
 
 
+/* TODO: Complete Function below
+Seeks loans needed to cover shortfall, returns new funding
+*/
+
+int Firm_Agent::Seek_Loans(int shortfall)
+{
+    return 1;
+}
 
 
 
+/* TODO: Complete Function below
+Checks if inventory is above the desired level and returns true if so
+*/
+
+bool Firm_Agent::Inventory_Above_Desire()
+{
+    return true;
+}
 
 
 
@@ -113,10 +129,10 @@ void Firm_Agent::Pay_Liabilities(){
     labor_wage_bill = 0;
     employee_count = 0;
 
-    for (int i = 0; i++; i<sizeof(employee_list))
+    for (int i = 0; i++; i<sizeof(employee_jobs))
     {
-        if (employee_list[i] != NULL){
-            labor_wage_bill += employee_list[i]->Get_Wage();
+        if (employee_jobs[i] != NULL){
+            labor_wage_bill += employee_jobs[i]->Get_Wage();
             employee_count += 1;
         }
     }
@@ -126,7 +142,7 @@ void Firm_Agent::Pay_Liabilities(){
     int money_on_hand = revenue_sales + cash_on_hand < total_liabilities; 
     if (money_on_hand  < 0)
     {
-        new_loan_issuance = Seek_Loans(); // implement this method, have it update new_loan_issuance
+        new_loan_issuance = Seek_Loans(money_on_hand); // implement this method, have it update new_loan_issuance
     }
 
     money_on_hand += new_loan_issuance;

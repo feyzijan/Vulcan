@@ -2,6 +2,8 @@
 #define GENERAL_GOOD_HPP
 
 
+class Firm_Agent;
+
 class General_Good{
 
     public:

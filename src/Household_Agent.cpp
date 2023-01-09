@@ -201,7 +201,7 @@ void Household_Agent::Seek_Jobs()
     Job * job_offer = pPublic_Info_Board->Get_Top_Job(); 
     
     // Compare against reservation wage
-    if (job_offer->Get_Wage_Offer() > reservation_wage)
+    if (job_offer->Get_Wage() > reservation_wage)
     {
         current_job = job_offer; // set pointers equal
         unemployed = false; // now employed

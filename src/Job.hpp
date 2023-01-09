@@ -2,8 +2,11 @@
 #define JOB_HPP
 
 
+class Household_Agent;
+class Firm_Agent;
+
 #include <iostream>
-#include "Firm_Agent.hpp"
+//#include "Firm_Agent.hpp"
 #include "Household_Agent.hpp"
 
 //TODO: Convert Job into a LinkedList struct
@@ -32,7 +35,7 @@ class Job{
     void Print() const;
 
     //Getters
-    int Get_Wage_Offer() const {return wage_offer;} 
+    int Get_Wage() const {return wage_offer;} 
     int Get_Posting_Date() const {return posting_date;}
 
 

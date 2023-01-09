@@ -79,7 +79,7 @@ int main()
     // STEP 0.4: Allocate and Initialize Firms
 
     // STEP 0.5: Allocate and Initialize Jobs and Job Market 
-    Job* job_1 = new Job(nullptr,10,1);
+    Job* job_1 = new Job(nullptr,nullptr,10,1);
     job_1->Print();
 
 

@@ -5,6 +5,8 @@
 #include <numeric>
 #include <random>
 
+class Public_Info_Board;
+
 #include "Public_Info_Board.hpp"
 #include "Job.hpp"
 //#include "Firm_Agent.hpp"
