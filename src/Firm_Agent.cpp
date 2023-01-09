@@ -6,7 +6,22 @@
 
 
 void Firm_Agent::Print(){
+    using namespace std;
+    cout << "\n------ Firm Agent at address : " << this << endl;
+
+    // Employee info
+    cout << "Number of employees: " << employee_count << 
+            " Desired employees: " << employee_count_desired << 
+            " Current Wage Offer: " << wage_offer << endl;
+
+    // Assets and liabilities
+    cout << "Assets: " << total_assets << " Savings: " << cash_on_hand << endl;
+    cout << "Total income (t-1): " << total_income << "Total Liabilities: " << total_liabilities << endl;
     
+    
+    // Characteristics
+    cout << "Positive Sentiment: " << sentiment << " Inventory: " << inventory <<endl;
+    cout << "Desired Inventory Factor: " << desired_inventory_factor << endl;
 }
 
 

@@ -17,6 +17,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     Consumer_Firm_Agent(Consumer_Firm_Agent&); //Copy Constructor
     ~Consumer_Firm_Agent(); // Destructor
 
+    void Print();
 
 
     // Put up Consumer Goods for Sale

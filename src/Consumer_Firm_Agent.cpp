@@ -42,6 +42,12 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(int employee_count, int savings, int wa
 }
 
 
+void Consumer_Firm_Agent::Print(){
+    using namespace std;
+    cout << "\n------ Consumer Firm Agent at address : " << this << endl;
+    Firm_Agent::Print();
+}
+
 
 
 

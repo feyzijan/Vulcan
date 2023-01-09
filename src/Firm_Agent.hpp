@@ -8,6 +8,9 @@
 #include "General_Good.hpp"
 #include "Job.hpp"
 
+// Todo: Move below definitions to the initialization file
+#define loan_book_size 100
+#define employee_list_size 100
 /* TODO:
 - Replace the numerical values in Loan and employee list with global constants
 
@@ -96,10 +99,8 @@ class Firm_Agent{
     int debt_interest_payments;
     int dividend_payments;
 
-    // Assets and Liabilities
-    int total_assets;
-    int total_debts_liabilities;
-    int total_employee_count;
+    // Assets and fianncials 
+    int total_assets; // maybe this should be the same as cash in hand?
     int leverage_ratio;
     int cash_on_hand;
 
@@ -109,10 +110,10 @@ class Firm_Agent{
     float dividend_ratio_pessimist; // characteristic
 
     // List of loans taken out
-    Loan* loan_book[100]; // 
+    Loan* loan_book[loan_book_size]; // 
 
     // Employees
-    Job* employee_jobs[100]; // Define this globally 
+    Job* employee_jobs[employee_list_size]; // Define this globally 
 
     int employee_count; 
     int wage_offer;

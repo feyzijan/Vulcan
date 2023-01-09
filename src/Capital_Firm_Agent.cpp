@@ -36,6 +36,15 @@ Capital_Firm_Agent::Capital_Firm_Agent(int employee_count, int savings, int wage
 }
 
 
+void Capital_Firm_Agent::Print(){
+    using namespace std;
+    cout << "\n------ Capital Firm Agent at address : " << this << endl;
+    Firm_Agent::Print();
+}
+
+
+
+
 // Constructor
 Capital_Firm_Agent::Capital_Firm_Agent()
 {
