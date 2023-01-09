@@ -4,7 +4,8 @@
 // Forward Declaration of Capital Firm Agent
 
 #include "General_Good.hpp"
-#include "Capital_Firm_Agent.hpp"
+
+class Capital_Firm_Agent;
 
 
 

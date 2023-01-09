@@ -7,12 +7,12 @@ class Firm_Agent;
 class General_Good{
 
     public:
-    General_Good();
+    General_Good() {};
     General_Good(Firm_Agent *  seller_pointer, int price, int quantity);
     
     General_Good(General_Good&);
 
-    ~General_Good();
+    ~General_Good() {};
 
     int Get_Price() const {return price;}
     int Get_Quantity() const {return quantity;}

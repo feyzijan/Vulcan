@@ -21,11 +21,11 @@ class Firm_Agent{
 
     public:
     
-    Firm_Agent(); // Default Constructor
+    Firm_Agent() {}; // Default Constructor
 
 
     Firm_Agent(Firm_Agent&); //Copy Constructor
-    ~Firm_Agent(); // Destructor
+    ~Firm_Agent(){}; // Destructor
 
 
     void Print(); // Print class variables

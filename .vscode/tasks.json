@@ -23,14 +23,11 @@
 				"${fileDirname}\\Loan.cpp",
 				"${fileDirname}\\General_Good.cpp",
 
-				//"${fileDirname}\\Consumer_Firm_Agent.cpp",
+				"${fileDirname}\\Consumer_Firm_Agent.cpp",
+				"${fileDirname}\\Consumer_Good.cpp",
+				
+				
 				//"${fileDirname}\\Capital_Firm_Agent.cpp",
-
-				
-				
-				
-				
-				//"${fileDirname}\\Consumer_Good.cpp",
 				//"${fileDirname}\\Capital_Good.cpp"
 
 
