@@ -19,10 +19,6 @@ class Household_Agent{
     public:
     // Constructors//
 
-    Household_Agent(int initial_savings, 
-    int max_unemp_dur, int reservation_wage,
-    float saving_propensity_pessimist, float saving_propensity_optimist,
-    bool unemployed, bool positive_sentiment); 
 
     //Full on Constructor
     Household_Agent(float propensities[7], int unemployment_tolerance, int wealth );
@@ -76,6 +72,11 @@ class Household_Agent{
 
 
 
+    //Setters
+    void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
+    void Set_Job(Job* ptr) { current_job = ptr;}
+
+
     //Getters
     int Get_Wage_Dividend() {};
     int Get_Wage() {return income_wage;};
@@ -85,9 +86,6 @@ class Household_Agent{
     //Household variables
     protected:
     
-    
-
-
     // Public info board
     Public_Info_Board* pPublic_Info_Board;
 
@@ -101,7 +99,7 @@ class Household_Agent{
     // Consumption and Expenditure
     int expenditure_consumption;
     int expenditure_tax;
-    float consumption_propensity; //c eq(17)
+    float consumption_propensity; //c eq(17) - characteristic
 
     // Savings
     int new_savings;
@@ -112,10 +110,10 @@ class Household_Agent{
     
     // Savings constants
     float saving_propensity; //s
-    float saving_propensity_pessimist; //s_h
-    float saving_propensity_optimist; //s_l
+    float saving_propensity_pessimist; //s_h - characteristic
+    float saving_propensity_optimist; //s_l  - characteristic
 
-    // Income variables
+    // Income 
     int income_current;
     int income_average;
     int income_wage; 
@@ -142,13 +140,6 @@ class Household_Agent{
     float c_h; // propensity to consume human wealth
     float c_excess_money; // propensity yo consume excess money balance 
     float p_majority_op_adoption; // mu^m : probablility of adopting majority opinion
-
-
-
-
-
-
-
 };
 
 #endif

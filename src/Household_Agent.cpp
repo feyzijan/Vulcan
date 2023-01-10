@@ -7,20 +7,6 @@ using namespace std;
 
 
 
-// Constructor
-Household_Agent::Household_Agent( int initial_savings, 
-    int max_unemp_dur, int reservation_wage,
-    float saving_propensity_pessimist, float saving_propensity_optimist,
-    bool unemployed, bool positive_sentiment)
-{
-    this->wealth_financial = initial_savings;
-    this->unemp_duration_upper_bound = max_unemp_dur; 
-    this->unemployed =  unemployed;
-    this->positive_sentiment = positive_sentiment;
-    this->reservation_wage = reservation_wage;
-    this->saving_propensity_pessimist = saving_propensity_pessimist;
-    this->saving_propensity_optimist = saving_propensity_optimist;
-}
 
 
 // New Constructor to use
@@ -38,6 +24,10 @@ Household_Agent::Household_Agent(float propensities[7], int unemployment_toleran
     c_excess_money = propensities[5];
     p_majority_op_adoption = propensities[6];
 
+    // Set nullpointers for Job and Public Board
+    Public_Info_Board* pPublic_Info_Board = nullptr;
+    Job * current_job = nullptr;
+
     // Set default initialization values
     income_past[income_lookback_period] = {};
 
@@ -46,13 +36,32 @@ Household_Agent::Household_Agent(float propensities[7], int unemployment_toleran
     business_owner = false;
     saving_propensity = saving_propensity_optimist;
 
-    // Set everything else to zero initially
-    wealth_human, expenditure_consumption, expenditure_tax, new_savings = 0,0,0,0;
-    cash_on_hand_real_desired, cash_on_hand_desired, cash_on_hand_current = 0,0,0;
-    income_current, income_average, income_wage,income_unemployment_benefit, 
-    income_gov_transfers, income_firm_owner_dividend = 0,0,0,0,0,0;
-    reservation_wage = 0;
+    // Set everything else to zero initiallly
+
+    // Wealth
+    wealth_human = 0;
+
+    // Consumption and Expenditure
+    expenditure_consumption = 0;
+    expenditure_tax = 0;
+
+    // Savings
+    new_savings = 0;
+    cash_on_hand_real_desired = 0;
+    cash_on_hand_desired = 0;  
+    cash_on_hand_current = 0;
+
+    // Income
+    income_current = 0;
+    income_average = 0;
+    income_wage = 0;
+    income_unemployment_benefit = 0;
+    income_gov_transfers = 0;
+    income_firm_owner_dividend = 0;
+
+    // Unemployment status
     unemp_duration = 0;
+    reservation_wage = 0;  //may set this to minimum wage or make random
 }
 
 
@@ -73,11 +82,11 @@ Household_Agent::~Household_Agent()
 
 
 void Household_Agent::Print_Characteristics() {
-    cout << "\n------ Household Agent at address : " << this << endl;
+    //cout << "\n------ Household Agent at address : " << this << endl;
     cout << "Consumption Propensity; " << consumption_propensity << " Savings propensities- optimist: " << saving_propensity_optimist << 
      " pessimist: " << saving_propensity_pessimist << endl;
     cout << "Propensity to consume - financial wealth: " << c_f << " human wealth: " << c_h << " excess money: " << c_excess_money << endl;
-    cout << "Majority conformity: " << p_majority_op_adoption << endl;
+    cout << "Majority conformity: " << p_majority_op_adoption << " Max unemployment tolerance: " << unemp_duration_upper_bound << endl;
     cout << "--------------------------------------" << endl;
 }
 
@@ -85,11 +94,22 @@ void Household_Agent::Print_Characteristics() {
 
 void Household_Agent::Print() {
     cout << "\n------ Household Agent at address : " << this << endl;
-    cout << "Savings: " << wealth_financial << " Current income: " << income_current << " Reservation Wage: " << reservation_wage << endl;
-    cout << "Unemployment: "<< unemployed << " Firm Ownership: " << business_owner << " Consumer Sentiment: " << positive_sentiment << endl; 
-    cout << " --- Unique Characteristics ---" <<endl;
-    cout << "Savings propensity - optimist: " << saving_propensity_optimist << endl;
-    cout << "Savings propensity - pessimist: " << saving_propensity_pessimist << endl;
+    // Wealth
+    cout << "Financial wealth: " << wealth_financial << " human wealth: " << wealth_human << endl;
+    // Consumption
+    cout << "Consumption - total: " << expenditure_consumption << " tax: " << expenditure_tax << endl;
+    // Savings
+    cout << "New savings: " << new_savings << " Savings propensity: " << saving_propensity <<  " Desired cash on hand - real: " << 
+    cash_on_hand_real_desired << " nominal: " << cash_on_hand_desired << " current: " << cash_on_hand_current << endl;
+    // Income
+    cout <<"Income - current total: " << income_current << " average: " << income_average << " wage: " << income_wage <<  " unemployment benefit " 
+    << income_unemployment_benefit <<  " Government transfer: " << income_gov_transfers << " dividends: " << income_firm_owner_dividend <<endl;
+    // Employment
+    cout << "Unemployed: " << unemployed << " Reservation wage: " << reservation_wage << " unemp duration: " << unemp_duration << endl;
+    // Sentiment
+    cout << "Positive Sentiment: " << positive_sentiment << endl;
+    Print_Characteristics(); 
+
     cout << "--------------------------------------" << endl;
 }
 
