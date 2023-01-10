@@ -10,10 +10,12 @@
 class Consumer_Firm_Agent: public Firm_Agent{
 
     public:
-    
-    Consumer_Firm_Agent(int employee_count, int savings, int wage,int assets,
-    float dividend_ratio_opt, float dividend_ratio_pes, int desired_inventory_factor, bool sentiment); // Constructor
-    
+
+
+    //new constructor to use
+    Consumer_Firm_Agent(float propensities[3], int assets, int employee_count, int capital_inventory);
+
+
     Consumer_Firm_Agent(Consumer_Firm_Agent&); //Copy Constructor
     ~Consumer_Firm_Agent(); // Destructor
 

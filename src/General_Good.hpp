@@ -8,7 +8,7 @@ class General_Good{
 
     public:
     General_Good() {};
-    General_Good(Firm_Agent *  seller_pointer, int price, int quantity);
+    General_Good(Firm_Agent *  seller_pointer, float seller_price, int seller_quantity);
     
     General_Good(General_Good&);
 
@@ -19,7 +19,7 @@ class General_Good{
     Firm_Agent * Get_Seller() {return pSeller;}
 
     protected:
-    int price;
+    float price;
     int quantity;
 
     Firm_Agent *  pSeller;

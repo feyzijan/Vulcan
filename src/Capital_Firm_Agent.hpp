@@ -10,11 +10,12 @@
 class Capital_Firm_Agent: public Firm_Agent{
 
     public:
-    
-    Capital_Firm_Agent(); // Constructor
 
-    Capital_Firm_Agent(int employee_count, int savings, int wage,int assets,
-    float dividend_ratio_opt, float dividend_ratio_pes, int desired_inventory_factor, bool sentiment); // Constructor
+
+    Capital_Firm_Agent(float propensities[3], int assets, int employee_count, int capital_inventory);
+    
+
+
 
     Capital_Firm_Agent(Capital_Firm_Agent&); //Copy Constructor
     ~Capital_Firm_Agent(); // Destructor

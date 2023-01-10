@@ -20,19 +20,22 @@
 using namespace std;
 
 // Global variables for initialization
-int n_households;
-int n_consumer_firms;
-int n_capital_firms;
+int n_households = 10;
+int n_consumer_firms = 5;
+int n_capital_firms = 2;
 
 int main()
 {
+
+    cout << "************* Program has started" <<endl;
 //  ------------------ STEP 0 INITIALIZATION ---------------------
+    cout << "*****************Initialization Phase begun" << endl;
     // STEP 0.01: Initalize global variables
-    n_households = 10;
-    n_consumer_firms = 5;
-    n_capital_firms = 2;
-    
+
+
     //---- STEP 0.1: Initialize market size, households, etc.
+
+
     
     //------- STEP 0.11: Initialize Households
     cout << "\n Initializing " << n_households << " households" << endl;
@@ -41,6 +44,8 @@ int main()
     Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent) * n_households);
 
     // TODO: Make the initialization parameters random according to some rule
+
+    // Fill Household array
     for (int i=0; i<n_households; i++) {
         float propensities[] = { 
             float(n_households)/float(i), // consumption propensity
@@ -57,21 +62,21 @@ int main()
 
         Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth);
 
-        //Household_array[i] = Household_Agent(100*i,i, 100*(i* 11/10), i/n_households + 0.1, i/n_households,i%2 == 0, i%2 == 0);
 
+        // Print each instance
+        /*
         cout << "Iteration: " << i << endl;
         Household_array[i].Print();
         Household_array[i].Print_Characteristics();
+        */
     }
-
-    //Household_array[1].Print();
 
     // TODO: Still need to give households jobs and initialize income, firm_ownership, etc.
 
 
 
-    //-------- STEP 0.12: Initialize Consumer Firms
-    /*
+    //-------- STEP 0.12: Initialize Consumer Firms ----------
+    
     cout << "\n Initializing " << n_consumer_firms << " consumer firms" << endl;
 
     // Allocate memory for the array to hold the firms
@@ -79,13 +84,27 @@ int main()
 
     // TODO: Make the initialization parameters random according to some rule
     for (int i=0; i<n_consumer_firms; i++) {
-        Cons_Firm_array[i] = Consumer_Firm_Agent(i, i*1000, 1000 + i, i*5000,
-        0.1, 0.05, 2, true);
+        float propensities[] = {
+            0.05, // dividend_ratio_optimist 
+            0.03, // dividend_ratio_pessimist 
+            float(i), // inventory factor
+        };
+        int assets = i*10000;
+        int employee_count = 2*i +2;
+        int capital_inventory = employee_count;
 
+
+        Cons_Firm_array[i] = Consumer_Firm_Agent(propensities, assets, employee_count, capital_inventory);
+
+
+        // Print each instance for checking
+        cout << "Iteration: " << i +1 ;
         Cons_Firm_array[i].Print();
+        cout << "\n";
     }
-    */
-    //Cons_Firm_array[1].Print();
+    
+
+
 
     //---------- STEP 0.12: Initialize Capital Firms
     /*

@@ -2,11 +2,11 @@
 
 
 
-Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, int seller_price, int seller_quantity)
+Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity)
 {
     pSeller = seller_pointer;
-    this->price = seller_price;
-    this->quantity = seller_quantity;
+    price = seller_price;
+    quantity = seller_quantity;
 }
 
 

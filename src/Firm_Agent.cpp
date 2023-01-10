@@ -10,19 +10,39 @@ void Firm_Agent::Print(){
     cout << "------ Firm Agent at address : " << this << endl;
 
     // Employee info
-    cout << "Number of employees: " << employee_count << 
-            " Desired employees: " << employee_count_desired << 
-            " Current Wage Offer: " << wage_offer << endl;
+    cout << "Number of employees: " << employee_count << " Desired employees: " << employee_count_desired << 
+    " Need Worker: " << need_worker << " Current Wage Offer: " << wage_offer << endl;
+    cout << "Labor utilization current: " << w_current << " Desired: " << w_target << endl;
+    
+    
+    //Inventory 
+    cout << "Desired Inventory Factor: " << desired_inventory_factor << " Current inventory: " << inventory << " Current Inv Factor: " 
+    << inventory_factor <<  " Capital inventory: " << working_capital_inventory << endl;
 
-    // Assets and liabilities
-    cout << "Assets: " << total_assets << " Savings: " << cash_on_hand << endl;
-    cout << "Total income (t-1): " << total_income << "Total Liabilities: " << total_liabilities << endl;
+    // Sentiment
+    cout << "Positive Sentiment: " << sentiment << " Bankruptcy: " << bankrupt <<endl;
     
-    
-    // Characteristics
-    cout << "Positive Sentiment: " << sentiment << " Inventory: " << inventory <<endl;
-    cout << "Desired Inventory Factor: " << desired_inventory_factor << endl;
+
+    //Production and sales figures
+    cout << "Production - current/actual: " << production_current << " planned: " << production_planned << " past: " << production_past <<endl;
+    cout << "Quantity sold: " << quantity_sold << " Current price: " << good_price_current << " Past price: " << good_price_past << endl;
+
+    //Inflows
+    cout << "Total income: " << total_income << " Sales Revenue: " << revenue_sales << " New loans: " << new_loan_issuance  << " subsidies: " << subsidies << endl;
+
+    //Expenditures
+    cout << "Total Liabilities: " << total_liabilities << " Wage bill: " << labor_wage_bill << " Capital costs: " << capital_costs << " Tax: " << tax_payments << endl;
+    cout << "Debt principal payments: " << debt_principal_payments << " Interest payments: " << debt_interest_payments << " Dividends: " << dividend_payments << endl;
+
+    //Assets and financials
+    cout << "Assets: " << total_assets << " Savings: " << cash_on_hand <<  " Leverage Ratio: " << leverage_ratio << endl;
+
+    //Dividend characteristics
+    cout << "Dividend ratio actual: " << dividend_ratio << " pesismist: " << dividend_ratio_pessimist << " optimist: " << dividend_ratio_optimist << endl;
+
 }
+
+
 
 
 

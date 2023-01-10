@@ -12,7 +12,7 @@ class Capital_Firm_Agent;
 class Capital_Good: public General_Good{
 
     public:
-    Capital_Good(Capital_Firm_Agent *  seller_pointer, int price, int quantity);
+    Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity);
 
     // Getters
     Capital_Firm_Agent * GetSeller() {return pSeller;}

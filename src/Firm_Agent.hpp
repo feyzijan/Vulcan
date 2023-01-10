@@ -21,7 +21,9 @@ class Firm_Agent{
 
     public:
     
-    Firm_Agent() {}; // Default Constructor
+    Firm_Agent() {}; 
+
+    
 
 
     Firm_Agent(Firm_Agent&); //Copy Constructor
@@ -127,7 +129,8 @@ class Firm_Agent{
     // Inventories
     int inventory;
     int working_capital_inventory;
-    int desired_inventory_factor; // a characteristic
+    float desired_inventory_factor; // a characteristic
+    float inventory_factor; 
 
 
     // Sentiment
