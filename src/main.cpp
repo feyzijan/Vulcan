@@ -5,6 +5,7 @@
 
 #include "Household_Agent.hpp"
 #include "Job.hpp"
+#include "Job_Market.hpp"
 
 #include "Firm_Agent.hpp"
 #include "Loan.hpp"
@@ -20,9 +21,18 @@
 using namespace std;
 
 // Global variables for initialization
-int n_households = 10;
-int n_consumer_firms = 5;
+int n_households = 100;
+int n_consumer_firms = 10;
 int n_capital_firms = 2;
+
+int n_total_jobs_initial = 94;
+
+
+// To easily switch printing on/off
+bool print_households = 0;
+bool print_cons_firms = 0;
+bool print_cap_firms = 0;
+
 
 int main()
 {
@@ -30,10 +40,11 @@ int main()
     cout << "************* Program has started" <<endl;
 //  ------------------ STEP 0 INITIALIZATION ---------------------
     cout << "*****************Initialization Phase begun" << endl;
-    // STEP 0.01: Initalize global variables
+    // STEP 0.10: Initalize global variables and the public board
 
-
-    //---- STEP 0.1: Initialize market size, households, etc.
+    Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
+    Job_Market* pJob_Market_1 = new Job_Market();
+    pPublic_Board_1->Set_Job_Market(pJob_Market_1);
 
 
     
@@ -61,18 +72,21 @@ int main()
         int unemployment_tolerance = 10;
 
         Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth);
+        Household_array[i].Set_Public_Info_Board(pPublic_Board_1);
 
 
         // Print each instance
-        
+        if(print_households) {
         cout << "Iteration: " << i << endl;
         Household_array[i].Print();
         cout << "\n";
+        }
     }
 
     // TODO: Still need to give households jobs and initialize income, firm_ownership, etc.
 
-
+    // Variable to keep track of # jobs to be assigned
+    int n_promised_jobs = 0; 
 
     //-------- STEP 0.12: Initialize Consumer Firms ----------
     
@@ -89,17 +103,21 @@ int main()
             float(i), // inventory factor
         };
         int assets = i*10000;
-        int employee_count = 2*i +2;
+        int employee_count = i+4;
+        n_promised_jobs += employee_count;
         int capital_inventory = employee_count;
 
 
         Cons_Firm_array[i] = Consumer_Firm_Agent(propensities, assets, employee_count, capital_inventory);
+        Cons_Firm_array[i].Set_Public_Info_Board(pPublic_Board_1);
 
 
         // Print each instance for checking
+        if(print_cons_firms){
         cout << "Iteration: " << i +1 ;
         Cons_Firm_array[i].Print();
         cout << "\n";
+        }
     }
     
 
@@ -118,20 +136,42 @@ int main()
             float(i), // inventory factor
         };
         int assets = i*10000;
-        int employee_count = 2*i +2;
+        int employee_count = i+4;
+        n_promised_jobs += employee_count;
         int capital_inventory = n_max_employees; // these firms only seek labor
 
 
         Cap_Firm_array[i] = Capital_Firm_Agent(propensities, assets, employee_count, capital_inventory);
-
+        Cap_Firm_array[i].Set_Public_Info_Board(pPublic_Board_1);
+        
         // Print each instance for checking
+        if(print_cap_firms){
         cout << "Iteration: " << i +1 ;
         Cap_Firm_array[i].Print();
         cout << "\n";
+        }
     }
+
+    cout << n_promised_jobs << " out of " << n_total_jobs_initial <<  " jobs have been promised to firms." << endl;
     
 
+    // Step 0.14 Allocate jobAdd_Job_Offer(Job*s to Households
+
+    // Step 0.141 - Make firms post jobs to the job list    
+
+
+
+
+
+
+
+
+
+
     // STEP 0.13 Assign jobs to households
+
+    //
+
 
     
 
@@ -169,8 +209,8 @@ int main()
     // STEP 0.4: Allocate and Initialize Firms
 
     // STEP 0.5: Allocate and Initialize Jobs and Job Market 
-    Job* job_1 = new Job(nullptr,nullptr,10,1);
-    job_1->Print();
+    //Job* job_1 = new Job(nullptr,nullptr,10,1);
+    //job_1->Print();
 
 
     // STEP 0.6: Allocate and Initialize Households
@@ -178,6 +218,7 @@ int main()
         // saving = distribution_gauss
         // saving = distribution_data
         // saving = random(0,10)
+
     
     //Household_Agent* Household_1 = new Household_Agent(1000, 10, false, false, 500, 0.4,0.2);
 

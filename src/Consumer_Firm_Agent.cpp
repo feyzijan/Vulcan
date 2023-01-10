@@ -35,6 +35,7 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int 
 
     //
     Consumer_Good* goods_on_market = new Consumer_Good(this, 0,0);
+    Public_Info_Board* pPublic_Info_Board = nullptr;
     Loan* loan_book[loan_book_size] = {};
     Job* employee_jobs[employee_list_size] = {};
 

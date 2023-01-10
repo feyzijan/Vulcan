@@ -4,7 +4,7 @@
 
 class Job;
 #include <iostream>
-#include "Job.hpp"
+//#include "Job.hpp"
 #include "Initialization_Parameters.hpp"
 
 //#define job_market_size 1000
@@ -12,7 +12,7 @@ class Job;
 class Job_Market{
 
     public:
-    Job_Market();
+    Job_Market() {};
     Job_Market(Job_Market&);
     ~Job_Market();
 
@@ -24,7 +24,7 @@ class Job_Market{
     void Remove_Top_Job_Offer();
 
     // Add New Job Offer to list, place in proper order
-    void Add_Job_Offer(Job* job_offer);
+    void Add_Job_Offer(Job* job_offer) {};
 
     
 

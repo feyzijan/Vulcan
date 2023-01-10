@@ -3,7 +3,10 @@
 
 
 class Job_Market;
+
+
 #include "Job_Market.hpp"
+#include "Job.hpp"
 #include "Initialization_Parameters.hpp"
 #include <iostream>
 
@@ -12,7 +15,7 @@ class Public_Info_Board{
     public:
 
     //-------- Constructors ----------- //
-    Public_Info_Board(); //Default Constructor
+    Public_Info_Board() {}; //Default Constructor
 
     Public_Info_Board(Public_Info_Board&); //Copy constructor
     
@@ -48,22 +51,28 @@ class Public_Info_Board{
 
     void Remove_Top_Job_Offer();
     
-    void Add_Job_Offer(Job * pJob_Offer);
+    void Post_Job_To_Market(Job * pJob_Offer);
 
     //---------------------------//
 
 
 
-
+    // Getters
 
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
 
     int Get_Price_Level() { return price_level;}
 
+    // Setters
+
+    void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
+
 
 
 
     protected:
+
+    Job_Market* pJob_Market;
 
 
 

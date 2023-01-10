@@ -108,7 +108,13 @@ void Household_Agent::Print() {
     cout << "Unemployed: " << unemployed << " Reservation wage: " << reservation_wage << " unemp duration: " << unemp_duration << endl;
     // Sentiment
     cout << "Positive Sentiment: " << positive_sentiment << endl;
+    
     Print_Characteristics(); 
+
+    //Public Board
+    cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
+
+    
 
     cout << "--------------------------------------" << endl;
 }

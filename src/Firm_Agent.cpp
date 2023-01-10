@@ -38,8 +38,10 @@ void Firm_Agent::Print(){
     cout << "Assets: " << total_assets << " Savings: " << cash_on_hand <<  " Leverage Ratio: " << leverage_ratio << endl;
 
     //Dividend characteristics
-    cout << "Dividend ratio actual: " << dividend_ratio << " pesismist: " << dividend_ratio_pessimist << " optimist: " << dividend_ratio_optimist << endl;
+    cout << "Dividend ratio actual: " << dividend_ratio << " pessimist: " << dividend_ratio_pessimist << " optimist: " << dividend_ratio_optimist << endl;
 
+    //Public Board
+    cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
 }
 
 

@@ -2,7 +2,8 @@
 #define INITIALIZATION_PARAMETERS_HPP
 
 
-#define job_market_size 100
+#define job_market_size 200
+
 
 
 extern int n_households;

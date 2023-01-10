@@ -34,6 +34,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float propensities[3], int assets, int em
 
     //
     Capital_Good* goods_on_market = new Capital_Good(this, 0,0);
+    Public_Info_Board* pPublic_Info_Board = nullptr;
     Loan* loan_book[loan_book_size] = {};
     Job* employee_jobs[employee_list_size] = {};
 

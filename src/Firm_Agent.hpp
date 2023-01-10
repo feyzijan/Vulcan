@@ -4,9 +4,11 @@
 
 #include <iostream>
 
+
 #include "Loan.hpp"
 #include "General_Good.hpp"
 #include "Job.hpp"
+#include "Public_Info_Board.hpp"
 
 // Todo: Move below definitions to the initialization file
 #define loan_book_size 100
@@ -73,7 +75,10 @@ class Firm_Agent{
     // Getters
 
     // Setters
+    void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
 
+
+    Public_Info_Board* pPublic_Info_Board;
 
     protected:
     General_Good* goods_on_market;

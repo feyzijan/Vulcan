@@ -1,3 +1,4 @@
+
 #include "Public_Info_Board.hpp"
 
 
@@ -23,3 +24,10 @@ void Public_Info_Board::Print() const{
     cout << " Household Optimism: " << household_sentiment_percentage << " Firm Optimism: " << firm_sentiment_percentage << endl;
 
 }
+
+
+
+void Public_Info_Board::Post_Job_To_Market(Job * pJob_Offer) {
+    pJob_Market->Add_Job_Offer(pJob_Offer);
+}
+
