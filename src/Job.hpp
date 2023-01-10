@@ -25,6 +25,15 @@ class Job{
     // Print info on job
     void Print() const;
 
+    // Overload Operators
+    bool operator==(const Job& rhs);
+    bool operator<=(const Job& rhs);
+    bool operator>=(const Job& rhs);
+    bool operator>(const Job& rhs);
+    bool operator<(const Job& rhs);
+    bool operator!=(const Job& rhs);
+
+
     //Getters
     int Get_Wage() const {return wage_offer;} 
     int Get_Posting_Date() const {return posting_date;}

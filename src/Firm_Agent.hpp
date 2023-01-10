@@ -72,10 +72,13 @@ class Firm_Agent{
 
 
 
+
+
     // Getters
 
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
+    void Set_Wage_Offer(int wage) { this->wage_offer = wage;} // used in testing
 
 
     Public_Info_Board* pPublic_Info_Board;

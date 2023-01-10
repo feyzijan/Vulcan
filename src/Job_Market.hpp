@@ -2,9 +2,12 @@
 #define JOB_MARKET_HPP
 
 
+
 class Job;
 #include <iostream>
-//#include "Job.hpp"
+#include <vector>
+#include <algorithm>
+#include "Job.hpp"
 #include "Initialization_Parameters.hpp"
 
 //#define job_market_size 1000
@@ -12,24 +15,28 @@ class Job;
 class Job_Market{
 
     public:
-    Job_Market() {};
-    Job_Market(Job_Market&);
-    ~Job_Market();
+    Job_Market() ;
+    Job_Market(Job_Market&){};
+    ~Job_Market(){};
+
+    void Print(int n);
 
     
     // Getter that returns pointer to first instance in Job list
-    Job* Get_Job_List() const; 
+    Job* Get_Top_Job(); 
 
     // Remove the highest paying Job offer once its taken
     void Remove_Top_Job_Offer();
 
     // Add New Job Offer to list, place in proper order
-    void Add_Job_Offer(Job* job_offer) {};
+    void Add_Job_Offer(Job* job_offer) ;
 
     
 
     private:
     Job * job_offers[job_market_size];
+    std::vector<Job*> job_list;
+
    
 
 };

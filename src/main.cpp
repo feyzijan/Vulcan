@@ -158,6 +158,18 @@ int main()
     // Step 0.14 Allocate jobAdd_Job_Offer(Job*s to Households
 
     // Step 0.141 - Make firms post jobs to the job list    
+    for (int i=0; i<n_consumer_firms; i++) {
+        Cons_Firm_array[i].Set_Wage_Offer((i+1)*1000);
+        Cons_Firm_array[i].Post_Jobs();
+    }
+
+    for (int i=0; i<n_capital_firms; i++) {
+        Cap_Firm_array[i].Set_Wage_Offer((i+1)*1001);
+        Cap_Firm_array[i].Post_Jobs();
+    }
+
+    pJob_Market_1->Print(10);
+
 
 
 
