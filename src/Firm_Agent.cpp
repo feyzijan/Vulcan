@@ -198,10 +198,11 @@ void Firm_Agent::Pay_Liabilities(){
 
 
 void Firm_Agent::Post_Jobs(){
+    using namespace std;
     int employee_need = employee_count_desired - employee_count;
     for(int i=0; i< employee_need;i++){
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
-        std::cout << "Posting job with wage: " << wage_offer <<std::endl;
+        cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
         pPublic_Info_Board->Post_Job_To_Market(job);
     }
 

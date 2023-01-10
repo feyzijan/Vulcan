@@ -19,7 +19,7 @@ class Job_Market{
     Job_Market(Job_Market&){};
     ~Job_Market(){};
 
-    void Print(int n);
+    void Print();
 
     
     // Getter that returns pointer to first instance in Job list
@@ -31,10 +31,11 @@ class Job_Market{
     // Add New Job Offer to list, place in proper order
     void Add_Job_Offer(Job* job_offer) ;
 
+    void Sort_Jobs_by_Wage();
+
     
 
     private:
-    Job * job_offers[job_market_size];
     std::vector<Job*> job_list;
 
    

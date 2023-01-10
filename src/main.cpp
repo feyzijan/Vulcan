@@ -158,6 +158,8 @@ int main()
     // Step 0.14 Allocate jobAdd_Job_Offer(Job*s to Households
 
     // Step 0.141 - Make firms post jobs to the job list    
+
+    /*
     for (int i=0; i<n_consumer_firms; i++) {
         Cons_Firm_array[i].Set_Wage_Offer((i+1)*1000);
         Cons_Firm_array[i].Post_Jobs();
@@ -167,9 +169,32 @@ int main()
         Cap_Firm_array[i].Set_Wage_Offer((i+1)*1001);
         Cap_Firm_array[i].Post_Jobs();
     }
+    */
 
-    pJob_Market_1->Print(10);
+    //Cons_Firm_array[0].Set_Wage_Offer(3000);
+    //Cons_Firm_array[0].Post_Jobs();
 
+    //pJob_Market_1->Print();
+
+
+
+    /* Testing Job Sorting
+    Job* job1 = new Job(nullptr,nullptr, 1000,0);
+    Job* job2 = new Job(nullptr,nullptr, 800,0);
+    Job* job3 = new Job(nullptr,nullptr, 1200,0);
+    Job* job4 = new Job(nullptr,nullptr, 1100,0);
+    Job* job5 = new Job(nullptr,nullptr, 1900,0);
+
+    pJob_Market_1->Add_Job_Offer(job1);
+    pJob_Market_1->Add_Job_Offer(job2);
+    pJob_Market_1->Add_Job_Offer(job3);
+    pJob_Market_1->Add_Job_Offer(job4);
+    pJob_Market_1->Add_Job_Offer(job5);
+
+    pJob_Market_1->Print();
+    pJob_Market_1->Sort_Jobs_by_Wage();
+    pJob_Market_1->Print();
+    */
 
 
 
