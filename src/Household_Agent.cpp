@@ -94,6 +94,8 @@ void Household_Agent::Print_Characteristics() {
 
 void Household_Agent::Print() {
     cout << "\n------ Household Agent at address : " << this << endl;
+    //Public Board
+    cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
     // Wealth
     cout << "Financial wealth: " << wealth_financial << " human wealth: " << wealth_human << endl;
     // Consumption
@@ -110,12 +112,6 @@ void Household_Agent::Print() {
     cout << "Positive Sentiment: " << positive_sentiment << endl;
     
     Print_Characteristics(); 
-
-    //Public Board
-    cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
-
-    
-
     cout << "--------------------------------------" << endl;
 }
 
@@ -261,28 +257,7 @@ void Household_Agent::Update_Wealth()
 
 
 
-/* Function to check if the household is willing to take the 
-highest paying job in the job board
-- *** Check the job offer pointer assignment works
-- Need to assign new income somewhere
-*/
 
-void Household_Agent::Seek_Jobs()
-{
-    // Get the top job offer
-    Job * job_offer = pPublic_Info_Board->Get_Top_Job(); 
-    
-    // Compare against reservation wage
-    if (job_offer->Get_Wage() > reservation_wage)
-    {
-        current_job = job_offer; // set pointers equal
-        unemployed = false; // now employed
-        pPublic_Info_Board->Remove_Top_Job_Offer(); // Remove job offer form board
-    } else{
-        // Update reservation wage and seek job in next period
-        Update_Reservation_Wage();
-    }
-}
 
 
 /* Function to update reservation wage
@@ -300,6 +275,30 @@ void Household_Agent::Update_Reservation_Wage()
     }
 } 
 
+
+
+/* Function to seek jobs and accept any above the reservation wage
+If job is accepted remove it from the job market
+
+*/
+
+void Household_Agent::Seek_Jobs()
+{
+    
+    Job* best_job = pPublic_Info_Board->Get_Top_Job();
+    if (best_job != NULL){
+        if (best_job->Get_Wage() >= reservation_wage){
+            current_job = best_job;
+            unemployed = false;
+            pPublic_Info_Board->Take_Job(current_job);
+            pPublic_Info_Board->Remove_Top_Job_Offer();
+        }
+        else {
+            Update_Reservation_Wage();
+        }
+    }
+    
+}
 
 
 

@@ -64,7 +64,7 @@ class Household_Agent{
 
 
 
-    // Compare two job offers and pick the best one
+    // Check for jobs in the public market
     void Seek_Jobs();
 
     // Update reservation wage

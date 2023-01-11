@@ -7,6 +7,7 @@ class Job_Market;
 
 #include "Job_Market.hpp"
 #include "Job.hpp"
+//#include "Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
 #include <iostream>
 
@@ -52,6 +53,8 @@ class Public_Info_Board{
     void Remove_Top_Job_Offer();
     
     void Post_Job_To_Market(Job * pJob_Offer);
+
+    void Take_Job(Job* pJob_Offer); // Notify employer and remove job from market
 
     //---------------------------//
 

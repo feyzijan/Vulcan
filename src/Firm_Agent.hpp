@@ -70,6 +70,10 @@ class Firm_Agent{
     // Adjust Wage offer after job search
     void Adjust_Wage_Offers();
 
+    // Act on job acceptance
+    void Hire_Worker(Job* pJob);
+    
+
 
 
 

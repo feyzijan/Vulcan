@@ -178,7 +178,7 @@ int main()
 
 
 
-    /* Testing Job Sorting
+    // /*Testing Job Sorting
     Job* job1 = new Job(nullptr,nullptr, 1000,0);
     Job* job2 = new Job(nullptr,nullptr, 800,0);
     Job* job3 = new Job(nullptr,nullptr, 1200,0);
@@ -194,7 +194,18 @@ int main()
     pJob_Market_1->Print();
     pJob_Market_1->Sort_Jobs_by_Wage();
     pJob_Market_1->Print();
-    */
+
+    pJob_Market_1->Remove_Top_Job_Offer();
+    pJob_Market_1->Print();
+
+
+    Household_array[0].Print();
+    Household_array[0].Seek_Jobs();
+    Household_array[0].Print();
+
+    pJob_Market_1->Print();
+
+    //*/
 
 
 

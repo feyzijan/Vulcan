@@ -18,15 +18,14 @@ void Job_Market::Print(){
 
 
 Job* Job_Market::Get_Top_Job(){
-    return *job_list.begin();
+    return job_list.front();
 }
 
 
 //TODO: Test this loop,
 
 void Job_Market::Remove_Top_Job_Offer(){
-
-
+    job_list.erase(job_list.begin());
 }
 
 

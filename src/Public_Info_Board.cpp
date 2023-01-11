@@ -5,8 +5,9 @@
 using namespace std;
 
 Job* Public_Info_Board::Get_Top_Job() {
-    Job * job_pointer = new Job();
-    return job_pointer;
+
+    Job * job = pJob_Market->Get_Top_Job();
+    return job;
 }
 
 
@@ -14,8 +15,19 @@ Job* Public_Info_Board::Get_Top_Job() {
 
 void Public_Info_Board::Remove_Top_Job_Offer(){
     std::cout << "Top job offer taken" <<std::endl;
+    pJob_Market->Remove_Top_Job_Offer();
 }
 
+
+void Public_Info_Board::Take_Job(Job* pJob_Offer) {
+    // Remove from market
+    Public_Info_Board::Remove_Top_Job_Offer();
+    // Notify employer
+    Firm_Agent* employer = pJob_Offer->Get_Employer();
+    //employer->Hire_Worker(pJob_Offer);
+
+
+}
 
 void Public_Info_Board::Print() const{
     cout << " Public Infor Board at adress " << this << endl;
