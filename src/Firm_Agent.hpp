@@ -132,6 +132,7 @@ class Firm_Agent{
     int employee_count; 
     int wage_offer;
     int employee_count_desired;
+    int n_active_job_postings;
     bool need_worker;
     int w_target; //Desired labor capacity utilization
     int w_current; //Current labor capacity utilization
@@ -156,5 +157,11 @@ class Firm_Agent{
 
 
 };
+
+
+// Initialization functions
+
+
+void Post_Initial_Job_Offers(Firm_Agent * Firm_array, int size);
 
 #endif

@@ -1,7 +1,7 @@
 #include "Capital_Firm_Agent.hpp"
 
 
-
+using namespace std;
 
 
 void Capital_Firm_Agent::Print(){
@@ -68,7 +68,8 @@ Capital_Firm_Agent::Capital_Firm_Agent(float propensities[3], int assets, int em
     dividend_ratio = dividend_ratio_optimist;
 
     // Employees
-    this->employee_count = 0; // correctly set
+    employee_count = 0; // correctly set
+    n_active_job_postings = 0;
     wage_offer = 0;
     w_target = 0;
     w_current = 0;
@@ -114,5 +115,14 @@ void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_B
         Cap_Firm_array[i] = Capital_Firm_Agent(propensities, assets, employee_count, capital_inventory);
         Cap_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
         
+    }
+}
+
+
+void Post_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size){
+    for (int i=0; i<size; i++) {
+        cout << "Now posting jobs for cons firm # " << i << endl;
+        Cap_Firm_array[i].Set_Wage_Offer((i+1)*1000);
+        Cap_Firm_array[i].Post_Jobs();
     }
 }

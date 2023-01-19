@@ -80,6 +80,7 @@ class Household_Agent{
     //Getters
     int Get_Wage_Dividend() {};
     int Get_Wage() {return income_wage;};
+    bool Get_Employment_Status() {return !unemployed;}
 
 
 

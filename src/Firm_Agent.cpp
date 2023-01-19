@@ -1,5 +1,6 @@
 #include "Firm_Agent.hpp"
 
+using namespace std;
 
 
 
@@ -42,6 +43,7 @@ void Firm_Agent::Print(){
 
     //Public Board
     cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
+    cout << "\n"<< endl;
 }
 
 
@@ -199,11 +201,15 @@ void Firm_Agent::Pay_Liabilities(){
 
 void Firm_Agent::Post_Jobs(){
     using namespace std;
-    int employee_need = employee_count_desired - employee_count;
-    for(int i=0; i< employee_need;i++){
+    int new_postings =  employee_count_desired - employee_count - n_active_job_postings ;
+    //cout << "Employee count desired: " << employee_count_desired << " Current employees: " << employee_count << endl;
+    cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
+    for(int i=0; i< new_postings;i++){
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
-        cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
+        //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
         pPublic_Info_Board->Post_Job_To_Market(job);
     }
 
 }
+
+

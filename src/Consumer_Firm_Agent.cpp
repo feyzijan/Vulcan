@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-
+using namespace std;
 
 
 
@@ -16,7 +16,7 @@ void Consumer_Firm_Agent::Print(){
 
 
 
-Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int employee_count, int capital_inventory)
+Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int employee_need, int capital_inventory)
 {
     
     dividend_ratio_optimist = propensities[0];
@@ -25,7 +25,8 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int 
 
     cash_on_hand = assets;
     total_assets = assets;
-    this->employee_count_desired = employee_count;
+    employee_count_desired = employee_need;
+    
     working_capital_inventory = capital_inventory;
 
     need_worker = 1;
@@ -69,7 +70,8 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int 
     dividend_ratio = dividend_ratio_optimist;
 
     // Employees
-    this->employee_count = 0; // correctly set
+    employee_count = 0; // correctly set
+    n_active_job_postings = 0;
     wage_offer = 0;
     w_target = 0;
     w_current = 0;
@@ -106,17 +108,24 @@ void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Inf
             float(i), // inventory factor
         };
         int assets = i*10000;
-        int employee_count = i+4;
-        *promised_jobs += employee_count;
-        int capital_inventory = employee_count;
+        int employee_need= i+4;
+        *promised_jobs += employee_need;
+        int capital_inventory = employee_need;
 
 
-        Cons_Firm_array[i] = Consumer_Firm_Agent(propensities, assets, employee_count, capital_inventory);
+        Cons_Firm_array[i] = Consumer_Firm_Agent(propensities, assets, employee_need, capital_inventory);
         Cons_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
-
-
     }
 
-
-
 }
+
+
+
+void Post_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int size){
+    for (int i=0; i<size; i++) {
+        cout << "Now posting jobs for cons firm # " << i << endl;
+        Cons_Firm_array[i].Set_Wage_Offer((i+1)*1000);
+        Cons_Firm_array[i].Post_Jobs();
+    }
+}
+

@@ -91,30 +91,30 @@ int main()
 
     // Step 0.14 Allocate jobAdd_Job_Offer(Job*s to Households
 
-    // Step 0.141 - Make firms post jobs to the job list    
+    // Step 0.141 - Make firms post jobs to the job list   - Todo move these functs to headers  
 
-    /*
-    for (int i=0; i<n_consumer_firms; i++) {
-        Cons_Firm_array[i].Set_Wage_Offer((i+1)*1000);
-        Cons_Firm_array[i].Post_Jobs();
-    }
+    // Make all firms post jobs for the number of employees they require
+    
+    Post_Initial_Job_Offers_Cons(Cons_Firm_array, n_consumer_firms);
+    Post_Initial_Job_Offers_Cap(Cap_Firm_array, n_capital_firms);
 
-    for (int i=0; i<n_capital_firms; i++) {
-        Cap_Firm_array[i].Set_Wage_Offer((i+1)*1001);
-        Cap_Firm_array[i].Post_Jobs();
-    }
-    */
 
     //Cons_Firm_array[0].Set_Wage_Offer(3000);
     //Cons_Firm_array[0].Post_Jobs();
 
-    //pJob_Market_1->Print();
+/*     Cons_Firm_array[0].Print();
+    Cons_Firm_array[0].Post_Jobs();
+    Cons_Firm_array[1].Print();
+    Cons_Firm_array[1].Post_Jobs(); 
+ */
+
+    pJob_Market_1->Print();
 
 
 
-    /*Testing Job Sorting
+    //Testing Job Sorting
     
-    Job* job1 = new Job(nullptr,nullptr, 1000,0);
+ /*    Job* job1 = new Job(nullptr,nullptr, 1000,0);
     Job* job2 = new Job(nullptr,nullptr, 800,0);
     Job* job3 = new Job(nullptr,nullptr, 1200,0);
     Job* job4 = new Job(nullptr,nullptr, 1100,0);
@@ -134,13 +134,13 @@ int main()
     pJob_Market_1->Print();
 
 
-    Household_array[0].Print();
+    cout << "Household has job?:" << Household_array[0].Get_Employment_Status() << endl;
     Household_array[0].Seek_Jobs();
-    Household_array[0].Print();
+    cout <<  "Household has job?:" <<  Household_array[0].Get_Employment_Status() << endl;
 
-    pJob_Market_1->Print();
+    pJob_Market_1->Print(); */
 
-    */
+    
 
 
 

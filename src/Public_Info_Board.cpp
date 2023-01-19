@@ -40,7 +40,7 @@ void Public_Info_Board::Print() const{
 
 
 void Public_Info_Board::Post_Job_To_Market(Job * pJob_Offer) {
-    cout << "Public board posting job with address: " <<  pJob_Offer << " and wage: "  << pJob_Offer->Get_Wage() << endl;
+    //cout << "Public board posting job with address: " <<  pJob_Offer << " and wage: "  << pJob_Offer->Get_Wage() << endl;
     pJob_Market->Add_Job_Offer(pJob_Offer);
 }
 

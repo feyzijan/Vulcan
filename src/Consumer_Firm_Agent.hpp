@@ -13,7 +13,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 
     //new constructor to use
-    Consumer_Firm_Agent(float propensities[3], int assets, int employee_count, int capital_inventory);
+    Consumer_Firm_Agent(float propensities[3], int assets, int employee_need, int capital_inventory);
 
 
     Consumer_Firm_Agent(Consumer_Firm_Agent&); //Copy Constructor
@@ -34,6 +34,8 @@ class Consumer_Firm_Agent: public Firm_Agent{
 // Initialization 
 
 void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs);
+
+void Post_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int size);
 
 
 
