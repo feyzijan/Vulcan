@@ -30,4 +30,10 @@ class Capital_Firm_Agent: public Firm_Agent{
 };
 
 
+// Initialization 
+
+void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs);
+
+
+
 #endif

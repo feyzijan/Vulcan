@@ -38,120 +38,54 @@ int main()
 {
 
     cout << "************* Program has started" <<endl;
-//  ------------------ STEP 0 INITIALIZATION ---------------------
+
+//  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun" << endl;
+
     // STEP 0.10: Initalize global variables and the public board
 
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
     Job_Market* pJob_Market_1 = new Job_Market();
     pPublic_Board_1->Set_Job_Market(pJob_Market_1);
 
-
     
+    int n_promised_jobs = 0;  // Variable to keep track of # jobs to be assigned
+
+
+    // TODO: Make the initialization parameters random according to some rule
+    // TODO: Still need to give households jobs and initialize income, firm_ownership, etc.
+
+
+
     //------- STEP 0.11: Initialize Households
     cout << "\n Initializing " << n_households << " households" << endl;
 
-    // Allocate memory for the array to hold the households
+    // Allocate memory for the array to hold the household then fill it
     Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent) * n_households);
+    Initialize_Households(Household_array, pPublic_Board_1, n_households); 
+   
 
-    // TODO: Make the initialization parameters random according to some rule
-
-    // Fill Household array
-    for (int i=0; i<n_households; i++) {
-        float propensities[] = { 
-            float(n_households)/float(i), // consumption propensity
-            0.3, // saving_propensity_optimist 
-            0.4, // saving_propensity_pessimist
-            0.1, // c_f
-            0.2, // c_h
-            0.1, // c_excess_money
-            0.25, // p_majority_op_adoption
-         };
-
-        int wealth = 1000 *i;
-        int unemployment_tolerance = 10;
-
-        Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth);
-        Household_array[i].Set_Public_Info_Board(pPublic_Board_1);
-
-
-        // Print each instance
-        if(print_households) {
-        cout << "Iteration: " << i << endl;
-        Household_array[i].Print();
-        cout << "\n";
-        }
-    }
-
-    // TODO: Still need to give households jobs and initialize income, firm_ownership, etc.
-
-    // Variable to keep track of # jobs to be assigned
-    int n_promised_jobs = 0; 
+    /* int i = 5;
+    cout << "Iteration: " << i << endl;
+    Household_array[i].Print(); */
 
     //-------- STEP 0.12: Initialize Consumer Firms ----------
-    
     cout << "\n Initializing " << n_consumer_firms << " consumer firms" << endl;
 
-    // Allocate memory for the array to hold the firms
+    // Allocate memory for the array to hold the firms then fill it
     Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
-
-    // TODO: Make the initialization parameters random according to some rule
-    for (int i=0; i<n_consumer_firms; i++) {
-        float propensities[] = {
-            0.05, // dividend_ratio_optimist 
-            0.03, // dividend_ratio_pessimist 
-            float(i), // inventory factor
-        };
-        int assets = i*10000;
-        int employee_count = i+4;
-        n_promised_jobs += employee_count;
-        int capital_inventory = employee_count;
-
-
-        Cons_Firm_array[i] = Consumer_Firm_Agent(propensities, assets, employee_count, capital_inventory);
-        Cons_Firm_array[i].Set_Public_Info_Board(pPublic_Board_1);
-
-
-        // Print each instance for checking
-        if(print_cons_firms){
-        cout << "Iteration: " << i +1 ;
-        Cons_Firm_array[i].Print();
-        cout << "\n";
-        }
-    }
+    Initialize_Consumer_Firms( Cons_Firm_array, pPublic_Board_1, n_consumer_firms, &n_promised_jobs);
     
 
     //---------- STEP 0.12: Initialize Capital Firms
-    
     cout << "\n Initializing " << n_capital_firms << " capital firms" << endl;
 
-    // Allocate memory for the array to hold the firms
+    // Allocate memory for the array to hold the firms then fill it
     Capital_Firm_Agent * Cap_Firm_array = (Capital_Firm_Agent*)malloc(sizeof(Capital_Firm_Agent) * n_capital_firms);
+    Initialize_Capital_Firms(Cap_Firm_array, pPublic_Board_1, n_capital_firms, &n_promised_jobs);
     
-    // TODO: Make the initialization parameters random according to some rule
-    for (int i=0; i<n_capital_firms; i++) {
-        float propensities[] = {
-            0.05, // dividend_ratio_optimist 
-            0.03, // dividend_ratio_pessimist 
-            float(i), // inventory factor
-        };
-        int assets = i*10000;
-        int employee_count = i+4;
-        n_promised_jobs += employee_count;
-        int capital_inventory = n_max_employees; // these firms only seek labor
 
-
-        Cap_Firm_array[i] = Capital_Firm_Agent(propensities, assets, employee_count, capital_inventory);
-        Cap_Firm_array[i].Set_Public_Info_Board(pPublic_Board_1);
-        
-        // Print each instance for checking
-        if(print_cap_firms){
-        cout << "Iteration: " << i +1 ;
-        Cap_Firm_array[i].Print();
-        cout << "\n";
-        }
-    }
-
+    //----------- STEP 0.13: Initialize jobs
     cout << n_promised_jobs << " out of " << n_total_jobs_initial <<  " jobs have been promised to firms." << endl;
     
 
@@ -178,7 +112,8 @@ int main()
 
 
 
-    // /*Testing Job Sorting
+    /*Testing Job Sorting
+    
     Job* job1 = new Job(nullptr,nullptr, 1000,0);
     Job* job2 = new Job(nullptr,nullptr, 800,0);
     Job* job3 = new Job(nullptr,nullptr, 1200,0);
@@ -205,7 +140,7 @@ int main()
 
     pJob_Market_1->Print();
 
-    //*/
+    */
 
 
 

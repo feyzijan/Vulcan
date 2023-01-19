@@ -301,6 +301,29 @@ void Household_Agent::Seek_Jobs()
 }
 
 
+// Non Member Function
 
+
+void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size){
+     for (int i=0; i<size; i++) {
+        float propensities[] = { 
+            float(n_households)/float(i), // consumption propensity
+            0.3, // saving_propensity_optimist 
+            0.4, // saving_propensity_pessimist
+            0.1, // c_f
+            0.2, // c_h
+            0.1, // c_excess_money
+            0.25, // p_majority_op_adoption
+         };
+
+        int wealth = 1000 *i;
+        int unemployment_tolerance = 10;
+
+        Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth);
+        Household_array[i].Set_Public_Info_Board(pPublic_Board);
+
+    }
+
+}
 
 

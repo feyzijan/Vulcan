@@ -142,4 +142,13 @@ class Household_Agent{
     float p_majority_op_adoption; // mu^m : probablility of adopting majority opinion
 };
 
+
+/* Initialization Functions
+
+*/
+
+void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size);
+
+
+
 #endif

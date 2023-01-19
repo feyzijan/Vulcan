@@ -96,3 +96,23 @@ Capital_Firm_Agent::~Capital_Firm_Agent()
 
 } 
 
+// Non member functions
+
+void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs){
+    for (int i=0; i<n_capital_firms; i++) {
+        float propensities[] = {
+            0.05, // dividend_ratio_optimist 
+            0.03, // dividend_ratio_pessimist 
+            float(i), // inventory factor
+        };
+        int assets = i*10000;
+        int employee_count = i+4;
+        *promised_jobs += employee_count;
+        int capital_inventory = n_max_employees; // these firms only seek labor
+
+
+        Cap_Firm_array[i] = Capital_Firm_Agent(propensities, assets, employee_count, capital_inventory);
+        Cap_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
+        
+    }
+}

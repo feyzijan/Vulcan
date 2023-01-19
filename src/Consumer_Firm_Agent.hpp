@@ -31,4 +31,11 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 };
 
+// Initialization 
+
+void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs);
+
+
+
+
 #endif
