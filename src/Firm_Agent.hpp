@@ -3,6 +3,9 @@
 
 
 #include <iostream>
+#include <vector>
+#include <algorithm>
+
 
 
 #include "Loan.hpp"
@@ -33,6 +36,8 @@ class Firm_Agent{
 
 
     void Print(); // Print class variables
+    void Print_Posted_Jobs();
+    void Print_Active_Jobs();
 
 
     // -------- Initializers
@@ -70,8 +75,8 @@ class Firm_Agent{
     // Adjust Wage offer after job search
     void Adjust_Wage_Offers();
 
-    // Act on job acceptance
-    void Hire_Worker(Job* pJob);
+    // Check the active job posting to see if any have been taken
+    void Check_For_New_Employees();
     
 
 
@@ -127,7 +132,8 @@ class Firm_Agent{
     Loan* loan_book[loan_book_size]; // 
 
     // Employees
-    Job* employee_jobs[employee_list_size]; // Define this globally 
+    std::vector<Job*> active_job_list;
+    std::vector<Job*> posted_job_list;
 
     int employee_count; 
     int wage_offer;

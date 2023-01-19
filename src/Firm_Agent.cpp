@@ -166,15 +166,11 @@ void Firm_Agent::Pay_Liabilities(){
 
     //Sum up wage bill
     labor_wage_bill = 0;
-    employee_count = 0;
+    
+    for (auto i = active_job_list.begin(); i != active_job_list.end(); ++i) 
+        labor_wage_bill += (*i)->Get_Wage();
 
-    for (int i = 0; i++; i<sizeof(employee_jobs))
-    {
-        if (employee_jobs[i] != NULL){
-            labor_wage_bill += employee_jobs[i]->Get_Wage();
-            employee_count += 1;
-        }
-    }
+
 
     total_liabilities = labor_wage_bill + debt_principal_payments + debt_interest_payments;
 
@@ -208,8 +204,51 @@ void Firm_Agent::Post_Jobs(){
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
         //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
         pPublic_Info_Board->Post_Job_To_Market(job);
+        posted_job_list.push_back(job);
     }
 
 }
+
+
+/* This function will loop through the firm's posted_job_listings array, 
+and move the ones marked as taken to the active_job_list arrays, and update employee counts
+
+*/
+
+void Firm_Agent::Check_For_New_Employees(){
+
+    auto it = posted_job_list.begin();
+    while(it !=  posted_job_list.end()) {
+        if((*it)->Get_Status() == 1) { 
+            active_job_list.push_back(*it);
+            employee_count +=1;
+            it = posted_job_list.erase(it);
+        } else {
+            it++;
+        }
+    }
+}
+
+
+
+/* Print Posted job offers
+*/
+void Firm_Agent::Print_Posted_Jobs(){
+    cout << "Firm Agent Printing Posted Jobs: " << endl;
+    for (auto i = posted_job_list.begin(); i !=  posted_job_list.end(); ++i){
+        (*i)->Print();
+    }
+}
+
+
+/* Print active(taken) job offers
+*/
+void Firm_Agent::Print_Active_Jobs(){
+     cout << "Firm Agent Printing Active Jobs: " << endl;
+    for (auto i = active_job_list.begin(); i !=  active_job_list.end(); ++i){
+        (*i)->Print();
+    }
+}
+
 
 

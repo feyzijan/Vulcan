@@ -51,3 +51,6 @@ void Job_Market::Sort_Jobs_by_Wage(){
 }
 
 
+void Job_Market::Print_Size(){
+    cout << "Job market has " << job_list.size() << " jobs" << endl;
+}

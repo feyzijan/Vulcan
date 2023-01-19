@@ -39,10 +39,13 @@ class Job{
     int Get_Posting_Date() const {return posting_date;}
     Firm_Agent* Get_Employer() const {return employer;} 
     Household_Agent* Get_Employee() const {return employee;}
+    bool Get_Status() const {return taken;}
 
 
     //Setters
     void Update_Wage(int new_wage);
+    void Set_Employee(Household_Agent* pemployee);
+    void Update_Status(bool status);
 
 
     private:
@@ -50,6 +53,7 @@ class Job{
     Household_Agent* employee;
     int wage_offer;
     int posting_date;
+    bool taken;
 
 
 

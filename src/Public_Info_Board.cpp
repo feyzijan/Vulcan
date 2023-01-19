@@ -23,7 +23,7 @@ void Public_Info_Board::Take_Job(Job* pJob_Offer) {
     // Remove from market
     Public_Info_Board::Remove_Top_Job_Offer();
     // Notify employer
-    Firm_Agent* employer = pJob_Offer->Get_Employer();
+    pJob_Offer->Update_Status(1); // mark job as taken
     //employer->Hire_Worker(pJob_Offer);
 
 

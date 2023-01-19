@@ -150,6 +150,7 @@ class Household_Agent{
 
 void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size);
 
+void Initialize_Household_Jobs(Household_Agent * Household_array,  int size);
 
 
 #endif

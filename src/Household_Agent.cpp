@@ -289,9 +289,9 @@ void Household_Agent::Seek_Jobs()
     if (best_job != NULL){
         if (best_job->Get_Wage() >= reservation_wage){
             current_job = best_job;
+            current_job->Set_Employee(this); // update job object
             unemployed = false;
             pPublic_Info_Board->Take_Job(current_job);
-            pPublic_Info_Board->Remove_Top_Job_Offer();
         }
         else {
             Update_Reservation_Wage();
@@ -325,5 +325,14 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
     }
 
 }
+
+
+void Initialize_Household_Jobs(Household_Agent * Household_array,  int size){
+       for (int i=0; i<size; i++) {
+        cout << "Now seeking jobs for household # " << i << endl;
+        Household_array[i].Seek_Jobs();
+    }
+}
+
 
 

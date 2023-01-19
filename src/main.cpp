@@ -95,20 +95,38 @@ int main()
 
     // Make all firms post jobs for the number of employees they require
     
-    Post_Initial_Job_Offers_Cons(Cons_Firm_array, n_consumer_firms);
-    Post_Initial_Job_Offers_Cap(Cap_Firm_array, n_capital_firms);
+    
+    /* Post_Initial_Job_Offers_Cons(Cons_Firm_array, n_consumer_firms);
+    Post_Initial_Job_Offers_Cap(Cap_Firm_array, n_capital_firms); */
+ 
 
-
-    //Cons_Firm_array[0].Set_Wage_Offer(3000);
-    //Cons_Firm_array[0].Post_Jobs();
-
-/*     Cons_Firm_array[0].Print();
+    Cons_Firm_array[0].Set_Wage_Offer(3000);
     Cons_Firm_array[0].Post_Jobs();
-    Cons_Firm_array[1].Print();
-    Cons_Firm_array[1].Post_Jobs(); 
- */
 
-    pJob_Market_1->Print();
+    pJob_Market_1->Sort_Jobs_by_Wage();
+
+    pJob_Market_1->Print_Size();
+
+
+    Cons_Firm_array[0].Print_Posted_Jobs();
+    Cons_Firm_array[0].Print_Active_Jobs();
+
+    Household_array[0].Seek_Jobs();
+    Household_array[1].Seek_Jobs();
+    pJob_Market_1->Print_Size();
+
+    Cons_Firm_array[0].Check_For_New_Employees();
+
+    Cons_Firm_array[0].Print_Posted_Jobs();
+
+    Cons_Firm_array[0].Print_Active_Jobs();
+
+    
+
+    //Initialize_Household_Jobs( Household_array, size);
+
+
+    
 
 
 
