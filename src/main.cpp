@@ -11,6 +11,7 @@
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
 #include "Initialization_Functions.hpp"
+#include "Random_Funtions.hpp"
 
 
 

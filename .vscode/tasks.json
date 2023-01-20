@@ -31,6 +31,8 @@
 				"${fileDirname}\\Capital_Firm_Agent.cpp",
 				"${fileDirname}\\Capital_Good.cpp",
 				"${fileDirname}\\Initialization_Functions.cpp",
+				"${fileDirname}\\Random_Functions.cpp",
+
 
 
 				
