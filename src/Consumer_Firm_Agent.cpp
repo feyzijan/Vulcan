@@ -128,3 +128,10 @@ void Post_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int siz
     }
 }
 
+
+
+void Check_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int size){
+        for (int i=0; i<size; i++) {
+        Cons_Firm_array[i].Check_For_New_Employees();
+    }
+}

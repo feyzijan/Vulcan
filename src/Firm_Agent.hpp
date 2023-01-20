@@ -168,6 +168,8 @@ class Firm_Agent{
 // Initialization functions
 
 
-void Post_Initial_Job_Offers(Firm_Agent * Firm_array, int size);
+/* void Post_Initial_Job_Offers(Firm_Agent * Firm_array, int size);
 
+void Check_Initial_Job_Offers(Firm_Agent * Firm_array, int size);
+ */
 #endif

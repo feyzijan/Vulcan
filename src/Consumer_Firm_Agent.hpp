@@ -37,6 +37,7 @@ void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Inf
 
 void Post_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int size);
 
+void Check_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int size);
 
 
 

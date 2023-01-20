@@ -125,3 +125,10 @@ void Post_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size){
         Cap_Firm_array[i].Post_Jobs();
     }
 }
+
+
+void Check_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size){
+        for (int i=0; i<size; i++) {
+        Cap_Firm_array[i].Check_For_New_Employees();
+    }
+}

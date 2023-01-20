@@ -14,7 +14,7 @@ Job* Public_Info_Board::Get_Top_Job() {
 
 
 void Public_Info_Board::Remove_Top_Job_Offer(){
-    std::cout << "Top job offer taken" <<std::endl;
+    //std::cout << "Top job offer taken" <<std::endl;
     pJob_Market->Remove_Top_Job_Offer();
 }
 

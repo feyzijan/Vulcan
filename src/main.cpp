@@ -22,10 +22,10 @@ using namespace std;
 
 // Global variables for initialization
 int n_households = 100;
-int n_consumer_firms = 10;
-int n_capital_firms = 2;
+int n_consumer_firms = 9;
+int n_capital_firms = 3;
 
-int n_total_jobs_initial = 94;
+int n_total_jobs_initial = 87; // change this to expected max count - just for checking
 
 
 // To easily switch printing on/off
@@ -89,74 +89,40 @@ int main()
     cout << n_promised_jobs << " out of " << n_total_jobs_initial <<  " jobs have been promised to firms." << endl;
     
 
-    // Step 0.14 Allocate jobAdd_Job_Offer(Job*s to Households
-
-    // Step 0.141 - Make firms post jobs to the job list   - Todo move these functs to headers  
-
-    // Make all firms post jobs for the number of employees they require
+    // Step 0.14 Allocate Jobs to Households
     
-    
-    /* Post_Initial_Job_Offers_Cons(Cons_Firm_array, n_consumer_firms);
-    Post_Initial_Job_Offers_Cap(Cap_Firm_array, n_capital_firms); */
+    // Firms post all the initial jobs they require
+    Post_Initial_Job_Offers_Cons(Cons_Firm_array, n_consumer_firms);
+    Post_Initial_Job_Offers_Cap(Cap_Firm_array, n_capital_firms); 
+
+    cout << "Posting jobs complete" << endl;
  
-
-    Cons_Firm_array[0].Set_Wage_Offer(3000);
-    Cons_Firm_array[0].Post_Jobs();
-
     pJob_Market_1->Sort_Jobs_by_Wage();
+    pJob_Market_1->Print_Size(); //debugging
 
-    pJob_Market_1->Print_Size();
+    // All households try to find a job
+    Initialize_Household_Jobs(Household_array, n_households);
 
+    cout << " Households have got the jobs" << endl;
 
-    Cons_Firm_array[0].Print_Posted_Jobs();
-    Cons_Firm_array[0].Print_Active_Jobs();
+    // All firms Check for their new employees
+    Check_Initial_Job_Offers_Cons(Cons_Firm_array, n_consumer_firms);
+    Check_Initial_Job_Offers_Cap(Cap_Firm_array, n_capital_firms);
 
-    Household_array[0].Seek_Jobs();
-    Household_array[1].Seek_Jobs();
-    pJob_Market_1->Print_Size();
+    cout << " Firms have registered their employees" << endl;
 
-    Cons_Firm_array[0].Check_For_New_Employees();
+    pJob_Market_1->Print_Size(); //debugging
 
-    Cons_Firm_array[0].Print_Posted_Jobs();
-
-    Cons_Firm_array[0].Print_Active_Jobs();
-
-    
-
-    //Initialize_Household_Jobs( Household_array, size);
-
-
-    
+    cout << " Job Market Initialization Now Complete" << endl;
 
 
 
-    //Testing Job Sorting
-    
- /*    Job* job1 = new Job(nullptr,nullptr, 1000,0);
-    Job* job2 = new Job(nullptr,nullptr, 800,0);
-    Job* job3 = new Job(nullptr,nullptr, 1200,0);
-    Job* job4 = new Job(nullptr,nullptr, 1100,0);
-    Job* job5 = new Job(nullptr,nullptr, 1900,0);
-
-    pJob_Market_1->Add_Job_Offer(job1);
-    pJob_Market_1->Add_Job_Offer(job2);
-    pJob_Market_1->Add_Job_Offer(job3);
-    pJob_Market_1->Add_Job_Offer(job4);
-    pJob_Market_1->Add_Job_Offer(job5);
-
-    pJob_Market_1->Print();
-    pJob_Market_1->Sort_Jobs_by_Wage();
-    pJob_Market_1->Print();
-
-    pJob_Market_1->Remove_Top_Job_Offer();
-    pJob_Market_1->Print();
+    //Testing that evt worked
+    cout << "Household # " << 10 <<  "has job?:" << Household_array[10].Get_Employment_Status() << endl;
+    cout <<   "Household # " << 90 <<  "has job?:" <<  Household_array[90].Get_Employment_Status() << endl;
 
 
-    cout << "Household has job?:" << Household_array[0].Get_Employment_Status() << endl;
-    Household_array[0].Seek_Jobs();
-    cout <<  "Household has job?:" <<  Household_array[0].Get_Employment_Status() << endl;
 
-    pJob_Market_1->Print(); */
 
     
 

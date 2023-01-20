@@ -18,7 +18,8 @@ void Job_Market::Print(){
 
 
 Job* Job_Market::Get_Top_Job(){
-    return job_list.front();
+    if (job_list.empty()) return NULL;
+    else return job_list.front();
 }
 
 

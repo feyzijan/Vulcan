@@ -37,6 +37,7 @@ void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_B
 
 void Post_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size);
 
+void Check_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size);
 
 
 
