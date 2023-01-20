@@ -32,7 +32,8 @@ public:
 
 
 /* Returns generator of uniform dist
-*/class Uniform_Dist_Generator {
+*/
+class Uniform_Dist_Generator {
     int min;
     int max;
     std::default_random_engine generator;
