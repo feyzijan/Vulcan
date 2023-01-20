@@ -44,3 +44,7 @@ void Public_Info_Board::Post_Job_To_Market(Job * pJob_Offer) {
     pJob_Market->Add_Job_Offer(pJob_Offer);
 }
 
+
+void Public_Info_Board::Sort_Job_Market(){
+    pJob_Market->Sort_Jobs_by_Wage();
+}

@@ -5,6 +5,10 @@
 
 const int n_max_employees = 100;
 
+const int n_households = 100;
+const int n_consumer_firms = 9;
+const int n_capital_firms = 3;
+
 
 /*
 namespace constants

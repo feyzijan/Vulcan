@@ -56,6 +56,7 @@ class Public_Info_Board{
 
     void Take_Job(Job* pJob_Offer); // Notify employer and remove job from market
 
+    void Sort_Job_Market();
     //---------------------------//
 
 
@@ -65,6 +66,8 @@ class Public_Info_Board{
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
 
     int Get_Price_Level() { return price_level;}
+
+    Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
 
     // Setters
 
