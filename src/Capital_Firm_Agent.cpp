@@ -124,7 +124,7 @@ void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_B
 
 void Post_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size){
     for (int i=0; i<size; i++) {
-        cout << "Now posting jobs for cap firm # " << i << endl;
+        //cout << "Now posting jobs for cap firm # " << i << endl;
         Cap_Firm_array[i].Set_Wage_Offer((i+1)*1000);
         Cap_Firm_array[i].Post_Jobs();
     }

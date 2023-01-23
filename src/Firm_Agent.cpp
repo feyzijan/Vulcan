@@ -199,7 +199,7 @@ void Firm_Agent::Post_Jobs(){
     using namespace std;
     int new_postings =  employee_count_desired - employee_count - n_active_job_postings ;
     //cout << "Employee count desired: " << employee_count_desired << " Current employees: " << employee_count << endl;
-    cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
+    //cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
     for(int i=0; i< new_postings;i++){
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
         //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;

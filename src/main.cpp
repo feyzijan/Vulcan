@@ -13,7 +13,7 @@
 
 
 #include "Initialization_Functions.hpp"
-#include "Random_Funtions.hpp"
+#include "Random_Functions.hpp"
 #include "Data_Logging.hpp"
 
 
@@ -26,6 +26,7 @@ int main()
 {
 
     cout << "************* Program has started" <<endl;
+
 
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun" << endl;

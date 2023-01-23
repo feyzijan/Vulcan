@@ -11,6 +11,9 @@ class Public_Info_Board;
 #include "Job.hpp"
 //#include "Firm_Agent.hpp"
 
+#include "Random_Functions.hpp"
+#include "Initialization_Parameters.hpp"
+
 #define income_lookback_period 10
 
 
@@ -81,7 +84,9 @@ class Household_Agent{
     int Get_Wage_Dividend() {};
     int Get_Wage() {return income_wage;};
     bool Get_Employment_Status() {return !unemployed;}
-
+    float Get_C_f() {return c_f;}
+    float Get_C_h() {return c_h;}
+ 
 
 
     //Household variables

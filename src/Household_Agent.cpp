@@ -304,17 +304,30 @@ void Household_Agent::Seek_Jobs()
 // Non Member Function
 
 
-void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size){
+void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size)
+{   
     cout << "\n Initializing " << size << " households" << endl;
-     for (int i=0; i<size; i++) {
+    
+    //Set up Random Generators
+    Normal_Dist_Generator init_c(init_c_mean, init_c_std, init_c_min, init_c_max);
+    Normal_Dist_Generator init_s_optimist(init_s_optimist_mean, init_s_optimist_std, init_s_optimist_min, init_s_optimist_max);
+    Normal_Dist_Generator init_s_pessimist(init_s_pessimist_mean, init_s_pessimist_std, init_s_pessimist_min, init_s_pessimist_max);
+    
+    Normal_Dist_Generator init_c_f(init_c_f_mean, init_c_f_std, init_c_f_min, init_c_f_max);
+    Normal_Dist_Generator init_c_h(init_c_h_mean, init_c_h_std, init_c_h_min, init_c_h_max);
+    
+    Normal_Dist_Generator init_c_excess(init_c_excess_mean, init_c_excess_std, init_c_excess_min, init_c_excess_max);
+    Normal_Dist_Generator init_p_majority(init_p_majority_mean, init_p_majority_std, init_p_majority_min, init_p_majority_max);
+    
+    for (int i=0; i<size; i++) {
         float propensities[] = { 
-            float(n_households)/float(i), // consumption propensity
-            0.3, // saving_propensity_optimist 
-            0.4, // saving_propensity_pessimist
-            0.1, // c_f
-            0.2, // c_h
-            0.1, // c_excess_money
-            0.25, // p_majority_op_adoption
+            init_c(), // consumption propensity
+            init_s_optimist(), // saving_propensity_optimist 
+            init_s_pessimist(), // saving_propensity_pessimist
+            init_c_f(), // c_f
+            init_c_h(), // c_h
+            init_c_excess(), // c_excess_money
+            init_p_majority(), // p_majority_op_adoption
          };
 
         int wealth = 1000 *i;
@@ -322,6 +335,7 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
 
         Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth);
         Household_array[i].Set_Public_Info_Board(pPublic_Board);
+        cout << "The c_h value is " << Household_array[i].Get_C_h() << endl;
 
     }
 
@@ -330,7 +344,7 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
 
 void Initialize_Household_Jobs(Household_Agent * Household_array,  int size){
        for (int i=0; i<size; i++) {
-        cout << "Now seeking jobs for household # " << i << endl;
+        //cout << "Now seeking jobs for household # " << i << endl;
         Household_array[i].Seek_Jobs();
     }
 }

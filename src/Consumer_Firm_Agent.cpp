@@ -135,7 +135,7 @@ void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Inf
 
 void Post_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int size){
     for (int i=0; i<size; i++) {
-        cout << "Now posting jobs for cons firm # " << i << endl;
+        //cout << "Now posting jobs for cons firm # " << i << endl;
         Cons_Firm_array[i].Set_Wage_Offer((i+1)*1000);
         Cons_Firm_array[i].Post_Jobs();
     }
