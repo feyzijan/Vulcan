@@ -13,6 +13,12 @@ extern const int n_capital_firms;
 extern const int n_max_employees;
 
 
+
+
+
+
+
+
 /*
 namespace constants
 {

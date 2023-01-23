@@ -305,6 +305,7 @@ void Household_Agent::Seek_Jobs()
 
 
 void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size){
+    cout << "\n Initializing " << size << " households" << endl;
      for (int i=0; i<size; i++) {
         float propensities[] = { 
             float(n_households)/float(i), // consumption propensity

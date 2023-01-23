@@ -15,7 +15,6 @@ class Normal_Dist_Generator {
     double min;
     double max;
 
-
 public:
     Normal_Dist_Generator(double mean, double stddev, double min, double max):
         distribution(mean, stddev), min(min), max(max)

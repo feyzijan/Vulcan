@@ -16,6 +16,8 @@ void Consumer_Firm_Agent::Print(){
 
 
 
+
+
 Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int employee_need, int capital_inventory)
 {
     
@@ -28,6 +30,10 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int 
     employee_count_desired = employee_need;
     
     working_capital_inventory = capital_inventory;
+
+
+
+
 
     need_worker = 1;
     sentiment = 1;
@@ -97,9 +103,16 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent()
 } 
 
 
-// Non member functions
 
-void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs){
+
+/* Function to initialize a fixed number of households given an array of suitable size allocated
+
+*/
+void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs)
+{
+    cout << "\n Initializing " << size << " consumer firms" << endl;
+
+
      for (int i=0; i<n_consumer_firms; i++) {
         float propensities[] = {
             0.05, // dividend_ratio_optimist 

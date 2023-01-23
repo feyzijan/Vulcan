@@ -96,9 +96,13 @@ Capital_Firm_Agent::~Capital_Firm_Agent()
 
 } 
 
-// Non member functions
 
-void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs){
+
+//------------------Non member functions---------------------------
+
+void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs)
+{
+        cout << "\n Initializing " << size << " capital firms" << endl;
     for (int i=0; i<n_capital_firms; i++) {
         float propensities[] = {
             0.05, // dividend_ratio_optimist 

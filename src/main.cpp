@@ -10,9 +10,11 @@
 #include "General_Good.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
+
+
 #include "Initialization_Functions.hpp"
 #include "Random_Funtions.hpp"
-
+#include "Data_Logging.hpp"
 
 
 
@@ -39,21 +41,15 @@ int main()
 
 
     //------- STEP 0.11: Initialize Households
-    cout << "\n Initializing " << n_households << " households" << endl;
-
     Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent) * n_households);
     Initialize_Households(Household_array, pPublic_Board_1, n_households); 
 
     //-------- STEP 0.12: Initialize Consumer Firms ----------
-    cout << "\n Initializing " << n_consumer_firms << " consumer firms" << endl;
-
     Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
     Initialize_Consumer_Firms( Cons_Firm_array, pPublic_Board_1, n_consumer_firms, &n_promised_jobs);
     
 
     //---------- STEP 0.12: Initialize Capital Firms
-    cout << "\n Initializing " << n_capital_firms << " capital firms" << endl;
-
     Capital_Firm_Agent * Cap_Firm_array = (Capital_Firm_Agent*)malloc(sizeof(Capital_Firm_Agent) * n_capital_firms);
     Initialize_Capital_Firms(Cap_Firm_array, pPublic_Board_1, n_capital_firms, &n_promised_jobs);
     
@@ -61,7 +57,7 @@ int main()
     //----------- STEP 0.13: Initialize job market
     cout << " Firms are seeking " << n_promised_jobs << " jobs"  << endl; 
     
-    int n_total_jobs_initial = 87; // change this to expected max count - just for checking
+    //int n_total_jobs_initial = 87; // change this to expected max count - just for checking
     //cout<< n_total_jobs_initial <<  " jobs have been promised to firms." << endl;
     
     Initialize_Job_Market(Cons_Firm_array,Cap_Firm_array,Household_array,pPublic_Board_1);
@@ -71,23 +67,13 @@ int main()
     cout << "Household # " << 90 <<  "has job?:" <<  Household_array[90].Get_Employment_Status() << endl;
 
 
-    // STEP 0.14 Assign firm owners
+    // STEP 0.14 Assign firm owners - Todo later
 
 
     // STEP 0.15 Set remaining initial parameters for Firms
 
 
     // STEP 0.16 Set remaining initial parameters for households
-
-
-
-
-
-    
-
-    
-
-
 
 
 
