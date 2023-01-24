@@ -5,7 +5,15 @@
 #include <fstream>
 #include <vector>
 #include <utility> // std::pair
+#include <random>
 
-void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
+
+#include "Household_Agent.hpp"
+
+void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<float>>> dataset);
+
+void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size);
+
+
 
 #endif

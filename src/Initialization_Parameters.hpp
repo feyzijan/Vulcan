@@ -61,6 +61,19 @@ extern const float init_s_pessimist_min ;
 extern const float init_s_pessimist_max ;
 
 
+// Starting wealth : wealth
+extern const float init_wealth_mean;
+extern const float init_wealth_std ;
+extern const float init_wealth_min ;
+extern const float init_wealth_max ;
+
+// Maximum tolerable unemployment duration
+extern const float init_unemp_tolerance_mean;
+extern const float init_unemp_tolerance_std;
+extern const float init_unemp_tolerance_min;
+extern const float init_unemp_tolerance_max;
+
+
 
 
 

@@ -17,12 +17,17 @@ Public_Info_Board* pPublic_Info_Board){
     pJob_Market->Print_Size(); //debugging
 
     // All households try to find a job
+    cout << "Now initializing household jobs" << endl;
+
     Initialize_Household_Jobs(Household_array, n_households);
+    cout << "Household job initialization complete" << endl;
 
     //cout << " Households have got the jobs" << endl;
 
     // All firms Check for their new employees
+    cout << "Now Consumer firms are checking their job postings" << endl;
     Check_Initial_Job_Offers_Cons(Cons_Firm_array, n_consumer_firms);
+    cout << "Now Capital firms are checking their job postings" << endl;
     Check_Initial_Job_Offers_Cap(Cap_Firm_array, n_capital_firms);
 
     //cout << " Firms have registered their employees" << endl;

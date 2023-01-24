@@ -4,6 +4,7 @@
 
 #include <numeric>
 #include <random>
+#include <vector>
 
 class Public_Info_Board;
 
@@ -24,8 +25,7 @@ class Household_Agent{
 
 
     //Full on Constructor
-    Household_Agent(float propensities[7], int unemployment_tolerance, int wealth );
-    
+    Household_Agent(float propensities[7], int unemployment_tolerance, int wealth, Public_Info_Board* pPublic_Board );
 
     Household_Agent(Household_Agent&); //Copy constructor
     
@@ -86,7 +86,10 @@ class Household_Agent{
     bool Get_Employment_Status() {return !unemployed;}
     float Get_C_f() {return c_f;}
     float Get_C_h() {return c_h;}
- 
+    Public_Info_Board* Get_Public_Board() {return pPublic_Info_Board;};
+
+    std::vector<float>* Get_All_Params();
+
 
 
     //Household variables
@@ -116,8 +119,9 @@ class Household_Agent{
     
     // Savings constants
     float saving_propensity; //s
-    float saving_propensity_pessimist; //s_h - characteristic
     float saving_propensity_optimist; //s_l  - characteristic
+    float saving_propensity_pessimist; //s_h - characteristic
+    
 
     // Income 
     int income_current;

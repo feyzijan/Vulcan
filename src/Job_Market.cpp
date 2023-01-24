@@ -18,8 +18,15 @@ void Job_Market::Print(){
 
 
 Job* Job_Market::Get_Top_Job(){
-    if (job_list.empty()) return NULL;
-    else return job_list.front();
+    
+    if (job_list.empty()) {
+        cout << "Job list is empty!" <<endl;
+        return NULL; 
+    }
+    else{
+        cout << "Returning job" <<endl;
+        return job_list.front();
+    } 
 }
 
 

@@ -36,6 +36,7 @@ int main()
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
     Job_Market* pJob_Market_1 = new Job_Market();
     pPublic_Board_1->Set_Job_Market(pJob_Market_1);
+    cout << "Public Board at address: " << pPublic_Board_1 << " initialized" <<endl;
 
     
     int n_promised_jobs = 0;  // Variable to keep track of # jobs to be assigned
@@ -56,13 +57,17 @@ int main()
     
 
     //----------- STEP 0.13: Initialize job market
+    cout << "Initializing job Market" << endl;
+
     cout << " Firms are seeking " << n_promised_jobs << " jobs"  << endl; 
     
     //int n_total_jobs_initial = 87; // change this to expected max count - just for checking
     //cout<< n_total_jobs_initial <<  " jobs have been promised to firms." << endl;
     
+    
     Initialize_Job_Market(Cons_Firm_array,Cap_Firm_array,Household_array,pPublic_Board_1);
     
+    cout << "Job Market init finished" <<endl;
     //Testing that evt worked
     cout << "Household # " << 10 <<  "has job?:" << Household_array[10].Get_Employment_Status() << endl;
     cout << "Household # " << 90 <<  "has job?:" <<  Household_array[90].Get_Employment_Status() << endl;
@@ -74,7 +79,22 @@ int main()
     // STEP 0.15 Set remaining initial parameters for Firms
 
 
-    // STEP 0.16 Set remaining initial parameters for households
+
+    //vector<float>* my_test_vec = Household_array[1].Get_All_Params();
+
+ /*    std::cout<<"Vector elements are: ";
+       for (auto i = vect->begin(); i != vect->end(); ++i)
+    {
+            cout<< *i << " " <<endl;
+    } */
+
+    //int i = 0;
+
+    //cout << my_test_vec->at(i++) << endl;
+
+
+    //Log_Household_Properties(Household_array, n_households);
+    
 
 
 

@@ -10,7 +10,7 @@ using namespace std;
 
 
 // New Constructor to use
-Household_Agent::Household_Agent(float propensities[7], int unemployment_tolerance, int wealth )
+Household_Agent::Household_Agent(float propensities[7], int unemployment_tolerance, int wealth, Public_Info_Board* pPublic_Board )
 {
 
     wealth_financial = wealth;
@@ -24,9 +24,10 @@ Household_Agent::Household_Agent(float propensities[7], int unemployment_toleran
     c_excess_money = propensities[5];
     p_majority_op_adoption = propensities[6];
 
-    // Set nullpointers for Job and Public Board
-    Public_Info_Board* pPublic_Info_Board = nullptr;
-    Job * current_job = nullptr;
+    // Set Pointers
+    //Public_Info_Board* pPublic_Info_Board = pPublic_Board;
+    this->pPublic_Info_Board = pPublic_Board;
+    this->current_job = nullptr;
 
     // Set default initialization values
     income_past[income_lookback_period] = {};
@@ -63,6 +64,11 @@ Household_Agent::Household_Agent(float propensities[7], int unemployment_toleran
     unemp_duration = 0;
     reservation_wage = 0;  //may set this to minimum wage or make random
 }
+
+
+
+
+
 
 
 
@@ -288,17 +294,61 @@ void Household_Agent::Seek_Jobs()
     Job* best_job = pPublic_Info_Board->Get_Top_Job();
     if (best_job != NULL){
         if (best_job->Get_Wage() >= reservation_wage){
+            //cout << "Job found" <<endl;
             current_job = best_job;
             current_job->Set_Employee(this); // update job object
             unemployed = false;
             pPublic_Info_Board->Take_Job(current_job);
         }
         else {
+            //cout << "job not found" <<endl;
             Update_Reservation_Wage();
         }
     }
     
 }
+
+
+
+/* Function to return ptr to a vector contianing all class variables
+    Used by the function to save the data to a log file
+*/
+vector<float>* Household_Agent::Get_All_Params(){
+
+    vector<float>* vec_pointer = new vector<float>();
+
+    vec_pointer->push_back(wealth_financial);
+    vec_pointer->push_back(wealth_human);
+    vec_pointer->push_back(expenditure_consumption);
+    vec_pointer->push_back(expenditure_tax);
+    vec_pointer->push_back(consumption_propensity);
+    vec_pointer->push_back(new_savings);
+    vec_pointer->push_back(cash_on_hand_real_desired);
+    vec_pointer->push_back(cash_on_hand_desired);
+    vec_pointer->push_back(cash_on_hand_current);
+    vec_pointer->push_back(saving_propensity);
+    vec_pointer->push_back(saving_propensity_optimist);
+    vec_pointer->push_back(saving_propensity_pessimist);
+    vec_pointer->push_back(income_current);
+    vec_pointer->push_back(income_average);
+    vec_pointer->push_back(income_wage);
+    vec_pointer->push_back(income_unemployment_benefit);
+    vec_pointer->push_back(income_gov_transfers);
+    vec_pointer->push_back(income_firm_owner_dividend);
+    vec_pointer->push_back(unemployed);
+    vec_pointer->push_back(reservation_wage);
+    vec_pointer->push_back(unemp_duration);
+    vec_pointer->push_back(unemp_duration_upper_bound);
+    vec_pointer->push_back(positive_sentiment);
+    vec_pointer->push_back(business_owner);
+    vec_pointer->push_back(c_f);
+    vec_pointer->push_back(c_h);
+    vec_pointer->push_back(c_excess_money);
+    vec_pointer->push_back(p_majority_op_adoption);
+
+    return vec_pointer;
+}
+
 
 
 // Non Member Function
@@ -312,12 +362,12 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
     Normal_Dist_Generator init_c(init_c_mean, init_c_std, init_c_min, init_c_max);
     Normal_Dist_Generator init_s_optimist(init_s_optimist_mean, init_s_optimist_std, init_s_optimist_min, init_s_optimist_max);
     Normal_Dist_Generator init_s_pessimist(init_s_pessimist_mean, init_s_pessimist_std, init_s_pessimist_min, init_s_pessimist_max);
-    
     Normal_Dist_Generator init_c_f(init_c_f_mean, init_c_f_std, init_c_f_min, init_c_f_max);
     Normal_Dist_Generator init_c_h(init_c_h_mean, init_c_h_std, init_c_h_min, init_c_h_max);
-    
     Normal_Dist_Generator init_c_excess(init_c_excess_mean, init_c_excess_std, init_c_excess_min, init_c_excess_max);
     Normal_Dist_Generator init_p_majority(init_p_majority_mean, init_p_majority_std, init_p_majority_min, init_p_majority_max);
+    Normal_Dist_Generator init_wealth(init_wealth_mean, init_wealth_std, init_wealth_min, init_wealth_max);
+    Normal_Dist_Generator init_unemp_tolerance(init_unemp_tolerance_mean, init_unemp_tolerance_std, init_unemp_tolerance_min, init_unemp_tolerance_max);
     
     for (int i=0; i<size; i++) {
         float propensities[] = { 
@@ -330,12 +380,12 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
             init_p_majority(), // p_majority_op_adoption
          };
 
-        int wealth = 1000 *i;
-        int unemployment_tolerance = 10;
+        int wealth = int(init_wealth());
+        int unemployment_tolerance = int(init_unemp_tolerance());
 
-        Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth);
-        Household_array[i].Set_Public_Info_Board(pPublic_Board);
-        cout << "The c_h value is " << Household_array[i].Get_C_h() << endl;
+        Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth,pPublic_Board);
+        //Household_array[i].Set_Public_Info_Board(pPublic_Board);
+        //cout << "The c_h value is " << Household_array[i].Get_C_h() << endl;
 
     }
 

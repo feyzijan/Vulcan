@@ -59,6 +59,23 @@ const float init_s_pessimist_min = 0.1;
 const float init_s_pessimist_max = 0.6;
 
 
+// Starting wealth : wealth
+const float init_wealth_mean = 10000.0;
+const float init_wealth_std = 50000.0;
+const float init_wealth_min = 0.0;
+const float init_wealth_max = 999999.0;
+
+// Starting wealth : wealth
+const float init_unemp_tolerance_mean = 10.0;
+const float init_unemp_tolerance_std = 2.0;
+const float init_unemp_tolerance_min = 0.0;
+const float init_unemp_tolerance_max = 100.0;
+
+
+
+
+
+
 
 
 
