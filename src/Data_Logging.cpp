@@ -37,7 +37,9 @@ void write_csv(std::string filename, std::vector<std::pair<std::string, std::vec
 
 
 
-/* TODO: Later separate function for float, int, bool values
+/* TODO: - Later separate function for float, int, bool values
+ - Check if the memory is freed from the vector
+        
 */
 void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
 {
@@ -79,11 +81,12 @@ void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
     std::vector<float> vec_p_majority_adoption;
     
     // Loop through household array and fill arrays
+    vector<float>* pvec_params;
 
-    size = 4;
+    //size = 4;
     for (int i=0;i<size;i++){
-
-        vector<float>* pvec_params = Household_Agent_Array[i].Get_All_Params();
+        
+        pvec_params = Household_Agent_Array[i].Get_All_Params();
 
       /*   std::vector<float>* pvec_params = new std::vector<float>;
         std::default_random_engine generator;
@@ -132,14 +135,17 @@ void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
 
         k=0;
 
-        delete[] pvec_params;
+        //delete[] pvec_params;
 
+        pvec_params->clear();
+        pvec_params->shrink_to_fit();
     }
 
     // Store vectors as pairs with column names
 
-    vector<pair<string, vector<float>>> vals = {{ "wealth_human", vec_wealth_financial }, { "expenditure_consumption", vec_expenditure_consumption }, 
-    { "expenditure_tax", vec_expenditure_tax }, { "consumption_propensity", vec_consumption_propensity }, { "new_savings", vec_new_savings }, 
+    vector<pair<string, vector<float>>> vals = {{ "wealth_human", vec_wealth_financial }, 
+    { "expenditure_consumption", vec_expenditure_consumption }, { "expenditure_tax", vec_expenditure_tax }, 
+    { "consumption_propensity", vec_consumption_propensity }, { "new_savings", vec_new_savings }, 
     { "cash_on_hand_real_desired", vec_cash_on_hand_real_desired }, { "cash_on_hand_desired", vec_cash_on_hand_desired }, 
     { "cash_on_hand_current", vec_cash_on_hand_current }, { "saving_propensity", vec_savings_propensity }, 
     { "saving_propensity_optimist", vec_savings_propensity_optimist }, { "saving_propensity_pessimist", vec_savings_propensity_pessimist }, 

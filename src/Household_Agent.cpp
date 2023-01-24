@@ -317,6 +317,8 @@ vector<float>* Household_Agent::Get_All_Params(){
 
     vector<float>* vec_pointer = new vector<float>();
 
+    //vector<float>* vec_pointer;
+    
     vec_pointer->push_back(wealth_financial);
     vec_pointer->push_back(wealth_human);
     vec_pointer->push_back(expenditure_consumption);
