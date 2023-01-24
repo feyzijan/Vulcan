@@ -8,7 +8,12 @@ using namespace std;
 
 void Firm_Agent::Print(){
     using namespace std;
-    cout << "------ Firm Agent at address : " << this << endl;
+    if (is_cons_firm){
+        cout << "------ Consumer Firm Agent at address : " << this << endl;
+    } else{
+        cout << "------ Capital Firm Agent at address : " << this << endl;
+    }
+    
 
     // Employee info
     cout << "Number of employees: " << employee_count << " Desired employees: " << employee_count_desired << 
@@ -250,6 +255,55 @@ void Firm_Agent::Print_Active_Jobs(){
     }
 }
 
+
+
+
+/* Function to return a vector containing all class parameters
+*/
+std::vector<float>* Firm_Agent::Get_All_Params() {
+
+    std::vector<float>* vec = new std::vector<float>;
+
+    vec->push_back(production_current);
+    vec->push_back(production_planned);
+    vec->push_back(production_past);
+    vec->push_back(quantity_sold);
+    vec->push_back(total_income);
+    vec->push_back(revenue_sales);
+    vec->push_back(new_loan_issuance);
+    vec->push_back(subsidies);
+    vec->push_back(good_price_current);
+    vec->push_back(good_price_past);
+    vec->push_back(total_liabilities);
+    vec->push_back(labor_wage_bill);
+    vec->push_back(capital_costs);
+    vec->push_back(tax_payments);
+    vec->push_back(debt_principal_payments);
+    vec->push_back(debt_interest_payments);
+    vec->push_back(dividend_payments);
+    vec->push_back(total_assets);
+    vec->push_back(leverage_ratio);
+    vec->push_back(cash_on_hand);
+    vec->push_back(dividend_ratio);
+    vec->push_back(dividend_ratio_optimist);
+    vec->push_back(dividend_ratio_pessimist);
+    vec->push_back(employee_count);
+    vec->push_back(wage_offer);
+    vec->push_back(employee_count_desired);
+    vec->push_back(n_active_job_postings);
+    vec->push_back(need_worker);
+    vec->push_back(w_target);
+    vec->push_back(w_current);
+    vec->push_back(inventory);
+    vec->push_back(working_capital_inventory);
+    vec->push_back(desired_inventory_factor);
+    vec->push_back(inventory_factor);
+    vec->push_back(sentiment);
+    vec->push_back(bankrupt);
+    vec->push_back(is_cons_firm);
+
+    return vec;
+}
 
 
 

@@ -88,6 +88,12 @@ int main()
     Log_Household_Properties(Household_array, n_households);
     cout << "Logging Household data: end" <<endl;
 
+    cout << "Logging Firm data: start" <<endl;
+    Log_Firm_Properties(Cons_Firm_array, n_consumer_firms);
+    cout << "Logging Firm data: mid" <<endl;
+    Log_Firm_Properties(Cap_Firm_array, n_capital_firms);
+    cout << "Logging Firm data: end" <<endl;
+
 
 
 

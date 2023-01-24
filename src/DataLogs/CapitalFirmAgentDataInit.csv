@@ -1,0 +1,4 @@
+roduction_current,production_planned,production_past,quantity_sold,total_income,revenue_sales,new_loan_issuance,subsidies,good_price_current,good_price_past,total_liabilities,labor_wage_bill,capital_costs,tax_payments,debt_principal_payments,debt_interest_payments,dividend_payments,total_assets,leverage_ratio,cash_on_hand,dividend_ratio,dividend_ratio_optimist,dividend_ratio_pessimist,employee_count,wage_offer,employee_count_desired,n_active_job_postings,need_worker,w_target,w_current,inventory,working_capital_inventory,desired_inventory_factor,inventory_factor,sentiment,bankrupt,is_cons_firm
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.05,0.05,0.03,4,1000,4,0,1,0,0,0,4,0,0,1,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10000,0,10000,0.05,0.05,0.03,5,2000,5,0,1,0,0,0,5,1,0,1,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20000,0,20000,0.05,0.05,0.03,6,3000,6,0,1,0,0,0,6,2,0,1,0,0

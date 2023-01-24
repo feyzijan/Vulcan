@@ -83,6 +83,8 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int 
 
     // Inventories
     inventory = 0;
+
+    is_cons_firm = 1;
 }
 
 

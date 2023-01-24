@@ -84,6 +84,7 @@ class Firm_Agent{
 
 
     // Getters
+    std::vector<float>* Get_All_Params(); 
 
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -94,6 +95,12 @@ class Firm_Agent{
 
     protected:
     General_Good* goods_on_market;
+    // List of loans taken out
+    Loan* loan_book[loan_book_size]; // 
+
+    // Employees
+    std::vector<Job*> active_job_list;
+    std::vector<Job*> posted_job_list;
 
     // Production and sales figures
     int production_current; // Actual production at t
@@ -128,12 +135,7 @@ class Firm_Agent{
     float dividend_ratio_optimist; // characteristic
     float dividend_ratio_pessimist; // characteristic
 
-    // List of loans taken out
-    Loan* loan_book[loan_book_size]; // 
 
-    // Employees
-    std::vector<Job*> active_job_list;
-    std::vector<Job*> posted_job_list;
 
     int employee_count; 
     int wage_offer;
@@ -157,6 +159,9 @@ class Firm_Agent{
 
     // Bankruptcy
     bool bankrupt;;
+
+    // type identifier, may be useful
+    bool is_cons_firm;
 
 
 
