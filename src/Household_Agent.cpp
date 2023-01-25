@@ -394,6 +394,9 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
 }
 
 
+
+
+
 void Initialize_Household_Jobs(Household_Agent * Household_array,  int size){
        for (int i=0; i<size; i++) {
         //cout << "Now seeking jobs for household # " << i << endl;

@@ -24,7 +24,7 @@ Job* Job_Market::Get_Top_Job(){
         return NULL; 
     }
     else{
-        cout << "Returning job" <<endl;
+        //cout << "Returning job" <<endl;
         return job_list.front();
     } 
 }

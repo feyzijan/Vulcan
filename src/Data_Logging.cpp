@@ -43,6 +43,7 @@ void write_csv(std::string filename, std::vector<std::pair<std::string, std::vec
 */
 void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
 {
+    cout << "Logging Household data: start" <<endl;
     // Declare the vectors
     std::vector<float> vec_wealth_financial; //int
     std::vector<float> vec_wealth_human;//int
@@ -157,11 +158,13 @@ void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
      { "p_majority_op_adoption", vec_p_majority_adoption }};
 
     write_csv("HouseholdDataInit.csv",vals);
+    cout << "Logging Household data: end" <<endl;
 }
 
 
 void Log_Firm_Properties(Firm_Agent* Firm_Array, int size)
 {
+    cout << "Logging Firm data: start" <<endl;
     // Declare the vectors
 
     std::vector<float> vec_production_current;
@@ -288,8 +291,10 @@ void Log_Firm_Properties(Firm_Agent* Firm_Array, int size)
 
     if (vec_is_cons_firm.at(0)){
         write_csv("ConsumerFirmAgentDataInit.csv",vals);
+            cout << "Logging Consumer Firm data: end" <<endl;
     } else{
         write_csv("CapitalFirmAgentDataInit.csv",vals);
+        cout << "Logging Capital Firm data: end" <<endl;
     }
 
 

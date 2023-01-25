@@ -14,7 +14,7 @@ extern const int n_max_employees;
 
 extern const int test_global_var ;
 
-//---- Household initialization parameters ----
+//---- Household initialization parameters -----------
 
 // General consumption propensity : c
 extern const float init_c_mean ;
@@ -73,8 +73,60 @@ extern const float init_unemp_tolerance_std;
 extern const float init_unemp_tolerance_min;
 extern const float init_unemp_tolerance_max;
 
+//---------------------------------------------
+
+//---- Firm initialization parameters -----------
 
 
+extern const float init_production_planned_mean;
+extern const float init_production_planned_std;
+extern const float init_production_planned_min;
+extern const float init_production_planned_max;
+
+extern const float init_good_price_current_mean;
+extern const float init_good_price_current_std;
+extern const float init_good_price_current_min;
+extern const float init_good_price_current_max;
+
+extern const float init_total_assets_mean;
+extern const float init_total_assets_std;
+extern const float init_total_assets_min;
+extern const float init_total_assets_max;
+
+extern const float init_dividend_ratio_optimist_mean;
+extern const float init_dividend_ratio_optimist_std;
+extern const float init_dividend_ratio_optimist_min;
+extern const float init_dividend_ratio_optimist_max;
+
+extern const float init_dividend_ratio_pessimist_mean;
+extern const float init_dividend_ratio_pessimist_std;
+extern const float init_dividend_ratio_pessimist_min;
+extern const float init_dividend_ratio_pessimist_max;
+
+extern const float init_wage_offer_mean;
+extern const float init_wage_offer_std;
+extern const float init_wage_offer_min;
+extern const float init_wage_offer_max;
+
+extern const float init_employee_count_desired_mean;
+extern const float init_employee_count_desired_std;
+extern const float init_employee_count_desired_min;
+extern const float init_employee_count_desired_max;
+
+extern const float init_inventory_mean;
+extern const float init_inventory_std;
+extern const float init_inventory_min;
+extern const float init_inventory_max;
+
+extern const float init_working_capital_inventory_mean;
+extern const float init_working_capital_inventory_std;
+extern const float init_working_capital_inventory_min;
+extern const float init_working_capital_inventory_max;
+
+extern const float init_desired_inventory_factor_mean;
+extern const float init_desired_inventory_factor_std;
+extern const float init_desired_inventory_factor_min;
+extern const float init_desired_inventory_factor_max;
 
 
 

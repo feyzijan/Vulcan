@@ -39,7 +39,7 @@ int main()
     cout << "Public Board at address: " << pPublic_Board_1 << " initialized" <<endl;
 
     
-    int n_promised_jobs = 0;  // Variable to keep track of # jobs to be assigned
+    int n_promised_jobs = 0;  // Debugging variable to keep track of # jobs to be assigned
 
 
     //------- STEP 0.11: Initialize Households
@@ -57,71 +57,33 @@ int main()
     
 
     //----------- STEP 0.13: Initialize job market
-    cout << "Initializing job Market" << endl;
-
-    cout << " Firms are seeking " << n_promised_jobs << " jobs"  << endl; 
-    
-    //int n_total_jobs_initial = 87; // change this to expected max count - just for checking
-    //cout<< n_total_jobs_initial <<  " jobs have been promised to firms." << endl;
-    
+    cout << "Initializing job Market -  " << " Firms are seeking " << n_promised_jobs << " jobs" << endl;
     
     Initialize_Job_Market(Cons_Firm_array,Cap_Firm_array,Household_array,pPublic_Board_1);
     
-    //Testing that evt worked
+    //Small test
     cout << "Household # " << 10 <<  "has job?:" << Household_array[10].Get_Employment_Status() << endl;
     cout << "Household # " << 90 <<  "has job?:" <<  Household_array[90].Get_Employment_Status() << endl;
 
 
-    // STEP 0.14 Assign firm owners - Todo later
+    // STEP 0.14 Assign firm owners - Todo later, minor thing
 
 
-    // STEP 0.15 Set remaining initial parameters for Firms
-
-
-
-   
-
-    //cout << my_test_vec->at(i++) << endl;
-
-
-    cout << "Logging Household data: start" <<endl;
+    // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     Log_Household_Properties(Household_array, n_households);
-    cout << "Logging Household data: end" <<endl;
-
-    cout << "Logging Firm data: start" <<endl;
     Log_Firm_Properties(Cons_Firm_array, n_consumer_firms);
-    cout << "Logging Firm data: mid" <<endl;
     Log_Firm_Properties(Cap_Firm_array, n_capital_firms);
-    cout << "Logging Firm data: end" <<endl;
 
 
 
 
 
-
-    // STEP 0.2: Initialize the Public Board
-        //Public_Info_Board* pPublic_Info_Board = new Public_Info_Board();
 
     // STEP 0.3: Initialize the Bank and Government
 
-    // STEP 0.4: Allocate and Initialize Firms
 
-    // STEP 0.5: Allocate and Initialize Jobs and Job Market 
-    //Job* job_1 = new Job(nullptr,nullptr,10,1);
-    //job_1->Print();
-
-
-    // STEP 0.6: Allocate and Initialize Households
-
-        // saving = distribution_gauss
-        // saving = distribution_data
-        // saving = random(0,10)
 
     
-    //Household_Agent* Household_1 = new Household_Agent(1000, 10, false, false, 500, 0.4,0.2);
-
-    //Household_1->Print();
-
 
 
 

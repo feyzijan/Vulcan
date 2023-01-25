@@ -1,13 +1,12 @@
 // TODO: Add function here to read all these values from a text file
-
-
 #include "Initialization_Parameters.hpp"
+
 
 const int n_max_employees = 100;
 
-const int n_households = 100;
-const int n_consumer_firms = 9;
-const int n_capital_firms = 3;
+const int n_households = 1000;
+const int n_consumer_firms = 50;
+const int n_capital_firms = 10;
 
 const int test_global_var = 999;
 
@@ -72,6 +71,57 @@ const float init_unemp_tolerance_min = 0.0;
 const float init_unemp_tolerance_max = 100.0;
 
 
+//---- Firm initialization parameters ----
+
+const float init_production_planned_mean = 1000;
+const float init_production_planned_std = 100;
+const float init_production_planned_min = 100;
+const float init_production_planned_max = 1900;
+
+const float init_good_price_current_mean = 10;
+const float init_good_price_current_std = 2;
+const float init_good_price_current_min = 1;
+const float init_good_price_current_max = 99;
+
+const float init_total_assets_mean = 1000000;
+const float init_total_assets_std = 250000;
+const float init_total_assets_min = 1;
+const float init_total_assets_max = 999999999;
+
+const float init_dividend_ratio_optimist_mean = 0.05;
+const float init_dividend_ratio_optimist_std = 0.02;
+const float init_dividend_ratio_optimist_min = 0.005;
+const float init_dividend_ratio_optimist_max = 0.2;
+
+const float init_dividend_ratio_pessimist_mean = 0.03;
+const float init_dividend_ratio_pessimist_std = 0.02;
+const float init_dividend_ratio_pessimist_min = 0.001;
+const float init_dividend_ratio_pessimist_max = 0.15;
+
+const float init_wage_offer_mean = 1000;
+const float init_wage_offer_std = 300;
+const float init_wage_offer_min = 100;
+const float init_wage_offer_max = 999999;
+
+const float init_employee_count_desired_mean = 50;
+const float init_employee_count_desired_std = 5;
+const float init_employee_count_desired_min = 1;
+const float init_employee_count_desired_max = 999999;
+
+const float init_inventory_mean = 1000;
+const float init_inventory_std = 100;
+const float init_inventory_min = 1;
+const float init_inventory_max = 999999;
+
+const float init_working_capital_inventory_mean = 50;
+const float init_working_capital_inventory_std = 5;
+const float init_working_capital_inventory_min = 1;
+const float init_working_capital_inventory_max = 999999;
+
+const float init_desired_inventory_factor_mean = 1.5;
+const float init_desired_inventory_factor_std = 0.25;
+const float init_desired_inventory_factor_min = 0.1;
+const float init_desired_inventory_factor_max = 4.0;
 
 
 

@@ -163,10 +163,6 @@ class Firm_Agent{
     // type identifier, may be useful
     bool is_cons_firm;
 
-
-
-
-
 };
 
 
@@ -178,3 +174,4 @@ class Firm_Agent{
 void Check_Initial_Job_Offers(Firm_Agent * Firm_array, int size);
  */
 #endif
+

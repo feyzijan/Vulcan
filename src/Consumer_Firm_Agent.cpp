@@ -18,36 +18,35 @@ void Consumer_Firm_Agent::Print(){
 
 
 
-Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int employee_need, int capital_inventory)
+Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6])
 {
     
-    dividend_ratio_optimist = propensities[0];
-    dividend_ratio_pessimist = propensities[1];
-    desired_inventory_factor = propensities[2];
+    dividend_ratio_optimist = float_vals[0];
+    dividend_ratio_pessimist =  float_vals[1];
+    desired_inventory_factor = float_vals[2];
+    good_price_current = float_vals[3];
 
-    cash_on_hand = assets;
-    total_assets = assets;
-    employee_count_desired = employee_need;
-    
-    working_capital_inventory = capital_inventory;
-
-
-
-
+    total_assets = int_vals[0];
+    employee_count_desired = int_vals[1];
+    working_capital_inventory = int_vals[2];
+    inventory = int_vals[3];
+    wage_offer = int_vals[4];
+    production_planned = int_vals[5];
 
     need_worker = 1;
     sentiment = 1;
     bankrupt = 0;
     inventory_factor = 0;
+    cash_on_hand = total_assets; // unsure how these two differed
 
-    //
+    // Initialize pointers
     Consumer_Good* goods_on_market = new Consumer_Good(this, 0,0);
     Public_Info_Board* pPublic_Info_Board = nullptr;
     Loan* loan_book[loan_book_size] = {};
 
+    // Set evt else to zero
     // Production and sales figures
     production_current = 0;
-    production_planned = 0;
     production_past = 0; 
     quantity_sold = 0;
 
@@ -56,7 +55,6 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int 
     revenue_sales =0;
     new_loan_issuance =0; 
     subsidies = 0;
-    good_price_current = 0;
     good_price_past = 0;
 
     // Expenditures
@@ -77,13 +75,10 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float propensities[3], int assets, int 
     // Employees
     employee_count = 0; // correctly set
     n_active_job_postings = 0;
-    wage_offer = 0;
     w_target = 0;
     w_current = 0;
 
-    // Inventories
-    inventory = 0;
-
+    //identifier
     is_cons_firm = 1;
 }
 
@@ -115,19 +110,38 @@ void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Inf
     cout << "\n Initializing " << size << " consumer firms" << endl;
 
 
+    Normal_Dist_Generator init_dividend_ratio_optimist(init_dividend_ratio_optimist_mean, init_dividend_ratio_optimist_std, init_dividend_ratio_optimist_min, init_dividend_ratio_optimist_max);
+    Normal_Dist_Generator init_dividend_ratio_pessimist(init_dividend_ratio_pessimist_mean, init_dividend_ratio_pessimist_std, init_dividend_ratio_pessimist_min, init_dividend_ratio_pessimist_max);
+    Normal_Dist_Generator init_desired_inventory_factor(init_desired_inventory_factor_mean, init_desired_inventory_factor_std, init_desired_inventory_factor_min, init_desired_inventory_factor_max);
+    
+    Normal_Dist_Generator init_total_assets(init_total_assets_mean, init_total_assets_std, init_total_assets_min, init_total_assets_max);
+    Normal_Dist_Generator init_employee_count_desired(init_employee_count_desired_mean, init_employee_count_desired_std, init_employee_count_desired_min, init_employee_count_desired_max);
+    Normal_Dist_Generator init_working_capital_inventory(init_working_capital_inventory_mean, init_working_capital_inventory_std, init_working_capital_inventory_min, init_working_capital_inventory_max);
+    
+    Normal_Dist_Generator init_inventory(init_inventory_mean, init_inventory_std, init_inventory_min, init_inventory_max);
+    Normal_Dist_Generator init_wage_offer(init_wage_offer_mean, init_wage_offer_std, init_wage_offer_min, init_wage_offer_max);
+    Normal_Dist_Generator init_production_planned(init_production_planned_mean, init_production_planned_std, init_production_planned_min, init_production_planned_max);
+    Normal_Dist_Generator init_good_price_current(init_good_price_current_mean, init_good_price_current_std, init_good_price_current_min, init_good_price_current_max);
+   
      for (int i=0; i<n_consumer_firms; i++) {
-        float propensities[] = {
-            0.05, // dividend_ratio_optimist 
-            0.03, // dividend_ratio_pessimist 
-            float(i), // inventory factor
+        float float_vals[] = {
+            init_dividend_ratio_optimist(),  
+            init_dividend_ratio_pessimist(),
+            init_desired_inventory_factor(), 
+            init_good_price_current()
         };
-        int assets = i*10000;
-        int employee_need= i+4;
-        *promised_jobs += employee_need;
-        int capital_inventory = employee_need;
+        int int_vals[]{
+            int(init_total_assets()),
+            int(init_employee_count_desired()),
+            int(init_working_capital_inventory()),
+            int(init_inventory()),
+            int(init_wage_offer()),
+            int(init_production_planned()),
+        };
 
 
-        Cons_Firm_array[i] = Consumer_Firm_Agent(propensities, assets, employee_need, capital_inventory);
+        *promised_jobs += int_vals[1];
+        Cons_Firm_array[i] = Consumer_Firm_Agent(float_vals, int_vals);
         Cons_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
     }
 

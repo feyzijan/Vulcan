@@ -5,7 +5,8 @@
 
 #include "Firm_Agent.hpp"
 #include "Consumer_Good.hpp"
-
+#include "Random_Functions.hpp"
+#include "Initialization_Parameters.hpp"
 
 class Consumer_Firm_Agent: public Firm_Agent{
 
@@ -13,7 +14,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 
     //new constructor to use
-    Consumer_Firm_Agent(float propensities[3], int assets, int employee_need, int capital_inventory);
+    Consumer_Firm_Agent(float float_vals[4], int int_vals[6]);
 
 
     Consumer_Firm_Agent(Consumer_Firm_Agent&); //Copy Constructor

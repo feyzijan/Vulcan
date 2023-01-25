@@ -5,6 +5,9 @@
 #include "Capital_Good.hpp"
 #include "Firm_Agent.hpp"
 
+#include "Random_Functions.hpp"
+#include "Initialization_Parameters.hpp"
+
 
 
 class Capital_Firm_Agent: public Firm_Agent{
@@ -12,8 +15,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     public:
 
 
-    Capital_Firm_Agent(float propensities[3], int assets, int employee_count, int capital_inventory);
-    
+    Capital_Firm_Agent(float float_vals[4], int int_vals[6]);
 
 
 

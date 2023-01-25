@@ -1,4 +1,11 @@
-roduction_current,production_planned,production_past,quantity_sold,total_income,revenue_sales,new_loan_issuance,subsidies,good_price_current,good_price_past,total_liabilities,labor_wage_bill,capital_costs,tax_payments,debt_principal_payments,debt_interest_payments,dividend_payments,total_assets,leverage_ratio,cash_on_hand,dividend_ratio,dividend_ratio_optimist,dividend_ratio_pessimist,employee_count,wage_offer,employee_count_desired,n_active_job_postings,need_worker,w_target,w_current,inventory,working_capital_inventory,desired_inventory_factor,inventory_factor,sentiment,bankrupt,is_cons_firm
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.05,0.05,0.03,4,1000,4,0,1,0,0,0,4,0,0,1,0,0
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10000,0,10000,0.05,0.05,0.03,5,2000,5,0,1,0,0,0,5,1,0,1,0,0
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20000,0,20000,0.05,0.05,0.03,6,3000,6,0,1,0,0,0,6,2,0,1,0,0
+production_current,production_planned,production_past,quantity_sold,total_income,revenue_sales,new_loan_issuance,subsidies,good_price_current,good_price_past,total_liabilities,labor_wage_bill,capital_costs,tax_payments,debt_principal_payments,debt_interest_payments,dividend_payments,total_assets,leverage_ratio,cash_on_hand,dividend_ratio,dividend_ratio_optimist,dividend_ratio_pessimist,employee_count,wage_offer,employee_count_desired,n_active_job_postings,need_worker,w_target,w_current,inventory,working_capital_inventory,desired_inventory_factor,inventory_factor,sentiment,bankrupt,is_cons_firm
+0,974,0,0,0,0,0,0,9.48181,0,0,0,0,0,0,0,0,935226,0,935226,0.0448181,0.0448181,0.0248181,0,1000,48,0,1,0,0,974,48,1.43523,0,1,0,0
+0,1160,0,0,0,0,0,0,13.2032,0,0,0,0,0,0,0,0,1.4004e+006,0,1.4004e+006,0.0820318,0.0820318,0.0620318,0,2000,58,0,1,0,0,1160,58,1.9004,0,1,0,0
+0,850,0,0,0,0,0,0,7.00208,0,0,0,0,0,0,0,0,625259,0,625259,0.0200208,0.0200208,0.0334954,0,3000,42,0,1,0,0,850,42,1.12526,0,1,0,0
+0,1017,0,0,0,0,0,0,10.3495,0,0,0,0,0,0,0,0,1.04369e+006,0,1.04369e+006,0.0534954,0.0534954,0.0323853,0,4000,50,0,1,0,0,1017,50,1.54369,0,1,0,0
+0,1011,0,0,0,0,0,0,10.2385,0,0,0,0,0,0,0,0,1.02982e+006,0,1.02982e+006,0.0523853,0.0523853,0.0239595,0,5000,50,0,1,0,0,1011,50,1.52982,0,1,0,0
+0,969,0,0,0,0,0,0,9.39595,0,0,0,0,0,0,0,0,924494,0,924494,0.0439595,0.0439595,0.0391636,0,6000,48,0,1,0,0,969,48,1.42449,0,1,0,0
+0,1045,0,0,0,0,0,0,10.9164,0,0,0,0,0,0,0,0,1.11454e+006,0,1.11454e+006,0.0591636,0.0591636,0.0337797,0,7000,52,0,1,0,0,1045,52,1.61455,0,1,0,0
+0,1018,0,0,0,0,0,0,10.378,0,0,0,0,0,0,0,0,1.04725e+006,0,1.04725e+006,0.0537797,0.0537797,0.0378995,0,8000,50,0,1,0,0,1018,50,1.54725,0,1,0,0
+0,1039,0,0,0,0,0,0,10.7899,0,0,0,0,0,0,0,0,1.09874e+006,0,1.09874e+006,0.0578995,0.0578995,0.0308839,0,9000,51,0,1,0,0,1039,51,1.59874,0,1,0,0
+0,763,0,0,0,0,0,0,5.26032,0,0,0,0,0,0,0,0,407540,0,407540,0.0508839,0.0508839,0.0167102,0,10000,38,0,1,0,0,763,38,0.90754,0,1,0,0
