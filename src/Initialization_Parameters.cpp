@@ -4,9 +4,9 @@
 
 const int n_max_employees = 100;
 
-const int n_households = 1000;
-const int n_consumer_firms = 50;
-const int n_capital_firms = 10;
+const int n_households = 10000;
+const int n_consumer_firms = 1000;
+const int n_capital_firms = 1000;
 
 const int test_global_var = 999;
 
@@ -60,7 +60,7 @@ const float init_s_pessimist_max = 0.6;
 
 // Starting wealth : wealth
 const float init_wealth_mean = 10000.0;
-const float init_wealth_std = 50000.0;
+const float init_wealth_std = 3000.0;
 const float init_wealth_min = 0.0;
 const float init_wealth_max = 999999.0;
 
