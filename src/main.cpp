@@ -71,8 +71,11 @@ int main()
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     Log_Household_Properties(Household_array, n_households);
-    Log_Firm_Properties(Cons_Firm_array, n_consumer_firms);
-    Log_Firm_Properties(Cap_Firm_array, n_capital_firms);
+    Log_Cons_Firm_Properties(Cons_Firm_array, n_consumer_firms);
+    Log_Cap_Firm_Properties(Cap_Firm_array, n_capital_firms);
+
+    Cons_Firm_array[0].Print();
+
 
 
 

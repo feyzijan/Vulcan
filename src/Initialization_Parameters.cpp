@@ -5,8 +5,8 @@
 const int n_max_employees = 100;
 
 const int n_households = 10000;
-const int n_consumer_firms = 1000;
-const int n_capital_firms = 1000;
+const int n_consumer_firms = 100;
+const int n_capital_firms = 100;
 
 const int test_global_var = 999;
 

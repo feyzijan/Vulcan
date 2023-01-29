@@ -6,7 +6,6 @@ using namespace std;
 
 void Capital_Firm_Agent::Print(){
     using namespace std;
-    cout << "\n------ Capital Firm Agent at address : " << this << endl;
     Firm_Agent::Print();
 }
 
@@ -76,7 +75,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     w_current = 0;
 
     //identifier
-    is_cons_firm = 0;
+    is_cons_firm = false;
 }
 
 

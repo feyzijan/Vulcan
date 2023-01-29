@@ -10,7 +10,7 @@ void write_csv(std::string filename, std::vector<std::pair<std::string, std::vec
     // Note that all columns should be the same size
     
     // Create an output filestream object
-    std::ofstream myFile("DataLogs/" +filename);
+    std::ofstream myFile("../DataLogs/" +filename);
     
     // Send column names to the stream
     for(int j = 0; j < dataset.size(); ++j)
@@ -162,9 +162,9 @@ void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
 }
 
 
-void Log_Firm_Properties(Firm_Agent* Firm_Array, int size)
+void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
 {
-    cout << "Logging Firm data: start" <<endl;
+    cout << "Logging Cons Firm data: start" <<endl;
     // Declare the vectors
 
     std::vector<float> vec_production_current;
@@ -219,7 +219,7 @@ void Log_Firm_Properties(Firm_Agent* Firm_Array, int size)
 
     for (int i=0;i<size;i++){
         
-        pvec_params = Firm_Array[i].Get_All_Params();
+        pvec_params = Cons_Firm_Array[i].Get_All_Params();
 
         vec_production_current.push_back(pvec_params->at(k++));
         vec_production_planned.push_back(pvec_params->at(k++));
@@ -289,13 +289,147 @@ void Log_Firm_Properties(Firm_Agent* Firm_Array, int size)
     {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm}};
 
 
-    if (vec_is_cons_firm.at(0)){
-        write_csv("ConsumerFirmAgentDataInit.csv",vals);
-            cout << "Logging Consumer Firm data: end" <<endl;
-    } else{
-        write_csv("CapitalFirmAgentDataInit.csv",vals);
-        cout << "Logging Capital Firm data: end" <<endl;
+
+
+    write_csv("ConsumerFirmAgentDataInit.csv",vals);
+    cout << "Logging Consumer Firm data: end" <<endl;
+
+
+}
+
+
+
+void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
+{
+    cout << "Logging Capital Firm data: start" <<endl;
+    // Declare the vectors
+
+    std::vector<float> vec_production_current;
+    std::vector<float> vec_production_planned;
+    std::vector<float> vec_production_past;
+    std::vector<float> vec_quantity_sold;
+
+    std::vector<float> vec_total_income;
+    std::vector<float> vec_revenue_sales;
+    std::vector<float> vec_new_loan_issuance;
+    std::vector<float> vec_subsidies;
+    std::vector<float> vec_good_price_current;//float
+    std::vector<float> vec_good_price_past;//float
+
+    std::vector<float> vec_total_liabilities;
+    std::vector<float> vec_labor_wage_bill;
+    std::vector<float> vec_capital_costs;
+    std::vector<float> vec_tax_payments;
+    std::vector<float> vec_debt_principal_payments;
+    std::vector<float> vec_debt_interest_payments;
+    std::vector<float> vec_dividend_payments;
+
+    std::vector<float> vec_total_assets;
+    std::vector<float> vec_leverage_ratio;
+    std::vector<float> vec_cash_on_hand;
+
+    std::vector<float> vec_dividend_ratio;//float
+    std::vector<float> vec_dividend_ratio_optimist;//float
+    std::vector<float> vec_dividend_ratio_pessimist;//float
+
+    std::vector<float> vec_employee_count;
+    std::vector<float> vec_wage_offer;
+    std::vector<float> vec_employee_count_desired;
+    std::vector<float> vec_n_active_job_postings;
+    std::vector<float> vec_need_worker; //bool
+    std::vector<float> vec_w_target;
+    std::vector<float> vec_w_current;
+
+    std::vector<float> vec_inventory;
+    std::vector<float> vec_working_capital_inventory;
+    std::vector<float> vec_desired_inventory_factor; //float
+    std::vector<float> vec_inventory_factor; //float
+
+    std::vector<float> vec_sentiment; //bool
+    std::vector<float> vec_bankrupt; //bool
+    std::vector<float> vec_is_cons_firm; //bool
+
+    // Loop through Firm array and fill arrays
+    vector<float>* pvec_params;
+
+    int k = 0;
+
+    for (int i=0;i<size;i++){
+        
+        pvec_params = Cap_Firm_Array[i].Get_All_Params();
+
+        vec_production_current.push_back(pvec_params->at(k++));
+        vec_production_planned.push_back(pvec_params->at(k++));
+        vec_production_past.push_back(pvec_params->at(k++));
+        vec_quantity_sold.push_back(pvec_params->at(k++));
+
+        vec_total_income.push_back(pvec_params->at(k++));
+        vec_revenue_sales.push_back(pvec_params->at(k++));
+        vec_new_loan_issuance.push_back(pvec_params->at(k++));
+        vec_subsidies.push_back(pvec_params->at(k++));
+        vec_good_price_current.push_back(pvec_params->at(k++));
+        vec_good_price_past.push_back(pvec_params->at(k++));
+
+        vec_total_liabilities.push_back(pvec_params->at(k++));
+        vec_labor_wage_bill.push_back(pvec_params->at(k++));
+        vec_capital_costs.push_back(pvec_params->at(k++));
+        vec_tax_payments.push_back(pvec_params->at(k++));
+        vec_debt_principal_payments.push_back(pvec_params->at(k++));
+        vec_debt_interest_payments.push_back(pvec_params->at(k++));
+        vec_dividend_payments.push_back(pvec_params->at(k++));
+
+        vec_total_assets.push_back(pvec_params->at(k++));
+        vec_leverage_ratio.push_back(pvec_params->at(k++));
+        vec_cash_on_hand.push_back(pvec_params->at(k++));
+
+        vec_dividend_ratio.push_back(pvec_params->at(k++));
+        vec_dividend_ratio_optimist.push_back(pvec_params->at(k++));
+        vec_dividend_ratio_pessimist.push_back(pvec_params->at(k++));
+        vec_employee_count.push_back(pvec_params->at(k++));
+        vec_wage_offer.push_back(pvec_params->at(k++));
+        vec_employee_count_desired.push_back(pvec_params->at(k++));
+        vec_n_active_job_postings.push_back(pvec_params->at(k++));
+        vec_need_worker.push_back(pvec_params->at(k++));
+        vec_w_target.push_back(pvec_params->at(k++));
+        vec_w_current.push_back(pvec_params->at(k++));
+
+        vec_inventory.push_back(pvec_params->at(k++));
+        vec_working_capital_inventory.push_back(pvec_params->at(k++));
+        vec_desired_inventory_factor.push_back(pvec_params->at(k++));
+        vec_inventory_factor.push_back(pvec_params->at(k++));
+        
+        vec_sentiment.push_back(pvec_params->at(k++));
+        vec_bankrupt.push_back(pvec_params->at(k++));
+        vec_is_cons_firm.push_back(pvec_params->at(k++));
+
+
+        k=0;
+        //delete[] pvec_params;
+
+        pvec_params->clear();
+        pvec_params->shrink_to_fit();
     }
+
+    std::vector<std::pair<std::string, std::vector<float>>> vals = { {"production_current", vec_production_current}, {"production_planned", vec_production_planned}, 
+    {"production_past", vec_production_past}, {"quantity_sold", vec_quantity_sold}, 
+    {"total_income", vec_total_income}, {"revenue_sales", vec_revenue_sales}, {"new_loan_issuance", vec_new_loan_issuance}, 
+    {"subsidies", vec_subsidies}, {"good_price_current", vec_good_price_current}, 
+    {"good_price_past", vec_good_price_past}, {"total_liabilities", vec_total_liabilities}, 
+    {"labor_wage_bill", vec_labor_wage_bill}, {"capital_costs", vec_capital_costs}, {"tax_payments", vec_tax_payments}, 
+    {"debt_principal_payments", vec_debt_principal_payments}, {"debt_interest_payments", vec_debt_interest_payments}, 
+    {"dividend_payments", vec_dividend_payments}, {"total_assets", vec_total_assets}, {"leverage_ratio", vec_leverage_ratio}, 
+    {"cash_on_hand", vec_cash_on_hand}, {"dividend_ratio", vec_dividend_ratio}, {"dividend_ratio_optimist", vec_dividend_ratio_optimist},
+    {"dividend_ratio_pessimist", vec_dividend_ratio_pessimist}, {"employee_count", vec_employee_count}, {"wage_offer", vec_wage_offer}, 
+    {"employee_count_desired", vec_employee_count_desired}, {"n_active_job_postings", vec_n_active_job_postings}, {"need_worker", vec_need_worker}, 
+    {"w_target", vec_w_target}, {"w_current", vec_w_current}, {"inventory", vec_inventory}, {"working_capital_inventory", vec_working_capital_inventory},
+    {"desired_inventory_factor", vec_desired_inventory_factor}, {"inventory_factor", vec_inventory_factor}, {"sentiment", vec_sentiment}, 
+    {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm}};
+
+
+
+
+    write_csv("CapitalFirmAgentDataInit.csv",vals);
+    cout << "Logging Capital Firm data: end" <<endl;
 
 
 }

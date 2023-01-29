@@ -9,7 +9,6 @@ using namespace std;
 
 void Consumer_Firm_Agent::Print(){
     using namespace std;
-    cout << "\n------ Consumer Firm Agent at address : " << this << endl;
     Firm_Agent::Print();
 }
 
@@ -79,7 +78,7 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6])
     w_current = 0;
 
     //identifier
-    is_cons_firm = 1;
+    is_cons_firm = true;
 }
 
 

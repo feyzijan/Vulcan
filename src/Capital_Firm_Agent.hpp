@@ -25,7 +25,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     void Print();
 
     protected:
-    //Capital_Good* goods_on_market;
+    Capital_Good* goods_on_market;
 
 
 
