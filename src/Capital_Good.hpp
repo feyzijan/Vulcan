@@ -12,13 +12,23 @@ class Capital_Firm_Agent;
 class Capital_Good: public General_Good{
 
     public:
-    Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity);
+    Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int date, int duration);
 
     // Getters
     Capital_Firm_Agent * GetSeller() {return pSeller;}
+    
+    float Get_Value() const {return value;}
+    int Get_Depreciation_Period() const {return depreciation_period;}
+
+    // Setters
+    void Update_Value(float new_value) {value = new_value;}
 
     protected:
     Capital_Firm_Agent *  pSeller;
+    float value;
+    int sold_date;
+    int depreciation_period;
+    int expiry_date;
 
 };
 #endif

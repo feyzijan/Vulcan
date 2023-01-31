@@ -129,11 +129,13 @@ extern const float init_desired_inventory_factor_min;
 extern const float init_desired_inventory_factor_max;
 
 
-//Public Board paremeters
+//Public Board parameters
 extern const float inflation_reaction;
 extern const float inflation_target; // yearly inflation target
 extern const float inflation_target_monthly; // monthly inflation target
 
+// Exogenous parameters for Consumer Firms
+extern const float cons_good_inv_depr_rate;
 
 
 

@@ -101,6 +101,10 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent()
 
 
 
+
+
+
+
 /* Function to initialize a fixed number of households given an array of suitable size allocated
 
 */
@@ -162,4 +166,31 @@ void Check_Initial_Job_Offers_Cons(Consumer_Firm_Agent * Cons_Firm_array, int si
         for (int i=0; i<size; i++) {
         Cons_Firm_array[i].Check_For_New_Employees();
     }
+}
+
+
+/* Function to loop through vector of capital goods the firm possesses,
+mark down their value, and remove the ones with zero value, i.e. end of life
+*/
+void Consumer_Firm_Agent::Depreciate_Capital(){
+//loop through a vector called capital_goods
+for(auto i= capital_goods.begin(); i!=capital_goods.end(); i++){
+    float original_price = (*i)->Get_Price();
+    float current_val  =  (*i)->Get_Value();
+    int depreciation_rate = (*i)->Get_Depreciation_Period();
+    
+    (*i)->Update_Value(current_val - original_price/depreciation_rate);
+
+    if ((*i)->Get_Value() <= 0){
+        capital_goods.erase(i);
+    }
+}
+
+}
+
+/* Function to depreciate(i.e. destroy) a fraction of the firm's inventory of consumer goods
+The depreciation rate is set exogenously in the initialization parameter for all firms
+*/
+void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
+    inventory  = int(inventory*(1-cons_good_inv_depr_rate));
 }

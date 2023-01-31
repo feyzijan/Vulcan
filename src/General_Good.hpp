@@ -18,6 +18,8 @@ class General_Good{
     int Get_Quantity() const {return quantity;}
     Firm_Agent * Get_Seller() {return pSeller;}
 
+    
+
     protected:
     float price;
     int quantity;

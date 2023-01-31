@@ -199,9 +199,7 @@ void Firm_Agent::Pay_Liabilities(){
 }
 
 
-void Firm_Agent::Depreciate_Capital(){
-    
-}
+
 
 
 

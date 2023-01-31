@@ -36,7 +36,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     cash_on_hand = total_assets; // unsure how these two differed
 
     // Initialize pointers
-    Capital_Good* goods_on_market = new Capital_Good(this, 0,0);
+    Capital_Good* goods_on_market = new Capital_Good(this, 0,0,1,10);
     Public_Info_Board* pPublic_Info_Board = nullptr;
     Loan* loan_book[loan_book_size] = {};
 

@@ -51,8 +51,6 @@ class Firm_Agent{
     // ------- Main Loop Methods
 
 
-    // Depreciate capital
-    void Depreciate_Capital();
     
 
 

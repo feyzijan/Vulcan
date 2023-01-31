@@ -9,6 +9,10 @@
 #include "Random_Functions.hpp"
 #include "Initialization_Parameters.hpp"
 
+#include <vector>
+
+using namespace std;
+
 class Consumer_Firm_Agent: public Firm_Agent{
 
     public:
@@ -24,10 +28,18 @@ class Consumer_Firm_Agent: public Firm_Agent{
     void Print();
 
 
+    // Depreciate capital
+    void Depreciate_Capital();
+    void Depreciate_Good_Inventory();
+
+
     // Put up Consumer Goods for Sale
 
     protected:
     Consumer_Good* goods_on_market;
+    vector<Capital_Good*> capital_goods;
+    
+
     
 
 
