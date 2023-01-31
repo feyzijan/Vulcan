@@ -199,6 +199,11 @@ void Firm_Agent::Pay_Liabilities(){
 }
 
 
+void Firm_Agent::Depreciate_Capital(){
+    
+}
+
+
 
 void Firm_Agent::Post_Jobs(){
     using namespace std;

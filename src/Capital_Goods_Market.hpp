@@ -4,9 +4,9 @@
 
 
 #include "Capital_Good.hpp"
-#include "Capital_Firm_Agent.hpp" 
 
 
+#include "vector"
  
 class Capital_Goods_Market{
 
@@ -18,11 +18,16 @@ class Capital_Goods_Market{
 
     void Add_Capital_Good_To_Market(Capital_Good * cap_good);
 
+    float Get_Price_Level();
+
 
     private:
-
-    Capital_Good cap_goods_array[1000];
+    std::vector<Capital_Good*> cap_goods_list;
+    int n_total_goods;
+    int total_weighed_price;
+    float price_level;
 
 
 };
+
 #endif

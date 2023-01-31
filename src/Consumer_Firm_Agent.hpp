@@ -28,6 +28,8 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
     protected:
     Consumer_Good* goods_on_market;
+    
+
 
 
 

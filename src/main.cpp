@@ -32,39 +32,29 @@ int main()
     cout << "*****************Initialization Phase begun" << endl;
 
     // STEP 0.10: Initalize Public Board and Job Market
-
+    
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
     Job_Market* pJob_Market_1 = new Job_Market();
     pPublic_Board_1->Set_Job_Market(pJob_Market_1);
     cout << "Public Board at address: " << pPublic_Board_1 << " initialized" <<endl;
 
-    
     int n_promised_jobs = 0;  // Debugging variable to keep track of # jobs to be assigned
 
 
-    //------- STEP 0.11: Initialize Households
+    //------- STEP 0.11: Initialize Households and Firms
+    
     Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent) * n_households);
     Initialize_Households(Household_array, pPublic_Board_1, n_households); 
-
-    //-------- STEP 0.12: Initialize Consumer Firms ----------
     Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
     Initialize_Consumer_Firms( Cons_Firm_array, pPublic_Board_1, n_consumer_firms, &n_promised_jobs);
-    
-
-    //---------- STEP 0.12: Initialize Capital Firms
     Capital_Firm_Agent * Cap_Firm_array = (Capital_Firm_Agent*)malloc(sizeof(Capital_Firm_Agent) * n_capital_firms);
     Initialize_Capital_Firms(Cap_Firm_array, pPublic_Board_1, n_capital_firms, &n_promised_jobs);
     
 
     //----------- STEP 0.13: Initialize job market
     cout << "Initializing job Market -  " << " Firms are seeking " << n_promised_jobs << " jobs" << endl;
-    
     Initialize_Job_Market(Cons_Firm_array,Cap_Firm_array,Household_array,pPublic_Board_1);
     
-    //Small test
-    cout << "Household # " << 10 <<  "has job?:" << Household_array[10].Get_Employment_Status() << endl;
-    cout << "Household # " << 90 <<  "has job?:" <<  Household_array[90].Get_Employment_Status() << endl;
-
 
     // STEP 0.14 Assign firm owners - Todo later, minor thing
 
@@ -74,11 +64,12 @@ int main()
     Log_Cons_Firm_Properties(Cons_Firm_array, n_consumer_firms);
     Log_Cap_Firm_Properties(Cap_Firm_array, n_capital_firms);
 
-    Cons_Firm_array[0].Print();
 
 
 
+ 
 
+    //pPublic_Board_1->Print_Inflation_History();
 
 
 
@@ -92,6 +83,15 @@ int main()
 
 
 //  -------- STEP 1 MAIN LOOP -------------------
+
+    // STEP 1.0: Update Inflation Rate and Interest rate 
+
+
+
+
+
+
+
 
     // STEP 1.1: Update Households , Firm
     // Households(n+1/2) =f [InfoBoard(n)] 

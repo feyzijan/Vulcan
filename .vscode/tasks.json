@@ -26,8 +26,11 @@
 
 				"${fileDirname}\\Consumer_Firm_Agent.cpp",
 				"${fileDirname}\\Consumer_Good.cpp",
+				"${fileDirname}\\Consumer_Goods_Market.cpp",
+				
 				"${fileDirname}\\Capital_Firm_Agent.cpp",
 				"${fileDirname}\\Capital_Good.cpp",
+				"${fileDirname}\\Capital_Goods_Market.cpp",
 
 				"${fileDirname}\\Initialization_Functions.cpp",
 				"${fileDirname}\\Random_Functions.cpp",

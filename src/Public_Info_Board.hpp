@@ -7,16 +7,24 @@ class Job_Market;
 
 #include "Job_Market.hpp"
 #include "Job.hpp"
+#include "Consumer_Goods_Market.hpp"
+#include "Capital_Goods_Market.hpp"
+
 //#include "Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
-#include <iostream>
 
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+
+using namespace std;
 class Public_Info_Board{
 
     public:
 
     //-------- Constructors ----------- //
-    Public_Info_Board() {}; //Default Constructor
+    Public_Info_Board(); //Default Constructor
 
     Public_Info_Board(Public_Info_Board&); //Copy constructor
     
@@ -45,6 +53,13 @@ class Public_Info_Board{
     //--------------------------------------------------------//
 
 
+    //--- Interest Rate ---//
+    void Update_Interest_Rate();
+    void Update_Inflation_Rate();
+    void Initialize_Price_Level();
+    
+
+
     //--- Job Market ---//
     Job* Get_Top_Job();
 
@@ -61,11 +76,14 @@ class Public_Info_Board{
 
 
 
+
     // Getters
 
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
 
-    int Get_Price_Level() { return price_level;}
+    int Get_Price_Level() { return price_level_current;}
+
+    void Print_Inflation_History();
 
     Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
 
@@ -79,18 +97,26 @@ class Public_Info_Board{
     protected:
 
     Job_Market* pJob_Market;
+    Consumer_Goods_Market* pConsumer_Goods_Market;
+    Capital_Goods_Market* pCapital_Goods_Market;
 
+    // Array of past inflation
+    queue<float> inflation_history;
 
 
 
     // General price level
-    int price_level;
+    int price_level_current;
+    int price_level_previous;
+
 
     // Interest rate
     int r_rate;
+    float r_reaction; // Reaction to inflation rate overshoots
 
     
     int inflation_current; // Inflation (trailing 12m)
+    int inflation_previous; // Inflation previous (trailing 12m)
     int inflation_target; // Inflation (next 12m target)
 
 

@@ -48,7 +48,13 @@ class Firm_Agent{
 
     // Sending Goods to Market
 
-    // ------- Update methods -------
+    // ------- Main Loop Methods
+
+
+    // Depreciate capital
+    void Depreciate_Capital();
+    
+
 
     // Check sales and update revenue and inventory
     void Check_Sales();
@@ -77,7 +83,8 @@ class Firm_Agent{
 
     // Check the active job posting to see if any have been taken
     void Check_For_New_Employees();
-    
+
+
 
 
 

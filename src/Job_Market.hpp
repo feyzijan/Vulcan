@@ -22,6 +22,8 @@ class Job_Market{
     void Print();
     void Print_Size();
 
+
+
     
     // Getter that returns pointer to first instance in Job list
     Job* Get_Top_Job(); 
@@ -33,6 +35,7 @@ class Job_Market{
     void Add_Job_Offer(Job* job_offer) ;
 
     void Sort_Jobs_by_Wage();
+
 
 
     // Getters

@@ -125,6 +125,12 @@ const float init_desired_inventory_factor_max = 4.0;
 
 
 
+//Public Board paremeters
+const float inflation_reaction = 1.5;
+const float inflation_target = 1.05; 
+const float inflation_target_monthly=  1.004;
+
+
 
 
 
