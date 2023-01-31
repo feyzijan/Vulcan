@@ -9,9 +9,11 @@
 
 // TODO: Add Random seeds based on time so they are truly random
 
-int Uniform_Dist (int min, int max);
+int Uniform_Dist_Int (int min, int max);
+float Uniform_Dist_Float (float min, float max);
 
-int Normal_Dist(int mean, int std, int min, int max);
+float Normal_Dist(float mean, float std);
+
 
 
 class Normal_Dist_Generator {

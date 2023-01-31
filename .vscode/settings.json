@@ -65,6 +65,7 @@
         "xlocmon": "cpp",
         "xloctime": "cpp",
         "xtree": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "queue": "cpp"
     }
 }

@@ -5,6 +5,8 @@
 #define job_market_size 200
 
 
+extern int global_date;
+
 
 extern const int n_households;
 extern const int n_consumer_firms;
@@ -134,8 +136,14 @@ extern const float inflation_reaction;
 extern const float inflation_target; // yearly inflation target
 extern const float inflation_target_monthly; // monthly inflation target
 
+// Exogenous parameters for Firms
+extern const int standard_employment_contract_length;
+
 // Exogenous parameters for Consumer Firms
 extern const float cons_good_inv_depr_rate;
+
+
+
 
 
 

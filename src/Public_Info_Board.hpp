@@ -19,6 +19,12 @@ class Job_Market;
 #include <queue>
 
 using namespace std;
+
+
+
+
+
+
 class Public_Info_Board{
 
     public:
@@ -72,6 +78,8 @@ class Public_Info_Board{
     void Take_Job(Job* pJob_Offer); // Notify employer and remove job from market
 
     void Sort_Job_Market();
+
+    void Update_Average_Wage() {average_wage = pJob_Market->Get_Average_Wage();};
     //---------------------------//
 
 
@@ -87,10 +95,17 @@ class Public_Info_Board{
 
     Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
 
+    int Get_Current_Date() { return current_date;}
+
+    float Get_Average_Wage() { return average_wage;}
+
     // Setters
 
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
 
+
+    float Get_Capital_Good_Price_Level();
+    float Get_Consumer_Good_Price_Level();
 
 
 
@@ -108,6 +123,7 @@ class Public_Info_Board{
     // General price level
     int price_level_current;
     int price_level_previous;
+    float average_wage; // Average wage in economy
 
 
     // Interest rate
@@ -132,6 +148,8 @@ class Public_Info_Board{
 
     //timestep
     int time_step; // timestep in days
+    //current date
+    int current_date;
 
 
 };

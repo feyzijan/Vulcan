@@ -5,13 +5,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
+#include <queue>
 
 
 #include "Loan.hpp"
 #include "General_Good.hpp"
 #include "Job.hpp"
 #include "Public_Info_Board.hpp"
+#include "Random_Functions.hpp"
 
 // Todo: Move below definitions to the initialization file
 #define loan_book_size 100
@@ -44,11 +45,28 @@ class Firm_Agent{
     void InitializeEmployees(); // Assign employees in t=0
 
 
+    // ------- Loop t=1 initialiserz
+    void Update_Average_Profits_T1();
+
+
 
 
     // Sending Goods to Market
 
     // ------- Main Loop Methods
+
+    void Cancel_Expired_Contracts();
+
+    void Random_Experimentation();
+
+    void Calc_Quantity_Sold();
+
+    void Update_Average_Profit();
+
+    int Pay_Dividends();
+
+    void Determine_New_Production();
+
 
 
     
@@ -101,7 +119,10 @@ class Firm_Agent{
     protected:
     General_Good* goods_on_market;
     // List of loans taken out
-    Loan* loan_book[loan_book_size]; // 
+    Loan* loan_book[loan_book_size]; 
+    queue<int> past_profits;
+    queue<int> past_sale_quantity;
+
 
     // Employees
     std::vector<Job*> active_job_list;
@@ -120,6 +141,10 @@ class Firm_Agent{
     int subsidies;
     float good_price_current; // good price set for t
     float good_price_past; // good price at t-1
+
+    int average_profit; // NEWLY ADDED
+    int average_sale_quantity; //NEWLY ADDED  
+  
 
     // Expenditures
     int total_liabilities; //Comprises of evt below
@@ -156,7 +181,11 @@ class Firm_Agent{
     int inventory;
     int working_capital_inventory;
     float desired_inventory_factor; // a characteristic
+    int desired_inventory; // NEWLY ADDED 
     float inventory_factor; 
+
+    float inventory_reaction_factor; // NEWLY ADDED 
+
 
 
     // Sentiment

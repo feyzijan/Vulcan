@@ -45,6 +45,18 @@ void Public_Info_Board::Update_Interest_Rate(){
 
 
 
+/* Function to return average capital good price level
+*/
+float Public_Info_Board::Get_Capital_Good_Price_Level(){
+    return pCapital_Goods_Market->Get_Price_Level();
+}
+
+/* Function to return average consumer good price level
+*/
+float Public_Info_Board::Get_Consumer_Good_Price_Level(){
+    return pConsumer_Goods_Market->Get_Price_Level();
+}
+
 
 
 

@@ -9,6 +9,7 @@ Job::Job(Firm_Agent*  employer, Household_Agent* employee, int wage_offer, int p
     this->employee = employee;
     this->wage_offer = wage_offer;
     this->posting_date  = posting_date;
+    this->contract_length = standard_employment_contract_length;
     taken = 0;
 }
 

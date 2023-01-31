@@ -15,6 +15,14 @@ void Job_Market::Print(){
 
 
 
+void Job_Market::Calculate_Average_Wage(){
+    float sum = 0;
+    for (auto i = job_list.begin(); i != job_list.end(); ++i) 
+        sum += (*i)->Get_Wage(); 
+
+    average_wage = sum/job_list.size();
+}
+
 
 
 Job* Job_Market::Get_Top_Job(){

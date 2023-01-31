@@ -93,10 +93,15 @@ void Firm_Agent::Update_Price()
 
 }
 
+
+/* Function to adjust wage offers based on labor need and average wages
+*/
 void Firm_Agent::Adjust_Wage_Offers()
 {
     float w_stoc; // a stochastic cutoff value for labor
-    float n_uniform; // value drawn from uniform dist
+    float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
+    int average_wage = pPublic_Info_Board->Get_Average_Wage();
+
 
     if (w_current - w_target >= w_current)
     {
@@ -217,6 +222,34 @@ void Firm_Agent::Post_Jobs(){
 
 }
 
+/* Function to check if any of the firm's active jobs have expired, 
+and lay off employees if so
+*/
+
+void Firm_Agent::Cancel_Expired_Contracts(){
+    auto it = active_job_list.begin();
+    while(it !=  active_job_list.end()) {
+        if((*it)->Get_Expiry_Status() == 1) { 
+            it = active_job_list.erase(it);
+            employee_count -=1;
+        } else {
+            it++;
+        }
+}
+}
+
+/* Function to randomly alter some firm parameters, such as targeted leverage, markup
+TODO: Add the parameters to be altered here and fill in the function
+*/
+void Firm_Agent::Random_Experimentation(){
+
+}
+
+
+
+
+
+
 
 /* This function will loop through the firm's posted_job_listings array, 
 and move the ones marked as taken to the active_job_list arrays, and update employee counts
@@ -257,6 +290,93 @@ void Firm_Agent::Print_Active_Jobs(){
         (*i)->Print();
     }
 }
+
+
+/* TODO: Incomplete Function
+*/
+void Firm_Agent::Calc_Quantity_Sold(){
+    quantity_sold = inventory + production_past -  goods_on_market->Get_Quantity(); // determine how much has been sold
+}
+
+
+/* Function to update the firm's average profit
+*/
+void Firm_Agent::Update_Average_Profit(){
+    average_profit += (revenue_sales -past_profits.front())/12;
+    past_profits.pop();
+    past_profits.push(revenue_sales);
+}
+
+
+
+void Firm_Agent::Update_Average_Profits_T1(){
+    for(int i=1; i<=12; i++){
+        past_profits.push(revenue_sales);
+    }
+    average_profit = revenue_sales;
+
+}
+
+
+/* Function to compute how much dividend can be paid to the shareholder
+return this value, and deduct it from the company
+This function will be called by the household, through the public board*/
+int Firm_Agent::Pay_Dividends(){
+    
+    // Calculate dividend payment - Formula taken from Jamel
+    dividend_payments = max(min(int(dividend_ratio * average_profit), cash_on_hand),0);
+
+    cash_on_hand -= dividend_payments;
+
+    return dividend_payments; 
+}
+
+/* Function to update new price and quantity based on past sales and price level
+Follows EQ 38 from the general paper for pricing and Jamel for quantity setting
+Note: I have not implemented the quantity adjustment in eq 38, but may do so
+
+*/
+void Firm_Agent::Determine_New_Production(){
+    if (is_cons_firm){ 
+        bool inventory_high = inventory >= desired_inventory;
+        bool price_high = good_price_current >= pPublic_Info_Board->Get_Consumer_Good_Price_Level();
+        
+        float p = 0.01; // Chnage this to uniform distribution
+        float q = 0.01; // Change this to uniform distribution
+
+
+        // Case a: Inventory low, Price high - > Maintain price, ??increase Production??
+        if (!inventory_high && price_high){
+            production_planned*= (1.0+q);        
+        } // Case b: Inventory low, Price low - > Increase Price, ??increase production slightly??
+        else if( !inventory_high && !price_high){
+            good_price_current *= (1.0+p);
+            production_planned*= (1.0+q);
+        } // Case c: Inventory high, Price high - > Maintain price, ??reduce production??
+        else if (inventory_high && price_high){
+            good_price_current *= (1.0-p);
+        } // Case d:Inventory high, Price low -> Increase price, ??reduce production slightly??
+        else{
+            good_price_current *= (1.0+p);
+            // Do nothing
+        }
+
+        // below eq is from jamel paper
+        production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
+
+
+
+
+
+    }else{
+        float p_level = pPublic_Info_Board->Get_Consumer_Good_Price_Level();
+
+    }
+
+    
+}
+
+
 
 
 

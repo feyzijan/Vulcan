@@ -2,6 +2,8 @@
 #include "Initialization_Parameters.hpp"
 
 
+int global_date = 0;
+
 const int n_max_employees = 100;
 
 const int n_households = 10000;
@@ -132,6 +134,10 @@ const float inflation_target_monthly=  1.004;
 
 // Exogenous parameters for Consumer Firms
 const float cons_good_inv_depr_rate = 0.01;
+
+// Exogenous parameters for Firms
+extern const int standard_employment_contract_length = 12;
+
 
 
 

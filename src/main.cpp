@@ -26,6 +26,8 @@ int main()
 {
 
     cout << "************* Program has started" <<endl;
+    global_date = 2;
+
 
 
     //  ------------------ STEP 0 INITIALIZATION --------------------- 

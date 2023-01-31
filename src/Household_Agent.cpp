@@ -297,6 +297,7 @@ void Household_Agent::Seek_Jobs()
             //cout << "Job found" <<endl;
             current_job = best_job;
             current_job->Set_Employee(this); // update job object
+            current_job->Set_Expiry_Date(pPublic_Info_Board->Get_Current_Date());
             unemployed = false;
             pPublic_Info_Board->Take_Job(current_job);
         }

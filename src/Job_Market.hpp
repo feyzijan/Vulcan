@@ -36,16 +36,20 @@ class Job_Market{
 
     void Sort_Jobs_by_Wage();
 
+    void Calculate_Average_Wage();
 
 
     // Getters
 
     int Get_Size(){ return job_list.size();}
+    float Get_Average_Wage(){ return average_wage;}
+
 
     
 
     private:
     std::vector<Job*> job_list;
+    float average_wage;
 
    
 
