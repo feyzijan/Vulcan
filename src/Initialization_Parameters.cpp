@@ -136,8 +136,13 @@ const float inflation_target_monthly=  1.004;
 const float cons_good_inv_depr_rate = 0.01;
 
 // Exogenous parameters for Firms
-extern const int standard_employment_contract_length = 12;
+const int standard_employment_contract_length = 12;
+const float cons_productivity = 100; // # units produced per worker machine pairing
+const int cons_workers_per_machine = 1;
 
+// Exogenous parameters for Capital Firms
+const float cap_productivity = 0.05; // # units produced per worker machine pairing
+const int cap_workers_per_machine = 1;
 
 
 

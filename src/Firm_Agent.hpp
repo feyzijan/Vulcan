@@ -67,6 +67,8 @@ class Firm_Agent{
 
     void Determine_New_Production();
 
+    void Determine_Labor_Need();
+
 
 
     

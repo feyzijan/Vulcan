@@ -95,21 +95,25 @@ void Firm_Agent::Update_Price()
 
 
 /* Function to adjust wage offers based on labor need and average wages
+TODO: Improve this as it is a bit too simplistic, maybe use JAMEL
 */
 void Firm_Agent::Adjust_Wage_Offers()
 {
     float w_stoc; // a stochastic cutoff value for labor
     float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
     int average_wage = pPublic_Info_Board->Get_Average_Wage();
+    
+    bool wage_high = wage_offer > average_wage;
 
+    if (wage_high && need_worker){
+        //wage_offer *= (1+n_uniform);
+    } else if(wage_high && !need_worker){
+        wage_offer *= (1-n_uniform);
+    } else if(!wage_high && need_worker){
+        wage_offer *= (1+n_uniform);
+    } else{ // (!wage_high && !need_worker)
 
-    if (w_current - w_target >= w_current)
-    {
-        wage_offer*= (1+n_uniform);
-    } else{
-        wage_offer*= (1-n_uniform);
     }
-
 
 }
 
@@ -365,16 +369,12 @@ void Firm_Agent::Determine_New_Production(){
         production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
 
 
-
-
-
     }else{
         float p_level = pPublic_Info_Board->Get_Consumer_Good_Price_Level();
-
-    }
-
-    
+    }   
 }
+
+
 
 
 
