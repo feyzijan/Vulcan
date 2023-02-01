@@ -56,6 +56,8 @@ int main()
     //----------- STEP 0.13: Initialize job market
     cout << "Initializing job Market -  " << " Firms are seeking " << n_promised_jobs << " jobs" << endl;
     Initialize_Job_Market(Cons_Firm_array,Cap_Firm_array,Household_array,pPublic_Board_1);
+
+
     
 
     // STEP 0.14 Assign firm owners - Todo later, minor thing

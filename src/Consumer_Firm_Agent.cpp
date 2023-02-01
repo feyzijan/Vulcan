@@ -41,7 +41,6 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6])
     // Initialize pointers
     Consumer_Good* goods_on_market = new Consumer_Good(this, 0,0);
     Public_Info_Board* pPublic_Info_Board = nullptr;
-    Loan* loan_book[loan_book_size] = {};
 
     // Set evt else to zero
     // Production and sales figures
@@ -99,6 +98,24 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent()
 } 
 
 
+
+
+/* Increment Firm inventory by the number of machines, productivity per machine,
+
+*/
+void Consumer_Firm_Agent::Produce_Consumer_Goods(){
+
+    labor_utilization = max((float)employee_count / float(working_capital_inventory*cons_workers_per_machine), float(1.0));
+    machine_utilization = max((float)working_capital_inventory / float(employee_count/cons_workers_per_machine), float(1.0));
+    
+    int production_max = working_capital_inventory * cons_productivity;
+    
+    production_current = int(production_max*labor_utilization);
+
+    inventory += production_current;
+    inventory_factor = float(inventory) / float(average_sale_quantity);
+
+}
 
 
 

@@ -8,7 +8,7 @@ class Firm_Agent;
 class Loan {
 
     public:
-    Loan(Firm_Agent* pborrowing_firm, float interest_rate, int principal_amount, int start_date, int end_date);
+    Loan(Firm_Agent* pborrowing_firm, float interest_rate, int principal_amount, int start_date, int end_date, bool short_term_loan);
     Loan(Loan&);
     ~Loan();
 
@@ -34,6 +34,7 @@ class Loan {
     int principal_amount;
     int start_date;
     int end_date;
+    bool loan_type; // 1 = short term, 0 = long term
     Firm_Agent* pBorrowing_Firm;
 
 

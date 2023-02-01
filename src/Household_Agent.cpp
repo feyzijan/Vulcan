@@ -66,8 +66,18 @@ Household_Agent::Household_Agent(float propensities[7], int unemployment_toleran
 }
 
 
+/* Household receives wages, and updates the following
+Average income over past n windows
+Current financial wealth
+Effective saving : Cash_on_hand - average_income
+Targeted saving : factor * average_income
+Targeted Consumption Expenditures: - some formula
 
 
+*/
+void Consumption_Savings_Decisions(){
+
+}
 
 
 
@@ -228,6 +238,7 @@ void Household_Agent::Determine_Consumer_Sentiment()
 /* Function to determine consumption budget
  - Determine based on how the current income compares to average past income
  - Incorporate savings rate and sentiment
+ TODO: WHICH PAPER IS THIS FROM?
 */
 void Household_Agent::Determine_Consumption_Budget()
 {
@@ -268,16 +279,14 @@ void Household_Agent::Update_Wealth()
 
 /* Function to update reservation wage
  If unemployed for longer than upper bound randomly reduce wage
- - Check what the uniform dist upper bounds should be
+ TODO: Check if you want to keep the duration condition
 */
 void Household_Agent::Update_Reservation_Wage()
 {
     if( unemp_duration > unemp_duration_upper_bound)
     {
-        std::random_device rd;  // Obtain a seed for the random number engine
-        std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
-        std::uniform_real_distribution<> dis(0.0, 0.2);
-        reservation_wage = reservation_wage * (1-dis(gen));  
+        float n_uniform = Uniform_Dist_Float(0.0,1.0);
+        reservation_wage = reservation_wage * (1-n_uniform*n_res_wage_decrease);  
     }
 } 
 

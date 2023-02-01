@@ -32,6 +32,9 @@ class Consumer_Firm_Agent: public Firm_Agent{
     void Depreciate_Capital();
     void Depreciate_Good_Inventory();
 
+    // Produce Consumer Goods
+    void Produce_Consumer_Goods();
+
 
     // Put up Consumer Goods for Sale
 

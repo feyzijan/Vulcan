@@ -36,6 +36,9 @@ class Household_Agent{
     void Print_Characteristics();
 
 
+    void Consumption_Savings_Decisions();
+
+
 
 
 
@@ -63,6 +66,8 @@ class Household_Agent{
 
     // Calculate new financial wealth (eq 6-7)
     void Update_Wealth();
+
+
 
 
 

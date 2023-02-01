@@ -10,6 +10,7 @@ class Job_Market;
 #include "Consumer_Goods_Market.hpp"
 #include "Capital_Goods_Market.hpp"
 
+
 //#include "Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
 
@@ -58,12 +59,10 @@ class Public_Info_Board{
     void Update_Firm_Sentiment();
     //--------------------------------------------------------//
 
-
-    //--- Interest Rate ---//
-    void Update_Interest_Rate();
-    void Update_Inflation_Rate();
+    float Calculate_Inflation();
     void Initialize_Price_Level();
-    
+
+
 
 
     //--- Job Market ---//
@@ -91,21 +90,22 @@ class Public_Info_Board{
 
     int Get_Price_Level() { return price_level_current;}
 
-    void Print_Inflation_History();
+    float Get_Capital_Good_Price_Level();
+    float Get_Consumer_Good_Price_Level();
+    float Get_Average_Wage() { return average_wage;}
 
     Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
 
     int Get_Current_Date() { return current_date;}
 
-    float Get_Average_Wage() { return average_wage;}
+
 
     // Setters
 
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
 
 
-    float Get_Capital_Good_Price_Level();
-    float Get_Consumer_Good_Price_Level();
+    
 
 
 
@@ -115,8 +115,7 @@ class Public_Info_Board{
     Consumer_Goods_Market* pConsumer_Goods_Market;
     Capital_Goods_Market* pCapital_Goods_Market;
 
-    // Array of past inflation
-    queue<float> inflation_history;
+
 
 
 
@@ -126,14 +125,13 @@ class Public_Info_Board{
     float average_wage; // Average wage in economy
 
 
-    // Interest rate
-    int r_rate;
-    float r_reaction; // Reaction to inflation rate overshoots
+    // Inflation and interest rate
+    float r_rate; // Interest rate
+    float inflation_current; // Inflation rate trailing 12m
 
-    
-    int inflation_current; // Inflation (trailing 12m)
-    int inflation_previous; // Inflation previous (trailing 12m)
-    int inflation_target; // Inflation (next 12m target)
+
+
+
 
 
     // Sentiments

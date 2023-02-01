@@ -250,7 +250,65 @@ void Firm_Agent::Random_Experimentation(){
 }
 
 
+/* Function to layoff excess workers based on last in first out principle
+If the function is called with no excess workers it does nothing
+Remove the last n elements from the ordered vector of employees
+*/
+void Firm_Agent::Layoff_Excess_Workers(){
+    layoff_wage_savings = 0;
 
+
+}
+
+
+/* Compute the expected wage bill for the next period
+Current wage bill - wage_bill of employees laid off + desired new employees * wage_offer
+*/
+
+void Firm_Agent::Compute_Expected_Wage_Bill(){
+    expected_wage_bill = labor_wage_bill - layoff_wage_savings + employee_count_desired * wage_offer;
+}
+
+
+
+/* Determine the labor force needed to meet the production targets
+The target is = minimum(#workers needed to operate machines needed to meet production target, #workers needed to operate current machines)
+TODO: This equation seems a bit weird so look into this
+*/
+void Firm_Agent::Determine_Labor_Need(){
+
+    int employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
+    need_worker = employee_count_desired > employee_count;
+    if(employee_count_desired < employee_count){
+        Layoff_Excess_Workers();
+    }
+    // No need to call Post_Jobs method as that will be done in any case
+
+    Compute_Expected_Wage_Bill();
+
+    if (expected_wage_bill > cash_on_hand){
+        Seek_Short_Term_Loan();
+    }
+    
+
+    
+ 
+
+}
+
+/* Functoin to seek short term unamortized loans from the bank to cover
+expected wage bill funding gap
+*/
+void Firm_Agent::Seek_Short_Term_Loan(){
+
+}
+
+/* Function to seek long term amortized loans from the bank to cover
+expected long term funding gap
+*/
+void Firm_Agent::Seek_Long_Term_Loan(){
+
+}
 
 
 
@@ -373,6 +431,8 @@ void Firm_Agent::Determine_New_Production(){
         float p_level = pPublic_Info_Board->Get_Consumer_Good_Price_Level();
     }   
 }
+
+
 
 
 

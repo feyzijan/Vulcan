@@ -131,7 +131,12 @@ extern const float init_desired_inventory_factor_min;
 extern const float init_desired_inventory_factor_max;
 
 
-// Public Board parameters
+
+
+// Initial Parameters for Bank
+extern const float initial_interest_rate;
+
+// Exogenous Parameters for Bank
 extern const float inflation_reaction;
 extern const float inflation_target; // yearly inflation target
 extern const float inflation_target_monthly; // monthly inflation target
@@ -150,7 +155,8 @@ extern const float cap_productivity; // # units produced per worker machine pair
 extern const int cap_workers_per_machine;
 
 
-
+// Exogenous parameters for Households
+extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
 
 
 

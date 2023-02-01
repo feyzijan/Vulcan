@@ -36,6 +36,9 @@
 				"${fileDirname}\\Random_Functions.cpp",
 				"${fileDirname}\\Data_Logging.cpp",
 
+				"${fileDirname}\\Bank_Agent.cpp",
+
+
 
 
 				

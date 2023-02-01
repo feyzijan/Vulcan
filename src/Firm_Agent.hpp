@@ -69,6 +69,10 @@ class Firm_Agent{
 
     void Determine_Labor_Need();
 
+    void Layoff_Excess_Workers();
+
+    void Compute_Expected_Wage_Bill();
+
 
 
     
@@ -82,6 +86,10 @@ class Firm_Agent{
 
     // Seek Loans if needed to pay liabilities
     int Seek_Loans(int shortfall);
+
+    void Seek_Short_Term_Loan();
+
+    void Seek_Long_Term_Loan();
 
 
     // Inventory check
@@ -108,6 +116,9 @@ class Firm_Agent{
 
 
 
+
+
+
     // Getters
     std::vector<float>* Get_All_Params(); 
 
@@ -121,7 +132,8 @@ class Firm_Agent{
     protected:
     General_Good* goods_on_market;
     // List of loans taken out
-    Loan* loan_book[loan_book_size]; 
+    std::vector<Loan*> loan_book;
+
     queue<int> past_profits;
     queue<int> past_sale_quantity;
 
@@ -157,6 +169,11 @@ class Firm_Agent{
     int debt_interest_payments;
     int dividend_payments;
 
+    int expected_wage_bill; // NEWLY ADDED
+    int layoff_wage_savings; // NEWLY ADDED
+    int expected_wage_bill_shortfall; // NEWLY ADDED
+    int expected_long_term_shortfall; // NEWLY ADDDED
+
     // Assets and fianncials 
     int total_assets; // maybe this should be the same as cash in hand?
     int leverage_ratio;
@@ -168,7 +185,7 @@ class Firm_Agent{
     float dividend_ratio_pessimist; // characteristic
 
 
-
+    // Employee
     int employee_count; 
     int wage_offer;
     int employee_count_desired;
@@ -176,6 +193,8 @@ class Firm_Agent{
     bool need_worker;
     int w_target; //Desired labor capacity utilization
     int w_current; //Current labor capacity utilization
+
+    float labor_utilization; // NEWLY ADDED
 
 
     
@@ -187,6 +206,8 @@ class Firm_Agent{
     float inventory_factor; 
 
     float inventory_reaction_factor; // NEWLY ADDED 
+
+    float machine_utilization; // NEWLY ADDED
 
 
 

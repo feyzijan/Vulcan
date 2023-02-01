@@ -9,6 +9,21 @@ void Capital_Firm_Agent::Print(){
     Firm_Agent::Print();
 }
 
+void Capital_Firm_Agent::Produce_Capital_Goods(){
+    
+    labor_utilization = max((float)employee_count / float(working_capital_inventory*cons_workers_per_machine), float(1.0));
+    machine_utilization = max((float)working_capital_inventory / float(employee_count/cons_workers_per_machine), float(1.0));
+    
+    int production_max = working_capital_inventory * cap_productivity;
+    
+    production_current = int(production_max*labor_utilization);
+
+    inventory += production_current;
+    inventory_factor = float(inventory) / float(average_sale_quantity);
+    
+
+}
+
 
 
 
@@ -38,7 +53,6 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     // Initialize pointers
     Capital_Good* goods_on_market = new Capital_Good(this, 0,0,1,10);
     Public_Info_Board* pPublic_Info_Board = nullptr;
-    Loan* loan_book[loan_book_size] = {};
 
     // Set evt else to zero
     // Production and sales figures

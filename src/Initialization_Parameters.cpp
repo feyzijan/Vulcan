@@ -127,7 +127,11 @@ const float init_desired_inventory_factor_max = 4.0;
 
 
 
-//Public Board parameters
+// Initial Parameters for Bank
+const float initial_interest_rate = 0.02;
+
+
+//Bank parameters
 const float inflation_reaction = 1.5;
 const float inflation_target = 1.05; 
 const float inflation_target_monthly=  1.004;
@@ -144,6 +148,8 @@ const int cons_workers_per_machine = 1;
 const float cap_productivity = 0.05; // # units produced per worker machine pairing
 const int cap_workers_per_machine = 1;
 
+// Exogenous parameters for Households
+const float n_res_wage_decrease = 0.02; // Household reservation wages are updated with *1-n_uniform*this_value
 
 
 
