@@ -9,6 +9,7 @@ class Consumer_Firm_Agent;
 class Consumer_Good: public General_Good{
 
     public:
+    // Constructor
     Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, int seller_quantity);
 
     // Getters
