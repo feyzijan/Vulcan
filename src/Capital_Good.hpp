@@ -1,18 +1,24 @@
 #ifndef CAPITAL_GOOD_HPP
 #define CAPITAL_GOOD_HPP
 
-// Forward Declaration of Capital Firm Agent
+
+
+#include <iostream>
+using namespace std;
 
 #include "General_Good.hpp"
 #include "Initialization_Parameters.hpp"
-class Capital_Firm_Agent;
-
+class Capital_Firm_Agent; // Forward Declaration of Capital Firm Agent
 
 
 class Capital_Good: public General_Good{
 
     public:
     Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int life_span);
+
+
+    // Printing
+    void Print() const;
 
     // Getters
     Capital_Firm_Agent * GetSeller() {return pSeller;}

@@ -7,18 +7,26 @@
 
 
 #include "vector"
+#include "algorithm"
  
 class Capital_Goods_Market{
 
     public:
-     
+    // Constructors and destructor
     Capital_Goods_Market();
     Capital_Goods_Market(Capital_Goods_Market&);
     ~Capital_Goods_Market();
 
-    void Add_Capital_Good_To_Market(Capital_Good * cap_good);
 
-    float Get_Price_Level();
+    // Printing and Debugging
+    void Print();
+
+    // Market operations
+    void Add_Capital_Good_To_Market(Capital_Good * cap_good);
+    void Sort_Capital_Goods_By_Price();
+
+    // Getters
+    float Get_Price_Level(){return price_level;}
 
 
     private:
@@ -26,7 +34,6 @@ class Capital_Goods_Market{
     int n_total_goods;
     int total_weighed_price;
     float price_level;
-
 
 };
 

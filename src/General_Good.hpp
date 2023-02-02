@@ -20,6 +20,8 @@ class General_Good{
     bool operator<(const General_Good& rhs);
     bool operator!=(const General_Good& rhs);
 
+
+
     // Getters
     float Get_Price() const {return price;}
     int Get_Quantity() const {return quantity;}
