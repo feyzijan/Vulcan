@@ -4,15 +4,16 @@
 class Firm_Agent; 
 
 //#include "Firm_Agent.hpp"
+#include "Initialization_Parameters.hpp"
+#include <iostream>
+using namespace std;
 
-
-int global_current_date;
 class Loan {
 
     public:
     // Constructors and Destructors
     Loan(Firm_Agent* pborrowing_firm, float interest_rate, int principal_amount,
-     int start_date, int end_date, bool short_term_loan);
+    int duration,bool short_term_loan);
     Loan(Loan&);
     ~Loan();
 
@@ -36,9 +37,6 @@ class Loan {
     Firm_Agent* Get_Borrowing_Firm() const {return pBorrowing_Firm; }
 
 
-
-
-
     protected:
     Firm_Agent* pBorrowing_Firm;
     float interest_rate;
@@ -47,9 +45,6 @@ class Loan {
     int end_date;
     bool loan_type; // 1 = short term, 0 = long term
     bool expired;
-
-    int current_date;
-
 };
 
 #endif

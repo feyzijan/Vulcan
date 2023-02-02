@@ -1,10 +1,12 @@
 #ifndef BANK_AGENT_HPP
 #define BANK_AGENT_HPP
 
+
+class Public_Info_Board;
 #include "Public_Info_Board.hpp"
 #include "Initialization_Parameters.hpp"
 #include "Loan.hpp"
-#include  "Firm_Agent.hpp"
+#include "Firm_Agent.hpp"
 
 
 #include <queue>

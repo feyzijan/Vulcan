@@ -8,6 +8,7 @@
 #include <queue>
 
 
+class Public_Info_Board;
 #include "Loan.hpp"
 #include "General_Good.hpp"
 #include "Job.hpp"

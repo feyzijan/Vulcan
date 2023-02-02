@@ -104,9 +104,7 @@ Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
     // Create new loan
     int short_term_funding_gap = pFirm->Get_Short_Term_Funding_Gap();
     int current_date = pPublic_Board->Get_Current_Date();
-    Loan* new_loan = new Loan(pFirm,r_rate,short_term_funding_gap,current_date, 
-    current_date + short_term_loan_length,1);
-
+    Loan* new_loan = new Loan(pFirm,r_rate,short_term_funding_gap, short_term_loan_length,1);
     // Update own records
     total_loan_issuance_to_date += short_term_funding_gap;
     new_loan_issuance += short_term_funding_gap;
@@ -134,9 +132,7 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
 
     if(issue){
         int current_date = pPublic_Board->Get_Current_Date();
-        Loan* new_loan = new Loan(pFirm,loan_rate,long_term_funding_gap,current_date, 
-        current_date + long_term_loan_length,0);
-
+        Loan* new_loan = new Loan(pFirm,loan_rate,long_term_funding_gap, long_term_loan_length,0);
         // Update own records
         total_loan_issuance_to_date += long_term_funding_gap;
         new_loan_issuance += long_term_funding_gap;

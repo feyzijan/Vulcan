@@ -12,7 +12,6 @@ class Firm_Agent;
 #include "Initialization_Parameters.hpp"
 
 
-
 class Job{
 
     public:
@@ -48,7 +47,7 @@ class Job{
     void Update_Wage(int new_wage){wage_offer = new_wage;}
     void Set_Employee(Household_Agent* pemployee) {employee = pemployee;}
     void Update_Status(bool status) { taken = status;}
-    void Set_Expiry_Date() {expiry_date = global_current_date + contract_length;}
+    void Set_Expiry_Date() {expiry_date = global_date + contract_length;}
     
 
     protected:

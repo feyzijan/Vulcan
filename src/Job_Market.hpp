@@ -26,7 +26,7 @@ class Job_Market{
     
     // Job Market Implementation Functions
     Job* Get_Top_Job(); 
-    void Remove_Top_Job_Offer(){job_list.erase(job_list.begin());}
+    void Remove_Top_Job_Offer();
     void Add_Job_Offer(Job* job_offer);
     void Sort_Jobs_by_Wage();
 

@@ -3,11 +3,15 @@
 
 
 class Job_Market;
+class Bank_Agent;
+class Consumer_Goods_Market;
+
 #include "Job_Market.hpp"
 #include "Job.hpp"
 #include "Consumer_Goods_Market.hpp"
 #include "Capital_Goods_Market.hpp"
 #include "Bank_Agent.hpp"
+#include "Loan.hpp"
 
 //#include "Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"

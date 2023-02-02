@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Initialization_Parameters.hpp"
+
 #include "Public_Info_Board.hpp"
 #include "Household_Agent.hpp"
 #include "Job.hpp"
@@ -10,23 +11,16 @@
 #include "General_Good.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
-
-
 #include "Initialization_Functions.hpp"
 #include "Random_Functions.hpp"
 #include "Data_Logging.hpp"
 
-
-
 using namespace std;
-
-
-
 int main()
 {
 
     cout << "************* Program has started" <<endl;
-    global_date = 2;
+    global_date = 0;
 
 
 
