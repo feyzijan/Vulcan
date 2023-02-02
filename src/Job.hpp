@@ -37,6 +37,7 @@ class Job{
     int Get_Wage() const {return wage_offer;} 
     int Get_Posting_Date() const {return posting_date;}
     int Get_Expiry_Date() const {return expiry_date;}
+    int Get_Contract_Length() const {return contract_length;}
     bool Get_Status() const {return taken;}
     bool Get_Expiry_Status() const {return (global_date>= expiry_date);}
     Firm_Agent* Get_Employer() const {return employer;} 

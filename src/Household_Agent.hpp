@@ -4,6 +4,7 @@
 #include <numeric>
 #include <random>
 #include <vector>
+#include <queue>
 
 class Public_Info_Board;
 #include "Public_Info_Board.hpp"
@@ -13,7 +14,7 @@ class Public_Info_Board;
 
 #define income_lookback_period 10
 
-
+using namespace std;
 class Household_Agent{
 
     public:
@@ -23,30 +24,29 @@ class Household_Agent{
     ~Household_Agent();
 
 
+
+    // Main Loop methods
+    void Update_Reservation_Wage();
+    void Consumption_Savings_Decisions();
+    void Update_Income();
+    void Update_Average_Income();
+    void Update_Average_Income_T1();
+    void Update_Wealth(); // TO Implement
+    void Determine_Consumer_Sentiment();
+    void Determine_Consumption_Budget(); //(eq 18)
+    void Buy_Consumer_Goods(); // TO IMPLEMENT
+
+    void Seek_Jobs();
+    
+
+
+
+ 
+    
+
     // Printing and Debugging
     void Print();
     void Print_Characteristics();
-
-    // Main Loop methods
-    void Consumption_Savings_Decisions();
-    // Update current total income from all sources
-    void Update_Income();
-    // Assign a value to the unemployment benefits
-    void Assign_Unemployment_Benefits(int unemployment_benefit_amount);
-    // Calculate average income over the past n_periods
-    void Update_Average_Income();
-    // Determine consumer sentiment
-    void Determine_Consumer_Sentiment();
-    // Determine consumption budget (eq 18)
-    void Determine_Consumption_Budget();
-    // Determine goods to buy - TO IMPLEMENT
-    void Buy_Consumer_Goods();
-    // Calculate new financial wealth (eq 6-7)
-    void Update_Wealth();
-    // Check for jobs in the public market
-    void Seek_Jobs();
-    // Update reservation wage
-    void Update_Reservation_Wage();
 
 
 
@@ -56,7 +56,6 @@ class Household_Agent{
 
 
     //Getters
-    int Get_Wage_Dividend() {};
     int Get_Wage() {return income_wage;};
     bool Get_Employment_Status() {return !unemployed;}
     float Get_C_f() {return c_f;}
@@ -64,11 +63,10 @@ class Household_Agent{
     Public_Info_Board* Get_Public_Board() {return pPublic_Info_Board;};
     std::vector<float>* Get_All_Params();
 
-
-
     protected:
     Public_Info_Board* pPublic_Info_Board;
     Job * current_job;
+    queue<int> past_incomes;
 
     // Wealth
     int wealth_financial; //W_f in equations 
@@ -100,6 +98,7 @@ class Household_Agent{
 
     // Initialize this to all zeros
     int income_past[income_lookback_period]; // must equal average_income_lookback_period
+    
 
     // Unemployment status
     bool unemployed;
