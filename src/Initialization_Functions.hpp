@@ -6,7 +6,6 @@
 #include <iostream>
 #include <vector>
 
-
 #include "Firm_Agent.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
@@ -16,7 +15,7 @@
 
 using namespace std;
 
-
+// Function to set up Job market at t=0
 void Initialize_Job_Market(Consumer_Firm_Agent* Cons_Firm_array,
 Capital_Firm_Agent* Cap_Firm_array, Household_Agent* Household_array,
 Public_Info_Board* pPublic_Info_Board);
