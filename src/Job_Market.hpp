@@ -15,44 +15,32 @@ class Job;
 class Job_Market{
 
     public:
+    // Constructors and destructor
     Job_Market() ;
-    Job_Market(Job_Market&){};
-    ~Job_Market(){};
+    Job_Market(Job_Market&);
+    ~Job_Market();
 
+    // Printing and Debugging
     void Print();
     void Print_Size();
-
-
-
     
-    // Getter that returns pointer to first instance in Job list
+    // Job Market Implementation Functions
     Job* Get_Top_Job(); 
-
-    // Remove the highest paying Job offer once its taken
-    void Remove_Top_Job_Offer();
-
-    // Add New Job Offer to list, place in proper order
-    void Add_Job_Offer(Job* job_offer) ;
-
+    void Remove_Top_Job_Offer(){job_list.erase(job_list.begin());}
+    void Add_Job_Offer(Job* job_offer);
     void Sort_Jobs_by_Wage();
 
+    // Information needed by firms
     void Calculate_Average_Wage();
 
-
     // Getters
-
     int Get_Size(){ return job_list.size();}
     float Get_Average_Wage(){ return average_wage;}
 
 
-    
-
     private:
     std::vector<Job*> job_list;
     float average_wage;
-
-   
-
 };
 
 #endif

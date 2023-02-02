@@ -2,33 +2,37 @@
 
 using namespace std;
 
-Job_Market::Job_Market(){
 
-}
+// Constructor and destructors
+Job_Market::Job_Market(){}
+Job_Market::~Job_Market(){}
+Job_Market::Job_Market(Job_Market&){}
 
 
+// Printing and Debugging
+
+/* Function to print all job objects in the market
+*/
 void Job_Market::Print(){
     cout << "Printing Job Market with " << job_list.size()  << " jobs" << endl;
+    Print_Size();
     for (auto i = job_list.begin(); i != job_list.end(); ++i) 
         cout << "Job with address: " << *i << " with wage: " << (*i)->Get_Wage() << endl; 
 }
 
-
-
-void Job_Market::Calculate_Average_Wage(){
-    float sum = 0;
-    for (auto i = job_list.begin(); i != job_list.end(); ++i) 
-        sum += (*i)->Get_Wage(); 
-
-    average_wage = sum/job_list.size();
+void Job_Market::Print_Size(){
+    cout << "Job market has " << job_list.size() << " jobs" << endl;
 }
 
 
+// Job Market Implementation Functions
 
+/* Return job with the highest wage
+*/
 Job* Job_Market::Get_Top_Job(){
     
     if (job_list.empty()) {
-        cout << "Job list is empty!" <<endl;
+        //cout << "Job list is empty!" <<endl;
         return NULL; 
     }
     else{
@@ -38,35 +42,36 @@ Job* Job_Market::Get_Top_Job(){
 }
 
 
-//TODO: Test this loop,
-
+/*Remove the highest paying Job offer once its taken
+*/
 void Job_Market::Remove_Top_Job_Offer(){
+    //cout << "Removing top job offer" <<endl;
     job_list.erase(job_list.begin());
 }
 
-
-// Implement sorted insertion
-void Job_Market::Add_Job_Offer(Job* job_offer) {
-    
+/* Add new Job to Market  TODO: Implement sorted insertion
+*/
+void Job_Market::Add_Job_Offer(Job* job_offer) { 
     //cout << "Job Market adding job with address: "  << job_offer << " with wage " << job_offer->Get_Wage() << endl;
-
-    // to the vector
     job_list.push_back(job_offer); 
-
 }
 
-
+/* Sort the job market by wage
+*/
 void Job_Market::Sort_Jobs_by_Wage(){
-    
-    //std::sort(job_list.begin(), job_list.end(),
-    //[] (const Job& lhs, const Job& rhs) -> bool {return lhs < rhs;});
-
     std::sort(job_list.begin(), job_list.end(),
     [](const Job* j1,const Job*  j2) -> bool {
     return j1->Get_Wage() > j2->Get_Wage() ;});
 }
 
 
-void Job_Market::Print_Size(){
-    cout << "Job market has " << job_list.size() << " jobs" << endl;
+// Information gathering functions
+/* Calculate average weight in the market
+*/
+void Job_Market::Calculate_Average_Wage(){
+    float sum = 0;
+    for (auto i = job_list.begin(); i != job_list.end(); ++i) 
+        sum += (*i)->Get_Wage(); 
+    average_wage = sum/job_list.size();
 }
+
