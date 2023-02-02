@@ -50,44 +50,22 @@ class Firm_Agent{
     void Compute_Expected_Wage_Bill();
     void Seek_Short_Term_Loan();
     void Post_Jobs();
-    void Check_For_New_Employees();// Check the active job posting to see if any have been taken
-    void Commence_Production(); // Implemented by subclasses
+    void Check_For_New_Employees();
+    //void Commence_Production(); // Implemented by subclasses
+    void Check_Sales(); 
+    void Update_Supplier_Networks(); // TO Implement
+    void Make_Investment_Decision(); // Complete
+    void Seek_Long_Term_Loan();
+    void Buy_Machines(); // To Implement
 
-    
 
-
-    // Check sales and update revenue and inventory
-    void Check_Sales();
 
     // Pay liabilities 
     void Pay_Liabilities();
-
     // Seek Loans if needed to pay liabilities
-    int Seek_Loans(int shortfall);
-
-
-
-    void Seek_Long_Term_Loan();
-
-
-    // Inventory check
-    bool Inventory_Above_Desire();
-
-
-
+    int Seek_Loans(int shortfall); // remove later
+    // Seek long term loan
     
-
-    
-
-    
-
-
-
-
-
-
-
-
 
 
 
@@ -103,16 +81,16 @@ class Firm_Agent{
     void Set_Wage_Offer(int wage) { this->wage_offer = wage;} // used in testing
 
 
-    Public_Info_Board* pPublic_Info_Board;
+    
 
     protected:
+    Public_Info_Board* pPublic_Info_Board;
     General_Good* goods_on_market;
-    // List of loans taken out
+
     std::vector<Loan*> loan_book;
 
     queue<int> past_profits;
     queue<int> past_sale_quantity;
-
 
     // Employees
     std::vector<Job*> active_job_list;
@@ -132,8 +110,8 @@ class Firm_Agent{
     float good_price_current; // good price set for t
     float good_price_past; // good price at t-1
 
-    int average_profit; // NEWLY ADDED
-    int average_sale_quantity; //NEWLY ADDED  
+    int average_profit; // NEWLY ADDED - Add to print and log
+    int average_sale_quantity; //NEWLY ADDED - Add to print and log
   
     // Loan Parameters
     int short_term_funding_gap;
@@ -148,10 +126,10 @@ class Firm_Agent{
     int debt_interest_payments;
     int dividend_payments;
 
-    int expected_wage_bill; // NEWLY ADDED
-    int layoff_wage_savings; // NEWLY ADDED
-    int expected_wage_bill_shortfall; // NEWLY ADDED
-    int expected_long_term_shortfall; // NEWLY ADDDED
+    int expected_wage_bill; // NEWLY ADDED- Add to print and log
+    int layoff_wage_savings; // NEWLY ADDED- Add to print and log
+    int expected_wage_bill_shortfall; // NEWLY ADDED- Add to print and log
+    int expected_long_term_shortfall; // NEWLY ADDDED- Add to print and log
 
     // Assets and fianncials 
     int total_assets; // maybe this should be the same as cash in hand?
@@ -163,7 +141,6 @@ class Firm_Agent{
     float dividend_ratio_optimist; // characteristic
     float dividend_ratio_pessimist; // characteristic
 
-
     // Employee
     int employee_count; 
     int wage_offer;
@@ -173,20 +150,20 @@ class Firm_Agent{
     int w_target; //Desired labor capacity utilization
     int w_current; //Current labor capacity utilization
 
-    float labor_utilization; // NEWLY ADDED
-
+    float labor_utilization; // NEWLY ADDDED- Add to print and log
 
     
     // Inventories
     int inventory;
     int working_capital_inventory;
     float desired_inventory_factor; // a characteristic
-    int desired_inventory; // NEWLY ADDED 
+    int desired_inventory; // NEWLY ADDED - Add to print and log
     float inventory_factor; 
 
-    float inventory_reaction_factor; // NEWLY ADDED 
+    float inventory_reaction_factor;  // NEWLY ADDDED- Add to print and log
 
-    float machine_utilization; // NEWLY ADDED
+    float machine_utilization;  // NEWLY ADDDED- Add to print and log
+    int desired_machines; // NEWLY ADDDED
 
 
 
@@ -202,12 +179,6 @@ class Firm_Agent{
 };
 
 
-// Initialization functions
 
-
-/* void Post_Initial_Job_Offers(Firm_Agent * Firm_array, int size);
-
-void Check_Initial_Job_Offers(Firm_Agent * Firm_array, int size);
- */
 #endif
 

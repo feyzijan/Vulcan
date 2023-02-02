@@ -127,8 +127,10 @@ const float cons_productivity = 100; // # units produced per worker machine pair
 const int cons_workers_per_machine = 1;
 
 // Exogenous parameters for Capital Firms
+const float cap_good_inv_depr_rate = 0.01;
 const float cap_productivity = 0.05; // # units produced per worker machine pairing
 const int cap_workers_per_machine = 1;
+const int machine_lifespan = 100;
 
 //---------------------------------------------
 

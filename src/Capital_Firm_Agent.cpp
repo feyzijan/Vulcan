@@ -1,31 +1,6 @@
 #include "Capital_Firm_Agent.hpp"
 
-
-using namespace std;
-
-
-void Capital_Firm_Agent::Print(){
-    using namespace std;
-    Firm_Agent::Print();
-}
-
-void Capital_Firm_Agent::Produce_Capital_Goods(){
-    
-    labor_utilization = max((float)employee_count / float(working_capital_inventory*cons_workers_per_machine), float(1.0));
-    machine_utilization = max((float)working_capital_inventory / float(employee_count/cons_workers_per_machine), float(1.0));
-    
-    int production_max = working_capital_inventory * cap_productivity;
-    
-    production_current = int(production_max*labor_utilization);
-
-    inventory += production_current;
-    inventory_factor = float(inventory) / float(average_sale_quantity);
-    
-
-}
-
-
-
+// -------------- Constructors ---------
 
 
 
@@ -51,10 +26,10 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     cash_on_hand = total_assets; // unsure how these two differed
 
     // Initialize pointers
-    Capital_Good* goods_on_market = new Capital_Good(this, 0,0,1,10);
+    Capital_Good* goods_on_market = new Capital_Good(this, 0,0, machine_lifespan );
     Public_Info_Board* pPublic_Info_Board = nullptr;
 
-    // Set evt else to zero
+       // Set evt else to zero
     // Production and sales figures
     production_current = 0;
     production_past = 0; 
@@ -66,6 +41,8 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     new_loan_issuance =0; 
     subsidies = 0;
     good_price_past = 0;
+    average_profit = 0;
+    average_sale_quantity = 0;
 
     // Expenditures
     total_liabilities = 0;
@@ -75,6 +52,11 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     debt_principal_payments = 0;
     debt_interest_payments = 0;
     dividend_payments = 0;
+
+    expected_wage_bill = 0;
+    layoff_wage_savings = 0;
+    expected_wage_bill_shortfall = 0;
+    expected_long_term_shortfall = 0;
 
     // Assets and fianncials 
     leverage_ratio = 0; // correctly set
@@ -88,28 +70,68 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     w_target = 0;
     w_current = 0;
 
+    labor_utilization = 0.0;
+
+    // Inventories
+    desired_inventory = 0.0;
+    inventory_reaction_factor = 1; // TODO Initialise this randomly
+    machine_utilization = 0.0;
+
     //identifier
     is_cons_firm = false;
 }
 
-
-
-
-
-
 //Copy constructor
-Capital_Firm_Agent::Capital_Firm_Agent(Capital_Firm_Agent&)
-{
+Capital_Firm_Agent::Capital_Firm_Agent(Capital_Firm_Agent&){}
 
+// Destructor
+Capital_Firm_Agent::~Capital_Firm_Agent(){} 
+
+
+// ------- Main Loop Methods-----------------
+
+/* Function to loop through vector of capital goods the firm possesses,
+mark down their value, and remove the ones with zero value, i.e. end of life
+*/
+void Capital_Firm_Agent::Depreciate_Capital(){
+
+    for(auto i= capital_goods.begin(); i!=capital_goods.end(); i++){
+        float original_price = (*i)->Get_Price();
+        float current_val  =  (*i)->Get_Value();
+        int depreciation_rate = (*i)->Get_Depreciation_Period();
+        
+        (*i)->Update_Value(current_val - original_price/depreciation_rate);
+
+        if ((*i)->Get_Value() <= 0){capital_goods.erase(i);}
+    }
+    working_capital_inventory = int(capital_goods.size());
+}
+
+/* Function to depreciate(i.e. destroy) a fraction of the firm's inventory of consumer goods
+The depreciation rate is set exogenously in the initialization parameter for all firms
+*/
+void Capital_Firm_Agent::Depreciate_Good_Inventory(){
+    inventory  = int(inventory*(1-cap_good_inv_depr_rate));
 }
 
 
 
-// Destructor
-Capital_Firm_Agent::~Capital_Firm_Agent()
-{
 
-} 
+/* Increment Firm inventory by the number of machines, productivity per machine,
+*/
+void Capital_Firm_Agent::Produce_Capital_Goods(){
+    
+    labor_utilization = max((float)employee_count / float(working_capital_inventory*cons_workers_per_machine), float(1.0));
+    machine_utilization = max((float)working_capital_inventory / float(employee_count/cons_workers_per_machine), float(1.0));
+    
+    int production_max = working_capital_inventory * cap_productivity;
+    
+    production_current = int(production_max*labor_utilization);
+    inventory += production_current;
+    inventory_factor = float(inventory) / float(average_sale_quantity);
+
+}
+
 
 
 
@@ -153,8 +175,6 @@ void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_B
         Cap_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
     }
 }
-
-
 
 
 void Post_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size){

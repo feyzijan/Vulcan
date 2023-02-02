@@ -13,26 +13,19 @@
 class Capital_Firm_Agent: public Firm_Agent{
 
     public:
-
-
+    //Constructors and Destructor
     Capital_Firm_Agent(float float_vals[4], int int_vals[6]);
+    Capital_Firm_Agent(Capital_Firm_Agent&); 
+    ~Capital_Firm_Agent(); 
 
-
-
-    Capital_Firm_Agent(Capital_Firm_Agent&); //Copy Constructor
-    ~Capital_Firm_Agent(); // Destructor
-
-    void Print();
-
+    // Main Loop methods
+    void Depreciate_Capital();
+    void Depreciate_Good_Inventory();
     void Produce_Capital_Goods();
-
-
-
 
     protected:
     Capital_Good* goods_on_market;
-
-
+    vector<Capital_Good*> capital_goods;
 
 };
 

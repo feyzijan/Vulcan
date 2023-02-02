@@ -124,6 +124,7 @@ int Firm_Agent::Pay_Dividends(){
     return dividend_payments; 
 }
 
+
 /* Function to update new price and quantity based on past sales and price level
 Updates good_price_current and production_planned variables
 Follows EQ 38 from the general paper for pricing and Jamel for quantity setting
@@ -261,11 +262,54 @@ void Firm_Agent::Check_For_New_Employees(){
     }
 }
 
+/* Function to check sales in the preceeding period, and update inventory, sales figure, etc.*/
+void Firm_Agent::Check_Sales()
+{
+    quantity_sold = production_past -  goods_on_market->Get_Quantity(); // determine how much has been sold
+    inventory = goods_on_market->Get_Quantity(); // determine how much is in inventory
+    revenue_sales =  quantity_sold * good_price_current;
+}
+
+
+/* Remove certain suppliers from list
+*/
+void Firm_Agent::Update_Supplier_Networks(){
+
+}
+
+/* Decide how many machines to buy
+TODO: Implement this
+*/
+void Firm_Agent::Make_Investment_Decision(){
+    desired_machines = 0;
+    if(working_capital_inventory == 0) {
+        desired_machines = 1;
+    }else{
+        desired_machines = 1;
+    }
+
+}
+
+void Firm_Agent::Buy_Machines(){
+    /* if (desired_machines > 0){
+        int machines_bought = pPublic_Info_Board->Buy_Machines(this, desired_machines);
+        working_capital_inventory += machines_bought;
+        desired_machines -= machines_bought;
+    } */
+}
 
 
 
-
-
+/* Function to seek long term amortized loans from the bank to cover
+expected long term funding gap
+*/
+void Firm_Agent::Seek_Long_Term_Loan(){
+    Loan* new_loan = pPublic_Info_Board->Seek_Long_Term_Loan(this);
+    if (new_loan != nullptr){
+        loan_book.push_back(new_loan);
+        cash_on_hand += new_loan->Get_Principal_Amount();
+    }
+}
 
 
 
@@ -286,46 +330,8 @@ int Firm_Agent::Seek_Loans(int shortfall)
 
 
 
-/* TODO: Complete Function below
-Checks if inventory is above the desired level and returns true if so
-*/
-
-bool Firm_Agent::Inventory_Above_Desire()
-{
-    return true;
-}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Function to check sales in the preceeding period,
-Update inventory, sales figure, etc.
-
-*/
-void Firm_Agent::Check_Sales()
-{
-    production_past = production_current; // The then current production is now past
-    production_current = 0; // initialize current prod to zero
-    quantity_sold = production_past -  goods_on_market->Get_Quantity(); // determine how much has been sold
-    inventory += goods_on_market->Get_Quantity(); // determine how much is in inventory
-
-    good_price_past = good_price_current;// The then current price is now past
-    good_price_current = 0; // initialize current price to zero
-
-    revenue_sales =  quantity_sold * good_price_past;
-
-}
 
 
 
@@ -382,68 +388,6 @@ void Firm_Agent::Pay_Liabilities(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Function to seek long term amortized loans from the bank to cover
-expected long term funding gap
-*/
-void Firm_Agent::Seek_Long_Term_Loan(){
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Function to compute how much dividend can be paid to the shareholder
-return this value, and deduct it from the company
-This function will be called by the household, through the public board*/
-int Firm_Agent::Pay_Dividends(){
-    
-    // Calculate dividend payment - Formula taken from Jamel
-    dividend_payments = max(min(int(dividend_ratio * average_profit), cash_on_hand),0);
-
-    cash_on_hand -= dividend_payments;
-
-    return dividend_payments; 
-}
-
-
-
-
-
-
-
-
-
-
-
 /* Function to return a vector containing all class parameters
 */
 std::vector<float>* Firm_Agent::Get_All_Params() {
@@ -490,8 +434,3 @@ std::vector<float>* Firm_Agent::Get_All_Params() {
 
     return vec;
 }
-
-
-
-
-
