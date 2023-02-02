@@ -2,6 +2,7 @@
 
 using namespace std;
 
+
 void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<float>>> dataset){
     // Make a CSV file with one or more columns of integer
     // Each column of data is represented by the pair <column name, column data>
@@ -37,10 +38,11 @@ void write_csv(std::string filename, std::vector<std::pair<std::string, std::vec
 
 
 
-/* TODO: - Later separate function for float, int, bool values
+/* TODO: - Separate functions for float, int, bool values
  - Check if the memory is freed from the vector
-        
+ - Use the global firm, household size variables
 */
+
 void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
 {
     cout << "Logging Household data: start" <<endl;

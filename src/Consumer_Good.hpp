@@ -1,8 +1,8 @@
 #ifndef CONSUMER_GOOD_HPP
 #define CONSUMER_GOOD_HPP
-
  
 #include "General_Good.hpp"
+
 class Consumer_Firm_Agent;
 
 
@@ -13,6 +13,7 @@ class Consumer_Good: public General_Good{
 
     // Getters
     Consumer_Firm_Agent* GetSeller() {return pSeller;}
+    
 
     protected:
     Consumer_Firm_Agent*  pSeller;

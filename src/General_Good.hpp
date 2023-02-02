@@ -7,27 +7,33 @@ class Firm_Agent;
 class General_Good{
 
     public:
-    General_Good() {};
-    General_Good(Firm_Agent *  seller_pointer, float seller_price, int seller_quantity);
-    
+    // Constructors
+    General_Good();
     General_Good(General_Good&);
+    ~General_Good();
 
-    ~General_Good() {};
+    // Overload Operators
+    bool operator==(const General_Good& rhs);
+    bool operator<=(const General_Good& rhs);
+    bool operator>=(const General_Good& rhs);
+    bool operator>(const General_Good& rhs);
+    bool operator<(const General_Good& rhs);
+    bool operator!=(const General_Good& rhs);
 
-    int Get_Price() const {return price;}
+    // Getters
+    float Get_Price() const {return price;}
     int Get_Quantity() const {return quantity;}
     Firm_Agent * Get_Seller() {return pSeller;}
 
+    // Setters
+    void Deduct_Quantity(int quantity_sold) {quantity -= quantity_sold;}
+    void Update_Price(float new_price) {price = new_price;}
     
 
     protected:
+    Firm_Agent *  pSeller;
     float price;
     int quantity;
-
-    Firm_Agent *  pSeller;
-
-
-
-
+    
 };
 #endif

@@ -2,12 +2,31 @@
 #include "Firm_Agent.hpp"
 
 
-General_Good::General_Good(Firm_Agent *  seller_pointer, float seller_price, int seller_quantity)
-{
-    pSeller = seller_pointer;
-    price = seller_price;
-    quantity = seller_quantity;
+General_Good::General_Good() {};
+General_Good::General_Good(General_Good&){};
+General_Good::~General_Good() {};
+
+
+// Overloaded Operators, comparisons made based on price
+bool General_Good::operator==(const General_Good& rhs){
+ return price == rhs.price;
 }
+bool General_Good::operator<=(const General_Good& rhs){
+    return price <= rhs.price;
+}
+bool General_Good::operator>=(const General_Good& rhs){
+    return price >= rhs.price;
+}
+bool General_Good::operator>(const General_Good& rhs){
+    return price > rhs.price;
+}
+bool General_Good::operator<(const General_Good& rhs){
+    return price < rhs.price;
+}
+bool General_Good::operator!=(const General_Good& rhs){
+    return price != rhs.price;
+}
+
 
 
 
