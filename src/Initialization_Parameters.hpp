@@ -2,84 +2,73 @@
 #define INITIALIZATION_PARAMETERS_HPP
 
 
-#define job_market_size 200
-
-
-extern int global_date;
-
+// Global parameters to be used throughout the simulation
+extern int global_date; 
 
 extern const int n_households;
 extern const int n_consumer_firms;
 extern const int n_capital_firms;
-
 extern const int n_max_employees;
+extern const int test_global_var; // for testing
 
-extern const int test_global_var ;
 
-//---- Household initialization parameters -----------
+//------- Household parameters ------------------
+// Household initialization parameters
+// Below values are used to generate distributions of initial parameters for households
 
 // General consumption propensity : c
 extern const float init_c_mean ;
 extern const float init_c_std ;
 extern const float init_c_min ;
 extern const float init_c_max ;
-
 // Propensity to consume financial wealth, c_f
 extern const float init_c_f_mean;
 extern const float init_c_f_std;
 extern const float init_c_f_min;
 extern const float init_c_f_max;
-
-
 // Propensity to consume human wealth, c_h
 extern const float init_c_h_mean ;
 extern const float init_c_h_std ;
 extern const float init_c_h_min ;
 extern const float init_c_h_max ;
-
-
 // Propensity to consume excess money : c_excess_money
 extern const float init_c_excess_mean ;
 extern const float init_c_excess_std ;
 extern const float init_c_excess_min ;
 extern const float init_c_excess_max ;
-
 // Propensity to adopt majority sentiment: p_majority_op_adoption
 extern const float init_p_majority_mean ;
 extern const float init_p_majority_std;
 extern const float init_p_majority_min;
 extern const float init_p_majority_max;
-
 // Savings propensity - optimist : saving_propensity_optimist 
 extern const float init_s_optimist_mean;
 extern const float init_s_optimist_std ;
 extern const float init_s_optimist_min ;
 extern const float init_s_optimist_max ;
-
 // Savings propensity - pessimist : // saving_propensity_pessimist
 extern const float init_s_pessimist_mean;
 extern const float init_s_pessimist_std ;
 extern const float init_s_pessimist_min ;
 extern const float init_s_pessimist_max ;
-
-
 // Starting wealth : wealth
 extern const float init_wealth_mean;
 extern const float init_wealth_std ;
 extern const float init_wealth_min ;
 extern const float init_wealth_max ;
-
 // Maximum tolerable unemployment duration
 extern const float init_unemp_tolerance_mean;
 extern const float init_unemp_tolerance_std;
 extern const float init_unemp_tolerance_min;
 extern const float init_unemp_tolerance_max;
 
+// Exogenous parameters for Households
+extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
+
 //---------------------------------------------
 
 //---- Firm initialization parameters -----------
-
-
+// Below values are used to generate distributions of initial parameters for firms
 extern const float init_production_planned_mean;
 extern const float init_production_planned_std;
 extern const float init_production_planned_min;
@@ -130,26 +119,8 @@ extern const float init_desired_inventory_factor_std;
 extern const float init_desired_inventory_factor_min;
 extern const float init_desired_inventory_factor_max;
 
-
-
-
-// Initial Parameters for Bank
-extern const float bank_initial_interest_rate;
-
-
-// Exogenous Parameters for Bank
-extern const float bank_inflation_reaction;
-extern const float bank_inflation_target; // yearly inflation target
-extern const float bank_inflation_target_monthly; // monthly inflation target
-extern const float bank_risk_premium; // added yearly interest rate to charge per leverage ratio
-extern const float bank_target_capital_ratio;
-extern const int bank_short_term_loan_length;
-extern const int bank_long_term_loan_length;
-
-
 // Exogenous parameters for Firms
 extern const int standard_employment_contract_length;
-
 
 // Exogenous parameters for Consumer Firms
 extern const float cons_good_inv_depr_rate;
@@ -161,23 +132,23 @@ extern const float cap_productivity; // # units produced per worker machine pair
 extern const int cap_workers_per_machine;
 
 
-// Exogenous parameters for Households
-extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
+//---------------------------------------------
+
+//---- Bank parameters --------------
+// Bank Initialization parameters
+extern const float bank_initial_interest_rate;
+
+// Exogenous Parameters for Bank
+extern const float bank_inflation_reaction;
+extern const float bank_inflation_target; // yearly inflation target
+extern const float bank_inflation_target_monthly; // monthly inflation target
+extern const float bank_risk_premium; // added yearly interest rate to charge per leverage ratio
+extern const float bank_target_capital_ratio;
+extern const int bank_short_term_loan_length;
+extern const int bank_long_term_loan_length;
+//---------------------------------------------
 
 
-
-
-/*
-namespace constants
-{
-    // since the actual variables are inside a namespace, the forward declarations need to be inside a namespace as well
-    //extern const int job_market_size;
-    extern const int n_households;
-    extern const int n_consumer_firms;
-    extern const int n_capital_firms;
-    extern const int n_max_employees;
-}
-*/
 
 
 #endif

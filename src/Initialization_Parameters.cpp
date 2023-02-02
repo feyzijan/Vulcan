@@ -2,79 +2,71 @@
 #include "Initialization_Parameters.hpp"
 
 
-int global_date = 0;
-
-const int n_max_employees = 100;
+// Global parameters to be used throughout the simulation
+int global_date = 0;// will be in main
 
 const int n_households = 10000;
 const int n_consumer_firms = 100;
 const int n_capital_firms = 100;
+const int n_max_employees = 100;
+const int test_global_var = 999; // for testing
 
-const int test_global_var = 999;
-
-
-//---- Household initialization parameters ----
-
+//------- Household parameters -----------
+// Household initialization parameters
 // General consumption propensity : c
 const float init_c_mean =0.5;
 const float init_c_std =0.15;
 const float init_c_min =0.1;
 const float init_c_max =0.9;
-
-
 // Propensity to consume financial wealth, c_f
 const float init_c_f_mean = 0.5;
 const float init_c_f_std = 0.1;
 const float init_c_f_min = 0.1;
 const float init_c_f_max = 0.9;
-
-
 // Propensity to consume human wealth, c_h
 const float init_c_h_mean = 0.2;
 const float init_c_h_std = 0.05;
 const float init_c_h_min = 0.0;
 const float init_c_h_max = 0.4;
-
 // Propensity to consume excess money : c_excess_money
 const float init_c_excess_mean = 0.3;
 const float init_c_excess_std = 0.05;
 const float init_c_excess_min = 0.0;
 const float init_c_excess_max = 0.7;
-
 // Propensity to adopt majority sentiment: p_majority_op_adoption
 const float init_p_majority_mean = 0.25;
 const float init_p_majority_std = 0.2;
 const float init_p_majority_min = 0.01;
 const float init_p_majority_max = 0.99;
-
 // Savings propensity - optimist : saving_propensity_optimist 
 const float init_s_optimist_mean = 0.2;
 const float init_s_optimist_std = 0.05;
 const float init_s_optimist_min = 0.0;
 const float init_s_optimist_max = 0.5;
-
 // Savings propensity - pessimist : // saving_propensity_pessimist
 const float init_s_pessimist_mean = 0.3;
 const float init_s_pessimist_std = 0.05;
 const float init_s_pessimist_min = 0.1;
 const float init_s_pessimist_max = 0.6;
-
-
 // Starting wealth : wealth
 const float init_wealth_mean = 10000.0;
 const float init_wealth_std = 3000.0;
 const float init_wealth_min = 0.0;
 const float init_wealth_max = 999999.0;
-
 // Starting wealth : wealth
 const float init_unemp_tolerance_mean = 10.0;
 const float init_unemp_tolerance_std = 2.0;
 const float init_unemp_tolerance_min = 0.0;
 const float init_unemp_tolerance_max = 100.0;
 
+// Exogenous parameters for Households
+const float n_res_wage_decrease = 0.02; 
+// - Household reservation wages are updated with *1-n_uniform*this_value
 
-//---- Firm initialization parameters ----
+//---------------------------------------------
 
+//---- Firm parameters----------------------
+//Firm initialization parameters 
 const float init_production_planned_mean = 1000;
 const float init_production_planned_std = 100;
 const float init_production_planned_min = 100;
@@ -125,27 +117,12 @@ const float init_desired_inventory_factor_std = 0.25;
 const float init_desired_inventory_factor_min = 0.1;
 const float init_desired_inventory_factor_max = 4.0;
 
-
-
-// Initial Parameters for Bank
-const float bank_initial_interest_rate = 0.02;
-
-
-//Bank parameters
-const float bank_inflation_reaction = 1.5;
-const float bank_inflation_target = 1.05; 
-const float bank_inflation_target_monthly=  1.004;
-const float bank_risk_premium = 1.0;
-const float bank_target_capital_ratio = 10.0;
-const int bank_short_term_loan_length = 12;
-const int bank_long_term_loan_length = 100;
+// Exogenous parameters for Firms
+const int standard_employment_contract_length = 12;
 
 
 // Exogenous parameters for Consumer Firms
 const float cons_good_inv_depr_rate = 0.01;
-
-// Exogenous parameters for Firms
-const int standard_employment_contract_length = 12;
 const float cons_productivity = 100; // # units produced per worker machine pairing
 const int cons_workers_per_machine = 1;
 
@@ -153,22 +130,23 @@ const int cons_workers_per_machine = 1;
 const float cap_productivity = 0.05; // # units produced per worker machine pairing
 const int cap_workers_per_machine = 1;
 
-// Exogenous parameters for Households
-const float n_res_wage_decrease = 0.02; // Household reservation wages are updated with *1-n_uniform*this_value
+//---------------------------------------------
+
+//---- Bank parameters --------------
+// Bank Initialization parameters
+const float bank_initial_interest_rate = 0.02;
+
+// Exogenous Parameters for Bank
+const float bank_inflation_reaction = 1.5;
+const float bank_inflation_target = 1.05; 
+const float bank_inflation_target_monthly=  1.004;
+const float bank_risk_premium = 1.0;
+const float bank_target_capital_ratio = 10.0;
+const int bank_short_term_loan_length = 12;
+const int bank_long_term_loan_length = 100;
+//---------------------------------------------
 
 
 
 
-
-/*
-namespace constants
-{
-    // since the actual variables are inside a namespace, the forward declarations need to be inside a namespace as well
-    //extern const int job_market_size {100};
-    extern const int n_households {100};
-    extern const int n_consumer_firms {10};
-    extern const int n_capital_firms{2};
-    extern const int n_max_employees{100};
-}
-*/
 
