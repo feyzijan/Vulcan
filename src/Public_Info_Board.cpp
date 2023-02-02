@@ -63,7 +63,7 @@ void Public_Info_Board::Take_Job(Job* pJob_Offer) {
 void Public_Info_Board::Print() const{
     cout << " Public Infor Board at adress " << this << endl;
     cout << " Price Level: " << price_level_current << " Interest Rate: " << r_rate <<endl;
-    cout << " Current Inflation: " << inflation_current << " Target Inflation: " << inflation_target << endl;
+    cout << " Current Inflation: " << inflation_current <<  endl;
     cout << " Household Optimism: " << household_sentiment_percentage << " Firm Optimism: " << firm_sentiment_percentage << endl;
 
 }
@@ -93,6 +93,20 @@ void Public_Info_Board::Initialize_Price_Level(){
 }
 
 
-/* Function to print inflation history
-// Get inflation history from the bank
+
+/* Function to call the bank's short term loan method
+This function will be called by the firm agent
 */
+Loan* Public_Info_Board::Seek_Short_Term_Loan(Firm_Agent* pFirm){
+    return pBank->Issue_Short_Term_Loan(pFirm);
+}
+
+/* Function to call the bank's long term loan method
+This function will be called by the firm agent
+*/
+Loan* Public_Info_Board::Seek_Long_Term_Loan(Firm_Agent* pFirm){
+    return pBank->Issue_Long_Term_Loan(pFirm);
+
+}
+
+

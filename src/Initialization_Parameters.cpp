@@ -128,13 +128,18 @@ const float init_desired_inventory_factor_max = 4.0;
 
 
 // Initial Parameters for Bank
-const float initial_interest_rate = 0.02;
+const float bank_initial_interest_rate = 0.02;
 
 
 //Bank parameters
-const float inflation_reaction = 1.5;
-const float inflation_target = 1.05; 
-const float inflation_target_monthly=  1.004;
+const float bank_inflation_reaction = 1.5;
+const float bank_inflation_target = 1.05; 
+const float bank_inflation_target_monthly=  1.004;
+const float bank_risk_premium = 1.0;
+const float bank_target_capital_ratio = 10.0;
+const int bank_short_term_loan_length = 12;
+const int bank_long_term_loan_length = 100;
+
 
 // Exogenous parameters for Consumer Firms
 const float cons_good_inv_depr_rate = 0.01;

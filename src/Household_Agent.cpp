@@ -75,11 +75,19 @@ Targeted Consumption Expenditures: - some formula
 
 
 */
-void Consumption_Savings_Decisions(){
-
+void Household_Agent::Consumption_Savings_Decisions(){
+    Update_Income();
+    Update_Average_Income();
+    Update_Wealth();
+    Determine_Consumer_Sentiment();
+    Determine_Consumption_Budget();
+    Buy_Consumer_Goods();
 }
 
 
+void Household_Agent::Buy_Consumer_Goods(){
+
+}
 
 
 //Copy constructor

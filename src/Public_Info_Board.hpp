@@ -9,7 +9,7 @@ class Job_Market;
 #include "Job.hpp"
 #include "Consumer_Goods_Market.hpp"
 #include "Capital_Goods_Market.hpp"
-
+#include "Bank_Agent.hpp"
 
 //#include "Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
@@ -63,6 +63,11 @@ class Public_Info_Board{
     void Initialize_Price_Level();
 
 
+    // Loan issuance
+    Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm);
+    Loan* Seek_Long_Term_Loan(Firm_Agent* pFirm);
+
+
 
 
     //--- Job Market ---//
@@ -111,7 +116,10 @@ class Public_Info_Board{
 
     protected:
 
+
+
     Job_Market* pJob_Market;
+    Bank_Agent* pBank;
     Consumer_Goods_Market* pConsumer_Goods_Market;
     Capital_Goods_Market* pCapital_Goods_Market;
 

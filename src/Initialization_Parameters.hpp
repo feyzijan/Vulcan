@@ -134,12 +134,18 @@ extern const float init_desired_inventory_factor_max;
 
 
 // Initial Parameters for Bank
-extern const float initial_interest_rate;
+extern const float bank_initial_interest_rate;
+
 
 // Exogenous Parameters for Bank
-extern const float inflation_reaction;
-extern const float inflation_target; // yearly inflation target
-extern const float inflation_target_monthly; // monthly inflation target
+extern const float bank_inflation_reaction;
+extern const float bank_inflation_target; // yearly inflation target
+extern const float bank_inflation_target_monthly; // monthly inflation target
+extern const float bank_risk_premium; // added yearly interest rate to charge per leverage ratio
+extern const float bank_target_capital_ratio;
+extern const int bank_short_term_loan_length;
+extern const int bank_long_term_loan_length;
+
 
 // Exogenous parameters for Firms
 extern const int standard_employment_contract_length;

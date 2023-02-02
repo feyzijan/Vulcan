@@ -120,7 +120,11 @@ class Firm_Agent{
 
 
     // Getters
-    std::vector<float>* Get_All_Params(); 
+    std::vector<float>* Get_All_Params();
+    int Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
+    int Get_Long_Term_Funding_Gap() {return long_term_funding_gap;}
+    float Get_Leverage_Ratio() {return leverage_ratio;}
+    
 
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -159,6 +163,9 @@ class Firm_Agent{
     int average_profit; // NEWLY ADDED
     int average_sale_quantity; //NEWLY ADDED  
   
+    // Loan Parameters
+    int short_term_funding_gap;
+    int long_term_funding_gap;
 
     // Expenditures
     int total_liabilities; //Comprises of evt below

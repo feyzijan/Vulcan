@@ -61,7 +61,7 @@ class Household_Agent{
     void Determine_Consumption_Budget();
     
     // Determine goods to buy - TO IMPLEMENT
-    //void Buy_Consumer_Goods(Consumer_Goods_Market* market);
+    void Buy_Consumer_Goods();
 
 
     // Calculate new financial wealth (eq 6-7)
