@@ -106,7 +106,6 @@ This function will be called by the firm agent
 */
 Loan* Public_Info_Board::Seek_Long_Term_Loan(Firm_Agent* pFirm){
     return pBank->Issue_Long_Term_Loan(pFirm);
-
 }
 
 

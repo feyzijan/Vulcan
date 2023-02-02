@@ -14,66 +14,44 @@
 #include "Public_Info_Board.hpp"
 #include "Random_Functions.hpp"
 
-// Todo: Move below definitions to the initialization file
-#define loan_book_size 100
-#define employee_list_size 100
-/* TODO:
-- Replace the numerical values in Loan and employee list with global constants
-
-*/
 
 
 class Firm_Agent{
 
     public:
-    
+    // Constructors and Destructor
     Firm_Agent() {}; 
+    Firm_Agent(Firm_Agent&); 
+    ~Firm_Agent(){}; 
 
-    
-
-
-    Firm_Agent(Firm_Agent&); //Copy Constructor
-    ~Firm_Agent(){}; // Destructor
-
-
-    void Print(); // Print class variables
+    //Print methods
+    void Print(); 
     void Print_Posted_Jobs();
     void Print_Active_Jobs();
 
+    // Initialization methods t = 0
+    
 
-    // -------- Initializers
-    void InitializeEmployees(); // Assign employees in t=0
-
-
-    // ------- Loop t=1 initialiserz
+    // Initialization methods t = 1
     void Update_Average_Profits_T1();
 
 
-
-
-    // Sending Goods to Market
-
-    // ------- Main Loop Methods
+    // Main Loop Methods - in order
 
     void Cancel_Expired_Contracts();
-
     void Random_Experimentation();
-
     void Calc_Quantity_Sold();
-
     void Update_Average_Profit();
-
     int Pay_Dividends();
-
     void Determine_New_Production();
-
+    void Adjust_Wage_Offers();
     void Determine_Labor_Need();
-
     void Layoff_Excess_Workers();
-
     void Compute_Expected_Wage_Bill();
-
-
+    void Seek_Short_Term_Loan();
+    void Post_Jobs();
+    void Check_For_New_Employees();// Check the active job posting to see if any have been taken
+    void Commence_Production(); // Implemented by subclasses
 
     
 
@@ -87,7 +65,7 @@ class Firm_Agent{
     // Seek Loans if needed to pay liabilities
     int Seek_Loans(int shortfall);
 
-    void Seek_Short_Term_Loan();
+
 
     void Seek_Long_Term_Loan();
 
@@ -95,20 +73,14 @@ class Firm_Agent{
     // Inventory check
     bool Inventory_Above_Desire();
 
-    // Plan the production for the next time step
-    void Plan_Production();
 
-    // Update price of goods to be sold in the next timestep
-    void Update_Price();
 
-    // Post job offers to employ workers 
-    void Post_Jobs();
+    
 
-    // Adjust Wage offer after job search
-    void Adjust_Wage_Offers();
+    
 
-    // Check the active job posting to see if any have been taken
-    void Check_For_New_Employees();
+    
+
 
 
 

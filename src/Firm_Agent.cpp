@@ -2,25 +2,24 @@
 
 using namespace std;
 
+// Printing methods
 
-
-
-
+/* Print all Firm parameters
+TODO: Update to include newly added parameters
+*/
 void Firm_Agent::Print(){
     using namespace std;
     if (is_cons_firm){
         cout << "------ Consumer Firm Agent at address : " << this << endl;
     } else{
         cout << "------ Capital Firm Agent at address : " << this << endl;
-    }
-    
+    }    
 
     // Employee info
     cout << "Number of employees: " << employee_count << " Desired employees: " << employee_count_desired << 
     " Need Worker: " << need_worker << " Current Wage Offer: " << wage_offer << endl;
     cout << "Labor utilization current: " << w_current << " Desired: " << w_target << endl;
-    
-    
+        
     //Inventory 
     cout << "Desired Inventory Factor: " << desired_inventory_factor << " Current inventory: " << inventory << " Current Inv Factor: " 
     << inventory_factor <<  " Capital inventory: " << working_capital_inventory << endl;
@@ -28,11 +27,10 @@ void Firm_Agent::Print(){
     // Sentiment
     cout << "Positive Sentiment: " << sentiment << " Bankruptcy: " << bankrupt <<endl;
     
-
     //Production and sales figures
     cout << "Production - current/actual: " << production_current << " planned: " << production_planned << " past: " << production_past <<endl;
     cout << "Quantity sold: " << quantity_sold << " Current price: " << good_price_current << " Past price: " << good_price_past << endl;
-
+    
     //Inflows
     cout << "Total income: " << total_income << " Sales Revenue: " << revenue_sales << " New loans: " << new_loan_issuance  << " subsidies: " << subsidies << endl;
 
@@ -50,6 +48,228 @@ void Firm_Agent::Print(){
     cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
     cout << "\n"<< endl;
 }
+
+
+/* Print Posted job offers
+*/
+void Firm_Agent::Print_Posted_Jobs(){
+    cout << "Firm Agent Printing Posted Jobs: " << endl;
+    for (auto i = posted_job_list.begin(); i !=  posted_job_list.end(); ++i){
+        (*i)->Print();
+    }
+}
+
+/* Print active(taken) job offers
+*/
+void Firm_Agent::Print_Active_Jobs(){
+     cout << "Firm Agent Printing Active Jobs: " << endl;
+    for (auto i = active_job_list.begin(); i !=  active_job_list.end(); ++i){
+        (*i)->Print();
+    }
+}
+//--------------------------------------------------------------
+
+// ----------- Initialization methods t = 0
+
+
+// ----------- Initialization methods t = 1
+
+/* Function to fill past average profit array with initial profits
+*/
+void Firm_Agent::Update_Average_Profits_T1(){
+    for(int i=1; i<=12; i++){
+        past_profits.push(revenue_sales);
+    }
+    average_profit = revenue_sales;
+}
+
+//--------------------------------------------------------------
+
+// ------- Main Loop Methods in order --
+
+/* Function to lay off active employees with expired contracts
+*/
+void Firm_Agent::Cancel_Expired_Contracts(){
+    auto it = active_job_list.begin();
+    while(it !=  active_job_list.end()) {
+        if((*it)->Get_Expiry_Status() == 1) { 
+            it = active_job_list.erase(it);
+            employee_count -=1;
+        } else {it++;}
+    }
+}
+
+/*  Function to randomly alter some firm parameters, such as targeted leverage, markup
+    TODO: Add the parameters to be altered here and fill in the function*/
+void Firm_Agent::Random_Experimentation(){}
+
+/* Function to calculate how many goods have been sold
+    TODO: Check if this is correct, not sure what the inventory value is at this point
+    it should be the inventory at the end of the last period*/
+void Firm_Agent::Calc_Quantity_Sold(){
+    quantity_sold = inventory -  goods_on_market->Get_Quantity(); // determine how much has been sold
+}
+
+/* Function to update the firm's average profit*/
+void Firm_Agent::Update_Average_Profit(){
+    average_profit += (revenue_sales - past_profits.front())/12;
+    past_profits.pop();
+    past_profits.push(revenue_sales);
+}
+
+/* Pay dividends to firm owner- formula taken from Jamel*/
+int Firm_Agent::Pay_Dividends(){ 
+    dividend_payments = max(min(int(dividend_ratio * average_profit), cash_on_hand),0);
+    cash_on_hand -= dividend_payments;
+    return dividend_payments; 
+}
+
+/* Function to update new price and quantity based on past sales and price level
+Updates good_price_current and production_planned variables
+Follows EQ 38 from the general paper for pricing and Jamel for quantity setting
+Note: I have not implemented the quantity adjustment in eq 38, but may do so 
+TODO: Update random variation in price and quantity
+*/
+void Firm_Agent::Determine_New_Production(){
+    bool price_high;
+    if (is_cons_firm){ price_high = good_price_current >= pPublic_Info_Board->Get_Consumer_Good_Price_Level();
+    } else {price_high = good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();}
+    
+    bool inventory_high = inventory >= desired_inventory; 
+    float p = Uniform_Dist_Float(0.0,0.5); // Random production adjustment
+    float q =  Uniform_Dist_Float(0.0,0.5); // Random price adjustment
+
+
+    // Case a: Inventory low, Price high - > Maintain price, increase prod
+    if (!inventory_high && price_high){
+        //production_planned*= (1.0+q);        
+    } // Case b: Inventory low, Price low - > Increase Price and production
+    else if( !inventory_high && !price_high){
+        good_price_current *= (1.0+p);
+        //production_planned*= (1.0+q);
+    } // Case c: Inventory high, Price high - > Reduce price, maintain prod
+    else if (inventory_high && price_high){
+        good_price_current *= (1.0-p);
+    } // Case d:Inventory high, Price low -> Increase price, maintain prod
+    else{
+        good_price_current *= (1.0+p);}
+
+    // below eq is from jamel paper - overrides above quantity adjustments
+    production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
+}
+
+
+/* Adjust wage offers based on labor need and average wages in the market
+TODO: Improve this as it is a bit too simplistic, maybe use JAMEL
+*/
+void Firm_Agent::Adjust_Wage_Offers()
+{
+    float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
+    int average_wage = pPublic_Info_Board->Get_Average_Wage();
+    
+    bool wage_high = wage_offer > average_wage;
+
+    if (wage_high && need_worker){
+        //wage_offer *= (1+n_uniform);
+    } else if(wage_high && !need_worker){
+        wage_offer *= (1-n_uniform);
+    } else if(!wage_high && need_worker){
+        wage_offer *= (1+n_uniform);
+    } else{ // (!wage_high && !need_worker)
+    }
+}
+
+
+/* Determine the labor force needed to meet the production targets
+The target is = minimum(#workers needed to operate machines needed to meet production target, #workers needed to operate current machines)
+TODO: Recheck equation
+*/
+void Firm_Agent::Determine_Labor_Need(){
+    int employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
+    need_worker = employee_count_desired > employee_count;
+    if(employee_count_desired < employee_count){Layoff_Excess_Workers();}
+    Compute_Expected_Wage_Bill();
+    if (expected_wage_bill_shortfall > 0){Seek_Short_Term_Loan();}
+}
+
+/* Function to layoff excess workers based on last in first out principle
+If the function is called with no excess workers it does nothing
+Remove the last n elements from the ordered vector of employees
+*/
+void Firm_Agent::Layoff_Excess_Workers(){
+    layoff_wage_savings = 0;
+    int layoff_count = employee_count - employee_count_desired;
+    for (int i=0; i<layoff_count; i++){
+        layoff_wage_savings += active_job_list.back()->Get_Wage();
+        active_job_list.back()->Update_Status(0); // Household will see they are laid off on next update
+        active_job_list.pop_back();
+    }
+}
+
+/* Compute the expected wage bill for the next period*/
+void Firm_Agent::Compute_Expected_Wage_Bill(){
+    expected_wage_bill = labor_wage_bill - layoff_wage_savings + employee_count_desired * wage_offer;
+    expected_wage_bill_shortfall = min(0, expected_wage_bill - cash_on_hand);
+}
+
+
+/* Function to seek short term unamortized loans from the bank to cover
+expected wage bill funding gap
+*/
+void Firm_Agent::Seek_Short_Term_Loan(){
+    Loan* new_loan = pPublic_Info_Board->Seek_Short_Term_Loan(this);
+    if (new_loan != nullptr){
+        loan_book.push_back(new_loan);
+        cash_on_hand += new_loan->Get_Principal_Amount();
+    }
+}
+
+
+/* Function to post jobs to the job market and update current postings with new wage offer
+ TODO: Remove job offers on the market if we don't need them anymore
+*/
+void Firm_Agent::Post_Jobs(){
+    using namespace std;
+    int new_postings =  employee_count_desired - employee_count - n_active_job_postings ;
+    //cout << "Employee count desired: " << employee_count_desired << " Current employees: " << employee_count << endl;
+    //cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
+    for(int i=0; i< new_postings;i++){
+        Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
+        //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
+        pPublic_Info_Board->Post_Job_To_Market(job);
+        posted_job_list.push_back(job);
+    }
+
+    // Loop through the posted_job_list and update wage_offer
+    for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
+        (*it)->Update_Wage(wage_offer);
+    }
+}
+
+
+/* Loop through the firm's posted_job_listings array, 
+and move the ones marked as taken to the active_job_list arrays, and update employee counts
+*/
+void Firm_Agent::Check_For_New_Employees(){
+    auto it = posted_job_list.begin();
+    while(it !=  posted_job_list.end()) {
+        if((*it)->Get_Status() == 1) { 
+            active_job_list.push_back(*it);
+            employee_count +=1;
+            it = posted_job_list.erase(it);
+        } else {it++;}
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -77,65 +297,14 @@ bool Firm_Agent::Inventory_Above_Desire()
 
 
 
-void Firm_Agent::Update_Price()
-{
-    //int current_price = GetPrice();
-    //n_uniform = uniform_dist(0,0.5);
-    float n_uniform = 1; //Update this to be from uniform dist
-
-    if (Inventory_Above_Desire())
-    {
-        good_price_current *= (1 + n_uniform);
-    } else{
-        good_price_current *= (1 - n_uniform);
-    }
-
-
-}
-
-
-/* Function to adjust wage offers based on labor need and average wages
-TODO: Improve this as it is a bit too simplistic, maybe use JAMEL
-*/
-void Firm_Agent::Adjust_Wage_Offers()
-{
-    float w_stoc; // a stochastic cutoff value for labor
-    float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
-    int average_wage = pPublic_Info_Board->Get_Average_Wage();
-    
-    bool wage_high = wage_offer > average_wage;
-
-    if (wage_high && need_worker){
-        //wage_offer *= (1+n_uniform);
-    } else if(wage_high && !need_worker){
-        wage_offer *= (1-n_uniform);
-    } else if(!wage_high && need_worker){
-        wage_offer *= (1+n_uniform);
-    } else{ // (!wage_high && !need_worker)
-
-    }
-
-}
 
 
 
 
 
-/* Function that sets desired production for next timestep
 
-*/
-void Firm_Agent::Plan_Production()
-{
-    int n_uniform = 1; //Update this to be from uniform dist
 
-    if (Inventory_Above_Desire())
-    {
-        production_planned = production_current *  (1 + n_uniform);
-    } else {
-        good_price_current = production_current *  (1 - n_uniform);
-    }
 
-}
 
 
 
@@ -212,96 +381,19 @@ void Firm_Agent::Pay_Liabilities(){
 
 
 
-void Firm_Agent::Post_Jobs(){
-    using namespace std;
-    int new_postings =  employee_count_desired - employee_count - n_active_job_postings ;
-    //cout << "Employee count desired: " << employee_count_desired << " Current employees: " << employee_count << endl;
-    //cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
-    for(int i=0; i< new_postings;i++){
-        Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
-        //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
-        pPublic_Info_Board->Post_Job_To_Market(job);
-        posted_job_list.push_back(job);
-    }
-
-}
-
-/* Function to check if any of the firm's active jobs have expired, 
-and lay off employees if so
-*/
-
-void Firm_Agent::Cancel_Expired_Contracts(){
-    auto it = active_job_list.begin();
-    while(it !=  active_job_list.end()) {
-        if((*it)->Get_Expiry_Status() == 1) { 
-            it = active_job_list.erase(it);
-            employee_count -=1;
-        } else {
-            it++;
-        }
-}
-}
-
-/* Function to randomly alter some firm parameters, such as targeted leverage, markup
-TODO: Add the parameters to be altered here and fill in the function
-*/
-void Firm_Agent::Random_Experimentation(){
-
-}
-
-
-/* Function to layoff excess workers based on last in first out principle
-If the function is called with no excess workers it does nothing
-Remove the last n elements from the ordered vector of employees
-*/
-void Firm_Agent::Layoff_Excess_Workers(){
-    layoff_wage_savings = 0;
-
-
-}
-
-
-/* Compute the expected wage bill for the next period
-Current wage bill - wage_bill of employees laid off + desired new employees * wage_offer
-*/
-
-void Firm_Agent::Compute_Expected_Wage_Bill(){
-    expected_wage_bill = labor_wage_bill - layoff_wage_savings + employee_count_desired * wage_offer;
-}
 
 
 
-/* Determine the labor force needed to meet the production targets
-The target is = minimum(#workers needed to operate machines needed to meet production target, #workers needed to operate current machines)
-TODO: This equation seems a bit weird so look into this
-*/
-void Firm_Agent::Determine_Labor_Need(){
 
-    int employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
-    need_worker = employee_count_desired > employee_count;
-    if(employee_count_desired < employee_count){
-        Layoff_Excess_Workers();
-    }
-    // No need to call Post_Jobs method as that will be done in any case
 
-    Compute_Expected_Wage_Bill();
 
-    if (expected_wage_bill > cash_on_hand){
-        Seek_Short_Term_Loan();
-    }
-    
 
-    
- 
 
-}
 
-/* Functoin to seek short term unamortized loans from the bank to cover
-expected wage bill funding gap
-*/
-void Firm_Agent::Seek_Short_Term_Loan(){
 
-}
+
+
+
 
 /* Function to seek long term amortized loans from the bank to cover
 expected long term funding gap
@@ -313,71 +405,20 @@ void Firm_Agent::Seek_Long_Term_Loan(){
 
 
 
-/* This function will loop through the firm's posted_job_listings array, 
-and move the ones marked as taken to the active_job_list arrays, and update employee counts
-
-*/
-
-void Firm_Agent::Check_For_New_Employees(){
-
-    auto it = posted_job_list.begin();
-    while(it !=  posted_job_list.end()) {
-        if((*it)->Get_Status() == 1) { 
-            active_job_list.push_back(*it);
-            employee_count +=1;
-            it = posted_job_list.erase(it);
-        } else {
-            it++;
-        }
-    }
-}
 
 
 
-/* Print Posted job offers
-*/
-void Firm_Agent::Print_Posted_Jobs(){
-    cout << "Firm Agent Printing Posted Jobs: " << endl;
-    for (auto i = posted_job_list.begin(); i !=  posted_job_list.end(); ++i){
-        (*i)->Print();
-    }
-}
-
-
-/* Print active(taken) job offers
-*/
-void Firm_Agent::Print_Active_Jobs(){
-     cout << "Firm Agent Printing Active Jobs: " << endl;
-    for (auto i = active_job_list.begin(); i !=  active_job_list.end(); ++i){
-        (*i)->Print();
-    }
-}
-
-
-/* TODO: Incomplete Function
-*/
-void Firm_Agent::Calc_Quantity_Sold(){
-    quantity_sold = inventory + production_past -  goods_on_market->Get_Quantity(); // determine how much has been sold
-}
-
-
-/* Function to update the firm's average profit
-*/
-void Firm_Agent::Update_Average_Profit(){
-    average_profit += (revenue_sales -past_profits.front())/12;
-    past_profits.pop();
-    past_profits.push(revenue_sales);
-}
 
 
 
-void Firm_Agent::Update_Average_Profits_T1(){
-    for(int i=1; i<=12; i++){
-        past_profits.push(revenue_sales);
-    }
-    average_profit = revenue_sales;
 
-}
+
+
+
+
+
+
+
 
 
 /* Function to compute how much dividend can be paid to the shareholder
@@ -393,44 +434,6 @@ int Firm_Agent::Pay_Dividends(){
     return dividend_payments; 
 }
 
-/* Function to update new price and quantity based on past sales and price level
-Follows EQ 38 from the general paper for pricing and Jamel for quantity setting
-Note: I have not implemented the quantity adjustment in eq 38, but may do so
-
-*/
-void Firm_Agent::Determine_New_Production(){
-    if (is_cons_firm){ 
-        bool inventory_high = inventory >= desired_inventory;
-        bool price_high = good_price_current >= pPublic_Info_Board->Get_Consumer_Good_Price_Level();
-        
-        float p = 0.01; // Chnage this to uniform distribution
-        float q = 0.01; // Change this to uniform distribution
-
-
-        // Case a: Inventory low, Price high - > Maintain price, ??increase Production??
-        if (!inventory_high && price_high){
-            production_planned*= (1.0+q);        
-        } // Case b: Inventory low, Price low - > Increase Price, ??increase production slightly??
-        else if( !inventory_high && !price_high){
-            good_price_current *= (1.0+p);
-            production_planned*= (1.0+q);
-        } // Case c: Inventory high, Price high - > Maintain price, ??reduce production??
-        else if (inventory_high && price_high){
-            good_price_current *= (1.0-p);
-        } // Case d:Inventory high, Price low -> Increase price, ??reduce production slightly??
-        else{
-            good_price_current *= (1.0+p);
-            // Do nothing
-        }
-
-        // below eq is from jamel paper
-        production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
-
-
-    }else{
-        float p_level = pPublic_Info_Board->Get_Consumer_Good_Price_Level();
-    }   
-}
 
 
 
