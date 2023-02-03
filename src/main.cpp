@@ -27,12 +27,18 @@ int main()
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun" << endl;
 
-    // STEP 0.10: Initalize Public Board and Job Market
+    // STEP 0.10: Initalize Public Board, Job Market, Bank
     
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
     Job_Market* pJob_Market_1 = new Job_Market();
+    Bank_Agent* pBank_1 = new Bank_Agent(pPublic_Board_1);
     pPublic_Board_1->Set_Job_Market(pJob_Market_1);
+    pPublic_Board_1->Set_Bank(pBank_1);
+
     cout << "Public Board at address: " << pPublic_Board_1 << " initialized" <<endl;
+    cout << "Job Market at address: " << pJob_Market_1 << " initialized" <<endl;
+    cout << "Bank at address: " << pBank_1 << " initialized" <<endl;
+
 
     int n_promised_jobs = 0;  // Debugging variable to keep track of # jobs to be assigned
 
@@ -52,32 +58,20 @@ int main()
     Initialize_Job_Market(Cons_Firm_array,Cap_Firm_array,Household_array,pPublic_Board_1);
 
 
+    int n = 100;
+    cout << " Household at position " << n << " has job :" <<  Household_array[n].Get_Employment_Status() << endl;
+    n = 9900;
+    cout << " Household at position " << n << " has job :" <<  Household_array[n].Get_Employment_Status() << endl;
+    n = 9990;
+    cout << " Household at position " << n << " has job :" <<  Household_array[n].Get_Employment_Status() << endl;
     
 
     // STEP 0.14 Assign firm owners - Todo later, minor thing
-
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     Log_Household_Properties(Household_array, n_households);
     Log_Cons_Firm_Properties(Cons_Firm_array, n_consumer_firms);
     Log_Cap_Firm_Properties(Cap_Firm_array, n_capital_firms);
-
-
-
-
- 
-
-    //pPublic_Board_1->Print_Inflation_History();
-
-
-
-    // STEP 0.3: Initialize the Bank and Government
-
-
-
-    
-
-
 
 
 //  -------- STEP 1 MAIN LOOP -------------------

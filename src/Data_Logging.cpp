@@ -159,7 +159,12 @@ void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
      { "business_owner", vec_business_owner }, { "c_f", vec_c_f }, { "c_h", vec_c_h }, { "c_excess_money", vec_c_excess_money }, 
      { "p_majority_op_adoption", vec_p_majority_adoption }};
 
-    write_csv("HouseholdDataInit.csv",vals);
+
+    std::stringstream ss;
+    ss << "HouseholdDataInit_t_" << global_date <<".csv";
+    std::string filename = ss.str();
+
+    write_csv(filename,vals);
     cout << "Logging Household data: end" <<endl;
 }
 
@@ -291,12 +296,12 @@ void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
     {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm}};
 
 
+    std::stringstream ss;
+    ss << "ConsumerFirmAgentDataInit_t_" << global_date <<".csv";
+    std::string filename = ss.str();
 
-
-    write_csv("ConsumerFirmAgentDataInit.csv",vals);
+    write_csv(filename,vals);
     cout << "Logging Consumer Firm data: end" <<endl;
-
-
 }
 
 
@@ -428,10 +433,10 @@ void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
     {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm}};
 
 
+    std::stringstream ss;
+    ss << "CapitalFirmAgentDataInit_t_" << global_date <<".csv";
+    std::string filename = ss.str();
 
-
-    write_csv("CapitalFirmAgentDataInit.csv",vals);
+    write_csv(filename,vals);
     cout << "Logging Capital Firm data: end" <<endl;
-
-
 }

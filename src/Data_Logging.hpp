@@ -2,6 +2,7 @@
 #define DATA_LOGGING_HPP
 
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <vector>
 #include <utility> // for std::pair
