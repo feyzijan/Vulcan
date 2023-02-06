@@ -21,6 +21,7 @@ class Consumer_Goods_Market{
     // Market operations
     void Add_Consumer_Good_To_Market(Consumer_Good * cons_good);
     void Sort_Consumer_Goods_By_Price();
+    int Buy_Consumer_Goods(int budget);
 
     // Getters
     float Get_Price_Level() {return price_level;}

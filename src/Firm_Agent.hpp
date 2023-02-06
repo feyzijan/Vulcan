@@ -87,6 +87,7 @@ class Firm_Agent{
     protected:
     Public_Info_Board* pPublic_Info_Board;
     General_Good* goods_on_market;
+    vector<Capital_Good*> capital_goods;
 
     std::vector<Loan*> loan_book;
 

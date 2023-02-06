@@ -34,6 +34,38 @@ void Consumer_Goods_Market::Sort_Consumer_Goods_By_Price()
     return a->Get_Price() < b->Get_Price(); });
 }
 
+/* Satisfy the household purccahse budget with as many goods as possible
+Loop through the market, sell the household as much goods as it can afford, return 
+remaining budget when it can no longer afford to buy anything else
+TODO: Test loop and simplify code, evaluate runtime
+TODO: Doesn't return quantity, maybe return array that includes this
+*/
+int Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
+    int remaining_budget = budget;
+    int quantity_bought = 0;
+    for(auto i=cons_goods_list.begin(); i!=cons_goods_list.end();i++){
+        int q = (*i)->Get_Quantity();
+        float p = (*i)->Get_Price();
+        int n = remaining_budget/p; // How much the household can afford to buy
+        if (n>=q){ // Household buys all the goods, likely not satisfied
+            n = q;
+            (*i)->Update_Quantity(-n);
+            quantity_bought += n;
+            remaining_budget -= n*p;
+        } else if (n==0) // Household can no longer afford to buy anything
+        {
+            break; // exit loop
+        } else{ // Household can't buy all, so has run out of budget
+            (*i)->Update_Quantity(-n);
+            remaining_budget -= n*p;
+             quantity_bought += n;
+            break; // exit loop
+        }
+        return remaining_budget;
+    }
+}
+
+
 // Printing and debugging
 
 /* Print all the goods in the market

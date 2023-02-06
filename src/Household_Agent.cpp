@@ -187,9 +187,16 @@ void Household_Agent::Determine_Consumption_Budget()
 }
 
 /* Interact with the market through public board to buy goods
+- Spend as much of the consumption budget as it can, only buying integer multiple # goods,
+- Add the unspent consumption budget to savings
+TODO: Update this method once the called Buy_Consumer_Goods method is updated to return other variables
+TODO: Check if the savings should be added now or later, to avoid double counting
 */
 void Household_Agent::Buy_Consumer_Goods(){
-
+    int remaining_consumption_budget = pPublic_Info_Board->Buy_Consumer_Goods(expenditure_consumption);
+    expenditure_consumption -= remaining_consumption_budget;
+    new_savings += remaining_consumption_budget;
+    wealth_financial += remaining_consumption_budget;
 }
 
 

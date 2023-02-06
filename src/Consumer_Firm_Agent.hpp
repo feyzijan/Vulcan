@@ -26,10 +26,8 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
     // Put up Consumer Goods for Sale
     
-
     protected:
     Consumer_Good* goods_on_market;
-    vector<Capital_Good*> capital_goods;
 
 };
 

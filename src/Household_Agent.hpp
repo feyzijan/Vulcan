@@ -23,8 +23,6 @@ class Household_Agent{
     Household_Agent(Household_Agent&);
     ~Household_Agent();
 
-
-
     // Main Loop methods
     void Update_Reservation_Wage();
     void Consumption_Savings_Decisions();
@@ -34,26 +32,16 @@ class Household_Agent{
     void Update_Wealth(); // TO Implement
     void Determine_Consumer_Sentiment();
     void Determine_Consumption_Budget(); //(eq 18)
-    void Buy_Consumer_Goods(); // TO IMPLEMENT
-
+    void Buy_Consumer_Goods(); 
     void Seek_Jobs();
     
-
-
-
- 
-    
-
     // Printing and Debugging
     void Print();
     void Print_Characteristics();
 
-
-
     //Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
     void Set_Job(Job* ptr) { current_job = ptr;}
-
 
     //Getters
     int Get_Wage() {return income_wage;};

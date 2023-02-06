@@ -24,6 +24,8 @@ class Capital_Goods_Market{
     // Market operations
     void Add_Capital_Good_To_Market(Capital_Good * cap_good);
     void Sort_Capital_Goods_By_Price();
+    int Get_Cost_For_Given_Quantity(int q_desired);
+    std::vector<Capital_Good*> Buy_Capital_Goods(int q_desired);
 
     // Getters
     float Get_Price_Level(){return price_level;}

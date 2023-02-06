@@ -25,7 +25,6 @@ class Capital_Firm_Agent: public Firm_Agent{
 
     protected:
     Capital_Good* goods_on_market;
-    vector<Capital_Good*> capital_goods;
 
 };
 

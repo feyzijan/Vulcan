@@ -296,6 +296,19 @@ void Firm_Agent::Buy_Machines(){
         working_capital_inventory += machines_bought;
         desired_machines -= machines_bought;
     } */
+    vector<Capital_Good*> new_capital_goods = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
+    // Calculate the number of machines bought by looping through new_capital_goods and incrementing quantity
+    int new_machines_bought = 0;
+    float total_price_paid = 0;
+    for (auto it = new_capital_goods.begin(); it != new_capital_goods.end(); ++it){
+        new_machines_bought += (*it)->Get_Quantity();
+        total_price_paid += (*it)->Get_Quantity() * (*it)->Get_Price();
+    }
+    // Copy all the objects in the new_capital_goods vector to the capital_goods vector
+    copy(new_capital_goods.begin(), new_capital_goods.end(), back_inserter(capital_goods));
+    // Update the working capital inventory
+    working_capital_inventory += new_machines_bought;
+    
 }
 
 

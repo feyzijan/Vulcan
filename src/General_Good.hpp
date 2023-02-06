@@ -28,7 +28,7 @@ class General_Good{
     Firm_Agent * Get_Seller() {return pSeller;}
 
     // Setters
-    void Deduct_Quantity(int quantity_sold) {quantity -= quantity_sold;}
+    void Update_Quantity(int quantity_change) {quantity += quantity_change;}
     void Update_Price(float new_price) {price = new_price;}
     
 

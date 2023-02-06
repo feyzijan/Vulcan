@@ -9,7 +9,7 @@ Capital_Goods_Market::Capital_Goods_Market(){
     price_level = 0.0;
 
 }
-
+//----------------------------------------------
 // ----------- Market operations
 
 /* Function to add a capital good to marke
@@ -35,6 +35,70 @@ void Capital_Goods_Market::Sort_Capital_Goods_By_Price()
     return a->Get_Price() < b->Get_Price(); });
 }
 
+/* Function to return how much it would cost to buy q number of goods
+TODO: Make this more efficient, perhaps return array for q[0,10]
+*/
+int Capital_Goods_Market::Get_Cost_For_Given_Quantity(int q_desired){
+    int q_current = 0;
+    float total_price = 0;
+    float average_price = 0;
+    for(auto i=cap_goods_list.begin(); i!=cap_goods_list.end();i++){
+        int q = (*i)->Get_Quantity();
+        float price = (*i)->Get_Price();
+        q_current += q;
+        if(q_current >= q_desired){ 
+            q = q_desired - q_current;
+            q_current = q_desired;
+        }
+        total_price += price * q;
+        average_price = total_price / q_current;
+        if(q_current==q_desired){
+            return average_price;
+        } else{
+            continue;
+        }
+    }
+}
+
+/* Buy Capital goods and return the quantity bought and price paid
+TODO: Complete Function
+TODO: The above function makes some of this redundant, as we already know the cost of
+buying n goods, so simplify this
+TODO: Check how to properly return a vector of capital good pointers, memorywise
+*/
+std::vector<Capital_Good*> Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
+    std::vector<Capital_Good*> sold_goods; // Unsure if this is the correct type of declaration
+    int q_current = 0;
+    float total_price = 0;
+    float average_price = 0;
+    for(auto i=cap_goods_list.begin(); i!=cap_goods_list.end();i++){
+        int q = (*i)->Get_Quantity();
+        int q_original = q;
+        float price = (*i)->Get_Price();
+        q_current += q;
+        if(q_current >= q_desired){ 
+            q = q_desired - q_current;
+            q_current = q_desired;
+        }
+        if (q >0){
+            // Add q number of these goods to the vector we have
+            Capital_Good* sold_good = new Capital_Good( (*(*i))); // Unsureif this copies correctly
+            sold_good->Update_Quantity(-q_original + q);
+            sold_goods.push_back(sold_good);
+            // Deduct quantity from the original good on the market
+            (*i)->Update_Quantity(-q);
+        }
+        if (q_current == q_desired){
+            return sold_goods;
+        } else{
+            continue;
+        }
+    }
+}
+
+
+
+//----------------------------------------------
 // Printing and debugging
 
 /* Print all the goods in the market

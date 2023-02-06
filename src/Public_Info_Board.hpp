@@ -40,6 +40,13 @@ class Public_Info_Board{
     void Sort_Job_Market();
     void Update_Average_Wage() {average_wage = pJob_Market->Get_Average_Wage();};
     
+    // Consumer Good Market
+    int Buy_Consumer_Goods(int budget);
+
+    // Capital Good Market
+    std::vector<Capital_Good*>  Buy_Capital_Goods(int q_desired);
+    
+    
     // Inflation and price level
     float Calculate_Inflation();
     void Initialize_Price_Level();
