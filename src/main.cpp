@@ -74,7 +74,43 @@ int main()
     Log_Cap_Firm_Properties(Cap_Firm_array, n_capital_firms);
 
 
-//  -------- STEP 1 MAIN LOOP -------------------
+    //  -------- STEP 1 MAIN LOOP -------------------
+    cout << "*****************Main Loop begun" << endl;
+    // Timestep t= 0.0
+
+    // STEP 1.1: Update Inflation Rate and Interest rate 
+    // STEP 1.2: Depreciate Firm's Capital Goods
+    // STEP 1.3: Depreciate Firm's Good Inventories
+    // STEP 1.4: Layoff workers with expired contracts
+    // STEP 1.5: Random experimentation - randomly tweak firm and household parameters
+    // STEP 1.61: Firms assess past period's sales data
+    // STEP 1.62: Firms pay dividend
+    // STEP 1.63: Firms set new price and production targets
+    // STEP 1.64: Firms set wage offers, labor target, and finance expected wage bill
+    // STEP 1.71: Households update reservation wages
+    // STEP 1.72: Labor market matching process
+    // STEP 1.8: Firms make investment decisions and finance these
+    
+    // -- t= 0.5
+
+    // STEP 1.91: Firms produce their goods
+    // STEP 1.92: Households receive wage and make saving/consumption plans
+    // STEP 1.93: Consumer good market commences
+    // STEP 1.94: Investment good market commences
+
+
+    // Timestep t=1
+
+
+
+
+
+
+
+
+
+
+
 
     // STEP 1.0: Update Inflation Rate and Interest rate 
 
