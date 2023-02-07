@@ -28,8 +28,8 @@ class Household_Agent{
     void Consumption_Savings_Decisions();
     void Update_Income();
     void Update_Average_Income();
-    void Update_Average_Income_T1();
-    void Update_Wealth(); // TO Implement
+    void Update_Average_Income_T1(); // Use in t=1 only
+    void Update_Savings(); // TO Implement
     void Determine_Consumer_Sentiment();
     void Determine_Consumption_Budget(); //(eq 18)
     void Buy_Consumer_Goods(); 

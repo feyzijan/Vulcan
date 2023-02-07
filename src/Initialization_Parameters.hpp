@@ -64,6 +64,7 @@ extern const float init_unemp_tolerance_max;
 
 // Exogenous parameters for Households
 extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
+extern const float targeted_savings_to_income_ratio;
 
 //---------------------------------------------
 

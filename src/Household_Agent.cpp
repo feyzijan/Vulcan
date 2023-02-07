@@ -79,7 +79,7 @@ void Household_Agent::Consumption_Savings_Decisions(){
     Update_Reservation_Wage();
     Update_Income();
     Update_Average_Income();
-    Update_Wealth();
+    Update_Savings();
     Determine_Consumer_Sentiment();
     Determine_Consumption_Budget();
     Buy_Consumer_Goods();
@@ -140,9 +140,10 @@ void Household_Agent::Update_Average_Income()
 
 /* Function to update financial wealth based on income andconsumption
 */
-void Household_Agent::Update_Wealth()
+void Household_Agent::Update_Savings()
 {
-    //wealth_financial = (interest_rate_cb + 1.0) * wealth_financial + income_current - expenditure_consumption;
+    int effective_savings = cash_on_hand_current - income_average; // maybe make this the same as current savings
+    cash_on_hand_desired = targeted_savings_to_income_ratio * income_average;
 }
 
 /* Determine Household sentiment, and thereby savings propensity and desired cash on hand
@@ -167,22 +168,15 @@ void Household_Agent::Determine_Consumer_Sentiment()
 
 
 /* Function to determine consumption budget
- - Determine based on how the current income compares to average past income
- - Incorporate savings rate and sentiment
- TODO: WHICH PAPER IS THIS FROM?
+ - Using Jamel functions
 */
 void Household_Agent::Determine_Consumption_Budget()
 {
-    if (income_current > income_average)
-    {
-        expenditure_consumption = (1-saving_propensity) * income_current;
+    int excess_savings = cash_on_hand_current - cash_on_hand_desired;
+    if (excess_savings < 0){
+        expenditure_consumption = (1.0-saving_propensity) * income_current;
     } else {
-        int new_c = (1-c_excess_money) * (1-consumption_propensity) + consumption_propensity;
-        int price_level = pPublic_Info_Board->Get_Price_Level();
-        cash_on_hand_real_desired = cash_on_hand_desired * price_level;
-        int consumption_from_income = new_c * income_current;
-        int consumption_from_excess_savings = c_excess_money * cash_on_hand_real_desired;
-        expenditure_consumption = consumption_from_income + consumption_from_excess_savings ; 
+        expenditure_consumption = (1.0-saving_propensity) * income_current + c_f * excess_savings;
     }
 }
 
