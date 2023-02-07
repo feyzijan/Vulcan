@@ -277,17 +277,23 @@ void Firm_Agent::Update_Supplier_Networks(){
 
 }
 
-/* Decide how many machines to buy
-TODO: Implement this
+/* Buy enough machines to match full utilization with desired number of employees
+TODO: 
+- Jamel has a complicated method, for now I will use a simpler one
 */
 void Firm_Agent::Make_Investment_Decision(){
     desired_machines = 0;
     if(working_capital_inventory == 0) {
         desired_machines = 1;
     }else{
-        desired_machines = 1;
+        desired_machines = employee_count_desired/cons_workers_per_machine - working_capital_inventory;
     }
+    int est_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
+    expected_long_term_shortfall =  est_cost - cash_on_hand;
+    if (expected_long_term_shortfall > 0){Seek_Long_Term_Loan();}
+    expected_long_term_shortfall =  est_cost - cash_on_hand;
 
+    Buy_Machines();
 }
 
 void Firm_Agent::Buy_Machines(){
@@ -308,7 +314,6 @@ void Firm_Agent::Buy_Machines(){
     copy(new_capital_goods.begin(), new_capital_goods.end(), back_inserter(capital_goods));
     // Update the working capital inventory
     working_capital_inventory += new_machines_bought;
-    
 }
 
 

@@ -45,6 +45,7 @@ class Public_Info_Board{
 
     // Capital Good Market
     std::vector<Capital_Good*>  Buy_Capital_Goods(int q_desired);
+    int Get_Cost_For_Desired_Cap_Goods(int q_desired);
     
     
     // Inflation and price level

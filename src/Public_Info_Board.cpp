@@ -70,6 +70,11 @@ int Public_Info_Board::Buy_Consumer_Goods(int budget){
 std::vector<Capital_Good*>  Public_Info_Board::Buy_Capital_Goods(int q_desired){
     return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);
 }
+/* Return how much it would cost to buy the desired number of machines
+*/
+int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
+    return pCapital_Goods_Market->Get_Cost_For_Given_Quantity(q_desired);
+}
 
 
 //--------------------------------------------------

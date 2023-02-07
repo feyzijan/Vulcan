@@ -103,14 +103,6 @@ int main()
     // InfoBoard(n+1) = JobMarket(n+1),CapitalGoodMarket(n+1),CapitalGoodMarket(n+1)
 
 
-
-
-
-
-
-    
-    
-
     cout << "Program end :-)\n";
     return 0;
 }

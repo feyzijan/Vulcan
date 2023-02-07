@@ -53,11 +53,12 @@ int Capital_Goods_Market::Get_Cost_For_Given_Quantity(int q_desired){
         total_price += price * q;
         average_price = total_price / q_current;
         if(q_current==q_desired){
-            return average_price;
+            return average_price*q_current;
         } else{
             continue;
         }
     }
+    return average_price*q_current;// If we get here, we have not found enough goods
 }
 
 /* Buy Capital goods and return the quantity bought and price paid
