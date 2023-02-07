@@ -84,10 +84,6 @@ class Household_Agent{
     int income_gov_transfers;
     int income_firm_owner_dividend;
 
-    // Initialize this to all zeros
-    int income_past[income_lookback_period]; // must equal average_income_lookback_period
-    
-
     // Unemployment status
     bool unemployed;
     int reservation_wage;

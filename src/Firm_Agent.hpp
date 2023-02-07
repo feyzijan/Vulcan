@@ -111,12 +111,12 @@ class Firm_Agent{
     float good_price_current; // good price set for t
     float good_price_past; // good price at t-1
 
-    int average_profit; // NEWLY ADDED - Add to print and log
-    int average_sale_quantity; //NEWLY ADDED - Add to print and log
+    int average_profit; // NEWLY ADDED - 
+    int average_sale_quantity; //NEWLY ADDED -
   
     // Loan Parameters
-    int short_term_funding_gap;
-    int long_term_funding_gap;
+    int short_term_funding_gap; // NEWLY ADDED - 
+    int long_term_funding_gap; // NEWLY ADDED - 
 
     // Expenditures
     int total_liabilities; //Comprises of evt below
@@ -127,10 +127,10 @@ class Firm_Agent{
     int debt_interest_payments;
     int dividend_payments;
 
-    int expected_wage_bill; // NEWLY ADDED- Add to print and log
-    int layoff_wage_savings; // NEWLY ADDED- Add to print and log
-    int expected_wage_bill_shortfall; // NEWLY ADDED- Add to print and log
-    int expected_long_term_shortfall; // NEWLY ADDDED- Add to print and log
+    int expected_wage_bill; // NEWLY ADDED- 
+    int layoff_wage_savings; // NEWLY ADDED-
+    int expected_wage_bill_shortfall; // NEWLY ADDED- 
+    int expected_long_term_shortfall; // NEWLY ADDDED- 
 
     // Assets and fianncials 
     int total_assets; // maybe this should be the same as cash in hand?
@@ -149,24 +149,21 @@ class Firm_Agent{
     int n_active_job_postings;
     bool need_worker;
     int w_target; //Desired labor capacity utilization
-    int w_current; //Current labor capacity utilization
 
-    float labor_utilization; // NEWLY ADDDED- Add to print and log
+    float labor_utilization; // NEWLY ADDDED
 
     
     // Inventories
     int inventory;
     int working_capital_inventory;
     float desired_inventory_factor; // a characteristic
-    int desired_inventory; // NEWLY ADDED - Add to print and log
+    int desired_inventory; // NEWLY ADDED 
     float inventory_factor; 
 
-    float inventory_reaction_factor;  // NEWLY ADDDED- Add to print and log
+    float inventory_reaction_factor;  // NEWLY ADDDED
 
-    float machine_utilization;  // NEWLY ADDDED- Add to print and log
+    float machine_utilization;  // NEWLY ADDDED
     int desired_machines; // NEWLY ADDDED
-
-
 
     // Sentiment
     bool sentiment; // pessimistic, optimistic
@@ -178,8 +175,6 @@ class Firm_Agent{
     bool is_cons_firm;
 
 };
-
-
 
 #endif
 

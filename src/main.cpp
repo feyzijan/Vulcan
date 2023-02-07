@@ -76,7 +76,8 @@ int main()
 
     //  -------- STEP 1 MAIN LOOP -------------------
     cout << "*****************Main Loop begun" << endl;
-    // Timestep t= 0.0
+    global_date = 1;
+    // Timestep t= 1.0
 
     // STEP 1.1: Update Inflation Rate and Interest rate 
     // STEP 1.2: Depreciate Firm's Capital Goods
@@ -91,7 +92,7 @@ int main()
     // STEP 1.72: Labor market matching process
     // STEP 1.8: Firms make investment decisions and finance these
     
-    // -- t= 0.5
+    // -- t= 1.5
 
     // STEP 1.91: Firms produce their goods
     // STEP 1.92: Households receive wage and make saving/consumption plans

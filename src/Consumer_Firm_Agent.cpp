@@ -43,6 +43,10 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6])
     good_price_past = 0;
     average_profit = 0;
     average_sale_quantity = 0;
+    
+    // Loan Parameters
+    short_term_funding_gap = 0;
+    long_term_funding_gap = 0;
 
     // Expenditures
     total_liabilities = 0;
@@ -68,14 +72,13 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6])
     employee_count = 0; // correctly set
     n_active_job_postings = 0;
     w_target = 0;
-    w_current = 0;
-
     labor_utilization = 0.0;
 
     // Inventories
     desired_inventory = 0.0;
     inventory_reaction_factor = 1; // TODO Initialise this randomly
     machine_utilization = 0.0;
+    desired_machines = 0;
 
     //identifier
     is_cons_firm = true;

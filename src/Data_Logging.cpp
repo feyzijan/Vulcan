@@ -219,6 +219,20 @@ void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
     std::vector<float> vec_bankrupt; //bool
     std::vector<float> vec_is_cons_firm; //bool
 
+    std::vector<float> vec_average_profit;
+    std::vector<float> vec_average_sale_quantity;
+    std::vector<float> vec_short_term_funding_gap;
+    std::vector<float> vec_long_term_funding_gap;
+    std::vector<float> vec_expected_wage_bill;
+    std::vector<float> vec_layoff_wage_savings;
+    std::vector<float> vec_expected_wage_bill_shortfall;
+    std::vector<float> vec_expected_long_term_shortfall;
+    std::vector<float> vec_labor_utilization;
+    std::vector<float> vec_desired_inventory;
+    std::vector<float> vec_inventory_reaction_factor;
+    std::vector<float> vec_machine_utilization;
+    std::vector<float> vec_desired_machines;
+
     // Loop through Firm array and fill arrays
     vector<float>* pvec_params;
 
@@ -272,6 +286,19 @@ void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
         vec_bankrupt.push_back(pvec_params->at(k++));
         vec_is_cons_firm.push_back(pvec_params->at(k++));
 
+        vec_average_profit.push_back(pvec_params->at(k++));
+        vec_average_sale_quantity.push_back(pvec_params->at(k++));
+        vec_short_term_funding_gap.push_back(pvec_params->at(k++));
+        vec_long_term_funding_gap.push_back(pvec_params->at(k++));
+        vec_expected_wage_bill.push_back(pvec_params->at(k++));
+        vec_layoff_wage_savings.push_back(pvec_params->at(k++));
+        vec_expected_wage_bill_shortfall.push_back(pvec_params->at(k++));
+        vec_expected_long_term_shortfall.push_back(pvec_params->at(k++));
+        vec_labor_utilization.push_back(pvec_params->at(k++));
+        vec_desired_inventory.push_back(pvec_params->at(k++));
+        vec_inventory_reaction_factor.push_back(pvec_params->at(k++));
+        vec_machine_utilization.push_back(pvec_params->at(k++));
+        vec_desired_machines.push_back(pvec_params->at(k++));
 
         k=0;
         //delete[] pvec_params;
@@ -293,7 +320,13 @@ void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
     {"employee_count_desired", vec_employee_count_desired}, {"n_active_job_postings", vec_n_active_job_postings}, {"need_worker", vec_need_worker}, 
     {"w_target", vec_w_target}, {"w_current", vec_w_current}, {"inventory", vec_inventory}, {"working_capital_inventory", vec_working_capital_inventory},
     {"desired_inventory_factor", vec_desired_inventory_factor}, {"inventory_factor", vec_inventory_factor}, {"sentiment", vec_sentiment}, 
-    {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm}};
+    {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm},
+    {"average_profit", vec_average_profit},{"average_sale_quantity", vec_average_sale_quantity},{"short_term_funding_gap", vec_short_term_funding_gap},
+    {"long_term_funding_gap", vec_long_term_funding_gap},{"expected_wage_bill", vec_expected_wage_bill},{"layoff_wage_savings", vec_layoff_wage_savings},
+    {"expected_wage_bill_shortfall", vec_expected_wage_bill_shortfall},{"expected_long_term_shortfall", vec_expected_long_term_shortfall},{"labor_utilization", vec_labor_utilization},
+    {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines}
+    };
+
 
 
     std::stringstream ss;
@@ -356,6 +389,21 @@ void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
     std::vector<float> vec_bankrupt; //bool
     std::vector<float> vec_is_cons_firm; //bool
 
+    std::vector<float> vec_average_profit;
+    std::vector<float> vec_average_sale_quantity;
+    std::vector<float> vec_short_term_funding_gap;
+    std::vector<float> vec_long_term_funding_gap;
+    std::vector<float> vec_expected_wage_bill;
+    std::vector<float> vec_layoff_wage_savings;
+    std::vector<float> vec_expected_wage_bill_shortfall;
+    std::vector<float> vec_expected_long_term_shortfall;
+    std::vector<float> vec_labor_utilization;
+    std::vector<float> vec_desired_inventory;
+    std::vector<float> vec_inventory_reaction_factor;
+    std::vector<float> vec_machine_utilization;
+    std::vector<float> vec_desired_machines;
+
+
     // Loop through Firm array and fill arrays
     vector<float>* pvec_params;
 
@@ -409,6 +457,20 @@ void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
         vec_bankrupt.push_back(pvec_params->at(k++));
         vec_is_cons_firm.push_back(pvec_params->at(k++));
 
+        vec_average_profit.push_back(pvec_params->at(k++));
+        vec_average_sale_quantity.push_back(pvec_params->at(k++));
+        vec_short_term_funding_gap.push_back(pvec_params->at(k++));
+        vec_long_term_funding_gap.push_back(pvec_params->at(k++));
+        vec_expected_wage_bill.push_back(pvec_params->at(k++));
+        vec_layoff_wage_savings.push_back(pvec_params->at(k++));
+        vec_expected_wage_bill_shortfall.push_back(pvec_params->at(k++));
+        vec_expected_long_term_shortfall.push_back(pvec_params->at(k++));
+        vec_labor_utilization.push_back(pvec_params->at(k++));
+        vec_desired_inventory.push_back(pvec_params->at(k++));
+        vec_inventory_reaction_factor.push_back(pvec_params->at(k++));
+        vec_machine_utilization.push_back(pvec_params->at(k++));
+        vec_desired_machines.push_back(pvec_params->at(k++));
+
 
         k=0;
         //delete[] pvec_params;
@@ -430,7 +492,13 @@ void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
     {"employee_count_desired", vec_employee_count_desired}, {"n_active_job_postings", vec_n_active_job_postings}, {"need_worker", vec_need_worker}, 
     {"w_target", vec_w_target}, {"w_current", vec_w_current}, {"inventory", vec_inventory}, {"working_capital_inventory", vec_working_capital_inventory},
     {"desired_inventory_factor", vec_desired_inventory_factor}, {"inventory_factor", vec_inventory_factor}, {"sentiment", vec_sentiment}, 
-    {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm}};
+    {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm},
+    {"average_profit", vec_average_profit},{"average_sale_quantity", vec_average_sale_quantity},{"short_term_funding_gap", vec_short_term_funding_gap},
+    {"long_term_funding_gap", vec_long_term_funding_gap},{"expected_wage_bill", vec_expected_wage_bill},{"layoff_wage_savings", vec_layoff_wage_savings},
+    {"expected_wage_bill_shortfall", vec_expected_wage_bill_shortfall},{"expected_long_term_shortfall", vec_expected_long_term_shortfall},{"labor_utilization", vec_labor_utilization},
+    {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines}
+    };
+    
 
 
     std::stringstream ss;

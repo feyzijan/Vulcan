@@ -18,25 +18,33 @@ void Firm_Agent::Print(){
     // Employee info
     cout << "Number of employees: " << employee_count << " Desired employees: " << employee_count_desired << 
     " Need Worker: " << need_worker << " Current Wage Offer: " << wage_offer << endl;
-    cout << "Labor utilization current: " << w_current << " Desired: " << w_target << endl;
-        
-    //Inventory 
+    cout << "Labor utilization current: " << labor_utilization << " Desired: " << w_target << endl;
+
+
+    // Inventory 
     cout << "Desired Inventory Factor: " << desired_inventory_factor << " Current inventory: " << inventory << " Current Inv Factor: " 
-    << inventory_factor <<  " Capital inventory: " << working_capital_inventory << endl;
+    << inventory_factor << "Desired Inventory" << desired_inventory <<  " Capital inventory: " << working_capital_inventory << endl;
+    cout << "Inventory reaction factor: " << inventory_reaction_factor << " Desired machines: " << desired_machines << "Machine utilization: " << machine_utilization << endl;
 
     // Sentiment
     cout << "Positive Sentiment: " << sentiment << " Bankruptcy: " << bankrupt <<endl;
     
-    //Production and sales figures
+    //Production, sales ,and price figures
     cout << "Production - current/actual: " << production_current << " planned: " << production_planned << " past: " << production_past <<endl;
     cout << "Quantity sold: " << quantity_sold << " Current price: " << good_price_current << " Past price: " << good_price_past << endl;
-    
+    cout << "Average profit " << average_profit << " Average sale quantity: " << average_sale_quantity << endl;
+
     //Inflows
     cout << "Total income: " << total_income << " Sales Revenue: " << revenue_sales << " New loans: " << new_loan_issuance  << " subsidies: " << subsidies << endl;
+    
+    // Loan parameters
+    cout << "Short term funding gap: " << short_term_funding_gap << " Long term funding gap: " << long_term_funding_gap << endl;
 
     //Expenditures
     cout << "Total Liabilities: " << total_liabilities << " Wage bill: " << labor_wage_bill << " Capital costs: " << capital_costs << " Tax: " << tax_payments << endl;
     cout << "Debt principal payments: " << debt_principal_payments << " Interest payments: " << debt_interest_payments << " Dividends: " << dividend_payments << endl;
+    cout << "Expected wage bill: " << expected_wage_bill << "Layoff wage savings: " << layoff_wage_savings << endl;
+    cout << "Expected wage bill shortfall: " << expected_wage_bill_shortfall << " Expected long term shortfall: " << expected_long_term_shortfall << endl;
 
     //Assets and financials
     cout << "Assets: " << total_assets << " Savings: " << cash_on_hand <<  " Leverage Ratio: " << leverage_ratio << endl;
@@ -47,6 +55,7 @@ void Firm_Agent::Print(){
     //Public Board
     cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
     cout << "\n"<< endl;
+
 }
 
 
@@ -441,7 +450,7 @@ std::vector<float>* Firm_Agent::Get_All_Params() {
     vec->push_back(n_active_job_postings);
     vec->push_back(need_worker);
     vec->push_back(w_target);
-    vec->push_back(w_current);
+    vec->push_back(labor_utilization);
     vec->push_back(inventory);
     vec->push_back(working_capital_inventory);
     vec->push_back(desired_inventory_factor);
@@ -449,6 +458,20 @@ std::vector<float>* Firm_Agent::Get_All_Params() {
     vec->push_back(sentiment);
     vec->push_back(bankrupt);
     vec->push_back(is_cons_firm);
+
+    vec->push_back(average_profit);
+    vec->push_back(average_sale_quantity);
+    vec->push_back(short_term_funding_gap);
+    vec->push_back(long_term_funding_gap);
+    vec->push_back(expected_wage_bill);
+    vec->push_back(layoff_wage_savings);
+    vec->push_back(expected_wage_bill_shortfall);
+    vec->push_back(expected_long_term_shortfall);
+    vec->push_back(labor_utilization);
+    vec->push_back(desired_inventory);
+    vec->push_back(inventory_reaction_factor);
+    vec->push_back(machine_utilization);
+    vec->push_back(desired_machines);
 
     return vec;
 }

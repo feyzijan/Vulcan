@@ -27,7 +27,6 @@ Household_Agent::Household_Agent(float propensities[7], int unemployment_toleran
     this->current_job = nullptr;
 
     // Set default initialization values
-    income_past[income_lookback_period] = {};
 
     unemployed = true;
     positive_sentiment = true;
@@ -250,7 +249,12 @@ void Household_Agent::Print() {
     cout << "Unemployed: " << unemployed << " Reservation wage: " << reservation_wage << " unemp duration: " << unemp_duration << endl;
     // Sentiment
     cout << "Positive Sentiment: " << positive_sentiment << endl;
-    
+    // Job 
+    if (current_job != nullptr){
+        cout << "Current job: " << endl;
+        current_job->Print();
+    } else {cout << "No current job" << endl;}
+    // Characteristics
     Print_Characteristics(); 
     cout << "--------------------------------------" << endl;
 }
