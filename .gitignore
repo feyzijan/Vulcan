@@ -33,3 +33,6 @@
 #ignore data fiels in wrk
 wrk/vulcan
 wrk/*.log
+
+Datalogs/*.csv
+

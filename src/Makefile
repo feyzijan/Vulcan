@@ -14,13 +14,13 @@ EXE= vulcan
 OBJ = main.o Household_Agent.o Job.o Public_Info_Board.o Initialization_Parameters.o \
 Firm_Agent.o Consumer_Firm_Agent.o Consumer_Good.o Loan.o  General_Good.o\
 Job.o Job_Market.o Capital_Firm_Agent.o Capital_Good.o Initialization_Functions.o Random_Functions.o\
-Data_Logging.o
+Data_Logging.o Bank_Agent.o Consumer_Goods_Market.o Capital_Goods_Market.o
 
 #library rules
 $(OBJ): Household_Agent.hpp Job.hpp Public_Info_Board.hpp Initialization_Parameters.hpp  \
 Firm_Agent.hpp Consumer_Firm_Agent.hpp Consumer_Good.hpp Loan.hpp  General_Good.hpp \
 Capital_Firm_Agent.hpp Capital_Good.hpp Initialization_Functions.hpp Random_Functions.hpp \
-Data_Logging.hpp
+Data_Logging.hpp Bank_Agent.hpp Consumer_Goods_Market.hpp Capital_Goods_Market.hpp
 
 
 #options
