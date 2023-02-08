@@ -63,6 +63,12 @@ const float init_unemp_tolerance_max = 100.0;
 const float n_res_wage_decrease = 0.02; 
 const float targeted_savings_to_income_ratio = 3.0;
 
+// Constants to initialize all firms with
+const int init_production_current = 100;
+const int init_quantity_sold = 90;
+const float init_good_price_past = 9.5;
+
+
 
 //---------------------------------------------
 

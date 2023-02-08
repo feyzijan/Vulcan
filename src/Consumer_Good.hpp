@@ -16,7 +16,7 @@ class Consumer_Good: public General_Good{
     Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, int seller_quantity);
 
     //Printing and Debugging
-    void Print() const;
+    void Print();
     // Getters
     Consumer_Firm_Agent* GetSeller() {return pSeller;}
     

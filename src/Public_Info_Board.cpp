@@ -59,10 +59,23 @@ void Public_Info_Board::Sort_Job_Market(){
 
 //--------------------------------------------------
 // Consumer Good Market
+
+/* Add Consumer good to the consumer goods market
+*/
+void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood){
+    pConsumer_Goods_Market->Add_Consumer_Good_To_Market(pGood);
+}
+
 /* Call the Consumer good Market with the budget, and return the remaining budget
 */
 int Public_Info_Board::Buy_Consumer_Goods(int budget){
     return pConsumer_Goods_Market->Buy_Consumer_Goods(budget);
+}
+
+/* Add Capital good to the capital goods market
+*/
+void Public_Info_Board::Send_Cap_Good_To_Market(Capital_Good* pGood){
+    pCapital_Goods_Market->Add_Capital_Good_To_Market(pGood);
 }
 
 /* Call the capital goods market with desired quantities, return q bought and average price paid

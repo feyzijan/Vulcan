@@ -82,17 +82,28 @@ int main()
     //  -------- STEP 1 MAIN LOOP -------------------
     cout << "*****************Main Loop begun" << endl;
     global_date = 1;
-    // Timestep t= 1.0
 
-    // STEP 1.1: Update Inflation Rate and Interest rate 
-    //pBank_1->Update_Inflation_Rate();
-    //pBank_1->Update_Interest_Rate();
+    // Timestep t=0.5
+
+    // Post goods to market
+    for (int i=0; i<n_consumer_firms; i++) {
+        Cons_Firm_array[i].Send_Goods_To_Market();
+    }
+    
+
+
+
+    // Timestep t= 1.0
+    // Start from Step 1.61
+
+    // STEP 1.1: Update Inflation Rate and Interest rate  - 
 
     // STEP 1.2: Depreciate Firm's Capital Goods
     // STEP 1.3: Depreciate Firm's Good Inventories
     // STEP 1.4: Layoff workers with expired contracts
     // STEP 1.5: Random experimentation - randomly tweak firm and household parameters
     // STEP 1.61: Firms assess past period's sales data
+
     // STEP 1.62: Firms pay dividend
     // STEP 1.63: Firms set new price and production targets
     // STEP 1.64: Firms set wage offers, labor target, and finance expected wage bill

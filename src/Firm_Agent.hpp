@@ -69,7 +69,6 @@ class Firm_Agent{
     
 
 
-
     // Getters
     std::vector<float>* Get_All_Params();
     int Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 

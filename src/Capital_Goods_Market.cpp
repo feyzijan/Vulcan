@@ -7,8 +7,8 @@ Capital_Goods_Market::Capital_Goods_Market(){
     n_total_goods = 0;
     total_weighed_price = 0;
     price_level = 0.0;
-
 }
+
 //----------------------------------------------
 // ----------- Market operations
 

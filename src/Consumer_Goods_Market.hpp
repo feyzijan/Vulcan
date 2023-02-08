@@ -23,6 +23,8 @@ class Consumer_Goods_Market{
     void Sort_Consumer_Goods_By_Price();
     int Buy_Consumer_Goods(int budget);
 
+
+
     // Getters
     float Get_Price_Level() {return price_level;}
     

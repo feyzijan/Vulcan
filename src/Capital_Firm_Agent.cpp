@@ -6,7 +6,6 @@
 
 Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
 {
-    
     dividend_ratio_optimist = float_vals[0];
     dividend_ratio_pessimist =  float_vals[1];
     desired_inventory_factor = float_vals[2];
@@ -25,25 +24,21 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     inventory_factor = 0;
     cash_on_hand = total_assets; // unsure how these two differed
 
-    // Initialize pointers
-    Capital_Good* goods_on_market = new Capital_Good(this, 0,0, machine_lifespan );
-    Public_Info_Board* pPublic_Info_Board = nullptr;
-
-       // Set evt else to zero
+    
     // Production and sales figures
-    production_current = 0;
+    production_current = init_production_current;
     production_past = 0; 
-    quantity_sold = 0;
+    quantity_sold = init_quantity_sold;
 
     // Inflows
-    total_income = 0;
-    revenue_sales =0;
+    revenue_sales = production_current * good_price_current;
+    total_income = revenue_sales;
     new_loan_issuance =0; 
     subsidies = 0;
-    good_price_past = 0;
-    average_profit = 0;
-    average_sale_quantity = 0;
-
+    good_price_past = init_good_price_past;
+    average_profit = revenue_sales;
+    average_sale_quantity = quantity_sold;
+    
     // Loan Parameters
     short_term_funding_gap = 0;
     long_term_funding_gap = 0;
@@ -81,7 +76,14 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     desired_machines = 0;
 
     //identifier
-    is_cons_firm = false;
+    is_cons_firm = true;
+
+    // Initialize pointers
+    Capital_Good* goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
+    Public_Info_Board* pPublic_Info_Board = nullptr;
+    
+    // Put goods on Market
+    //Send_Goods_To_Market();
 }
 
 //Copy constructor
@@ -132,9 +134,14 @@ void Capital_Firm_Agent::Produce_Capital_Goods(){
     production_current = int(production_max*labor_utilization);
     inventory += production_current;
     inventory_factor = float(inventory) / float(average_sale_quantity);
-
 }
 
+/* Post Produced goods to market
+*/
+void Capital_Firm_Agent::Send_Goods_To_Market(){
+    cout << "Cap firm " << this <<" sending goods to market" << endl;
+    pPublic_Info_Board->Send_Cap_Good_To_Market(goods_on_market);
+}
 
 
 

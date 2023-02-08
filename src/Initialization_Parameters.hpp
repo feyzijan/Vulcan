@@ -120,6 +120,15 @@ extern const float init_desired_inventory_factor_std;
 extern const float init_desired_inventory_factor_min;
 extern const float init_desired_inventory_factor_max;
 
+// Constants to initialize all firms with
+extern const int init_production_current;
+extern const int init_quantity_sold;
+extern const float init_good_price_past;
+
+
+
+
+
 // Exogenous parameters for Firms
 extern const int standard_employment_contract_length;
 
