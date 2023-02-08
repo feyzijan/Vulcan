@@ -37,11 +37,6 @@ class Bank_Agent{
     void Print_Interest_Rate_History(); // To Implement
     
 
-
-    
-
-
-
     protected:
     Public_Info_Board* pPublic_Board;
     
@@ -50,7 +45,6 @@ class Bank_Agent{
 
     vector<Loan*> short_term_loan_book; 
     vector<Loan*> long_term_loan_book; 
-
 
     // Interest rate 
     float r_rate;
@@ -62,7 +56,6 @@ class Bank_Agent{
     float inflation_previous; // Inflation previous (trailing 12m)
     float inflation_target; // Inflation (next 12m target)
     float inflation_past_month; // Inflation MoM
-
 
     // Repayments
     int new_principal_repayments;

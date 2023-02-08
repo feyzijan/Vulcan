@@ -24,4 +24,7 @@ void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size);
 
 void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size);
 
+void Log_Everything(Household_Agent* Household_Array, Consumer_Firm_Agent* Cons_Firm_Array, Capital_Firm_Agent* Cap_Firm_Array, 
+int n_households, int n_consumer_firms, int n_capital_firms);
+
 #endif

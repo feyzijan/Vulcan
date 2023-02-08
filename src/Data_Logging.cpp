@@ -508,3 +508,11 @@ void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
     write_csv(filename,vals);
     cout << "Logging Capital Firm data: end" <<endl;
 }
+
+
+void Log_Everything(Household_Agent* Household_Array, Consumer_Firm_Agent* Cons_Firm_Array, Capital_Firm_Agent* Cap_Firm_Array, 
+int n_households, int n_consumer_firms, int n_capital_firms){
+    Log_Household_Properties(Household_Array, n_households);
+    Log_Cons_Firm_Properties(Cons_Firm_Array, n_consumer_firms);
+    Log_Cap_Firm_Properties(Cap_Firm_Array, n_capital_firms);
+}

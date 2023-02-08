@@ -16,6 +16,7 @@
 #include "Data_Logging.hpp"
 
 using namespace std;
+
 int main()
 {
 
@@ -32,8 +33,12 @@ int main()
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
     Job_Market* pJob_Market_1 = new Job_Market();
     Bank_Agent* pBank_1 = new Bank_Agent(pPublic_Board_1);
+    Consumer_Goods_Market* pConsumer_Goods_Market_1 = new Consumer_Goods_Market();
+    Capital_Goods_Market* pCapital_Goods_Market_1 = new Capital_Goods_Market();
     pPublic_Board_1->Set_Job_Market(pJob_Market_1);
     pPublic_Board_1->Set_Bank(pBank_1);
+    pPublic_Board_1->Set_Consumer_Goods_Market(pConsumer_Goods_Market_1);
+    pPublic_Board_1->Set_Capital_Goods_Market(pCapital_Goods_Market_1);
 
     cout << "Public Board at address: " << pPublic_Board_1 << " initialized" <<endl;
     cout << "Job Market at address: " << pJob_Market_1 << " initialized" <<endl;
@@ -69,10 +74,10 @@ int main()
     // STEP 0.14 Assign firm owners - Todo later, minor thing
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
-    Log_Household_Properties(Household_array, n_households);
-    Log_Cons_Firm_Properties(Cons_Firm_array, n_consumer_firms);
-    Log_Cap_Firm_Properties(Cap_Firm_array, n_capital_firms);
 
+    Log_Everything(Household_array, Cons_Firm_array, Cap_Firm_array, n_households, n_consumer_firms, n_capital_firms);
+
+    //pBank_1->Print();
 
     //  -------- STEP 1 MAIN LOOP -------------------
     cout << "*****************Main Loop begun" << endl;
@@ -80,6 +85,9 @@ int main()
     // Timestep t= 1.0
 
     // STEP 1.1: Update Inflation Rate and Interest rate 
+    //pBank_1->Update_Inflation_Rate();
+    //pBank_1->Update_Interest_Rate();
+
     // STEP 1.2: Depreciate Firm's Capital Goods
     // STEP 1.3: Depreciate Firm's Good Inventories
     // STEP 1.4: Layoff workers with expired contracts
@@ -109,35 +117,6 @@ int main()
 
 
 
-
-
-
-
-    // STEP 1.0: Update Inflation Rate and Interest rate 
-
-
-
-
-
-
-
-
-    // STEP 1.1: Update Households , Firm
-    // Households(n+1/2) =f [InfoBoard(n)] 
-    // Firms(n+1/2)      = f[InfoBoard(n)] 
-
-    // STEP 1.2: Add Jobs/Goods/Capital from Firms  (Job/interaction)      
-    // JobMarket(n+1/2)  = f(Firms(n+1/2))
-    // Sort the job
-    // GoodMarket ...
-    
-    // STEP 1.3: Update Household  based on Markets
-    // Households(n+1) = f(JobMarket(n+1/2), Household(n+1/2))
-    // JobMarket(n+1)  = f(Firms(n+1))
-    
-
-    // Update InfoBoard (done automatically)
-    // InfoBoard(n+1) = JobMarket(n+1),CapitalGoodMarket(n+1),CapitalGoodMarket(n+1)
 
 
     cout << "Program end :-)\n";

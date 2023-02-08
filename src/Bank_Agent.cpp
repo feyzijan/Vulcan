@@ -168,5 +168,37 @@ void Bank_Agent::Print_Inflation_History(){
 /* Print all bank parameters for debugging purposes
 */
 void Bank_Agent::Print(){
+    cout << "Bank at address: " << this << endl;
 
+    // Interest rate
+    cout << "Interest Rate: " << r_rate << " Interest rate reaction: " << r_reaction << endl;
+    cout << "Interest rate history: " << endl;
+    for(int i = 0; i < interest_rate_history.size(); i++){
+        cout << interest_rate_history[i] << " , ";
+    } cout << endl;
+
+    // Inflation
+    cout << "Inflation rate current: " << inflation_current << " previous: " << inflation_previous  << " past_month: "<< 
+    inflation_past_month << " target: " << inflation_target << endl;
+    Print_Inflation_History();
+
+    // Loan issuance totals
+    cout << "Total loan issuance to date: " << total_loan_issuance_to_date << " new loan issuance: " << new_loan_issuance << " outstanding loans: " << outstanding_loans << endl;
+    // Repayments
+    cout << "Total principal repayments: " << total_principal_repayments << " total interest repayments: " << total_interest_repayments << endl;
+    // Loan parameters
+    cout << "Short term loan length: " << short_term_loan_length << " long term loan length: " << long_term_loan_length << endl;
+    // Solvency
+    cout << "Capital ratio: " << capital_ratio << " target capital ratio: " << target_capital_ratio << endl;
+    // Loan books
+    cout << "Short term loan book: " << endl;
+    for(int i = 0; i < short_term_loan_book.size(); i++){
+        cout << "Loan " << i << " : " << endl;
+        short_term_loan_book[i]->Print();
+    }
+    cout << "Long term loan book: " << endl;
+    for(int i = 0; i < long_term_loan_book.size(); i++){
+        cout << "Loan " << i << " : " << endl;
+        long_term_loan_book[i]->Print();
+    }
 }
