@@ -18,13 +18,16 @@
 void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<float>>> dataset);
 
 // Call write_csv on all households and firms
-void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size);
+void Log_Household_Properties(vector<Household_Agent*> *pHousehold_vectory, int size);
 
-void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size);
+void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, int size);
 
-void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size);
+void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, int size);
 
-void Log_Everything(Household_Agent* Household_Array, Consumer_Firm_Agent* Cons_Firm_Array, Capital_Firm_Agent* Cap_Firm_Array, 
-int n_households, int n_consumer_firms, int n_capital_firms);
+void Log_Firm_Properties(vector<Firm_Agent*> *pFirm_vector, int size);
+
+void Log_Everything(vector<Household_Agent*> *pHousehold_vector,
+    vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
+    int n_households, int n_consumer_firms, int n_capital_firms);
 
 #endif

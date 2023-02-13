@@ -4,93 +4,16 @@
 
 
 
-Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
+Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : Firm_Agent::Firm_Agent(float_vals, int_vals)
 {
-    dividend_ratio_optimist = float_vals[0];
-    dividend_ratio_pessimist =  float_vals[1];
-    desired_inventory_factor = float_vals[2];
-    good_price_current = float_vals[3];
-
-    total_assets = int_vals[0];
-    employee_count_desired = int_vals[1];
-    working_capital_inventory = int_vals[2];
-    inventory = int_vals[3];
-    wage_offer = int_vals[4];
-    production_planned = int_vals[5];
-
-    need_worker = 1;
-    sentiment = 1;
-    bankrupt = 0;
-    inventory_factor = 0;
-    cash_on_hand = total_assets; // unsure how these two differed
-
-    
-    // Production and sales figures
-    production_current = init_production_current;
-    production_past = 0; 
-    quantity_sold = init_quantity_sold;
-
-    // Inflows
-    revenue_sales = production_current * good_price_current;
-    total_income = revenue_sales;
-    new_loan_issuance =0; 
-    subsidies = 0;
-    good_price_past = init_good_price_past;
-    average_profit = revenue_sales;
-    average_sale_quantity = quantity_sold;
-    
-    // Loan Parameters
-    short_term_funding_gap = 0;
-    long_term_funding_gap = 0;
-
-    // Expenditures
-    total_liabilities = 0;
-    labor_wage_bill =0;
-    capital_costs = 0;
-    tax_payments =0; 
-    debt_principal_payments = 0;
-    debt_interest_payments = 0;
-    dividend_payments = 0;
-
-    expected_wage_bill = 0;
-    layoff_wage_savings = 0;
-    expected_wage_bill_shortfall = 0;
-    expected_long_term_shortfall = 0;
-
-    // Assets and fianncials 
-    leverage_ratio = 0; // correctly set
-    
-    // Dividend characteristics
-    dividend_ratio = dividend_ratio_optimist;
-
-    // Employees
-    employee_count = 0; // correctly set
-    n_active_job_postings = 0;
-    w_target = 0;
-    labor_utilization = 0.0;
-
-    // Inventories
-    desired_inventory = 0.0;
-    inventory_reaction_factor = 1; // TODO Initialise this randomly
-    machine_utilization = 0.0;
-    desired_machines = 0;
-
     //identifier
-    is_cons_firm = true;
+    is_cons_firm = false;
 
-    // Initialize pointers
-/*     goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
-    pPublic_Info_Board = nullptr;
-
-    // Initialize capital goods
-    initial_capital_goods = new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan);
-    cout << "Initialized capital good, now pushing to market" << endl;
-    //capital_goods_list.push_back(initial_capital_goods);
-    cout << "Pushed to market" << endl; */
-    
+    goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
     // Put goods on Market
     //Send_Goods_To_Market();
 }
+
 
 //Copy constructor
 Capital_Firm_Agent::Capital_Firm_Agent(Capital_Firm_Agent&){}
@@ -153,7 +76,7 @@ void Capital_Firm_Agent::Send_Goods_To_Market(){
 
 //------------------Non member functions---------------------------
 
-void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_Board* pPublic_Board, int size, int* promised_jobs)
+void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Board, int size, int* promised_jobs)
 {
     cout << "\n Initializing " << size << " capital firms" << endl;
     Normal_Dist_Generator init_dividend_ratio_optimist(init_dividend_ratio_optimist_mean, init_dividend_ratio_optimist_std, init_dividend_ratio_optimist_min, init_dividend_ratio_optimist_max);
@@ -186,26 +109,30 @@ void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_B
             int(init_production_planned()),
         };
 
-
         *promised_jobs += int_vals[1];
-        Cap_Firm_array[i] = Capital_Firm_Agent(float_vals, int_vals);
-        Cap_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
+        
+        pCapital_Firm_vector->push_back(new Capital_Firm_Agent(float_vals, int_vals));
+        cout << "Cons firm initialized! #" << i << endl;
+        pCapital_Firm_vector->at(i)->Set_Public_Info_Board(pPublic_Board);
     }
     cout << "Capital firms initialized" << endl;
 }
 
 
-void Post_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size){
-    for (int i=0; i<size; i++) {
-        //cout << "Now posting jobs for cap firm # " << i << endl;
-        Cap_Firm_array[i].Set_Wage_Offer((i+1)*1000);
-        Cap_Firm_array[i].Post_Jobs();
+void Post_Initial_Job_Offers_Cap(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, int size){
+    
+    int i = 0;
+    for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector) {
+        i +=1000;
+        firm_ptr->Set_Wage_Offer(i);
+        firm_ptr->Post_Jobs();
     }
 }
 
 
-void Check_Initial_Job_Offers_Cap(Capital_Firm_Agent * Cap_Firm_array, int size){
-        for (int i=0; i<size; i++) {
-        Cap_Firm_array[i].Check_For_New_Employees();
+void Check_Initial_Job_Offers_Cap(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, int size){
+    
+    for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector) {
+        firm_ptr->Check_For_New_Employees();
     }
 }

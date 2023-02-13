@@ -1,7 +1,92 @@
 #include "Firm_Agent.hpp"
 
 using namespace std;
+// Constructors
 
+Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
+{
+    dividend_ratio_optimist = float_vals[0];
+    dividend_ratio_pessimist =  float_vals[1];
+    desired_inventory_factor = float_vals[2];
+    good_price_current = float_vals[3];
+
+    total_assets = int_vals[0];
+    employee_count_desired = int_vals[1];
+    working_capital_inventory = int_vals[2];
+    inventory = int_vals[3];
+    wage_offer = int_vals[4];
+    production_planned = int_vals[5];
+
+    need_worker = 1;
+    sentiment = 1;
+    bankrupt = 0;
+    inventory_factor = 0;
+    cash_on_hand = total_assets; // unsure how these two differed
+
+    
+    // Production and sales figures
+    production_current = init_production_current;
+    production_past = 0; 
+    quantity_sold = init_quantity_sold;
+
+    // Inflows
+    revenue_sales = production_current * good_price_current;
+    total_income = revenue_sales;
+    new_loan_issuance =0; 
+    subsidies = 0;
+    good_price_past = init_good_price_past;
+    average_profit = revenue_sales;
+    average_sale_quantity = quantity_sold;
+    
+    // Loan Parameters
+    short_term_funding_gap = 0;
+    long_term_funding_gap = 0;
+
+    // Expenditures
+    total_liabilities = 0;
+    labor_wage_bill =0;
+    capital_costs = 0;
+    tax_payments =0; 
+    debt_principal_payments = 0;
+    debt_interest_payments = 0;
+    dividend_payments = 0;
+
+    expected_wage_bill = 0;
+    layoff_wage_savings = 0;
+    expected_wage_bill_shortfall = 0;
+    expected_long_term_shortfall = 0;
+
+    // Assets and fianncials 
+    leverage_ratio = 0; // correctly set
+    
+    // Dividend characteristics
+    dividend_ratio = dividend_ratio_optimist;
+
+    // Employees
+    employee_count = 0; // correctly set
+    n_active_job_postings = 0;
+    w_target = 0;
+    labor_utilization = 0.0;
+
+    // Inventories
+    desired_inventory = 0.0;
+    inventory_reaction_factor = 1; // TODO Initialise this randomly
+    machine_utilization = 0.0;
+    desired_machines = 0;
+    pPublic_Info_Board = nullptr;
+
+    // Initialize capital good inventory
+    initial_capital_goods = new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan);
+    cout << " Created initial capital good " << endl;
+    capital_goods_list.push_back(initial_capital_goods);
+    cout << "Passed capital good into list" << endl;; 
+}
+
+
+
+
+
+//-------------------------------------
 // Printing methods
 
 /* Print all Firm parameters

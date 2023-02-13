@@ -103,8 +103,8 @@ class Household_Agent{
 
 
 //----- Initialization Functions
-void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size);
-void Initialize_Household_Jobs(Household_Agent * Household_array,  int size);
+void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_Info_Board* pPublic_Board, int size);
+void Initialize_Household_Jobs(vector<Household_Agent*> *pHousehold_vector,  int size);
 
 
 #endif

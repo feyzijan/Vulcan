@@ -16,8 +16,10 @@
 using namespace std;
 
 // Function to set up Job market at t=0
-void Initialize_Job_Market(Consumer_Firm_Agent* Cons_Firm_array,
-Capital_Firm_Agent* Cap_Firm_array, Household_Agent* Household_array,
-Public_Info_Board* pPublic_Info_Board);
+void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
+    vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
+    Public_Info_Board* pPublic_Info_Board);
+
+
 
 #endif

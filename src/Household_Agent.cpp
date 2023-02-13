@@ -313,7 +313,7 @@ vector<float>* Household_Agent::Get_All_Params(){
 // Non Member Function
 
 
-void Initialize_Households(Household_Agent * Household_array, Public_Info_Board* pPublic_Board, int size)
+void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_Info_Board* pPublic_Board, int size)
 {   
     cout << "\n Initializing " << size << " households" << endl;
     
@@ -342,7 +342,7 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
         int wealth = int(init_wealth());
         int unemployment_tolerance = int(init_unemp_tolerance());
 
-        Household_array[i] = Household_Agent(propensities, unemployment_tolerance,wealth,pPublic_Board);
+        pHousehold_vector->push_back(new Household_Agent(propensities, unemployment_tolerance,wealth,pPublic_Board));
         //Household_array[i].Set_Public_Info_Board(pPublic_Board);
         //cout << "The c_h value is " << Household_array[i].Get_C_h() << endl;
 
@@ -353,12 +353,14 @@ void Initialize_Households(Household_Agent * Household_array, Public_Info_Board*
 
 
 
+/* Loop through households and call seek jobs function
+*/
+void Initialize_Household_Jobs(vector<Household_Agent*> *pHousehold_vector,  int size){
 
-void Initialize_Household_Jobs(Household_Agent * Household_array,  int size){
-       for (int i=0; i<size; i++) {
-        //cout << "Now seeking jobs for household # " << i << endl;
-        Household_array[i].Seek_Jobs();
+    for (Household_Agent* household_ptr : *pHousehold_vector) {
+        household_ptr->Seek_Jobs();
     }
+
 }
 
 

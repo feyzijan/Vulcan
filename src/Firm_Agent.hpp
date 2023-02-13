@@ -24,7 +24,8 @@ class Firm_Agent{
     public:
     // Constructors and Destructor
     Firm_Agent() {}; 
-    Firm_Agent(Firm_Agent&); 
+    Firm_Agent(float float_vals[4], int int_vals[6]);
+    Firm_Agent(Firm_Agent&){}; 
     ~Firm_Agent(){}; 
 
     //Print methods

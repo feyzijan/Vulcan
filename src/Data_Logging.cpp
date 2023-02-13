@@ -43,7 +43,7 @@ void write_csv(std::string filename, std::vector<std::pair<std::string, std::vec
  - Use the global firm, household size variables
 */
 
-void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
+void Log_Household_Properties(vector<Household_Agent*> *pHousehold_vector, int size)
 {
     cout << "Logging Household data: start" <<endl;
     // Declare the vectors
@@ -89,7 +89,7 @@ void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
     //size = 4;
     for (int i=0;i<size;i++){
         
-        pvec_params = Household_Agent_Array[i].Get_All_Params();
+        pvec_params = pHousehold_vector->at(i)->Get_All_Params();
 
       /*   std::vector<float>* pvec_params = new std::vector<float>;
         std::default_random_engine generator;
@@ -169,7 +169,7 @@ void Log_Household_Properties(Household_Agent* Household_Agent_Array, int size)
 }
 
 
-void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
+void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, int size)
 {
     cout << "Logging Cons Firm data: start" <<endl;
     // Declare the vectors
@@ -240,7 +240,7 @@ void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
 
     for (int i=0;i<size;i++){
         
-        pvec_params = Cons_Firm_Array[i].Get_All_Params();
+        pvec_params = pConsumer_Firm_vector->at(i)->Get_All_Params();   
 
         vec_production_current.push_back(pvec_params->at(k++));
         vec_production_planned.push_back(pvec_params->at(k++));
@@ -339,7 +339,7 @@ void Log_Cons_Firm_Properties(Consumer_Firm_Agent* Cons_Firm_Array, int size)
 
 
 
-void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
+void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, int size)
 {
     cout << "Logging Capital Firm data: start" <<endl;
     // Declare the vectors
@@ -411,7 +411,7 @@ void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
 
     for (int i=0;i<size;i++){
         
-        pvec_params = Cap_Firm_Array[i].Get_All_Params();
+        pvec_params = pCapital_Firm_vector->at(i)->Get_All_Params();
 
         vec_production_current.push_back(pvec_params->at(k++));
         vec_production_planned.push_back(pvec_params->at(k++));
@@ -510,9 +510,10 @@ void Log_Cap_Firm_Properties(Capital_Firm_Agent* Cap_Firm_Array, int size)
 }
 
 
-void Log_Everything(Household_Agent* Household_Array, Consumer_Firm_Agent* Cons_Firm_Array, Capital_Firm_Agent* Cap_Firm_Array, 
-int n_households, int n_consumer_firms, int n_capital_firms){
-    Log_Household_Properties(Household_Array, n_households);
-    Log_Cons_Firm_Properties(Cons_Firm_Array, n_consumer_firms);
-    Log_Cap_Firm_Properties(Cap_Firm_Array, n_capital_firms);
+void Log_Everything(vector<Household_Agent*> *pHousehold_vector,
+    vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
+    int n_households, int n_consumer_firms, int n_capital_firms){
+    Log_Household_Properties(pHousehold_vector, n_households);
+    Log_Cons_Firm_Properties(pConsumer_Firm_vector, n_consumer_firms);
+    Log_Cap_Firm_Properties(pCapital_Firm_vector, n_capital_firms);
 }
