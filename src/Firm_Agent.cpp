@@ -81,7 +81,7 @@ void Firm_Agent::Print_Active_Jobs(){
 */
 void Firm_Agent::Print_Capital_Goods(){
     cout << "Firm Agent Printing Capital Good Inventory: " << endl;
-    for (auto i = capital_goods.begin(); i !=  capital_goods.end(); ++i){
+    for (auto i = capital_goods_list.begin(); i !=  capital_goods_list.end(); ++i){
         (*i)->Print();
     }
 }
@@ -109,7 +109,7 @@ void Firm_Agent::Update_Average_Profits_T1(){
 /* Function to depreciate the value of each capital in the inventory
 */
 void Firm_Agent::Depreciate_Capital(){
-    for (auto i = capital_goods.begin(); i !=  capital_goods.end(); ++i){
+    for (auto i = capital_goods_list.begin(); i !=  capital_goods_list.end(); ++i){
         (*i)->Depreciate();
     }
 }
@@ -339,7 +339,7 @@ void Firm_Agent::Buy_Machines(){
         total_price_paid += (*it)->Get_Quantity() * (*it)->Get_Price();
     }
     // Copy all the objects in the new_capital_goods vector to the capital_goods vector
-    copy(new_capital_goods.begin(), new_capital_goods.end(), back_inserter(capital_goods));
+    copy(new_capital_goods.begin(), new_capital_goods.end(), back_inserter(capital_goods_list));
     // Update the working capital inventory
     working_capital_inventory += new_machines_bought;
 }

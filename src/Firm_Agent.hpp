@@ -11,6 +11,8 @@
 class Public_Info_Board;
 #include "Loan.hpp"
 #include "General_Good.hpp"
+#include "Capital_Good.hpp"
+#include "Consumer_Good.hpp"
 #include "Job.hpp"
 #include "Public_Info_Board.hpp"
 #include "Random_Functions.hpp"
@@ -86,7 +88,8 @@ class Firm_Agent{
     protected:
     Public_Info_Board* pPublic_Info_Board;
     General_Good* goods_on_market;
-    vector<Capital_Good*> capital_goods;
+    Capital_Good* initial_capital_goods;
+    vector<Capital_Good*> capital_goods_list;
 
     std::vector<Loan*> loan_book;
 

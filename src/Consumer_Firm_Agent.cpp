@@ -80,11 +80,15 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6])
     is_cons_firm = true;
 
     // Initialize pointers
-    goods_on_market = new Consumer_Good(this, good_price_current,production_current-quantity_sold);
-    Public_Info_Board* pPublic_Info_Board = nullptr;
+/*     goods_on_market = new Consumer_Good(this, good_price_current,production_current-quantity_sold);
+    pPublic_Info_Board = nullptr;
 
     // Initialize capital good objects
-    capital_goods.push_back(new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan));
+    initial_capital_goods = new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan);
+    cout << " Finished capital good " << endl;
+    //capital_goods_list.push_back(initial_capital_goods);*/
+    
+    cout << "Finished cons firm constructor" << endl;; 
     
     // Put goods on Market
     //Send_Goods_To_Market();
@@ -189,12 +193,12 @@ void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Inf
         };
 
         *promised_jobs += int_vals[1];
+        //cout << " set up arrays now passign them in " << endl;
         Cons_Firm_array[i] = Consumer_Firm_Agent(float_vals, int_vals);
         cout << "Cons firm initialized! #" << i << endl;
         Cons_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
-        
     }
-    cout << "Consumer Firm initialized" << endl;
+    cout << "Consumer Firms initialized" << endl;
 
 }
 

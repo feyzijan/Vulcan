@@ -79,14 +79,15 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     is_cons_firm = true;
 
     // Initialize pointers
-    cout << "Initializing pointers for cap firm" << endl;
-    goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
-    Public_Info_Board* pPublic_Info_Board = nullptr;
-    cout << "Initialized goods on market" << endl;
+/*     goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
+    pPublic_Info_Board = nullptr;
 
     // Initialize capital goods
-    capital_goods.push_back(new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan));
-    cout << "Initialized goods in store" << endl;
+    initial_capital_goods = new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan);
+    cout << "Initialized capital good, now pushing to market" << endl;
+    //capital_goods_list.push_back(initial_capital_goods);
+    cout << "Pushed to market" << endl; */
+    
     // Put goods on Market
     //Send_Goods_To_Market();
 }

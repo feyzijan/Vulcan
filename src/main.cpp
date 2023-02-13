@@ -52,10 +52,10 @@ int main()
     
     Household_Agent * Household_array = (Household_Agent*)malloc(sizeof(Household_Agent) * n_households);
     Initialize_Households(Household_array, pPublic_Board_1, n_households); 
-    Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
-    Initialize_Consumer_Firms( Cons_Firm_array, pPublic_Board_1, n_consumer_firms, &n_promised_jobs);
     Capital_Firm_Agent * Cap_Firm_array = (Capital_Firm_Agent*)malloc(sizeof(Capital_Firm_Agent) * n_capital_firms);
     Initialize_Capital_Firms(Cap_Firm_array, pPublic_Board_1, n_capital_firms, &n_promised_jobs);
+    Consumer_Firm_Agent * Cons_Firm_array = (Consumer_Firm_Agent*)malloc(sizeof(Consumer_Firm_Agent) * n_consumer_firms);
+    Initialize_Consumer_Firms( Cons_Firm_array, pPublic_Board_1, n_consumer_firms, &n_promised_jobs);
     
 
     //----------- STEP 0.13: Initialize job market
@@ -63,13 +63,8 @@ int main()
     Initialize_Job_Market(Cons_Firm_array,Cap_Firm_array,Household_array,pPublic_Board_1);
 
 
-    int n = 100;
+    int n = n_households/10;
     cout << " Household at position " << n << " has job :" <<  Household_array[n].Get_Employment_Status() << endl;
-    n = 9900;
-    cout << " Household at position " << n << " has job :" <<  Household_array[n].Get_Employment_Status() << endl;
-    n = 9990;
-    cout << " Household at position " << n << " has job :" <<  Household_array[n].Get_Employment_Status() << endl;
-    
 
     // STEP 0.14 Assign firm owners - Todo later, minor thing
 
@@ -109,16 +104,16 @@ int main()
     // STEP 1.2: Depreciate Firm's Capital Goods
     cout << "Step 1.2: Depreciating capital goods" <<endl;
 
-    Cons_Firm_array[50].Print_Capital_Goods();
-    
-    for (int i=0; i<n_consumer_firms; i++) {
+    Cons_Firm_array[n_consumer_firms/2].Print_Capital_Goods();
+
+/*     for (int i=0; i<n_consumer_firms; i++) {
         Cons_Firm_array[i].Depreciate_Capital();
     }
     for (int i=0; i<n_capital_firms; i++) {
         Cap_Firm_array[i].Depreciate_Capital();
-    }
+    } */
 
-    Cons_Firm_array[50].Print_Capital_Goods();
+    Cons_Firm_array[n_consumer_firms/2].Print_Capital_Goods();
 
 
 

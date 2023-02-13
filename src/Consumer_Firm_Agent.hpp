@@ -3,7 +3,7 @@
 
 #include "Firm_Agent.hpp"
 #include "Consumer_Good.hpp"
-
+#include "Capital_Good.hpp"
 #include "Random_Functions.hpp"
 #include "Initialization_Parameters.hpp"
 
