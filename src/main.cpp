@@ -89,6 +89,8 @@ int main()
     for (int i=0; i<n_consumer_firms; i++) {
         Cons_Firm_array[i].Send_Goods_To_Market();
     }
+    // Set initial price level
+    pPublic_Board_1->Initialize_Price_Level();
     
 
 
@@ -96,9 +98,31 @@ int main()
     // Timestep t= 1.0
     // Start from Step 1.61
 
-    // STEP 1.1: Update Inflation Rate and Interest rate  - 
+    // STEP 1.1: Update Inflation Rate and Interest rate  -
+    cout << "Step 1.1: Updating inflation and interest rates" <<endl;
+    //pBank_1->Print();
+    pBank_1->Update_Inflation_Rate();
+    pBank_1->Update_Interest_Rate();
+    //pBank_1->Print();
+    //cout << "Success!" << endl;
 
     // STEP 1.2: Depreciate Firm's Capital Goods
+    cout << "Step 1.2: Depreciating capital goods" <<endl;
+
+    Cons_Firm_array[50].Print_Capital_Goods();
+    
+    for (int i=0; i<n_consumer_firms; i++) {
+        Cons_Firm_array[i].Depreciate_Capital();
+    }
+    for (int i=0; i<n_capital_firms; i++) {
+        Cap_Firm_array[i].Depreciate_Capital();
+    }
+
+    Cons_Firm_array[50].Print_Capital_Goods();
+
+
+
+
     // STEP 1.3: Depreciate Firm's Good Inventories
     // STEP 1.4: Layoff workers with expired contracts
     // STEP 1.5: Random experimentation - randomly tweak firm and household parameters

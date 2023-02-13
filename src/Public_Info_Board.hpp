@@ -81,7 +81,7 @@ class Public_Info_Board{
     void Set_Consumer_Goods_Market(Consumer_Goods_Market* ptr) { pConsumer_Goods_Market = ptr;}
     void Set_Capital_Goods_Market(Capital_Goods_Market* ptr) { pCapital_Goods_Market = ptr;}
     void Set_Bank(Bank_Agent* ptr) { pBank = ptr;}
-
+    
     // Printing and Debugging
     void Print() const;
 
@@ -92,8 +92,8 @@ class Public_Info_Board{
     Capital_Goods_Market* pCapital_Goods_Market;
 
     // General price level
-    int price_level_current;
-    int price_level_previous;
+    float price_level_current;
+    float price_level_previous;
     float average_wage; // Average wage in economy
 
     // Inflation and interest rate

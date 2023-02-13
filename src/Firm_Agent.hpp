@@ -29,6 +29,7 @@ class Firm_Agent{
     void Print(); 
     void Print_Posted_Jobs();
     void Print_Active_Jobs();
+    void Print_Capital_Goods();
 
     // Initialization methods t = 0
     
@@ -38,7 +39,7 @@ class Firm_Agent{
 
 
     // Main Loop Methods - in order
-
+    void Depreciate_Capital();
     void Cancel_Expired_Contracts();
     void Random_Experimentation();
     void Calc_Quantity_Sold();

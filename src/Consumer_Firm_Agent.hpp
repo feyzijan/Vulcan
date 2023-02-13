@@ -20,7 +20,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     ~Consumer_Firm_Agent(); 
 
     // Main Loop methods
-    void Depreciate_Capital();
+    /* void Depreciate_Capital(); */
     void Depreciate_Good_Inventory();
     void Produce_Consumer_Goods();
     void Send_Goods_To_Market();

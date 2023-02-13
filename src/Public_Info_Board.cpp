@@ -97,11 +97,11 @@ int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
 float Public_Info_Board::Calculate_Inflation(){
     price_level_previous = price_level_current;
     price_level_current = pConsumer_Goods_Market->Get_Price_Level();
-    return (price_level_current - price_level_previous)/price_level_previous;
+    return 1.0 + (price_level_current - price_level_previous)/price_level_previous;
 }
 
 void Public_Info_Board::Initialize_Price_Level(){
-    price_level_previous = pConsumer_Goods_Market->Get_Price_Level();
+    price_level_current = pConsumer_Goods_Market->Get_Price_Level();
 }
 
 //--------------------------------------------------

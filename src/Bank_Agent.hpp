@@ -41,7 +41,7 @@ class Bank_Agent{
     Public_Info_Board* pPublic_Board;
     
     queue<float> inflation_history; // Array of past inflation
-    vector<float> interest_rate_history; // Array of past interest rates
+    queue<float> interest_rate_history; // Array of past interest rates
 
     vector<Loan*> short_term_loan_book; 
     vector<Loan*> long_term_loan_book; 

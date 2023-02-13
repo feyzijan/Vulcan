@@ -16,15 +16,15 @@ Price level is updated as well
 */
 void Consumer_Goods_Market::Add_Consumer_Good_To_Market(Consumer_Good * cons_good)
 {
-    cout << "Cons good market adding good " << cons_good << endl;
+    //cout << "Cons good market adding good " << cons_good << endl;
     cons_goods_list.push_back(cons_good);
-    cout << "Cons good market added good " << cons_good << endl;
+    //cout << "Cons good market added good " << cons_good << endl;
     int q = cons_good->Get_Quantity();
     float p = cons_good->Get_Price();
     n_total_goods += q;
     total_weighed_price += float(p*q);
     price_level = (float)total_weighed_price/(float)n_total_goods;
-    cout << "new price level " << price_level;
+    //cout << "new price level " << price_level;
 }
 
 

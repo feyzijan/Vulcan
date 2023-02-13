@@ -20,6 +20,9 @@ class Capital_Good: public General_Good{
     // Printing
     void Print() const;
 
+    // Depreciation
+    void Depreciate();
+    
     // Getters
     Capital_Firm_Agent * GetSeller() {return pSeller;}
     float Get_Value() const {return value;}

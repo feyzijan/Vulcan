@@ -80,9 +80,12 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6])
     is_cons_firm = true;
 
     // Initialize pointers
-    Consumer_Good* goods_on_market = new Consumer_Good(this, good_price_current,production_current-quantity_sold);
+    goods_on_market = new Consumer_Good(this, good_price_current,production_current-quantity_sold);
     Public_Info_Board* pPublic_Info_Board = nullptr;
 
+    // Initialize capital good objects
+    capital_goods.push_back(new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan));
+    
     // Put goods on Market
     //Send_Goods_To_Market();
 }
@@ -99,7 +102,7 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent(){}
 /* Function to loop through vector of capital goods the firm possesses,
 mark down their value, and remove the ones with zero value, i.e. end of life
 */
-void Consumer_Firm_Agent::Depreciate_Capital(){
+/* void Consumer_Firm_Agent::Depreciate_Capital(){
 
     for(auto i= capital_goods.begin(); i!=capital_goods.end(); i++){
         float original_price = (*i)->Get_Price();
@@ -111,7 +114,7 @@ void Consumer_Firm_Agent::Depreciate_Capital(){
         if ((*i)->Get_Value() <= 0){capital_goods.erase(i);}
     }
     working_capital_inventory = int(capital_goods.size());
-}
+} */
 
 
 /* Function to depreciate(i.e. destroy) a fraction of the firm's inventory of consumer goods
@@ -140,8 +143,8 @@ void Consumer_Firm_Agent::Produce_Consumer_Goods(){
 /* Post Produced goods to market
 */
 void Consumer_Firm_Agent::Send_Goods_To_Market(){
-    cout << "cons firm " << this << " sending goods to market" << endl;
-    goods_on_market->Print();
+    //cout << "cons firm " << this << " sending goods to market" << endl;
+    //goods_on_market->Print();
     pPublic_Info_Board->Send_Cons_Good_To_Market(goods_on_market);
 }
 
@@ -169,6 +172,7 @@ void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Inf
     Normal_Dist_Generator init_good_price_current(init_good_price_current_mean, init_good_price_current_std, init_good_price_current_min, init_good_price_current_max);
    
      for (int i=0; i<n_consumer_firms; i++) {
+        cout << " Cons firm initializing #" << i << endl;
         float float_vals[] = {
             init_dividend_ratio_optimist(),  
             init_dividend_ratio_pessimist(),
@@ -186,8 +190,11 @@ void Initialize_Consumer_Firms(Consumer_Firm_Agent * Cons_Firm_array, Public_Inf
 
         *promised_jobs += int_vals[1];
         Cons_Firm_array[i] = Consumer_Firm_Agent(float_vals, int_vals);
+        cout << "Cons firm initialized! #" << i << endl;
         Cons_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
+        
     }
+    cout << "Consumer Firm initialized" << endl;
 
 }
 

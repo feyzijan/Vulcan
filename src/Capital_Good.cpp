@@ -7,7 +7,7 @@ Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_pr
 {
     pSeller = seller_pointer;
     price = seller_price;
-    value = seller_price;
+    value = seller_price* seller_quantity;
     quantity = seller_quantity;
     depreciation_period = life_span;
     sold_date = global_date;
@@ -23,6 +23,12 @@ void Capital_Good::Print() const{
     cout << "Price: " << price  << " Quantity: " << quantity << endl;
     cout << "Value: " << value << " Depreciation Period: " << depreciation_period << endl;
     cout << "Sold Date: " << sold_date << " Expiry Date: " << expiry_date << endl;
+}
+
+/* Depreciate by selling_price/depreciation_period * quantity
+*/
+void Capital_Good::Depreciate(){
+    value -= price/depreciation_period*quantity;
 }
 
 

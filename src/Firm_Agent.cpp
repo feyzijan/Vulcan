@@ -76,6 +76,16 @@ void Firm_Agent::Print_Active_Jobs(){
         (*i)->Print();
     }
 }
+
+/* Print all capital goods owned by the firm
+*/
+void Firm_Agent::Print_Capital_Goods(){
+    cout << "Firm Agent Printing Capital Good Inventory: " << endl;
+    for (auto i = capital_goods.begin(); i !=  capital_goods.end(); ++i){
+        (*i)->Print();
+    }
+}
+
 //--------------------------------------------------------------
 
 // ----------- Initialization methods t = 0
@@ -95,6 +105,15 @@ void Firm_Agent::Update_Average_Profits_T1(){
 //--------------------------------------------------------------
 
 // ------- Main Loop Methods in order --
+
+/* Function to depreciate the value of each capital in the inventory
+*/
+void Firm_Agent::Depreciate_Capital(){
+    for (auto i = capital_goods.begin(); i !=  capital_goods.end(); ++i){
+        (*i)->Depreciate();
+    }
+}
+
 
 /* Function to lay off active employees with expired contracts
 */

@@ -79,9 +79,14 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6])
     is_cons_firm = true;
 
     // Initialize pointers
-    Capital_Good* goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
+    cout << "Initializing pointers for cap firm" << endl;
+    goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
     Public_Info_Board* pPublic_Info_Board = nullptr;
-    
+    cout << "Initialized goods on market" << endl;
+
+    // Initialize capital goods
+    capital_goods.push_back(new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan));
+    cout << "Initialized goods in store" << endl;
     // Put goods on Market
     //Send_Goods_To_Market();
 }
@@ -98,7 +103,7 @@ Capital_Firm_Agent::~Capital_Firm_Agent(){}
 /* Function to loop through vector of capital goods the firm possesses,
 mark down their value, and remove the ones with zero value, i.e. end of life
 */
-void Capital_Firm_Agent::Depreciate_Capital(){
+/* void Capital_Firm_Agent::Depreciate_Capital(){
 
     for(auto i= capital_goods.begin(); i!=capital_goods.end(); i++){
         float original_price = (*i)->Get_Price();
@@ -110,7 +115,7 @@ void Capital_Firm_Agent::Depreciate_Capital(){
         if ((*i)->Get_Value() <= 0){capital_goods.erase(i);}
     }
     working_capital_inventory = int(capital_goods.size());
-}
+} */
 
 /* Function to depreciate(i.e. destroy) a fraction of the firm's inventory of consumer goods
 The depreciation rate is set exogenously in the initialization parameter for all firms
@@ -164,6 +169,7 @@ void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_B
     Normal_Dist_Generator init_good_price_current(init_good_price_current_mean, init_good_price_current_std, init_good_price_current_min, init_good_price_current_max);
    
     for (int i=0; i<n_capital_firms; i++) {
+        cout << "cap firm initializing #: "<< i << endl;
         float float_vals[] = {
             init_dividend_ratio_optimist(),  
             init_dividend_ratio_pessimist(),
@@ -184,6 +190,7 @@ void Initialize_Capital_Firms(Capital_Firm_Agent * Cap_Firm_array, Public_Info_B
         Cap_Firm_array[i] = Capital_Firm_Agent(float_vals, int_vals);
         Cap_Firm_array[i].Set_Public_Info_Board(pPublic_Board);
     }
+    cout << "Capital firms initialized" << endl;
 }
 
 

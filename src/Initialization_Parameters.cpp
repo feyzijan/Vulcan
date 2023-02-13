@@ -5,9 +5,9 @@
 // Global parameters to be used throughout the simulation
 int global_date = 0;// will be in main
 
-const int n_households = 10000;
-const int n_consumer_firms = 100;
-const int n_capital_firms = 100;
+const int n_households = 1000;
+const int n_consumer_firms = 50;
+const int n_capital_firms = 50;
 const int n_max_employees = 100;
 const int test_global_var = 999; // for testing
 
@@ -67,6 +67,7 @@ const float targeted_savings_to_income_ratio = 3.0;
 const int init_production_current = 100;
 const int init_quantity_sold = 90;
 const float init_good_price_past = 9.5;
+const float init_capital_good_price = 100.0;
 
 
 

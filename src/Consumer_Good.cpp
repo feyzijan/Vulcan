@@ -11,8 +11,9 @@ Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller
 
 void Consumer_Good::Print(){
     cout << "Consumer Good at address: " << this << endl;
-    cout << "Seller: " << pSeller << endl;
     cout << "Price: " << price  << " Quantity: " << quantity << endl;
+    cout << "Seller: " << pSeller << endl;
+
 }
 
 

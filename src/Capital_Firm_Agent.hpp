@@ -19,7 +19,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     ~Capital_Firm_Agent(); 
 
     // Main Loop methods
-    void Depreciate_Capital();
+    /* void Depreciate_Capital(); */
     void Depreciate_Good_Inventory();
     void Produce_Capital_Goods();
     void Send_Goods_To_Market();

@@ -84,7 +84,7 @@ void Bank_Agent::Update_Interest_Rate(){
     r_rate = max( float(r_reaction* inflation_overshoot), float(0.0)); 
 
     // Update historical records
-    interest_rate_history.push_back(r_rate);
+    interest_rate_history.push(r_rate);
 
 
     /* Alternative interest rate rule with output target:
@@ -165,6 +165,19 @@ void Bank_Agent::Print_Inflation_History(){
     }
 }
 
+/* Function to print last 12 interest rates
+*/
+void Bank_Agent::Print_Interest_Rate_History(){
+    queue<float> temp;
+    temp = interest_rate_history;
+    cout << "Interest Rate History T12M: " << endl;
+    while(!temp.empty()){
+        cout << temp.front() << " , ";
+        temp.pop();
+    }
+}
+
+
 /* Print all bank parameters for debugging purposes
 */
 void Bank_Agent::Print(){
@@ -172,15 +185,14 @@ void Bank_Agent::Print(){
 
     // Interest rate
     cout << "Interest Rate: " << r_rate << " Interest rate reaction: " << r_reaction << endl;
-    cout << "Interest rate history: " << endl;
-    for(int i = 0; i < interest_rate_history.size(); i++){
-        cout << interest_rate_history[i] << " , ";
-    } cout << endl;
-
+    Print_Interest_Rate_History();
+    cout << endl;
+    
     // Inflation
     cout << "Inflation rate current: " << inflation_current << " previous: " << inflation_previous  << " past_month: "<< 
     inflation_past_month << " target: " << inflation_target << endl;
     Print_Inflation_History();
+    cout << endl;
 
     // Loan issuance totals
     cout << "Total loan issuance to date: " << total_loan_issuance_to_date << " new loan issuance: " << new_loan_issuance << " outstanding loans: " << outstanding_loans << endl;
