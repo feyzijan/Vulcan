@@ -193,10 +193,6 @@ int main()
 
     pJob_Market_1->Remove_Unwanted_Jobs();
     pJob_Market_1->Sort_Jobs_by_Wage();
-    
-
-
-
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Seek_Jobs();}
@@ -221,23 +217,48 @@ int main()
     
     // -- t= 1.5
     // STEP 1.91: Firms produce their goods
+    cout << " \n ------------ Step 1.91: Firms produce their goods ----------------" <<endl;
     
+    for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+        firm_ptr->Produce_Consumer_Goods();}
+    for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Produce_Capital_Goods();}
 
     // STEP 1.92: Households receive wage and make saving/consumption plans
+    cout << " \n ------------ Step 1.92: Households receive wage and make saving/consumption plans ----------------" <<endl;
+
+    for (Household_Agent* household_ptr : *pHousehold_vector){
+        household_ptr->Consumption_Savings_Decisions();}
+    
     // STEP 1.93: Consumer good market commences
-    // STEP 1.94: Investment good market commences
+    cout << " \n ------------ Step 1.93: Consumer good market commences ----------------" <<endl;
+    
+    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+        firm_ptr->Send_Goods_To_Market();}
+
+    pConsumer_Goods_Market_1->Sort_Consumer_Goods_By_Price();
+
+    for(Household_Agent* household_ptr : *pHousehold_vector){
+        household_ptr->Buy_Consumer_Goods();}
+
+    // STEP 1.94: Capital good market commences
+    cout << " \n ------------ Step 1.94: Investment good market commences ----------------" <<endl;
+
+    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Send_Goods_To_Market();}
+
+    pCapital_Goods_Market_1->Sort_Capital_Goods_By_Price();
+    
+    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+        firm_ptr->Buy_Capital_Goods();}
+    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Buy_Capital_Goods();}
 
 
     // Timestep t=1
+    Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms);
 
-
-
-
-
-
-
-
-
+    // Timestep t=2 and onward
 
     cout << "Program end :-)\n";
     return 0;

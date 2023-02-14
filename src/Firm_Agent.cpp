@@ -457,7 +457,7 @@ void Firm_Agent::Make_Investment_Decision(){
     expected_long_term_shortfall =  est_cost - cash_on_hand;
 }
 
-void Firm_Agent::Buy_Machines(){
+void Firm_Agent::Buy_Capital_Goods(){
     /* if (desired_machines > 0){
         int machines_bought = pPublic_Info_Board->Buy_Machines(this, desired_machines);
         working_capital_inventory += machines_bought;

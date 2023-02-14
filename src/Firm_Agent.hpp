@@ -64,7 +64,9 @@ class Firm_Agent{
     void Update_Supplier_Networks(); // TO Implement
     void Make_Investment_Decision(); // Complete
     void Seek_Long_Term_Loan();
-    void Buy_Machines(); // To Implement
+    void Buy_Capital_Goods(); 
+    //virtual void Produce_Goods(); // Implemented by subclasses
+
 
 
 

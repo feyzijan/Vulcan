@@ -82,7 +82,6 @@ void Household_Agent::Consumption_Savings_Decisions(){
     Update_Savings();
     Determine_Consumer_Sentiment();
     Determine_Consumption_Budget();
-    Buy_Consumer_Goods();
 }
 
 
