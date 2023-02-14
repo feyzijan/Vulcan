@@ -12,6 +12,9 @@ class General_Good{
     General_Good(General_Good&);
     ~General_Good();
 
+    //Print methods
+    void Print();
+
     // Overload Operators
     bool operator==(const General_Good& rhs);
     bool operator<=(const General_Good& rhs);
@@ -20,11 +23,9 @@ class General_Good{
     bool operator<(const General_Good& rhs);
     bool operator!=(const General_Good& rhs);
 
-
-
     // Getters
-    float Get_Price() const {return price;}
-    int Get_Quantity() const {return quantity;}
+    float Get_Price()  {return price;}
+    int Get_Quantity() {return quantity;}
     Firm_Agent * Get_Seller() {return pSeller;}
 
     // Setters

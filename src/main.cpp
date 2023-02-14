@@ -208,10 +208,12 @@ int main()
     // loop though all firms and make investment decisions
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Make_Investment_Decision();
-        //firm_ptr->Buy_Machines();}
+        //firm_ptr->Buy_Machines();
+        }
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Make_Investment_Decision();
-        //firm_ptr->Buy_Machines();}
+        //firm_ptr->Buy_Machines();
+        }
 
 
     

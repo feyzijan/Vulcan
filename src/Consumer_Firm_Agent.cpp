@@ -6,9 +6,9 @@
 */
 Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): Firm_Agent::Firm_Agent(float_vals,int_vals)
 {
-
     is_cons_firm = true;
-    goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold);
+    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold);
+    goods_on_market = cons_goods_on_market;
     //Send_Goods_To_Market();
 }
 
@@ -67,8 +67,7 @@ void Consumer_Firm_Agent::Produce_Consumer_Goods(){
 */
 void Consumer_Firm_Agent::Send_Goods_To_Market(){
     //cout << "cons firm " << this << " sending goods to market" << endl;
-    //goods_on_market->Print();
-    pPublic_Info_Board->Send_Cons_Good_To_Market(goods_on_market);
+    pPublic_Info_Board->Send_Cons_Good_To_Market(cons_goods_on_market);
 }
 
 

@@ -28,7 +28,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     // Production and sales figures
     production_planned = production_current; // assume they executed their plan perfectly
     production_past = 0; 
-    quantity_sold = inventory*  init_quantity_sold_ratio; 
+    quantity_sold = inventory *  init_quantity_sold_ratio; 
 
     // Inflows
     revenue_sales = production_current * good_price_current;
@@ -235,7 +235,7 @@ void Firm_Agent::Random_Experimentation(){
     TODO: Check if this is correct, not sure what the inventory value is at this point
     it should be the inventory at the end of the last period*/
 void Firm_Agent::Check_Sales(){
-    quantity_sold = inventory -  goods_on_market->Get_Quantity(); // determine how much has been sold
+    quantity_sold = inventory -  goods_on_market->Get_Quantity();; // determine how much has been sold
     inventory -= quantity_sold;
     revenue_sales = quantity_sold * good_price_current; // unsure if this gives float or int
     inventory_factor = inventory / production_current;

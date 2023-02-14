@@ -28,7 +28,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     // Put up Consumer Goods for Sale
     
     protected:
-    Consumer_Good* goods_on_market;
+    Consumer_Good* cons_goods_on_market;
 
 };
 

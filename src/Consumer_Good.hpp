@@ -19,6 +19,8 @@ class Consumer_Good: public General_Good{
     void Print();
     // Getters
     Consumer_Firm_Agent* GetSeller() {return pSeller;}
+    int GetQuantity() {return quantity;}
+    float GetPrice() {return price;}
     
 
     protected:

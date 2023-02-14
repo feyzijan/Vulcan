@@ -25,7 +25,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     void Send_Goods_To_Market();
 
     protected:
-    Capital_Good* goods_on_market;
+    Capital_Good* cap_goods_on_market;
 
 
 

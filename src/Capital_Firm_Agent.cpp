@@ -9,7 +9,8 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     //identifier
     is_cons_firm = false;
 
-    goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, machine_lifespan);
+    cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, machine_lifespan);
+    goods_on_market = cap_goods_on_market;
     // Put goods on Market
     //Send_Goods_To_Market();
 }
@@ -69,7 +70,7 @@ void Capital_Firm_Agent::Produce_Capital_Goods(){
 */
 void Capital_Firm_Agent::Send_Goods_To_Market(){
     //cout << "Cap firm " << this <<" sending goods to market" << endl;
-    pPublic_Info_Board->Send_Cap_Good_To_Market(goods_on_market);
+    pPublic_Info_Board->Send_Cap_Good_To_Market(cap_goods_on_market);
 }
 
 

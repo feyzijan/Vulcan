@@ -65,7 +65,7 @@ const float targeted_savings_to_income_ratio = 3.0;
 
 // Constants to initialize all firms with
 const int init_production_current_ratio = 0.4;
-const int init_quantity_sold_ratio = 0.25;
+const float init_quantity_sold_ratio = 0.25;
 const float init_good_price_past = 9.5;
 const float init_capital_good_price = 100.0;
 
