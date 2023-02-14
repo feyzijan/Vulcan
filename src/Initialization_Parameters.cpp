@@ -49,10 +49,10 @@ const float init_s_pessimist_std = 0.05;
 const float init_s_pessimist_min = 0.1;
 const float init_s_pessimist_max = 0.6;
 // Starting wealth : wealth
-const float init_wealth_mean = 10000.0;
+const float init_wealth_mean = 100.0;
 const float init_wealth_std = 3000.0;
 const float init_wealth_min = 0.0;
-const float init_wealth_max = 999999.0;
+const float init_wealth_max = 999.0;
 // Maximum tolerable unemployment duration
 const float init_unemp_tolerance_mean = 10.0;
 const float init_unemp_tolerance_std = 2.0;
@@ -90,8 +90,8 @@ const float init_good_price_current_std = 2;
 const float init_good_price_current_min = 1;
 const float init_good_price_current_max = 99;
 
-const float init_total_assets_mean = 1000000;
-const float init_total_assets_std = 250000;
+const float init_total_assets_mean = 10000;
+const float init_total_assets_std = 2500;
 const float init_total_assets_min = 1;
 const float init_total_assets_max = 999999999;
 

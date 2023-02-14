@@ -221,6 +221,7 @@ int main()
     
     // -- t= 1.5
     // STEP 1.91: Firms produce their goods
+    
 
     // STEP 1.92: Households receive wage and make saving/consumption plans
     // STEP 1.93: Consumer good market commences

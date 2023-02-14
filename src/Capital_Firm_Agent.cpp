@@ -8,7 +8,9 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
 {
     //identifier
     is_cons_firm = false;
-
+    production_current = max(working_capital_inventory * cap_workers_per_machine * cap_productivity, employee_count_desired / cap_workers_per_machine * cap_productivity);
+    inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
+    
     cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, machine_lifespan);
     goods_on_market = cap_goods_on_market;
     // Put goods on Market

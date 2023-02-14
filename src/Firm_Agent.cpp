@@ -13,10 +13,11 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     total_assets = int_vals[0];
     employee_count_desired = int_vals[1];
     working_capital_inventory = int_vals[2];
-    inventory = int_vals[3];
+    //inventory = int_vals[3]; // override this
+    inventory = 0;
     wage_offer = int_vals[4];
     //production_current= int_vals[5]; // this may be useles
-    production_current= init_production_current_ratio*inventory; 
+    production_current= 0; // set in subclass constructor
 
     need_worker = 1;
     sentiment = 1;
