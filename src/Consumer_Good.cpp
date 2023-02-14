@@ -4,11 +4,11 @@
 
 Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity)
 {
-    cout << "Consumer Good Constructor begin" << endl;
+    //cout << "Consumer Good Constructor begin" << endl;
     pSeller = seller_pointer;
     price = seller_price;
     quantity = seller_quantity;
-    cout << "Consumer Good Constructor end" << endl;
+    //cout << "Consumer Good Constructor end" << endl;
 }
 
 void Consumer_Good::Print(){

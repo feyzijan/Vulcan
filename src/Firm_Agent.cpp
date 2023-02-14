@@ -78,9 +78,9 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     // Initialize capital good inventory
     initial_capital_goods = new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan);
-    cout << " Created initial capital good " << endl;
+    //cout << " Created initial capital good " << endl;
     capital_goods_list.push_back(initial_capital_goods);
-    cout << "Passed capital good into list" << endl;; 
+    //cout << "Passed capital good into list" << endl;; 
 }
 
 
@@ -157,7 +157,7 @@ void Firm_Agent::Print_Posted_Jobs(){
 /* Print active(taken) job offers
 */
 void Firm_Agent::Print_Active_Jobs(){
-     cout << "Firm Agent Printing Active Jobs: " << endl;
+    cout << "Firm Agent Printing Active Jobs: " << endl;
     for (auto i = active_job_list.begin(); i !=  active_job_list.end(); ++i){
         (*i)->Print();
     }
@@ -315,7 +315,7 @@ void Firm_Agent::Adjust_Wage_Offers()
     float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
     int average_wage = pPublic_Info_Board->Get_Average_Wage();
     
-    bool wage_high = wage_offer > average_wage;
+    bool wage_high = wage_offer >= average_wage;
 
     if (wage_high && need_worker){
         //wage_offer *= (1+n_uniform);
@@ -335,6 +335,9 @@ TODO: Recheck equation
 void Firm_Agent::Determine_Labor_Need(){
     int employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
     need_worker = employee_count_desired > employee_count;
+
+    Remove_Job_Postings();
+
     if(employee_count_desired < employee_count){Layoff_Excess_Workers();}
     Compute_Expected_Wage_Bill();
     if (expected_wage_bill_shortfall > 0){Seek_Short_Term_Loan();}
@@ -343,8 +346,8 @@ void Firm_Agent::Determine_Labor_Need(){
 
 /* Compute the expected wage bill for the next period*/
 void Firm_Agent::Compute_Expected_Wage_Bill(){
-    expected_wage_bill = labor_wage_bill - layoff_wage_savings + employee_count_desired * wage_offer;
-    expected_wage_bill_shortfall = min(0, expected_wage_bill - cash_on_hand);
+    expected_wage_bill = labor_wage_bill - layoff_wage_savings + (employee_count_desired - employee_count) * wage_offer;
+    expected_wage_bill_shortfall = min(0, cash_on_hand - expected_wage_bill);
 }
 
 
@@ -362,6 +365,7 @@ void Firm_Agent::Seek_Short_Term_Loan(){
 /* Function to layoff excess workers based on last in first out principle
 If the function is called with no excess workers it does nothing
 Remove the last n elements from the ordered vector of employees
+Also remove active job postings from the market
 */
 void Firm_Agent::Layoff_Excess_Workers(){
     layoff_wage_savings = 0;
@@ -371,6 +375,21 @@ void Firm_Agent::Layoff_Excess_Workers(){
         active_job_list.back()->Update_Status(0); // Household will see they are laid off on next update
         active_job_list.pop_back();
     }
+}
+
+/* Function to remove job postings from the market
+*/
+void Firm_Agent::Remove_Job_Postings(){
+    n_active_job_postings = posted_job_list.size();
+    int postings_needed = max(0, employee_count_desired - employee_count);
+    int postings_to_remove = n_active_job_postings - postings_needed;
+    
+    for (int i=0; i<postings_to_remove; i++){
+        posted_job_list.back()->Update_Status(-1); // Job market will remove these on next update
+        posted_job_list.pop_back();
+        n_active_job_postings -=1;
+    }
+
 }
 
 
@@ -405,6 +424,7 @@ void Firm_Agent::Check_For_New_Employees(){
         if((*it)->Get_Status() == 1) { 
             active_job_list.push_back(*it);
             employee_count +=1;
+            labor_wage_bill += (*it)->Get_Wage();
             it = posted_job_list.erase(it);
         } else {it++;}
     }
@@ -473,8 +493,8 @@ void Firm_Agent::Seek_Long_Term_Loan(){
 
 
 
-
-// Old functions, complete
+// ---------------------------------------------------
+// Old functions, complete or delete
 
 
 /* TODO: Complete Function below

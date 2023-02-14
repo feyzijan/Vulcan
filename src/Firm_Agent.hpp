@@ -57,6 +57,7 @@ class Firm_Agent{
     void Compute_Expected_Wage_Bill();
     void Seek_Short_Term_Loan();
     void Layoff_Excess_Workers();
+    void Remove_Job_Postings(); // TO implemeent
     void Post_Jobs();
     void Check_For_New_Employees();
     //void Commence_Production(); // Implemented by subclasses
@@ -73,7 +74,7 @@ class Firm_Agent{
     int Seek_Loans(int shortfall); // remove later
     // Seek long term loan
     
-
+ 
 
     // Getters
     std::vector<float>* Get_All_Params();

@@ -29,6 +29,7 @@ class Job_Market{
     void Remove_Top_Job_Offer();
     void Add_Job_Offer(Job* job_offer);
     void Sort_Jobs_by_Wage();
+    void Remove_Unwanted_Jobs();
 
     // Information needed by firms
     void Calculate_Average_Wage();

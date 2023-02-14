@@ -61,6 +61,12 @@ extern const float init_unemp_tolerance_mean;
 extern const float init_unemp_tolerance_std;
 extern const float init_unemp_tolerance_min;
 extern const float init_unemp_tolerance_max;
+// Reservation Wage:
+extern const float init_res_wage_mean;
+extern const float init_res_wage_std;
+extern const float init_res_wage_min;
+extern const float init_res_wage_max;
+
 
 // Exogenous parameters for Households
 extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
@@ -121,7 +127,7 @@ extern const float init_desired_inventory_factor_min;
 extern const float init_desired_inventory_factor_max;
 
 // Constants to initialize all firms with
-extern const int init_production_current_ratio;
+extern const float init_production_current_ratio;
 extern const float init_quantity_sold_ratio;
 extern const float init_good_price_past;
 extern const float init_capital_good_price;

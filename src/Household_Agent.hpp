@@ -19,7 +19,7 @@ class Household_Agent{
 
     public:
     // Constructors and destructor
-    Household_Agent(float propensities[7], int unemployment_tolerance, int wealth, Public_Info_Board* pPublic_Board );
+    Household_Agent(float propensities[7], int vals[3], Public_Info_Board* pPublic_Board );
     Household_Agent(Household_Agent&);
     ~Household_Agent();
 

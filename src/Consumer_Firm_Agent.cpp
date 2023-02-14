@@ -94,7 +94,7 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
     Normal_Dist_Generator init_good_price_current(init_good_price_current_mean, init_good_price_current_std, init_good_price_current_min, init_good_price_current_max);
    
      for (int i=0; i<n_consumer_firms; i++) {
-        cout << " Cons firm initializing #" << i << endl;
+        //cout << " Cons firm initializing #" << i << endl;
         float float_vals[] = {
             init_dividend_ratio_optimist(),  
             init_dividend_ratio_pessimist(),
@@ -113,11 +113,11 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
         *promised_jobs += int_vals[1];
         //cout << " set up arrays now passign them in " << endl;
         pConsumer_Firm_vector->push_back(new Consumer_Firm_Agent(float_vals, int_vals));
-        cout << "Cons firm initialized! #" << i << endl;
+        //cout << "Cons firm initialized! #" << i << endl;
         pConsumer_Firm_vector->at(i)->Set_Public_Info_Board(pPublic_Board);
         
     }
-    cout << "Consumer Firms initialized" << endl;
+    //cout << "Consumer Firms initialized" << endl;
 
 }
 
@@ -125,10 +125,7 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
 /* Post all the job offers for all the firms in the array
 */
 void Post_Initial_Job_Offers_Cons(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, int size){
-    int i = 0;
     for (Consumer_Firm_Agent* cons_firm_ptr : *pConsumer_Firm_vector) {
-        i +=1000;
-        cons_firm_ptr->Set_Wage_Offer(i);
         cons_firm_ptr->Post_Jobs();
     }
 }

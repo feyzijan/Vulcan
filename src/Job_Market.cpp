@@ -64,7 +64,22 @@ void Job_Market::Sort_Jobs_by_Wage(){
     return j1->Get_Wage() > j2->Get_Wage() ;});
 }
 
+/* Function to remove jobs from the market that have a status = -1
+*/
+void Job_Market::Remove_Unwanted_Jobs(){
+    //cout << "Removing jobs from the market" <<endl;
+    job_list.erase(std::remove_if(job_list.begin(), job_list.end(), [](Job* job) {
+        if (job->Get_Status() == -1) {
+            delete job; // Free memory of removed object
+            return true;
+        }
+        return false;
+    }), job_list.end());
+}
 
+
+
+//--------------------------
 // Information gathering functions
 /* Calculate average weight in the market
 */

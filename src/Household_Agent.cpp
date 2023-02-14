@@ -7,11 +7,12 @@
 //----------- Constructors
 
 // New Constructor to use
-Household_Agent::Household_Agent(float propensities[7], int unemployment_tolerance, int wealth, Public_Info_Board* pPublic_Board )
+Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info_Board* pPublic_Board )
 {
 
-    wealth_financial = wealth;
-    unemp_duration_upper_bound = unemployment_tolerance;
+    wealth_financial = vals[0];
+    unemp_duration_upper_bound = vals[1];
+    reservation_wage = vals[2];
 
     consumption_propensity = propensities[0];
     saving_propensity_optimist = propensities[1];
@@ -327,7 +328,8 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
     Normal_Dist_Generator init_p_majority(init_p_majority_mean, init_p_majority_std, init_p_majority_min, init_p_majority_max);
     Normal_Dist_Generator init_wealth(init_wealth_mean, init_wealth_std, init_wealth_min, init_wealth_max);
     Normal_Dist_Generator init_unemp_tolerance(init_unemp_tolerance_mean, init_unemp_tolerance_std, init_unemp_tolerance_min, init_unemp_tolerance_max);
-    
+    Normal_Dist_Generator init_res_wage(init_res_wage_mean, init_res_wage_std, init_res_wage_min, init_res_wage_max);
+
     for (int i=0; i<size; i++) {
         float propensities[] = { 
             init_c(), // consumption propensity
@@ -339,10 +341,14 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
             init_p_majority(), // p_majority_op_adoption
          };
 
-        int wealth = int(init_wealth());
-        int unemployment_tolerance = int(init_unemp_tolerance());
+        int vals[] = {
+            int(init_wealth()),
+            int(init_unemp_tolerance()),
+            int(init_res_wage())
+        };
 
-        pHousehold_vector->push_back(new Household_Agent(propensities, unemployment_tolerance,wealth,pPublic_Board));
+
+        pHousehold_vector->push_back(new Household_Agent(propensities, vals,pPublic_Board));
         //Household_array[i].Set_Public_Info_Board(pPublic_Board);
         //cout << "The c_h value is " << Household_array[i].Get_C_h() << endl;
 

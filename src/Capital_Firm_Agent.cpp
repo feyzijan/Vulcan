@@ -94,7 +94,7 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     Normal_Dist_Generator init_good_price_current(init_good_price_current_mean, init_good_price_current_std, init_good_price_current_min, init_good_price_current_max);
    
     for (int i=0; i<n_capital_firms; i++) {
-        cout << "cap firm initializing #: "<< i << endl;
+        //cout << "cap firm initializing #: "<< i << endl;
         float float_vals[] = {
             init_dividend_ratio_optimist(),  
             init_dividend_ratio_pessimist(),
@@ -113,19 +113,15 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
         *promised_jobs += int_vals[1];
         
         pCapital_Firm_vector->push_back(new Capital_Firm_Agent(float_vals, int_vals));
-        cout << "Cons firm initialized! #" << i << endl;
+        //cout << "Cons firm initialized! #" << i << endl;
         pCapital_Firm_vector->at(i)->Set_Public_Info_Board(pPublic_Board);
     }
-    cout << "Capital firms initialized" << endl;
+    //cout << "Capital firms initialized" << endl;
 }
 
 
 void Post_Initial_Job_Offers_Cap(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, int size){
-    
-    int i = 0;
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector) {
-        i +=1000;
-        firm_ptr->Set_Wage_Offer(i);
         firm_ptr->Post_Jobs();
     }
 }

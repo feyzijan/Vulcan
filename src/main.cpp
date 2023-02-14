@@ -24,11 +24,17 @@ int main()
     global_date = 0;
 
 
+    int starting_employees = init_employee_count_desired_mean * (n_consumer_firms + n_capital_firms);
+    cout << "Expected employee desire: " << starting_employees << endl;
+
+
+
+
 
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun" << endl;
 
-    // STEP 0.10: Initalize Public Board, Job Market, Bank
+    // STEP 0.10: Initalize Public Board, Job Market, Bank, Markets
     
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
     Job_Market* pJob_Market_1 = new Job_Market();
@@ -63,59 +69,42 @@ int main()
     Initialize_Job_Market(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector,pPublic_Board_1);
 
 
-    int n = n_households/10;
-    cout << " Household at position " << n << " has job :" <<  pHousehold_vector->at(n)->Get_Employment_Status() << endl;
-
     // STEP 0.14 Assign firm owners - Todo later, minor thing
 
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms);
 
+
+    // STEP 0.16: Send goods to markets and initialize price level
+    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+        firm_ptr->Send_Goods_To_Market();}
+    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Send_Goods_To_Market();}
+
+    pPublic_Board_1->Initialize_Price_Level();
+
+
     //  -------- STEP 1 MAIN LOOP -------------------
     cout << "*****************Main Loop begun" << endl;
     global_date = 1;
-
-    // Timestep t=0.5
-
-    // Send goods to market
-    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
-        firm_ptr->Send_Goods_To_Market();
-    }
-
-    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-        firm_ptr->Send_Goods_To_Market();
-    }
-
-
-
-    // Set initial price level
-    pPublic_Board_1->Initialize_Price_Level();
     
     // Timestep t= 1.0
 
-
     // STEP 1.1: Update Inflation Rate and Interest rate  -
-    cout << "Step 1.1: Updating inflation and interest rates" <<endl;
-    
-    //pBank_1->Print();
+    cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
+
     pBank_1->Update_Inflation_Rate();
     pBank_1->Update_Interest_Rate();
-    //pBank_1->Print();
-    //cout << "Success!" << endl;
 
-    
     // STEP 1.2: Depreciate Firm's Capital Goods
     cout << "\n------------ Step 1.2: Depreciating capital goods ----------------" <<endl;
-
-    //pConsumer_Firm_vector->at(n_consumer_firms/2)->Print_Capital_Goods();
 
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Depreciate_Capital();}
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Depreciate_Capital();}
 
-    //pConsumer_Firm_vector->at(n_consumer_firms/2)->Print_Capital_Goods();
 
     // STEP 1.3: Depreciate Firms' Good Inventories
     cout << "\n------------ Step 1.3: Depreciating Good inventories ----------------" <<endl;
@@ -135,6 +124,7 @@ int main()
     
     // STEP 1.5: Random experimentation - randomly tweak firm and household parameters
     cout << " \n ------------ Step 1.5: Random experimentation ----------------" <<endl;
+
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Random_Experimentation();}
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
@@ -146,14 +136,16 @@ int main()
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Check_Sales();
         firm_ptr->Update_Average_Profits_T1();
-        firm_ptr->Update_Average_Sales_T1();}
-
+        firm_ptr->Update_Average_Sales_T1();
+    }
+    
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Check_Sales();
         firm_ptr->Update_Average_Profits_T1();
-        firm_ptr->Update_Average_Sales_T1();}
+        firm_ptr->Update_Average_Sales_T1();
+    }
 
-    // STEP 1.62: Firms pay dividends
+    // STEP 1.62: Firms pay dividends - not yet implemented
     cout << " \n ------------ Step 1.62: Firms pay dividend ----------------" <<endl;
 
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
@@ -172,17 +164,21 @@ int main()
 
     // STEP 1.64: Firms set wage offers, labor target, and finance expected wage bill
     cout << " \n ------------ Step 1.64: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
+
+    pJob_Market_1->Calculate_Average_Wage(); 
     
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();
         firm_ptr->Layoff_Excess_Workers();
+        firm_ptr->Remove_Job_Postings();
         firm_ptr->Post_Jobs();}
 
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();
         firm_ptr->Layoff_Excess_Workers();
+        firm_ptr->Remove_Job_Postings();
         firm_ptr->Post_Jobs();}
 
 
@@ -194,6 +190,12 @@ int main()
 
     // STEP 1.72: Labor market matching process
     cout << " \n ------------ Step 1.72: Labor market matching process ----------------" <<endl;
+
+    pJob_Market_1->Remove_Unwanted_Jobs();
+    pJob_Market_1->Sort_Jobs_by_Wage();
+    
+
+
 
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
@@ -218,8 +220,8 @@ int main()
 
     
     // -- t= 1.5
-
     // STEP 1.91: Firms produce their goods
+
     // STEP 1.92: Households receive wage and make saving/consumption plans
     // STEP 1.93: Consumer good market commences
     // STEP 1.94: Investment good market commences

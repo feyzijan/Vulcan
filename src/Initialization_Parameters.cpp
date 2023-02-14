@@ -5,9 +5,9 @@
 // Global parameters to be used throughout the simulation
 int global_date = 0;// will be in main
 
-const int n_households = 1000;
-const int n_consumer_firms = 50;
-const int n_capital_firms = 50;
+const int n_households = 75000;
+const int n_consumer_firms = 1000;
+const int n_capital_firms = 200;
 const int n_max_employees = 100;
 const int test_global_var = 999; // for testing
 
@@ -53,18 +53,23 @@ const float init_wealth_mean = 10000.0;
 const float init_wealth_std = 3000.0;
 const float init_wealth_min = 0.0;
 const float init_wealth_max = 999999.0;
-// Starting wealth : wealth
+// Maximum tolerable unemployment duration
 const float init_unemp_tolerance_mean = 10.0;
 const float init_unemp_tolerance_std = 2.0;
 const float init_unemp_tolerance_min = 0.0;
 const float init_unemp_tolerance_max = 100.0;
+// Reservation Wage:
+const float init_res_wage_mean = 1050;
+const float init_res_wage_std = 300;
+const float init_res_wage_min = 100;
+const float init_res_wage_max = 999999;
 
 // Exogenous parameters for Households
 const float n_res_wage_decrease = 0.02; 
 const float targeted_savings_to_income_ratio = 3.0;
 
 // Constants to initialize all firms with
-const int init_production_current_ratio = 0.4;
+const float init_production_current_ratio = 0.4;
 const float init_quantity_sold_ratio = 0.25;
 const float init_good_price_past = 9.5;
 const float init_capital_good_price = 100.0;
