@@ -311,63 +311,6 @@ vector<float>* Household_Agent::Get_All_Params(){
 
 
 
-// Non Member Function
-
-
-void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_Info_Board* pPublic_Board, int size)
-{   
-    cout << "\n Initializing " << size << " households" << endl;
-    
-    //Set up Random Generators
-    Normal_Dist_Generator init_c(init_c_mean, init_c_std, init_c_min, init_c_max);
-    Normal_Dist_Generator init_s_optimist(init_s_optimist_mean, init_s_optimist_std, init_s_optimist_min, init_s_optimist_max);
-    Normal_Dist_Generator init_s_pessimist(init_s_pessimist_mean, init_s_pessimist_std, init_s_pessimist_min, init_s_pessimist_max);
-    Normal_Dist_Generator init_c_f(init_c_f_mean, init_c_f_std, init_c_f_min, init_c_f_max);
-    Normal_Dist_Generator init_c_h(init_c_h_mean, init_c_h_std, init_c_h_min, init_c_h_max);
-    Normal_Dist_Generator init_c_excess(init_c_excess_mean, init_c_excess_std, init_c_excess_min, init_c_excess_max);
-    Normal_Dist_Generator init_p_majority(init_p_majority_mean, init_p_majority_std, init_p_majority_min, init_p_majority_max);
-    Normal_Dist_Generator init_wealth(init_wealth_mean, init_wealth_std, init_wealth_min, init_wealth_max);
-    Normal_Dist_Generator init_unemp_tolerance(init_unemp_tolerance_mean, init_unemp_tolerance_std, init_unemp_tolerance_min, init_unemp_tolerance_max);
-    Normal_Dist_Generator init_res_wage(init_res_wage_mean, init_res_wage_std, init_res_wage_min, init_res_wage_max);
-
-    for (int i=0; i<size; i++) {
-        float propensities[] = { 
-            init_c(), // consumption propensity
-            init_s_optimist(), // saving_propensity_optimist 
-            init_s_pessimist(), // saving_propensity_pessimist
-            init_c_f(), // c_f
-            init_c_h(), // c_h
-            init_c_excess(), // c_excess_money
-            init_p_majority(), // p_majority_op_adoption
-         };
-
-        int vals[] = {
-            int(init_wealth()),
-            int(init_unemp_tolerance()),
-            int(init_res_wage())
-        };
-
-
-        pHousehold_vector->push_back(new Household_Agent(propensities, vals,pPublic_Board));
-        //Household_array[i].Set_Public_Info_Board(pPublic_Board);
-        //cout << "The c_h value is " << Household_array[i].Get_C_h() << endl;
-
-    }
-
-}
-
-
-
-
-/* Loop through households and call seek jobs function
-*/
-void Initialize_Household_Jobs(vector<Household_Agent*> *pHousehold_vector,  int size){
-
-    for (Household_Agent* household_ptr : *pHousehold_vector) {
-        household_ptr->Seek_Jobs();
-    }
-
-}
 
 
 

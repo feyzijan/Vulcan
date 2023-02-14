@@ -32,9 +32,5 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
 };
 
-// Initialization functions
-void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, Public_Info_Board* pPublic_Board, int size, int* promised_jobs);
-void Post_Initial_Job_Offers_Cons(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, int size);
-void Check_Initial_Job_Offers_Cons(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, int size);
 
 #endif
