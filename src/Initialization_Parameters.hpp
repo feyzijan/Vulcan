@@ -121,8 +121,8 @@ extern const float init_desired_inventory_factor_min;
 extern const float init_desired_inventory_factor_max;
 
 // Constants to initialize all firms with
-extern const int init_production_current;
-extern const int init_quantity_sold;
+extern const int init_production_current_ratio;
+extern const int init_quantity_sold_ratio;
 extern const float init_good_price_past;
 extern const float init_capital_good_price;
 

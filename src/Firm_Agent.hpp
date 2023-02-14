@@ -39,25 +39,27 @@ class Firm_Agent{
 
     // Initialization methods t = 1
     void Update_Average_Profits_T1();
+    void Update_Average_Sales_T1();
 
 
     // Main Loop Methods - in order
     void Depreciate_Capital();
+    //void Depreciate_Good_Inventory();
     void Cancel_Expired_Contracts();
     void Random_Experimentation();
-    void Calc_Quantity_Sold();
+    void Check_Sales();
     void Update_Average_Profit();
+    void Update_Average_Sales();
     int Pay_Dividends();
     void Determine_New_Production();
     void Adjust_Wage_Offers();
     void Determine_Labor_Need();
-    void Layoff_Excess_Workers();
     void Compute_Expected_Wage_Bill();
     void Seek_Short_Term_Loan();
+    void Layoff_Excess_Workers();
     void Post_Jobs();
     void Check_For_New_Employees();
     //void Commence_Production(); // Implemented by subclasses
-    void Check_Sales(); 
     void Update_Supplier_Networks(); // TO Implement
     void Make_Investment_Decision(); // Complete
     void Seek_Long_Term_Loan();
@@ -95,7 +97,7 @@ class Firm_Agent{
     std::vector<Loan*> loan_book;
 
     queue<int> past_profits;
-    queue<int> past_sale_quantity;
+    queue<int> past_sale_quantities;
 
     // Employees
     std::vector<Job*> active_job_list;

@@ -9,7 +9,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     //identifier
     is_cons_firm = false;
 
-    goods_on_market = new Capital_Good(this, good_price_current,production_current-quantity_sold, machine_lifespan);
+    goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, machine_lifespan);
     // Put goods on Market
     //Send_Goods_To_Market();
 }
@@ -45,7 +45,7 @@ mark down their value, and remove the ones with zero value, i.e. end of life
 The depreciation rate is set exogenously in the initialization parameter for all firms
 */
 void Capital_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(inventory*(1-cap_good_inv_depr_rate));
+    inventory  = int(float(inventory)*(1.0-cap_good_inv_depr_rate));
 }
 
 
@@ -68,7 +68,7 @@ void Capital_Firm_Agent::Produce_Capital_Goods(){
 /* Post Produced goods to market
 */
 void Capital_Firm_Agent::Send_Goods_To_Market(){
-    cout << "Cap firm " << this <<" sending goods to market" << endl;
+    //cout << "Cap firm " << this <<" sending goods to market" << endl;
     pPublic_Info_Board->Send_Cap_Good_To_Market(goods_on_market);
 }
 

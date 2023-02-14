@@ -15,7 +15,8 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     working_capital_inventory = int_vals[2];
     inventory = int_vals[3];
     wage_offer = int_vals[4];
-    production_planned = int_vals[5];
+    //production_current= int_vals[5]; // this may be useles
+    production_current= init_production_current_ratio*inventory; 
 
     need_worker = 1;
     sentiment = 1;
@@ -25,9 +26,9 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     
     // Production and sales figures
-    production_current = init_production_current;
+    production_planned = production_current; // assume they executed their plan perfectly
     production_past = 0; 
-    quantity_sold = init_quantity_sold;
+    quantity_sold = inventory*  init_quantity_sold_ratio; 
 
     // Inflows
     revenue_sales = production_current * good_price_current;
@@ -108,8 +109,8 @@ void Firm_Agent::Print(){
 
     // Inventory 
     cout << "Desired Inventory Factor: " << desired_inventory_factor << " Current inventory: " << inventory << " Current Inv Factor: " 
-    << inventory_factor << "Desired Inventory" << desired_inventory <<  " Capital inventory: " << working_capital_inventory << endl;
-    cout << "Inventory reaction factor: " << inventory_reaction_factor << " Desired machines: " << desired_machines << "Machine utilization: " << machine_utilization << endl;
+    << inventory_factor << endl << "Desired Inventory: " << desired_inventory <<  " Capital inventory: " << working_capital_inventory << endl;
+    cout << "Inventory reaction factor: " << inventory_reaction_factor << " Desired machines: " << desired_machines << " Machine utilization: " << machine_utilization << endl;
 
     // Sentiment
     cout << "Positive Sentiment: " << sentiment << " Bankruptcy: " << bankrupt <<endl;
@@ -128,7 +129,7 @@ void Firm_Agent::Print(){
     //Expenditures
     cout << "Total Liabilities: " << total_liabilities << " Wage bill: " << labor_wage_bill << " Capital costs: " << capital_costs << " Tax: " << tax_payments << endl;
     cout << "Debt principal payments: " << debt_principal_payments << " Interest payments: " << debt_interest_payments << " Dividends: " << dividend_payments << endl;
-    cout << "Expected wage bill: " << expected_wage_bill << "Layoff wage savings: " << layoff_wage_savings << endl;
+    cout << "Expected wage bill: " << expected_wage_bill << " Layoff wage savings: " << layoff_wage_savings << endl;
     cout << "Expected wage bill shortfall: " << expected_wage_bill_shortfall << " Expected long term shortfall: " << expected_long_term_shortfall << endl;
 
     //Assets and financials
@@ -178,7 +179,7 @@ void Firm_Agent::Print_Capital_Goods(){
 
 // ----------- Initialization methods t = 1
 
-/* Function to fill past average profit array with initial profits
+/* Function to fill past average profit queue with initial profits
 */
 void Firm_Agent::Update_Average_Profits_T1(){
     for(int i=1; i<=12; i++){
@@ -186,6 +187,15 @@ void Firm_Agent::Update_Average_Profits_T1(){
     }
     average_profit = revenue_sales;
 }
+/* Function to fill past average sale quantity queue with initial profits
+*/
+void Firm_Agent::Update_Average_Sales_T1(){
+    for(int i=1; i<=12; i++){
+        past_sale_quantities.push(quantity_sold);
+    }
+    average_sale_quantity = quantity_sold;
+}
+
 
 //--------------------------------------------------------------
 
@@ -213,14 +223,23 @@ void Firm_Agent::Cancel_Expired_Contracts(){
 }
 
 /*  Function to randomly alter some firm parameters, such as targeted leverage, markup
-    TODO: Add the parameters to be altered here and fill in the function*/
-void Firm_Agent::Random_Experimentation(){}
+    TODO: Read from Global Params */
+void Firm_Agent::Random_Experimentation(){
+    desired_inventory_factor *= Uniform_Dist_Float(0.8,1.2);
+    dividend_ratio_optimist *= Uniform_Dist_Float(0.8,1.2);
+    dividend_ratio_pessimist *= Uniform_Dist_Float(0.8,1.2);
+
+}
 
 /* Function to calculate how many goods have been sold
     TODO: Check if this is correct, not sure what the inventory value is at this point
     it should be the inventory at the end of the last period*/
-void Firm_Agent::Calc_Quantity_Sold(){
+void Firm_Agent::Check_Sales(){
     quantity_sold = inventory -  goods_on_market->Get_Quantity(); // determine how much has been sold
+    inventory -= quantity_sold;
+    revenue_sales = quantity_sold * good_price_current; // unsure if this gives float or int
+    inventory_factor = inventory / production_current;
+    desired_inventory = desired_inventory_factor * production_current;
 }
 
 /* Function to update the firm's average profit*/
@@ -229,6 +248,14 @@ void Firm_Agent::Update_Average_Profit(){
     past_profits.pop();
     past_profits.push(revenue_sales);
 }
+
+/* Function to update the firm's average quantity sold*/
+void Firm_Agent::Update_Average_Sales(){
+    average_sale_quantity += (quantity_sold - past_sale_quantities.front())/12;
+    past_sale_quantities.pop();
+    past_sale_quantities.push(quantity_sold);
+}
+
 
 /* Pay dividends to firm owner- formula taken from Jamel*/
 int Firm_Agent::Pay_Dividends(){ 
@@ -243,16 +270,22 @@ Updates good_price_current and production_planned variables
 Follows EQ 38 from the general paper for pricing and Jamel for quantity setting
 Note: I have not implemented the quantity adjustment in eq 38, but may do so 
 TODO: Update random variation in price and quantity
+ - Make random adjustments take global parameters as limits
 */
-void Firm_Agent::Determine_New_Production(){
+void Firm_Agent::Determine_New_Production()
+{
     bool price_high;
-    if (is_cons_firm){ price_high = good_price_current >= pPublic_Info_Board->Get_Consumer_Good_Price_Level();
-    } else {price_high = good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();}
+    if (is_cons_firm){
+        price_high = good_price_current >= pPublic_Info_Board->Get_Consumer_Good_Price_Level();
+    } else {
+        price_high = good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
+    }
     
+    good_price_past = good_price_current; // store current price incase we want to see the change
+
     bool inventory_high = inventory >= desired_inventory; 
     float p = Uniform_Dist_Float(0.0,0.5); // Random production adjustment
     float q =  Uniform_Dist_Float(0.0,0.5); // Random price adjustment
-
 
     // Case a: Inventory low, Price high - > Maintain price, increase prod
     if (!inventory_high && price_high){
@@ -275,6 +308,7 @@ void Firm_Agent::Determine_New_Production(){
 
 /* Adjust wage offers based on labor need and average wages in the market
 TODO: Improve this as it is a bit too simplistic, maybe use JAMEL
+ - Use global params for uniform dist
 */
 void Firm_Agent::Adjust_Wage_Offers()
 {
@@ -306,19 +340,6 @@ void Firm_Agent::Determine_Labor_Need(){
     if (expected_wage_bill_shortfall > 0){Seek_Short_Term_Loan();}
 }
 
-/* Function to layoff excess workers based on last in first out principle
-If the function is called with no excess workers it does nothing
-Remove the last n elements from the ordered vector of employees
-*/
-void Firm_Agent::Layoff_Excess_Workers(){
-    layoff_wage_savings = 0;
-    int layoff_count = employee_count - employee_count_desired;
-    for (int i=0; i<layoff_count; i++){
-        layoff_wage_savings += active_job_list.back()->Get_Wage();
-        active_job_list.back()->Update_Status(0); // Household will see they are laid off on next update
-        active_job_list.pop_back();
-    }
-}
 
 /* Compute the expected wage bill for the next period*/
 void Firm_Agent::Compute_Expected_Wage_Bill(){
@@ -335,6 +356,20 @@ void Firm_Agent::Seek_Short_Term_Loan(){
     if (new_loan != nullptr){
         loan_book.push_back(new_loan);
         cash_on_hand += new_loan->Get_Principal_Amount();
+    }
+}
+
+/* Function to layoff excess workers based on last in first out principle
+If the function is called with no excess workers it does nothing
+Remove the last n elements from the ordered vector of employees
+*/
+void Firm_Agent::Layoff_Excess_Workers(){
+    layoff_wage_savings = 0;
+    int layoff_count = employee_count - employee_count_desired;
+    for (int i=0; i<layoff_count; i++){
+        layoff_wage_savings += active_job_list.back()->Get_Wage();
+        active_job_list.back()->Update_Status(0); // Household will see they are laid off on next update
+        active_job_list.pop_back();
     }
 }
 
@@ -375,13 +410,7 @@ void Firm_Agent::Check_For_New_Employees(){
     }
 }
 
-/* Function to check sales in the preceeding period, and update inventory, sales figure, etc.*/
-void Firm_Agent::Check_Sales()
-{
-    quantity_sold = production_past -  goods_on_market->Get_Quantity(); // determine how much has been sold
-    inventory = goods_on_market->Get_Quantity(); // determine how much is in inventory
-    revenue_sales =  quantity_sold * good_price_current;
-}
+
 
 
 /* Remove certain suppliers from list
@@ -405,8 +434,6 @@ void Firm_Agent::Make_Investment_Decision(){
     expected_long_term_shortfall =  est_cost - cash_on_hand;
     if (expected_long_term_shortfall > 0){Seek_Long_Term_Loan();}
     expected_long_term_shortfall =  est_cost - cash_on_hand;
-
-    Buy_Machines();
 }
 
 void Firm_Agent::Buy_Machines(){
@@ -447,7 +474,7 @@ void Firm_Agent::Seek_Long_Term_Loan(){
 
 
 
-
+// Old functions, complete
 
 
 /* TODO: Complete Function below

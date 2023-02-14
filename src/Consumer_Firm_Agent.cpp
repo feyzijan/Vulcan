@@ -8,7 +8,7 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
 {
 
     is_cons_firm = true;
-    goods_on_market = new Consumer_Good(this, good_price_current,production_current-quantity_sold);
+    goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold);
     //Send_Goods_To_Market();
 }
 
@@ -44,7 +44,7 @@ mark down their value, and remove the ones with zero value, i.e. end of life
 The depreciation rate is set exogenously in the initialization parameter for all firms
 */
 void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(inventory*(1-cons_good_inv_depr_rate));
+    inventory  = int(float(inventory)*(1.0-cons_good_inv_depr_rate));
 }
 
 
