@@ -182,6 +182,13 @@ int main()
         firm_ptr->Post_Jobs();}
 
 
+    pJob_Market_1->Sort_Jobs_by_Wage();
+
+    cout << "# Job postings to remove: " << test_global_var << endl; // debugging 
+    cout << "# Job postings to add: " << test_global_var_2 << endl; // debugging
+
+
+
     // Step 1.65: Households Check if they are fired
     cout << " \n ------------ Step 1.65: Households Check if they are fired ----------------" <<endl;
     for (Household_Agent* household_ptr : *pHousehold_vector){
@@ -195,8 +202,11 @@ int main()
 
     // STEP 1.72: Labor market matching process
     cout << " \n ------------ Step 1.72: Labor market matching process ----------------" <<endl;
+    pJob_Market_1->Print_Size();
+    //pJob_Market_1->Print(true);
 
     pJob_Market_1->Remove_Unwanted_Jobs();
+    pJob_Market_1->Print_Size();
     pJob_Market_1->Sort_Jobs_by_Wage();
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
@@ -205,6 +215,8 @@ int main()
         firm_ptr->Check_For_New_Employees();}
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Check_For_New_Employees();}
+
+    pJob_Market_1->Print_Size();
 
     // STEP 1.8: Firms make investment decisions and finance these
     cout << " \n ------------ Step 1.8: Firms make investment decisions and finance these ----------------" <<endl;

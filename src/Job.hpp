@@ -22,7 +22,7 @@ class Job{
     ~Job();
 
     // Printing and Debugging
-    void Print() const;
+    void Print();
 
     // Overload Operators
     bool operator==(const Job& rhs);
@@ -37,7 +37,7 @@ class Job{
     int Get_Posting_Date() const {return posting_date;}
     int Get_Expiry_Date() const {return expiry_date;}
     int Get_Contract_Length() const {return contract_length;}
-    bool Get_Status() const {return taken;}
+    bool Get_Status() const {return status;}
     bool Get_Expiry_Status() const {return (global_date>= expiry_date);}
     Firm_Agent* Get_Employer() const {return employer;} 
     Household_Agent* Get_Employee() const {return employee;}
@@ -46,7 +46,7 @@ class Job{
     //Setters
     void Update_Wage(int new_wage){wage_offer = new_wage;}
     void Set_Employee(Household_Agent* pemployee) {employee = pemployee;}
-    void Update_Status(bool status) { taken = status;}
+    void Update_Status(int status) { this->status = status;}
     void Set_Expiry_Date() {expiry_date = global_date + contract_length;}
     
 
@@ -57,7 +57,7 @@ class Job{
     int posting_date;
     int contract_length;
     int expiry_date;
-    bool taken;
+    int status;
 };
 
 #endif

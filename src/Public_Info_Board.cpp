@@ -62,8 +62,11 @@ void Public_Info_Board::Post_Job_To_Market(Job * pJob_Offer) {
     pJob_Market->Add_Job_Offer(pJob_Offer);
 }
 
-/* Mark a job as taken and remove from the job market*/
+/* Mark a job as taken and remove from the job market
+ TODO: Edit this to deal with cases when taken job is not at the top of the list
+*/
 void Public_Info_Board::Take_Job(Job* pJob_Offer) {
+
     // Remove from market
     Public_Info_Board::Remove_Top_Job_Offer();
     // Notify employer

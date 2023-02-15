@@ -22,7 +22,7 @@ void Job_Market::Print(bool print_jobs){
     Print_Size();
     if (print_jobs){
         for (auto i = job_list.begin(); i != job_list.end(); ++i) 
-            cout << "Job with address: " << *i << " with wage: " << (*i)->Get_Wage() << endl;
+            cout << "Job with address: " << *i << " with wage: " << (*i)->Get_Wage() << "Status " << (*i)->Get_Status() << endl;
     }
      
 }

@@ -4,12 +4,14 @@
 
 // Global parameters to be used throughout the simulation
 int global_date = 0;// will be in main
+int test_global_var = 0; // for testing
+int test_global_var_2 = 0; // for testing
 
 const int n_households = 60000;
 const int n_consumer_firms = 1000;
 const int n_capital_firms = 200;
 const int n_max_employees = 100;
-const int test_global_var = 999; // for testing
+
 
 //------- Household parameters -----------
 // Household initialization parameters
@@ -54,7 +56,7 @@ const float init_wealth_std = 3000.0;
 const float init_wealth_min = 0.0;
 const float init_wealth_max = 999.0;
 // Maximum tolerable unemployment duration
-const float init_unemp_tolerance_mean = 10.0;
+const float init_unemp_tolerance_mean = 4.0;
 const float init_unemp_tolerance_std = 2.0;
 const float init_unemp_tolerance_min = 0.0;
 const float init_unemp_tolerance_max = 100.0;

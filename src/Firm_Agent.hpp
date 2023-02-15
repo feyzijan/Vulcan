@@ -16,7 +16,7 @@ class Public_Info_Board;
 #include "Job.hpp"
 #include "Public_Info_Board.hpp"
 #include "Random_Functions.hpp"
-
+#include "Initialization_Parameters.hpp"
 
 
 class Firm_Agent{

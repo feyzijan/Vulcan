@@ -13,7 +13,7 @@ Job::Job(Firm_Agent*  employer, Household_Agent* employee, int wage_offer, int p
     this->posting_date  = posting_date;
     this->contract_length = standard_employment_contract_length;
     this->expiry_date = 99999; // Inially non expiring
-    taken = 0;
+    status = 0;
 }
 
 Job::~Job(){
@@ -21,11 +21,11 @@ Job::~Job(){
 }
 
 //--- Printing and Debugging
-void Job::Print() const{
+void Job::Print(){
     cout << "\n------ Job Object at address : " << this << endl;
     cout << "Employer address: " << employer << " Employee address: " << employee << endl;
     cout << "Post Date: " << posting_date<< "Contract Length" << contract_length << " Expiry Date: " << expiry_date << endl;
-    cout << " Wage Offer: " << wage_offer << " Taken: " << taken << endl;
+    cout << " Wage Offer: " << wage_offer << " Status: " << status << endl;
     cout << "--------------------------------------" << endl;
 
 }

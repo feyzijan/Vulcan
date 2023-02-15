@@ -337,7 +337,7 @@ void Firm_Agent::Determine_Labor_Need(){
     employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
     need_worker = employee_count_desired > employee_count;
     
-    if (posted_job_list.size() > 0 ){
+    if (posted_job_list.size() >  max(0,employee_count_desired - employee_count) ){
         Remove_Job_Postings();
     }
 
@@ -396,13 +396,14 @@ void Firm_Agent::Layoff_Excess_Workers(){
 */
 void Firm_Agent::Remove_Job_Postings(){
     int n_active_job_postings = posted_job_list.size();
-    if (n_active_job_postings != 0){
+    /* if (n_active_job_postings != 0){
         bool flag = 1; // for debugging
-        } 
+        }  */
     int postings_needed = max(0, employee_count_desired - employee_count);
     int postings_to_remove = max(0,n_active_job_postings - postings_needed);
     
     for (int i=0; i<postings_to_remove; i++){
+        test_global_var +=1;
         posted_job_list.back()->Update_Status(-1); // Job market will remove these on next update
         posted_job_list.pop_back();
         n_active_job_postings -=1;
@@ -420,6 +421,7 @@ void Firm_Agent::Post_Jobs(){
     //cout << "Employee count desired: " << employee_count_desired << " Current employees: " << employee_count << endl;
     //cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
     for(int i=0; i< new_postings;i++){
+        test_global_var_2 +=1;
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
         //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
         pPublic_Info_Board->Post_Job_To_Market(job);

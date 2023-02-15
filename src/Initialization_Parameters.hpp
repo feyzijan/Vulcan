@@ -4,13 +4,13 @@
 
 // Global parameters to be used throughout the simulation
 extern int global_date; 
+extern int test_global_var; // for testing
+extern int test_global_var_2; // for testing
 
 extern const int n_households;
 extern const int n_consumer_firms;
 extern const int n_capital_firms;
 extern const int n_max_employees;
-extern const int test_global_var; // for testing
-
 
 //------- Household parameters ------------------
 // Household initialization parameters
