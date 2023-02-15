@@ -29,7 +29,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     // Production and sales figures
     production_planned = production_current; // assume they executed their plan perfectly
     production_past = 0; 
-    quantity_sold = inventory *  init_quantity_sold_ratio; 
+    quantity_sold = 0;
 
     // Inflows
     revenue_sales = production_current * good_price_current;
@@ -38,7 +38,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     subsidies = 0;
     good_price_past = init_good_price_past;
     average_profit = revenue_sales;
-    average_sale_quantity = quantity_sold;
+    average_sale_quantity = 0;
     
     // Loan Parameters
     short_term_funding_gap = 0;
@@ -236,10 +236,10 @@ void Firm_Agent::Random_Experimentation(){
     TODO: Check if this is correct, not sure what the inventory value is at this point
     it should be the inventory at the end of the last period*/
 void Firm_Agent::Check_Sales(){
-    quantity_sold = inventory -  goods_on_market->Get_Quantity();; // determine how much has been sold
+    quantity_sold = inventory -  goods_on_market->Get_Quantity(); // determine how much has been sold
     inventory -= quantity_sold;
     revenue_sales = quantity_sold * good_price_current; // unsure if this gives float or int
-    inventory_factor = inventory / production_current;
+    inventory_factor = float(inventory) / float(production_current);
     desired_inventory = desired_inventory_factor * production_current;
 }
 
@@ -334,21 +334,32 @@ The target is = minimum(#workers needed to operate machines needed to meet produ
 TODO: Recheck equation
 */
 void Firm_Agent::Determine_Labor_Need(){
-    int employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
+    employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
     need_worker = employee_count_desired > employee_count;
+    
+    if (posted_job_list.size() > 0 ){
+        Remove_Job_Postings();
+    }
 
-    Remove_Job_Postings();
 
-    if(employee_count_desired < employee_count){Layoff_Excess_Workers();}
-    Compute_Expected_Wage_Bill();
-    if (expected_wage_bill_shortfall > 0){Seek_Short_Term_Loan();}
+    if(employee_count_desired < employee_count){Layoff_Excess_Workers();
+    } else{
+        expected_wage_bill = labor_wage_bill + (employee_count_desired - employee_count) * wage_offer;
+        expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
+    }
+
+    short_term_funding_gap = expected_wage_bill_shortfall;
+
+    if (short_term_funding_gap > 0){
+        Seek_Short_Term_Loan();
+        }
 }
 
 
 /* Compute the expected wage bill for the next period*/
 void Firm_Agent::Compute_Expected_Wage_Bill(){
     expected_wage_bill = labor_wage_bill - layoff_wage_savings + (employee_count_desired - employee_count) * wage_offer;
-    expected_wage_bill_shortfall = min(0, cash_on_hand - expected_wage_bill);
+    expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
 }
 
 
@@ -376,14 +387,20 @@ void Firm_Agent::Layoff_Excess_Workers(){
         active_job_list.back()->Update_Status(0); // Household will see they are laid off on next update
         active_job_list.pop_back();
     }
+    expected_wage_bill = labor_wage_bill - layoff_wage_savings;
+    expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
+
 }
 
 /* Function to remove job postings from the market
 */
 void Firm_Agent::Remove_Job_Postings(){
-    n_active_job_postings = posted_job_list.size();
+    int n_active_job_postings = posted_job_list.size();
+    if (n_active_job_postings != 0){
+        bool flag = 1; // for debugging
+        } 
     int postings_needed = max(0, employee_count_desired - employee_count);
-    int postings_to_remove = n_active_job_postings - postings_needed;
+    int postings_to_remove = max(0,n_active_job_postings - postings_needed);
     
     for (int i=0; i<postings_to_remove; i++){
         posted_job_list.back()->Update_Status(-1); // Job market will remove these on next update
@@ -408,6 +425,7 @@ void Firm_Agent::Post_Jobs(){
         pPublic_Info_Board->Post_Job_To_Market(job);
         posted_job_list.push_back(job);
     }
+    n_active_job_postings += new_postings;
 
     // Loop through the posted_job_list and update wage_offer
     for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){

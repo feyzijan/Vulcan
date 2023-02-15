@@ -5,7 +5,7 @@
 // Global parameters to be used throughout the simulation
 int global_date = 0;// will be in main
 
-const int n_households = 75000;
+const int n_households = 60000;
 const int n_consumer_firms = 1000;
 const int n_capital_firms = 200;
 const int n_max_employees = 100;
@@ -59,7 +59,7 @@ const float init_unemp_tolerance_std = 2.0;
 const float init_unemp_tolerance_min = 0.0;
 const float init_unemp_tolerance_max = 100.0;
 // Reservation Wage:
-const float init_res_wage_mean = 1050;
+const float init_res_wage_mean = 950;
 const float init_res_wage_std = 300;
 const float init_res_wage_min = 100;
 const float init_res_wage_max = 999999;
@@ -141,7 +141,7 @@ const int cons_workers_per_machine = 1;
 
 // Exogenous parameters for Capital Firms
 const float cap_good_inv_depr_rate = 0.01;
-const float cap_productivity = 0.05; // # units produced per worker machine pairing
+const float cap_productivity = 10; // # units produced per worker machine pairing
 const int cap_workers_per_machine = 1;
 const int machine_lifespan = 100;
 

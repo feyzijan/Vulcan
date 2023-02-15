@@ -207,6 +207,12 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
     //pJob_Market->Print_Size(); 
 
     cout << "Household job initialization - begin" << endl;
+
+    // Shuffle households
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(pHousehold_vector->begin(), pHousehold_vector->end(), g);
+
     Initialize_Household_Jobs(pHousehold_vector, n_households);
     cout << "Household job initialization - end" << endl;
 

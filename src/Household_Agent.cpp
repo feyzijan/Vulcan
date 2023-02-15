@@ -59,7 +59,6 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
 
     // Unemployment status
     unemp_duration = 0;
-    reservation_wage = 0;  //may set this to minimum wage or make random
 }
 
 Household_Agent::Household_Agent(Household_Agent&){}
@@ -83,6 +82,31 @@ void Household_Agent::Consumption_Savings_Decisions(){
     Determine_Consumer_Sentiment();
     Determine_Consumption_Budget();
 }
+
+
+
+/* Function to check if current_job status is 0 or 1
+if 0 then mark as unemployed, and update the unemployment duration, and delete the job object, 
+and set the current_job pointer to nullptr
+*/
+void Household_Agent::Check_Employment_Status()
+{
+    if (current_job == nullptr){
+        unemployed = true;
+        unemp_duration += 1;
+    } else {
+        if (current_job->Get_Status() == 0){
+            unemployed = true;
+            unemp_duration += 1;
+            delete current_job;
+            current_job = nullptr;
+        } else {
+            unemployed = false;
+            unemp_duration = 0;
+        }
+    }
+}
+
 
 
 /* Function to update reservation wage

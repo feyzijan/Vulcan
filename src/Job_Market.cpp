@@ -4,7 +4,11 @@ using namespace std;
 
 
 // Constructor and destructors
-Job_Market::Job_Market(){}
+Job_Market::Job_Market(){
+    average_wage = init_wage_offer_mean;
+}
+
+
 Job_Market::~Job_Market(){}
 Job_Market::Job_Market(Job_Market&){}
 
@@ -13,11 +17,14 @@ Job_Market::Job_Market(Job_Market&){}
 
 /* Function to print all job objects in the market
 */
-void Job_Market::Print(){
+void Job_Market::Print(bool print_jobs){
     cout << "Printing Job Market with " << job_list.size()  << " jobs" << endl;
     Print_Size();
-    for (auto i = job_list.begin(); i != job_list.end(); ++i) 
-        cout << "Job with address: " << *i << " with wage: " << (*i)->Get_Wage() << endl; 
+    if (print_jobs){
+        for (auto i = job_list.begin(); i != job_list.end(); ++i) 
+            cout << "Job with address: " << *i << " with wage: " << (*i)->Get_Wage() << endl;
+    }
+     
 }
 
 void Job_Market::Print_Size(){
@@ -84,9 +91,10 @@ void Job_Market::Remove_Unwanted_Jobs(){
 /* Calculate average weight in the market
 */
 void Job_Market::Calculate_Average_Wage(){
-    float sum = 0;
-    for (auto i = job_list.begin(); i != job_list.end(); ++i) 
-        sum += (*i)->Get_Wage(); 
-    average_wage = sum/job_list.size();
+   float total_wage = 0.0;
+    for (Job* job : job_list) {
+        total_wage += job->Get_Wage();
+    }
+    average_wage = total_wage / job_list.size();
 }
 

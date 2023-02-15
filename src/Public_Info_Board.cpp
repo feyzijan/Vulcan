@@ -5,9 +5,27 @@
 //-------- Constructors and destructor
 
 Public_Info_Board::Public_Info_Board(){
+    // Genereal price level
     price_level_current =0;
     price_level_previous = 0;
+    average_wage = 0;
+    // Inflation and interest rates
+    r_rate = 0;
     inflation_current = 0;
+    // Sentiments
+    household_sentiment_sum = 0;
+    household_sentiment_percentage = 0;
+    cons_firm_sentiment_sum = 0;
+    cons_firm_sentiment_percentage = 0;
+    cap_firm_sentiment_sum = 0;
+    cap_firm_sentiment_percentage = 0;
+
+    // Unemployment
+    public_unemployment_benefit = 0;
+
+    // timestep - not using these for now
+    time_step = 0;
+    current_date = 0;
 }
 
 Public_Info_Board::~Public_Info_Board(){}
@@ -129,6 +147,6 @@ void Public_Info_Board::Print() const{
     cout << " Public Infor Board at adress " << this << endl;
     cout << " Price Level: " << price_level_current << " Interest Rate: " << r_rate <<endl;
     cout << " Current Inflation: " << inflation_current <<  endl;
-    cout << " Household Optimism: " << household_sentiment_percentage << " Firm Optimism: " << firm_sentiment_percentage << endl;
+    cout << " Household Optimism: " << household_sentiment_percentage << " COns Firm Optimism: " << cons_firm_sentiment_percentage << endl;
 }
 

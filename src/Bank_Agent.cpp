@@ -103,7 +103,7 @@ Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
 
     // Create new loan
     int short_term_funding_gap = pFirm->Get_Short_Term_Funding_Gap();
-    int current_date = pPublic_Board->Get_Current_Date();
+    int current_date = pPublic_Board->Get_Current_Date(); // remove
     Loan* new_loan = new Loan(pFirm,r_rate,short_term_funding_gap, short_term_loan_length,1);
     // Update own records
     total_loan_issuance_to_date += short_term_funding_gap;

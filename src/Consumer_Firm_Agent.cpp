@@ -9,6 +9,9 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     is_cons_firm = true;
     production_current = max(working_capital_inventory * cons_workers_per_machine * cons_productivity,employee_count_desired / cons_workers_per_machine * cons_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
+    quantity_sold = inventory *  init_quantity_sold_ratio; 
+    average_sale_quantity = quantity_sold;
+
     cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold);
     goods_on_market = cons_goods_on_market;
     //Send_Goods_To_Market();

@@ -49,7 +49,8 @@ class Public_Info_Board{
     void Send_Cap_Good_To_Market(Capital_Good* pGood);
     int Get_Cost_For_Desired_Cap_Goods(int q_desired);
     
-    
+    // Update Member Variables
+
     // Inflation and price level
     float Calculate_Inflation();
     void Initialize_Price_Level();
@@ -64,7 +65,8 @@ class Public_Info_Board{
     void Add_Household_Sentiment(bool positive_sentiment);
     void Update_Household_Sentiment();
     void Add_Firm_Sentiment(bool positive_sentiment);
-    int Get_Firm_Sentiment() {return firm_sentiment_percentage;}    
+    float Get_Cons_Firm_Sentiment() {return cons_firm_sentiment_percentage;}    
+    float Get_Cap_Firm_Sentiment() {return cap_firm_sentiment_percentage;}
     void Update_Firm_Sentiment();
 
     // Getters
@@ -101,10 +103,12 @@ class Public_Info_Board{
     float inflation_current; 
 
     // Sentiments
-    long household_sentiment_sum; // Sum of household sentiment: +1 for each positive
-    long household_sentiment_percentage; // Percentage of households who are optimist
-    long firm_sentiment_sum; // Sum of firm sentiment: +1 for each positive
-    long firm_sentiment_percentage; // Percentage of firms who are optimist
+    int household_sentiment_sum; // Sum of household sentiment: +1 for each positive
+    float household_sentiment_percentage; // Percentage of households who are optimist
+    int cons_firm_sentiment_sum; // Sum of firm sentiment: +1 for each positive
+    float cons_firm_sentiment_percentage; // Percentage of firms who are optimist
+    int cap_firm_sentiment_sum; // Sum of firm sentiment: +1 for each positive
+    float cap_firm_sentiment_percentage; // Percentage of firms who are optimist
 
     // Unemployment benefits
     int public_unemployment_benefit;

@@ -17,7 +17,7 @@ float Normal_Dist(float mean, float std);
 
 
 class Normal_Dist_Generator {
-    std::default_random_engine generator;
+    std::mt19937 generator;
     std::normal_distribution<float> distribution;
     float min;
     float max;
@@ -25,7 +25,10 @@ class Normal_Dist_Generator {
 public:
     Normal_Dist_Generator(float mean, float stddev, float min, float max):
         distribution(mean, stddev), min(min), max(max)
-    {}
+    {
+        std::random_device rd;
+        generator.seed(rd());
+    }
 
     float operator ()() {
         while (true) {

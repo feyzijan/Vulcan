@@ -21,7 +21,7 @@ class Job_Market{
     ~Job_Market();
 
     // Printing and Debugging
-    void Print();
+    void Print(bool print_jobs);
     void Print_Size();
     
     // Job Market Implementation Functions

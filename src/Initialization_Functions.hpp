@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <random>
 
 #include "Firm_Agent.hpp"
 #include "Consumer_Firm_Agent.hpp"

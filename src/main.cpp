@@ -73,7 +73,7 @@ int main()
 
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
-    Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms);
+    //Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms);
 
 
     // STEP 0.16: Send goods to markets and initialize price level
@@ -105,14 +105,6 @@ int main()
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Depreciate_Capital();}
 
-
-    // STEP 1.3: Depreciate Firms' Good Inventories
-    cout << "\n------------ Step 1.3: Depreciating Good inventories ----------------" <<endl;
-
-    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
-        firm_ptr->Depreciate_Good_Inventory();}
-    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-        firm_ptr->Depreciate_Good_Inventory();}
     
     // STEP 1.4: Layoff workers with expired contracts
     cout << " \n ------------ Step 1.4: Depreciating Good inventories ----------------" <<endl;
@@ -153,6 +145,16 @@ int main()
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Pay_Dividends();}
 
+
+    // STEP 1.625: Depreciate Firms' Good Inventories
+    cout << "\n------------ Step 1.625: Depreciating Good inventories ----------------" <<endl;
+
+    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+        firm_ptr->Depreciate_Good_Inventory();}
+    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Depreciate_Good_Inventory();}
+
+
     // STEP 1.63: Firms set new price and production targets
     cout << " \n ------------ Step 1.63: Firms set new price and production targets ----------------" <<endl;
     
@@ -166,21 +168,24 @@ int main()
     cout << " \n ------------ Step 1.64: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
 
     pJob_Market_1->Calculate_Average_Wage(); 
+    pPublic_Board_1->Update_Average_Wage();
+    pJob_Market_1->Print_Size();
     
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();
-        firm_ptr->Layoff_Excess_Workers();
-        firm_ptr->Remove_Job_Postings();
         firm_ptr->Post_Jobs();}
 
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();
-        firm_ptr->Layoff_Excess_Workers();
-        firm_ptr->Remove_Job_Postings();
         firm_ptr->Post_Jobs();}
 
+
+    // Step 1.65: Households Check if they are fired
+    cout << " \n ------------ Step 1.65: Households Check if they are fired ----------------" <<endl;
+    for (Household_Agent* household_ptr : *pHousehold_vector){
+        household_ptr->Check_Employment_Status();}
 
     // STEP 1.71: Households update reservation wages
     cout << " \n ------------ Step 1.71: Households update reservation wages ----------------" <<endl;
@@ -256,7 +261,7 @@ int main()
 
 
     // Timestep t=1
-    Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms);
+    //Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms);
 
     // Timestep t=2 and onward
 
