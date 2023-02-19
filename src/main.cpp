@@ -55,7 +55,6 @@ int main()
 
 
     //------- STEP 0.11: Initialize Households and Firms
-    
     vector<Household_Agent*> *pHousehold_vector = new vector<Household_Agent*>();
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector = new vector<Consumer_Firm_Agent*>();
     vector<Capital_Firm_Agent*> *pCapital_Firm_vector = new vector<Capital_Firm_Agent*>();
@@ -67,6 +66,7 @@ int main()
     //----------- STEP 0.13: Initialize job market
     cout << "Initializing job Market -  " << " Firms are seeking " << n_promised_jobs << " jobs" << endl;
     Initialize_Job_Market(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector,pPublic_Board_1);
+    pJob_Market_1->Print_Size();
 
 
     // STEP 0.14 Assign firm owners - Todo later, minor thing
@@ -97,6 +97,7 @@ int main()
     pBank_1->Update_Inflation_Rate();
     pBank_1->Update_Interest_Rate();
 
+
     // STEP 1.2: Depreciate Firm's Capital Goods
     cout << "\n------------ Step 1.2: Depreciating capital goods ----------------" <<endl;
 
@@ -114,6 +115,7 @@ int main()
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Cancel_Expired_Contracts();}
     
+
     // STEP 1.5: Random experimentation - randomly tweak firm and household parameters
     cout << " \n ------------ Step 1.5: Random experimentation ----------------" <<endl;
 
@@ -122,6 +124,7 @@ int main()
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Random_Experimentation();}
     
+
     // STEP 1.61: Firms assess past period's sales data
     cout << " \n ------------ Step 1.61: Firms assess past period's sales data ----------------" <<endl;
     
@@ -136,6 +139,7 @@ int main()
         firm_ptr->Update_Average_Profits_T1();
         firm_ptr->Update_Average_Sales_T1();
     }
+
 
     // STEP 1.62: Firms pay dividends - not yet implemented
     cout << " \n ------------ Step 1.62: Firms pay dividend ----------------" <<endl;
@@ -164,30 +168,33 @@ int main()
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Determine_New_Production();}
 
+
     // STEP 1.64: Firms set wage offers, labor target, and finance expected wage bill
     cout << " \n ------------ Step 1.64: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
 
     pJob_Market_1->Calculate_Average_Wage(); 
     pPublic_Board_1->Update_Average_Wage();
+
+    cout << "Job market before any new operations" << endl;
     pJob_Market_1->Print_Size();
     
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
-        firm_ptr->Determine_Labor_Need();
-        firm_ptr->Post_Jobs();}
+        firm_ptr->Determine_Labor_Need();}
 
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
-        firm_ptr->Determine_Labor_Need();
-        firm_ptr->Post_Jobs();}
-
+        firm_ptr->Determine_Labor_Need();}
 
     pJob_Market_1->Sort_Jobs_by_Wage();
 
-    cout << "# Job postings to remove: " << test_global_var << endl; // debugging 
-    cout << "# Job postings to add: " << test_global_var_2 << endl; // debugging
-
-
+    cout << "Job market after the requested " << test_global_var_2  << " new postings" << endl;
+    pJob_Market_1->Print_Size();
+    
+    pJob_Market_1->Remove_Unwanted_Jobs();
+    cout << "Job market after removing the requested # " << test_global_var << " existing postings" <<  endl;
+    pJob_Market_1->Print_Size();
+    
 
     // Step 1.65: Households Check if they are fired
     cout << " \n ------------ Step 1.65: Households Check if they are fired ----------------" <<endl;
@@ -202,11 +209,6 @@ int main()
 
     // STEP 1.72: Labor market matching process
     cout << " \n ------------ Step 1.72: Labor market matching process ----------------" <<endl;
-    pJob_Market_1->Print_Size();
-    //pJob_Market_1->Print(true);
-
-    pJob_Market_1->Remove_Unwanted_Jobs();
-    pJob_Market_1->Print_Size();
     pJob_Market_1->Sort_Jobs_by_Wage();
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
@@ -216,7 +218,9 @@ int main()
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Check_For_New_Employees();}
 
+    cout << "Job market after the matching process" << endl;
     pJob_Market_1->Print_Size();
+    
 
     // STEP 1.8: Firms make investment decisions and finance these
     cout << " \n ------------ Step 1.8: Firms make investment decisions and finance these ----------------" <<endl;

@@ -122,7 +122,7 @@ const float init_inventory_std = 100;
 const float init_inventory_min = 1;
 const float init_inventory_max = 999999;
 
-const float init_working_capital_inventory_mean = 50;
+const float init_working_capital_inventory_mean = 60;
 const float init_working_capital_inventory_std = 5;
 const float init_working_capital_inventory_min = 1;
 const float init_working_capital_inventory_max = 999999;

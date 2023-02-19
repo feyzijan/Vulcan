@@ -336,23 +336,30 @@ TODO: Recheck equation
 void Firm_Agent::Determine_Labor_Need(){
     employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
     need_worker = employee_count_desired > employee_count;
+    n_active_job_postings = posted_job_list.size();
     
-    if (posted_job_list.size() >  max(0,employee_count_desired - employee_count) ){
+    if (n_active_job_postings >  max(0,employee_count_desired - employee_count) ){
         Remove_Job_Postings();
     }
 
 
-    if(employee_count_desired < employee_count){Layoff_Excess_Workers();
+    if(employee_count_desired < employee_count){
+        Layoff_Excess_Workers(); // this will compute expected_wage_bill
     } else{
         expected_wage_bill = labor_wage_bill + (employee_count_desired - employee_count) * wage_offer;
-        expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
     }
 
+    expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
     short_term_funding_gap = expected_wage_bill_shortfall;
-
     if (short_term_funding_gap > 0){
-        Seek_Short_Term_Loan();
-        }
+        Seek_Short_Term_Loan(); 
+    }
+
+    // If more job postings are needed and there is no short term funding gap, post jobs
+    if((short_term_funding_gap == 0) & (n_active_job_postings <  max(0,employee_count_desired - employee_count)) ){
+        test_global_var_2 += max(0,employee_count_desired - employee_count) -  n_active_job_postings;
+        Post_Jobs();
+    }      
 }
 
 
@@ -371,6 +378,8 @@ void Firm_Agent::Seek_Short_Term_Loan(){
     if (new_loan != nullptr){
         loan_book.push_back(new_loan);
         cash_on_hand += new_loan->Get_Principal_Amount();
+        expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
+        short_term_funding_gap = expected_wage_bill_shortfall;
     }
 }
 
@@ -388,22 +397,20 @@ void Firm_Agent::Layoff_Excess_Workers(){
         active_job_list.pop_back();
     }
     expected_wage_bill = labor_wage_bill - layoff_wage_savings;
-    expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
-
 }
 
 /* Function to remove job postings from the market
 */
 void Firm_Agent::Remove_Job_Postings(){
-    int n_active_job_postings = posted_job_list.size();
     /* if (n_active_job_postings != 0){
         bool flag = 1; // for debugging
         }  */
+
     int postings_needed = max(0, employee_count_desired - employee_count);
     int postings_to_remove = max(0,n_active_job_postings - postings_needed);
+    test_global_var += postings_to_remove; // debug variable
     
     for (int i=0; i<postings_to_remove; i++){
-        test_global_var +=1;
         posted_job_list.back()->Update_Status(-1); // Job market will remove these on next update
         posted_job_list.pop_back();
         n_active_job_postings -=1;
@@ -421,7 +428,7 @@ void Firm_Agent::Post_Jobs(){
     //cout << "Employee count desired: " << employee_count_desired << " Current employees: " << employee_count << endl;
     //cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
     for(int i=0; i< new_postings;i++){
-        test_global_var_2 +=1;
+        //test_global_var_2 +=1;
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
         //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
         pPublic_Info_Board->Post_Job_To_Market(job);
