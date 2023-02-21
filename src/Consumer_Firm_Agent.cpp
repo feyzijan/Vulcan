@@ -27,23 +27,6 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent(){}
 
 // ------- Main Loop Methods-----------------
 
-/* Function to loop through vector of capital goods the firm possesses,
-mark down their value, and remove the ones with zero value, i.e. end of life
-*/
-/* void Consumer_Firm_Agent::Depreciate_Capital(){
-
-    for(auto i= capital_goods.begin(); i!=capital_goods.end(); i++){
-        float original_price = (*i)->Get_Price();
-        float current_val  =  (*i)->Get_Value();
-        int depreciation_rate = (*i)->Get_Depreciation_Period();
-        
-        (*i)->Update_Value(current_val - original_price/depreciation_rate);
-
-        if ((*i)->Get_Value() <= 0){capital_goods.erase(i);}
-    }
-    working_capital_inventory = int(capital_goods.size());
-} */
-
 
 /* Function to depreciate(i.e. destroy) a fraction of the firm's inventory of consumer goods
 The depreciation rate is set exogenously in the initialization parameter for all firms
@@ -65,6 +48,8 @@ void Consumer_Firm_Agent::Produce_Consumer_Goods(){
     production_current = int(production_max*labor_utilization);
     inventory += production_current;
     inventory_factor = float(inventory) / float(average_sale_quantity);
+        pPublic_Info_Board->Update_Consumer_goods_production(production_current);
+    pPublic_Info_Board->Update_Consumer_goods_production_planned(production_planned);
 }
 
 

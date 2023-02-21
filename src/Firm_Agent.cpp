@@ -214,13 +214,16 @@ void Firm_Agent::Depreciate_Capital(){
 /* Function to lay off active employees with expired contracts
 */
 void Firm_Agent::Cancel_Expired_Contracts(){
+    int temp = 0;
     auto it = active_job_list.begin();
     while(it !=  active_job_list.end()) {
         if((*it)->Get_Expiry_Status() == 1) { 
+            temp ++;
             it = active_job_list.erase(it);
             employee_count -=1;
         } else {it++;}
     }
+    pPublic_Info_Board->Update_Contract_Expiries(temp);
 }
 
 /*  Function to randomly alter some firm parameters, such as targeted leverage, markup
@@ -335,6 +338,7 @@ TODO: Recheck equation
 */
 void Firm_Agent::Determine_Labor_Need(){
     employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
+    pPublic_Info_Board->Update_Employee_Demand(min(employee_count_desired-employee_count,0));
     need_worker = employee_count_desired > employee_count;
     n_active_job_postings = posted_job_list.size();
     
@@ -358,6 +362,7 @@ void Firm_Agent::Determine_Labor_Need(){
     // If more job postings are needed and there is no short term funding gap, post jobs
     if((short_term_funding_gap == 0) & (n_active_job_postings <  max(0,employee_count_desired - employee_count)) ){
         test_global_var_2 += max(0,employee_count_desired - employee_count) -  n_active_job_postings;
+        pPublic_Info_Board->Update_New_Job_Postings(max(0,employee_count_desired - employee_count) -  n_active_job_postings);
         Post_Jobs();
     }      
 }
@@ -397,6 +402,7 @@ void Firm_Agent::Layoff_Excess_Workers(){
         active_job_list.pop_back();
     }
     expected_wage_bill = labor_wage_bill - layoff_wage_savings;
+    pPublic_Info_Board->Update_Employee_Firings(layoff_count);
 }
 
 /* Function to remove job postings from the market
@@ -408,7 +414,7 @@ void Firm_Agent::Remove_Job_Postings(){
 
     int postings_needed = max(0, employee_count_desired - employee_count);
     int postings_to_remove = max(0,n_active_job_postings - postings_needed);
-    test_global_var += postings_to_remove; // debug variable
+    pPublic_Info_Board->Update_Removed_Job_Postings(postings_to_remove);
     
     for (int i=0; i<postings_to_remove; i++){
         posted_job_list.back()->Update_Status(-1); // Job market will remove these on next update
@@ -448,14 +454,17 @@ and move the ones marked as taken to the active_job_list arrays, and update empl
 */
 void Firm_Agent::Check_For_New_Employees(){
     auto it = posted_job_list.begin();
+    int temp = 0;
     while(it !=  posted_job_list.end()) {
         if((*it)->Get_Status() == 1) { 
             active_job_list.push_back(*it);
             employee_count +=1;
             labor_wage_bill += (*it)->Get_Wage();
             it = posted_job_list.erase(it);
+            temp ++;
         } else {it++;}
     }
+    pPublic_Info_Board->Update_Employee_Hires(temp);
 }
 
 
@@ -476,12 +485,17 @@ void Firm_Agent::Make_Investment_Decision(){
     if(working_capital_inventory == 0) {
         desired_machines = 1;
     }else{
-        desired_machines = employee_count_desired/cons_workers_per_machine - working_capital_inventory;
+        desired_machines = min(0,employee_count_desired/cons_workers_per_machine - working_capital_inventory);
     }
-    int est_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
-    expected_long_term_shortfall =  est_cost - cash_on_hand;
-    if (expected_long_term_shortfall > 0){Seek_Long_Term_Loan();}
-    expected_long_term_shortfall =  est_cost - cash_on_hand;
+    if (desired_machines >0){
+        int estimated_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
+        expected_long_term_shortfall =  estimated_cost - cash_on_hand;
+        if (expected_long_term_shortfall > 0){Seek_Long_Term_Loan();}
+        expected_long_term_shortfall =  estimated_cost - cash_on_hand;
+    }
+    // temporary override
+    desired_machines = Uniform_Dist_Int(0,5);
+    test_global_var += desired_machines;
 }
 
 void Firm_Agent::Buy_Capital_Goods(){
@@ -498,6 +512,8 @@ void Firm_Agent::Buy_Capital_Goods(){
         new_machines_bought += (*it)->Get_Quantity();
         total_price_paid += (*it)->Get_Quantity() * (*it)->Get_Price();
     }
+    pPublic_Info_Board->Update_Machine_spending(total_price_paid);
+    pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
     // Copy all the objects in the new_capital_goods vector to the capital_goods vector
     copy(new_capital_goods.begin(), new_capital_goods.end(), back_inserter(capital_goods_list));
     // Update the working capital inventory

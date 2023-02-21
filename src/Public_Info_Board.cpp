@@ -12,21 +12,45 @@ Public_Info_Board::Public_Info_Board(){
     // Inflation and interest rates
     r_rate = 0;
     inflation_current = 0;
+
+    // Global aggregate variables
+
     // Sentiments
     household_sentiment_sum = 0;
-    household_sentiment_percentage = 0;
+    household_sentiment_percentage = 0.0;
     cons_firm_sentiment_sum = 0;
-    cons_firm_sentiment_percentage = 0;
+    cons_firm_sentiment_percentage = 0.0;
     cap_firm_sentiment_sum = 0;
-    cap_firm_sentiment_percentage = 0;
+    cap_firm_sentiment_percentage = 0.0;
 
-    // Unemployment
+    // Capital expenditure
+    machine_orders = 0;
+    machine_spending = 0;
+    // Consumer expenditure
+    consumer_orders = 0;
+    consumer_spending = 0;
+    // Production
+    consumer_goods_production = 0;
+    capital_goods_production = 0;
+    consumer_goods_production_planned = 0;
+    capital_goods_production_planned = 0;
+    // Employment
+    n_employed_workers = 0;
+    n_unemployed_workers = 0;
+    new_employee_demand = 0;
+    employee_firings = 0;
+    employee_hires = 0;
+    unemployment_rate = 0.0;
+    contract_expiries = 0;
+
+    // not using this as of yet
     public_unemployment_benefit = 0;
 
     // timestep - not using these for now
     time_step = 0;
     current_date = 0;
 }
+
 
 Public_Info_Board::~Public_Info_Board(){}
 Public_Info_Board::Public_Info_Board(Public_Info_Board&){}
@@ -89,7 +113,7 @@ void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood){
 
 /* Call the Consumer good Market with the budget, and return the remaining budget
 */
-int Public_Info_Board::Buy_Consumer_Goods(int budget){
+std::pair<int, int> Public_Info_Board::Buy_Consumer_Goods(int budget){
     return pConsumer_Goods_Market->Buy_Consumer_Goods(budget);
 }
 

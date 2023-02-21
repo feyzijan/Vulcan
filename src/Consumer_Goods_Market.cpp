@@ -43,7 +43,7 @@ remaining budget when it can no longer afford to buy anything else
 TODO: Test loop and simplify code, evaluate runtime
 TODO: Doesn't return quantity, maybe return array that includes this
 */
-int Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
+std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
     int remaining_budget = budget;
     int quantity_bought = 0;
     for(auto i=cons_goods_list.begin(); i!=cons_goods_list.end();i++){
@@ -61,10 +61,10 @@ int Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
         } else{ // Household can't buy all, so has run out of budget
             (*i)->Update_Quantity(-n);
             remaining_budget -= n*p;
-             quantity_bought += n;
+            quantity_bought += n;
             break; // exit loop
         }
-        return remaining_budget;
+        return std::make_pair(remaining_budget, quantity_bought);
     }
 }
 

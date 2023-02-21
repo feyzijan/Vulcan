@@ -188,11 +188,11 @@ int main()
 
     pJob_Market_1->Sort_Jobs_by_Wage();
 
-    cout << "Job market after the requested " << test_global_var_2  << " new postings" << endl;
+    cout << "Job market after the requested " << pPublic_Board_1->Get_New_Job_Postings()  << " new postings" << endl;
     pJob_Market_1->Print_Size();
     
     pJob_Market_1->Remove_Unwanted_Jobs();
-    cout << "Job market after removing the requested # " << test_global_var << " existing postings" <<  endl;
+    cout << "Job market after the requested " << pPublic_Board_1->Get_Removed_Job_Postings() << " job posting removals" << endl;
     pJob_Market_1->Print_Size();
     
 
@@ -210,6 +210,8 @@ int main()
     // STEP 1.72: Labor market matching process
     cout << " \n ------------ Step 1.72: Labor market matching process ----------------" <<endl;
     pJob_Market_1->Sort_Jobs_by_Wage();
+    cout << pPublic_Board_1->Get_Employed_Workers() << " workers are employed, " << pPublic_Board_1->Get_Unemployed_Workers() << 
+    " workers are unemployed " << " Unemployment rate at :" << pPublic_Board_1->Get_Unemployment_Rate() <<  endl;
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Seek_Jobs();}
@@ -220,11 +222,25 @@ int main()
 
     cout << "Job market after the matching process" << endl;
     pJob_Market_1->Print_Size();
-    
+    cout << pPublic_Board_1->Get_Employed_Workers() << " workers are employed, " << pPublic_Board_1->Get_Unemployed_Workers() << 
+    " workers are unemployed " << " Unemployment rate at :" << pPublic_Board_1->Get_Unemployment_Rate() <<  endl;
+
+
+
+    // Step 1.73: Sentiments Updating
+    cout << " \n ------------ Step 1.73: Sentiments Updating ----------------" <<endl;
+
+    pPublic_Board_1->Update_Household_Sentiment_Percentage();
+    pPublic_Board_1->Update_Cons_Firm_Sentiment_Percentage();
+    pPublic_Board_1->Update_Cap_Firm_Sentiment_Percentage();
+    pPublic_Board_1->Update_Unemployment_Rate();
+
+
 
     // STEP 1.8: Firms make investment decisions and finance these
     cout << " \n ------------ Step 1.8: Firms make investment decisions and finance these ----------------" <<endl;
     // loop though all firms and make investment decisions
+    test_global_var = 0;
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Make_Investment_Decision();
         //firm_ptr->Buy_Machines();
@@ -234,6 +250,7 @@ int main()
         //firm_ptr->Buy_Machines();
         }
 
+    cout << "Firms have committed to buying " << test_global_var << " machines" << endl;
 
     
     // -- t= 1.5
@@ -244,6 +261,10 @@ int main()
         firm_ptr->Produce_Consumer_Goods();}
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Produce_Capital_Goods();}
+
+    cout << "Consumer Firms have produced " << pPublic_Board_1->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Board_1->Get_Capital_Goods_Production_Planned() << endl;
+    cout << "Capital Firms have produced " << pPublic_Board_1->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Board_1->Get_Capital_Goods_Production_Planned() << endl;
+
 
     // STEP 1.92: Households receive wage and make saving/consumption plans
     cout << " \n ------------ Step 1.92: Households receive wage and make saving/consumption plans ----------------" <<endl;
@@ -262,6 +283,8 @@ int main()
     for(Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Buy_Consumer_Goods();}
 
+    cout << "Households have spent " << pPublic_Board_1->Get_Consumer_Spending() << " on consumer goods to buy " << pPublic_Board_1->Get_Consumer_Orders() << " consumer goods" << endl;
+
     // STEP 1.94: Capital good market commences
     cout << " \n ------------ Step 1.94: Investment good market commences ----------------" <<endl;
 
@@ -274,6 +297,8 @@ int main()
         firm_ptr->Buy_Capital_Goods();}
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Buy_Capital_Goods();}
+
+    cout << "Firms have spent " << pPublic_Board_1->Get_Machine_Spending() << " on capital goods to buy " << pPublic_Board_1->Get_Machine_Orders() << " capital goods" << endl;
 
 
     // Timestep t=1

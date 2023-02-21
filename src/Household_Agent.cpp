@@ -105,6 +105,8 @@ void Household_Agent::Check_Employment_Status()
             unemp_duration = 0;
         }
     }
+    pPublic_Info_Board->Update_Employed_Workers(!unemployed);
+    pPublic_Info_Board->Update_Unemployed_Workers(unemployed);
 }
 
 
@@ -178,15 +180,15 @@ void Household_Agent::Determine_Consumer_Sentiment()
     if (unemployed){positive_sentiment = false;} 
     else{positive_sentiment = true;}
 
-  /*   bool majority_adoption = (rand() % 100) < p_majority_op_adoption*100;
-    if (majority_adoption){
-        positive_sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); 
-    } */
+    bool adopt_majority= Uniform_Dist_Float(0,1)  < p_majority_op_adoption;
+    if(adopt_majority){
+        positive_sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
 
     if (positive_sentiment){saving_propensity = saving_propensity_optimist;
     } else{saving_propensity = saving_propensity_pessimist;}
 
     cash_on_hand_desired = saving_propensity * income_average;// Set targets for cash on hand
+    pPublic_Info_Board->Update_Household_sentiment_sum(positive_sentiment);
 }
 
 
@@ -210,10 +212,14 @@ TODO: Update this method once the called Buy_Consumer_Goods method is updated to
 TODO: Check if the savings should be added now or later, to avoid double counting
 */
 void Household_Agent::Buy_Consumer_Goods(){
-    int remaining_consumption_budget = pPublic_Info_Board->Buy_Consumer_Goods(expenditure_consumption);
+    std::pair<int, int> purchase = pPublic_Info_Board->Buy_Consumer_Goods(expenditure_consumption);
+    int remaining_consumption_budget = purchase.first;
+    int goods_bought = purchase.second;
     expenditure_consumption -= remaining_consumption_budget;
     new_savings += remaining_consumption_budget;
     wealth_financial += remaining_consumption_budget;
+    pPublic_Info_Board->Update_Consumer_spending(expenditure_consumption);
+    pPublic_Info_Board->Update_Consumer_orders(goods_bought);
 }
 
 
