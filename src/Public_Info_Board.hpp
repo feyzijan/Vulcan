@@ -59,13 +59,15 @@ class Public_Info_Board{
     Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm);
     Loan* Seek_Long_Term_Loan(Firm_Agent* pFirm);
 
+    // Global Data
+    void Reset_Global_Data();
+
     
     // Gathering and reading public sentiment - TO Implement all
     float Get_Household_Sentiment() {return household_sentiment_percentage;}
     float Get_Cons_Firm_Sentiment() {return cons_firm_sentiment_percentage;}    
     float Get_Cap_Firm_Sentiment() {return cap_firm_sentiment_percentage;}
     float Get_Unemployment_Rate() { return unemployment_rate;}
-
 
     // Getters
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
@@ -75,8 +77,6 @@ class Public_Info_Board{
     float Get_Average_Wage() { return average_wage;}
     Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
     int Get_Current_Date() { return current_date;}
-
-    // Write getters for all class member variables
     int Get_Machine_Orders() { return machine_orders;}
     int Get_Machine_Spending() { return machine_spending;}
     int Get_Consumer_Orders() { return consumer_orders;}
@@ -93,9 +93,6 @@ class Public_Info_Board{
     int Get_Contract_Expiries() { return contract_expiries;}
     int Get_New_Job_Postings() { return new_job_postings;}
     int Get_Removed_Job_Postings() { return removed_job_postings;}
-
-   
-
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
@@ -121,6 +118,7 @@ class Public_Info_Board{
     
     void Update_Employed_Workers(int amount) { n_employed_workers += amount; }
     void Update_Unemployed_Workers(int amount) { n_unemployed_workers += amount; }
+
     void Update_Employee_Demand(int amount) { new_employee_demand += amount; }
     void Update_Employee_Firings(int amount) { employee_firings += amount; }
     void Update_Employee_Hires(int amount) { employee_hires += amount; }
@@ -128,13 +126,10 @@ class Public_Info_Board{
     void Update_New_Job_Postings(int amount) { new_job_postings += amount; }
     void Update_Removed_Job_Postings(int amount) { removed_job_postings += amount; }
 
-
-    void Update_Unemployment_Rate() { unemployment_rate = n_unemployed_workers/n_households; }
+    void Update_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
     void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = household_sentiment_sum/n_households; }
     void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = cons_firm_sentiment_sum/n_consumer_firms; }
     void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = cap_firm_sentiment_sum/n_capital_firms; }
-
-
 
 
     // Printing and Debugging

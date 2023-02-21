@@ -167,6 +167,31 @@ Loan* Public_Info_Board::Seek_Long_Term_Loan(Firm_Agent* pFirm){
     return pBank->Issue_Long_Term_Loan(pFirm);
 }
 
+//--------------------------------------------------
+// Global Data
+/* Function to reset global data parameters to zero*/
+void Public_Info_Board::Reset_Global_Data(){
+    // Capital expenditure
+    machine_orders = 0;
+    machine_spending = 0;
+    // Consumer expenditure
+    consumer_orders = 0;
+    consumer_spending = 0;
+    // Production
+    consumer_goods_production = 0;
+    capital_goods_production = 0;
+    consumer_goods_production_planned = 0;
+    capital_goods_production_planned = 0;
+    // Employment
+    n_employed_workers = 0;
+    n_unemployed_workers = 0;
+    new_employee_demand = 0;
+    employee_firings = 0;
+    employee_hires = 0;
+    unemployment_rate = 0.0;
+    contract_expiries = 0;
+}
+
 
 // Printing and Debugging
 

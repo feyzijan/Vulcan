@@ -45,11 +45,17 @@ void Consumer_Firm_Agent::Produce_Consumer_Goods(){
     
     int production_max = working_capital_inventory * cons_productivity;
     
-    production_current = int(production_max*labor_utilization);
+    production_current = min(int(production_max*labor_utilization), production_planned);
     inventory += production_current;
     inventory_factor = float(inventory) / float(average_sale_quantity);
-        pPublic_Info_Board->Update_Consumer_goods_production(production_current);
+
+    pPublic_Info_Board->Update_Consumer_goods_production(production_current);
     pPublic_Info_Board->Update_Consumer_goods_production_planned(production_planned);
+
+    if ( production_current > production_planned){
+        bool debug = true;
+    }
+
 }
 
 

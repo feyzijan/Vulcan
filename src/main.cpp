@@ -210,22 +210,35 @@ int main()
     // STEP 1.72: Labor market matching process
     cout << " \n ------------ Step 1.72: Labor market matching process ----------------" <<endl;
     pJob_Market_1->Sort_Jobs_by_Wage();
-    cout << pPublic_Board_1->Get_Employed_Workers() << " workers are employed, " << pPublic_Board_1->Get_Unemployed_Workers() << 
-    " workers are unemployed " << " Unemployment rate at :" << pPublic_Board_1->Get_Unemployment_Rate() <<  endl;
+
+    pPublic_Board_1->Update_Unemployment_Rate();
+    pJob_Market_1->Calculate_Average_Wage(); 
+    pPublic_Board_1->Update_Average_Wage();
+
+    cout << "# Employed workers: " << pPublic_Board_1->Get_Employed_Workers() << endl;
+    cout << "# Unemployed workers: " << pPublic_Board_1->Get_Unemployed_Workers() << endl;
+    cout << "Unemployment rate: " << pPublic_Board_1->Get_Unemployment_Rate() << endl;
+    cout << "Average wage: " << pPublic_Board_1->Get_Average_Wage() << endl; 
+
+    pPublic_Board_1->Reset_Global_Data();
+    cout << "Commencing labor market matching with " << pJob_Market_1->Get_Size() << " job postings"  << endl;
+
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
-        household_ptr->Seek_Jobs();}
+        household_ptr->Seek_Jobs();
+        household_ptr->Check_Employment_Status();}
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Check_For_New_Employees();}
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Check_For_New_Employees();}
 
-    cout << "Job market after the matching process" << endl;
-    pJob_Market_1->Print_Size();
-    cout << pPublic_Board_1->Get_Employed_Workers() << " workers are employed, " << pPublic_Board_1->Get_Unemployed_Workers() << 
-    " workers are unemployed " << " Unemployment rate at :" << pPublic_Board_1->Get_Unemployment_Rate() <<  endl;
-
-
+    
+    pPublic_Board_1->Update_Unemployment_Rate();
+    cout << "Labor market matching ended with " << pJob_Market_1->Get_Size() << " job postings remaining"  << endl;
+    cout << "# Employed workers: " << pPublic_Board_1->Get_Employed_Workers() << endl;
+    cout << "# Unemployed workers: " << pPublic_Board_1->Get_Unemployed_Workers() << endl;
+    cout << "Unemployment rate: " << pPublic_Board_1->Get_Unemployment_Rate() << endl;
+    cout << "Average wage: " << pPublic_Board_1->Get_Average_Wage() << endl; 
 
     // Step 1.73: Sentiments Updating
     cout << " \n ------------ Step 1.73: Sentiments Updating ----------------" <<endl;
@@ -233,8 +246,6 @@ int main()
     pPublic_Board_1->Update_Household_Sentiment_Percentage();
     pPublic_Board_1->Update_Cons_Firm_Sentiment_Percentage();
     pPublic_Board_1->Update_Cap_Firm_Sentiment_Percentage();
-    pPublic_Board_1->Update_Unemployment_Rate();
-
 
 
     // STEP 1.8: Firms make investment decisions and finance these
@@ -250,19 +261,23 @@ int main()
         //firm_ptr->Buy_Machines();
         }
 
-    cout << "Firms have committed to buying " << test_global_var << " machines" << endl;
+    cout << "Firms wish to buy " << test_global_var << " machines" << endl;
 
     
     // -- t= 1.5
     // STEP 1.91: Firms produce their goods
     cout << " \n ------------ Step 1.91: Firms produce their goods ----------------" <<endl;
+
+    cout << "Consumer Firms have produced " << pPublic_Board_1->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Board_1->Get_Consumer_Goods_Production_Planned() << endl;
+    cout << "Capital Firms have produced " << pPublic_Board_1->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Board_1->Get_Capital_Goods_Production_Planned() << endl;
+
     
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Produce_Consumer_Goods();}
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Produce_Capital_Goods();}
 
-    cout << "Consumer Firms have produced " << pPublic_Board_1->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Board_1->Get_Capital_Goods_Production_Planned() << endl;
+    cout << "Consumer Firms have produced " << pPublic_Board_1->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Board_1->Get_Consumer_Goods_Production_Planned() << endl;
     cout << "Capital Firms have produced " << pPublic_Board_1->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Board_1->Get_Capital_Goods_Production_Planned() << endl;
 
 

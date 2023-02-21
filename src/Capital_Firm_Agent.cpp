@@ -65,11 +65,16 @@ void Capital_Firm_Agent::Produce_Capital_Goods(){
     
     int production_max = working_capital_inventory * cap_productivity;
     
-    production_current = int(production_max*labor_utilization);
+    production_current = min(int(production_max*labor_utilization), production_planned);
     inventory += production_current;
     inventory_factor = float(inventory) / float(average_sale_quantity);
+
     pPublic_Info_Board->Update_Capital_goods_production(production_current);
     pPublic_Info_Board->Update_Capital_goods_production_planned(production_planned);
+
+    if ( production_current > production_planned){
+        bool debug = true;
+    }
 }
 
 /* Post Produced goods to market
