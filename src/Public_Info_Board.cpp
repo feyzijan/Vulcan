@@ -128,7 +128,7 @@ void Public_Info_Board::Send_Cap_Good_To_Market(Capital_Good* pGood){
 std::vector<Capital_Good*>*  Public_Info_Board::Buy_Capital_Goods(int q_desired){
     return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);
 }
-/* Return how much it would cost to buy the desired number of machines
+/* Return how much it would cost to buy the desired # machines
 */
 int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
     return pCapital_Goods_Market->Get_Cost_For_Given_Quantity(q_desired);
@@ -201,5 +201,15 @@ void Public_Info_Board::Print() const{
     cout << " Price Level: " << price_level_current << " Interest Rate: " << r_rate <<endl;
     cout << " Current Inflation: " << inflation_current <<  endl;
     cout << " Household Optimism: " << household_sentiment_percentage << " COns Firm Optimism: " << cons_firm_sentiment_percentage << endl;
+}
+
+
+/* Function to print labor market related variables
+*/
+void Public_Info_Board::Print_Labor_Market() const{
+    cout << " # employed workers: " << n_employed_workers << " # unemployed workers: " << n_unemployed_workers << endl;
+    cout << " # new employee demand: " << new_employee_demand << " # employee firings: " << employee_firings << endl;
+    cout << " # new employee hires: " << employee_hires << " Unemployment Rate: " << unemployment_rate << endl;
+    cout << "average_wage: " << average_wage <<  " # contract expiries: " << contract_expiries << endl;
 }
 

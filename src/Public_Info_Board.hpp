@@ -136,6 +136,7 @@ class Public_Info_Board{
 
     // Printing and Debugging
     void Print() const;
+    void Print_Labor_Market() const;
 
     protected:
     Job_Market* pJob_Market;

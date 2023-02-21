@@ -1,10 +1,51 @@
 #include "Initialization_Functions.hpp"
 
+// General Initialization Function
+void Initialize_Households_Firms_Jobs( vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
+ vector<Capital_Firm_Agent*> *pCapital_Firm_vector,  Public_Info_Board* pPublic_Board, Job_Market* pJob_Market,
+Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank ){
+        
+    // STEP 0.10: Initalize Public Board, Job Market, Bank, Markets
+    cout << " Step 0.10: Initalize Public Board, Job Market, Bank, Markets" << endl;
+    pPublic_Board->Set_Job_Market(pJob_Market);
+    pPublic_Board->Set_Bank(pBank);
+    pPublic_Board->Set_Consumer_Goods_Market(pConsumer_Goods_Market);
+    pPublic_Board->Set_Capital_Goods_Market(pCapital_Goods_Market);
+
+    
+    //--------- STEP 0.11: Initialize Households and Firms
+    cout << " Step 0.11: Initialize Households and Firms" << endl;
+    Initialize_Households(pHousehold_vector, pPublic_Board, n_households); 
+    Initialize_Consumer_Firms( pConsumer_Firm_vector, pPublic_Board,  n_consumer_firms);
+    Initialize_Capital_Firms(pCapital_Firm_vector, pPublic_Board,n_capital_firms);
+
+
+    //----------- STEP 0.12: Initialize job market
+    cout << " Step 0.12: Initialize job market" << endl;
+    Initialize_Job_Market(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector,pPublic_Board);
+    pJob_Market->Print_Size();
+    pPublic_Board->Print_Labor_Market();
+
+    //----------- STEP 0.13 Assign firm owners - Todo later, minor thing
+
+
+    //----------- STEP 0.16: Send initial goods to markets and initialize price level
+    cout << "Step 0.16: Send initial goods to markets and initialize price level" << endl;
+
+    Initialize_Cons_Cap_Goods_Markets(pConsumer_Firm_vector,  pCapital_Firm_vector, pConsumer_Goods_Market,
+    pCapital_Goods_Market,pPublic_Board);
+
+
+}
+
+
+
+
 // ----------------------- Consumer firms
 
 /* Initialize a fixed number of households given an array of suitable size allocated
 */
-void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, Public_Info_Board* pPublic_Board, int size, int* promised_jobs)
+void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, Public_Info_Board* pPublic_Board, int size)
 {
     cout << "\n Initializing " << size << " consumer firms" << endl;
 
@@ -36,7 +77,6 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
             int(init_production_planned()),
         };
 
-        *promised_jobs += int_vals[1];
         //cout << " set up arrays now passign them in " << endl;
         pConsumer_Firm_vector->push_back(new Consumer_Firm_Agent(float_vals, int_vals));
         //cout << "Cons firm initialized! #" << i << endl;
@@ -69,7 +109,7 @@ void Check_Initial_Job_Offers_Cons(vector<Consumer_Firm_Agent*> *pConsumer_Firm_
 
 // ----------------------- Capital firms
 
-void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Board, int size, int* promised_jobs)
+void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Board, int size)
 {
     cout << "\n Initializing " << size << " capital firms" << endl;
     Normal_Dist_Generator init_dividend_ratio_optimist(init_dividend_ratio_optimist_mean, init_dividend_ratio_optimist_std, init_dividend_ratio_optimist_min, init_dividend_ratio_optimist_max);
@@ -102,7 +142,6 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
             int(init_production_planned()),
         };
 
-        *promised_jobs += int_vals[1];
         
         pCapital_Firm_vector->push_back(new Capital_Firm_Agent(float_vals, int_vals));
         //cout << "Cons firm initialized! #" << i << endl;
@@ -225,3 +264,23 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
     cout << " Job Market Initialization Now Complete" << endl;
     
 }
+
+// ---- Consumer and Capital goods market
+// Function to set up Consumer Goods market at t=0
+void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
+    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board){
+
+    // Order of looping does not matter here
+    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+        firm_ptr->Send_Goods_To_Market();}
+    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Send_Goods_To_Market();}
+
+    pConsumer_Goods_Market->Update_Price_Level();
+    pCapital_Goods_Market->Update_Price_Level();
+
+    pPublic_Info_Board->Initialize_Price_Level();
+
+}
+
+
