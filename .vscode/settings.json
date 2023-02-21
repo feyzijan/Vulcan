@@ -67,6 +67,7 @@
         "xtree": "cpp",
         "fstream": "cpp",
         "queue": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "array": "cpp"
     }
 }

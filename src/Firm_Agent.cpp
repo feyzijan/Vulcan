@@ -504,20 +504,25 @@ void Firm_Agent::Buy_Capital_Goods(){
         working_capital_inventory += machines_bought;
         desired_machines -= machines_bought;
     } */
-    vector<Capital_Good*> new_capital_goods = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
+    vector<Capital_Good*>* new_capital_goods = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
     // Calculate the number of machines bought by looping through new_capital_goods and incrementing quantity
     int new_machines_bought = 0;
     float total_price_paid = 0;
-    for (auto it = new_capital_goods.begin(); it != new_capital_goods.end(); ++it){
-        new_machines_bought += (*it)->Get_Quantity();
-        total_price_paid += (*it)->Get_Quantity() * (*it)->Get_Price();
+    if (new_capital_goods->empty() == false){
+        for (auto cap_good : *new_capital_goods){
+            new_machines_bought += cap_good->Get_Quantity();
+            total_price_paid += cap_good->Get_Quantity() * cap_good->Get_Price();
+        }
     }
-    pPublic_Info_Board->Update_Machine_spending(total_price_paid);
-    pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
+
     // Copy all the objects in the new_capital_goods vector to the capital_goods vector
-    copy(new_capital_goods.begin(), new_capital_goods.end(), back_inserter(capital_goods_list));
+    capital_goods_list.insert(capital_goods_list.end(), new_capital_goods->begin(), new_capital_goods->end());
+    delete new_capital_goods;
     // Update the working capital inventory
     working_capital_inventory += new_machines_bought;
+
+    pPublic_Info_Board->Update_Machine_spending(total_price_paid);
+    pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
 }
 
 

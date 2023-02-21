@@ -14,6 +14,16 @@ Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_pr
     expiry_date = sold_date + depreciation_period;
 }
 
+/* Copy constructor*/
+Capital_Good::Capital_Good(const Capital_Good& other){
+    pSeller = other.pSeller;
+    price = other.price;
+    value = other.value;
+    quantity = other.quantity;
+    depreciation_period = other.depreciation_period;
+    sold_date = global_date;
+    expiry_date = sold_date + depreciation_period;
+}
 
 /* Printing
 */

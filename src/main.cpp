@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "Initialization_Parameters.hpp"
 
+#include "Initialization_Parameters.hpp"
 #include "Public_Info_Board.hpp"
 #include "Household_Agent.hpp"
 #include "Job.hpp"
@@ -16,6 +16,7 @@
 #include "Data_Logging.hpp"
 
 using namespace std;
+
 
 int main()
 {
@@ -81,6 +82,9 @@ int main()
         firm_ptr->Send_Goods_To_Market();}
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Send_Goods_To_Market();}
+
+    pConsumer_Goods_Market_1->Update_Price_Level();
+    pCapital_Goods_Market_1->Update_Price_Level();
 
     pPublic_Board_1->Initialize_Price_Level();
 
@@ -267,10 +271,6 @@ int main()
     // -- t= 1.5
     // STEP 1.91: Firms produce their goods
     cout << " \n ------------ Step 1.91: Firms produce their goods ----------------" <<endl;
-
-    cout << "Consumer Firms have produced " << pPublic_Board_1->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Board_1->Get_Consumer_Goods_Production_Planned() << endl;
-    cout << "Capital Firms have produced " << pPublic_Board_1->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Board_1->Get_Capital_Goods_Production_Planned() << endl;
-
     
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Produce_Consumer_Goods();}
@@ -289,31 +289,69 @@ int main()
     
     // STEP 1.93: Consumer good market commences
     cout << " \n ------------ Step 1.93: Consumer good market commences ----------------" <<endl;
+
+    cout << "Households have set aside " << pPublic_Board_1->Get_Consumption_Budget() << " to spend on consumer goods" << endl;
     
+    cout << "Consumer goods market before firms post goods ( what remains of the previous market): " << endl;
+    pConsumer_Goods_Market_1->Update_Price_Level();
+    pConsumer_Goods_Market_1->Print();
+    pConsumer_Goods_Market_1->Reset_Market();
+
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Send_Goods_To_Market();}
 
+    cout << "Consumer goods market after firms post goods ( after resetting market): " << endl;
     pConsumer_Goods_Market_1->Sort_Consumer_Goods_By_Price();
+    pConsumer_Goods_Market_1->Update_Price_Level();
+    pConsumer_Goods_Market_1->Print();
 
     for(Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Buy_Consumer_Goods();}
 
     cout << "Households have spent " << pPublic_Board_1->Get_Consumer_Spending() << " on consumer goods to buy " << pPublic_Board_1->Get_Consumer_Orders() << " consumer goods" << endl;
+    cout <<  float(pPublic_Board_1->Get_Consumer_Spending()) / float(pPublic_Board_1->Get_Consumption_Budget())*100 << "% of household budgets have been spent " << endl;
+    pConsumer_Goods_Market_1->Update_Price_Level();
+    pConsumer_Goods_Market_1->Print();
+
+
+
 
     // STEP 1.94: Capital good market commences
     cout << " \n ------------ Step 1.94: Investment good market commences ----------------" <<endl;
 
+    
+    pPublic_Board_1->Reset_Global_Data();
+    pCapital_Goods_Market_1->Reset_Market();
+
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Send_Goods_To_Market();}
 
+    cout << "Firms have now posted capital goods " << endl;
+
     pCapital_Goods_Market_1->Sort_Capital_Goods_By_Price();
+    pCapital_Goods_Market_1->Update_Price_Level();
+    pCapital_Goods_Market_1->Print();
     
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Buy_Capital_Goods();}
+
+
+    cout << "Cons Firms have now bought capital goods " << endl;
+    cout << "Cons Firms have spent " << pPublic_Board_1->Get_Machine_Spending() << " on capital goods to buy " << pPublic_Board_1->Get_Machine_Orders() << " capital goods" << endl;
+
+    pCapital_Goods_Market_1->Sort_Capital_Goods_By_Price();
+    pCapital_Goods_Market_1->Update_Price_Level();
+    pCapital_Goods_Market_1->Print();
+
+
+    pPublic_Board_1->Reset_Global_Data();
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Buy_Capital_Goods();}
 
-    cout << "Firms have spent " << pPublic_Board_1->Get_Machine_Spending() << " on capital goods to buy " << pPublic_Board_1->Get_Machine_Orders() << " capital goods" << endl;
+    cout << "Cap Firms have now bought capital goods " << endl;
+    pCapital_Goods_Market_1->Update_Price_Level();
+    pCapital_Goods_Market_1->Print();
+    cout << "Cap Firms have spent " << pPublic_Board_1->Get_Machine_Spending() << " on capital goods to buy " << pPublic_Board_1->Get_Machine_Orders() << " capital goods" << endl;
 
 
     // Timestep t=1

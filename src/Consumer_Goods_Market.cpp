@@ -19,11 +19,11 @@ void Consumer_Goods_Market::Add_Consumer_Good_To_Market(Consumer_Good * cons_goo
     //cout << "Cons good market adding good " << cons_good << endl;
     cons_goods_list.push_back(cons_good);
     //cout << "Cons good market added good " << cons_good << endl;
-    int q = cons_good->Get_Quantity();
+/*     int q = cons_good->Get_Quantity();
     float p = cons_good->Get_Price();
     n_total_goods += q;
     total_weighed_price += float(p*q);
-    price_level = (float)total_weighed_price/(float)n_total_goods;
+    price_level = (float)total_weighed_price/(float)n_total_goods; */
     //cout << "new price level " << price_level;
 }
 
@@ -58,14 +58,38 @@ std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
         } else if (n==0) // Household can no longer afford to buy anything
         {
             break; // exit loop
-        } else{ // Household can't buy all, so has run out of budget
+        } else{ // Household can't buy all, so will run out of budget after this purchase
             (*i)->Update_Quantity(-n);
             remaining_budget -= n*p;
             quantity_bought += n;
             break; // exit loop
         }
-        return std::make_pair(remaining_budget, quantity_bought);
     }
+    // Update price level and quantity for the market
+    return std::make_pair(remaining_budget, quantity_bought);
+}
+
+/* Update the price level of the market
+*/
+void Consumer_Goods_Market::Update_Price_Level(){
+    n_total_goods = 0;
+    total_weighed_price = 0;
+    for(auto i=cons_goods_list.begin(); i!=cons_goods_list.end();i++){
+        int q = (*i)->Get_Quantity();
+        float p = (*i)->Get_Price();
+        n_total_goods += q;
+        total_weighed_price += float(p*q);
+    }
+    price_level = (float)total_weighed_price/(float)n_total_goods;
+}
+
+/* Reset the market
+*/
+void Consumer_Goods_Market::Reset_Market(){
+    cons_goods_list.clear();
+    n_total_goods = 0;
+    total_weighed_price = 0;
+    price_level = 0.0;
 }
 
 
@@ -75,16 +99,16 @@ std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
 */
 void Consumer_Goods_Market::Print(){
     std::cout << "Consumer Goods Market at " << this << std::endl;
-    std::cout << "-------------------" << std::endl;
     std::cout << "Price level: " << price_level << std::endl;
     std::cout << "Total number of goods: " << n_total_goods << std::endl;
     std::cout << "Total weighted price: " << total_weighed_price << std::endl;
     std::cout << "-------------------" << std::endl;
-    std::cout << "Goods in the market: " << std::endl;
-    for (int i = 0; i < cons_goods_list.size(); i++)
+    
+    /*std::cout << "Goods in the market: " << std::endl;
+     for (int i = 0; i < cons_goods_list.size(); i++)
     {
         std::cout << "Good " << i << std::endl;
         cons_goods_list[i]->Print();
     }
-    std::cout << "-------------------" << std::endl;
+    std::cout << "-------------------" << std::endl; */
 }

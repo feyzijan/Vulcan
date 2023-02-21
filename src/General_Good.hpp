@@ -30,6 +30,7 @@ class General_Good{
 
     // Setters
     void Update_Quantity(int quantity_change) {quantity += quantity_change;}
+    void Set_Quantity(int new_quantity) {quantity = new_quantity;}
     void Update_Price(float new_price) {price = new_price;}
     
 

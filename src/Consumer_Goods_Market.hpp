@@ -21,6 +21,8 @@ class Consumer_Goods_Market{
     void Add_Consumer_Good_To_Market(Consumer_Good * cons_good);
     void Sort_Consumer_Goods_By_Price();
     std::pair<int, int>  Buy_Consumer_Goods(int budget);
+    void Update_Price_Level();
+    void Reset_Market(); 
 
 
 

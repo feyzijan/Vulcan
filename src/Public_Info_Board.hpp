@@ -45,7 +45,7 @@ class Public_Info_Board{
     std::pair<int, int> Buy_Consumer_Goods(int budget);
 
     // Capital Good Market
-    std::vector<Capital_Good*>  Buy_Capital_Goods(int q_desired);
+    std::vector<Capital_Good*>*  Buy_Capital_Goods(int q_desired);
     void Send_Cap_Good_To_Market(Capital_Good* pGood);
     int Get_Cost_For_Desired_Cap_Goods(int q_desired);
     
@@ -81,6 +81,7 @@ class Public_Info_Board{
     int Get_Machine_Spending() { return machine_spending;}
     int Get_Consumer_Orders() { return consumer_orders;}
     int Get_Consumer_Spending() { return consumer_spending;}
+    int Get_Consumption_Budget() { return consumption_budgets;}
     int Get_Consumer_Goods_Production() { return consumer_goods_production;}
     int Get_Capital_Goods_Production() { return capital_goods_production;}
     int Get_Consumer_Goods_Production_Planned() { return consumer_goods_production_planned;}
@@ -110,6 +111,7 @@ class Public_Info_Board{
     void Update_Machine_spending(int amount) { machine_spending += amount; }
     void Update_Consumer_orders(int amount) { consumer_orders += amount; }
     void Update_Consumer_spending(int amount) { consumer_spending += amount; }
+    void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
     
     void Update_Consumer_goods_production(int amount) { consumer_goods_production += amount; }
     void Update_Capital_goods_production(int amount) { capital_goods_production += amount; }
@@ -169,7 +171,8 @@ class Public_Info_Board{
     // Consumer expenditure
     int consumer_orders;
     int consumer_spending;
-
+    int consumption_budgets;
+    
     // Production
     int consumer_goods_production;
     int capital_goods_production;

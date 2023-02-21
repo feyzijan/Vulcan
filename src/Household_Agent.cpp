@@ -203,6 +203,7 @@ void Household_Agent::Determine_Consumption_Budget()
     } else {
         expenditure_consumption = (1.0-saving_propensity) * income_current + c_f * excess_savings;
     }
+    pPublic_Info_Board->Update_Consumption_Budgets(expenditure_consumption);
 }
 
 /* Interact with the market through public board to buy goods
