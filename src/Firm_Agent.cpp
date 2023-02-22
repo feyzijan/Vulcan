@@ -396,11 +396,26 @@ Also remove active job postings from the market
 void Firm_Agent::Layoff_Excess_Workers(){
     layoff_wage_savings = 0;
     int layoff_count = employee_count - employee_count_desired;
+
+    // check for errors
+    if (active_job_list.size() == 0){
+        return;
+    } else if ( active_job_list.size() != employee_count){
+        return;
+    } else if ( layoff_count > active_job_list.size() ){
+        return;
+    } else if ( layoff_count < 0 ){
+        return;
+    }
+
     for (int i=0; i<layoff_count; i++){
+        //if (active_job_list.back() == nullptr){
+        //    cout << "Error: active_job_list.back() is nullptr" << endl;}
         layoff_wage_savings += active_job_list.back()->Get_Wage();
         active_job_list.back()->Update_Status(0); // Household will see they are laid off on next update
         active_job_list.pop_back();
     }
+    employee_count -= layoff_count;
     expected_wage_bill = labor_wage_bill - layoff_wage_savings;
     pPublic_Info_Board->Update_Employee_Firings(layoff_count);
 }

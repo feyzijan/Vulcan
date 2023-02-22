@@ -9,6 +9,7 @@ void Time_Step_1(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Fi
 vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Info_Board, Job_Market* pJob_Market,
 Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank){
 
+    cout << "\n___________________TIMESTEP #______________ " << global_date << endl;
     // STEP 1.1: Update Inflation Rate and Interest rate  -
     std::cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
     pBank->Update_Inflation_Rate();

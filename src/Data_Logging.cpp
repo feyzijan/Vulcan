@@ -161,7 +161,7 @@ void Log_Household_Properties(vector<Household_Agent*> *pHousehold_vector, int s
 
 
     std::stringstream ss;
-    ss << "HouseholdDataInit_t_" << global_date <<".csv";
+    ss << "HouseholdData_t_" << global_date <<".csv";
     std::string filename = ss.str();
 
     write_csv(filename,vals);
@@ -330,7 +330,7 @@ void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vecto
 
 
     std::stringstream ss;
-    ss << "ConsumerFirmAgentDataInit_t_" << global_date <<".csv";
+    ss << "ConsumerFirmAgentData_t_" << global_date <<".csv";
     std::string filename = ss.str();
 
     write_csv(filename,vals);
@@ -502,7 +502,7 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
 
 
     std::stringstream ss;
-    ss << "CapitalFirmAgentDataInit_t_" << global_date <<".csv";
+    ss << "CapitalFirmAgentData_t_" << global_date <<".csv";
     std::string filename = ss.str();
 
     write_csv(filename,vals);
