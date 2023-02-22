@@ -7,9 +7,9 @@ int global_date = 0;// will be in main
 int test_global_var = 0; // for testing
 int test_global_var_2 = 0; // for testing
 
-const int n_households = 60000;
-const int n_consumer_firms = 1000;
-const int n_capital_firms = 200;
+const int n_households = 2;
+const int n_consumer_firms = 1;
+const int n_capital_firms = 1;
 const int n_max_employees = 100;
 
 
