@@ -52,30 +52,30 @@ class Firm_Agent{
     void Update_Average_Profit();
     void Update_Average_Sales();
     int Pay_Dividends();
+    virtual void Depreciate_Good_Inventory() {};
     void Determine_New_Production();
+    
     void Adjust_Wage_Offers();
     void Determine_Labor_Need();
-    void Compute_Expected_Wage_Bill();
-    void Seek_Short_Term_Loan();
+    void Remove_Job_Postings(); 
     void Layoff_Excess_Workers();
-    void Remove_Job_Postings(); // TO implemeent
+    void Seek_Short_Term_Loan();
+
     void Post_Jobs();
     void Check_For_New_Employees();
-    //void Commence_Production(); // Implemented by subclasses
-    void Update_Supplier_Networks(); // TO Implement
+    
     void Make_Investment_Decision(); // Complete
+    virtual void Produce_Goods() {};
+    virtual void Send_Goods_To_Market() {};
+    virtual void Update_Goods_On_Market() {};
+
     void Seek_Long_Term_Loan();
+    virtual void Update_Supplier_Networks(); // TO Implement
     void Buy_Capital_Goods(); 
-    //virtual void Produce_Goods(); // Implemented by subclasses
+    
 
-
-
-
-    // Pay liabilities 
+    void Update_Leverage_Ratio();
     void Pay_Liabilities();
-    // Seek Loans if needed to pay liabilities
-    int Seek_Loans(int shortfall); // remove later
-    // Seek long term loan
     
  
 

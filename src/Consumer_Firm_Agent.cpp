@@ -38,7 +38,7 @@ void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
 
 /* Increment Firm inventory by the number of machines, productivity per machine,
 */
-void Consumer_Firm_Agent::Produce_Consumer_Goods(){
+void Consumer_Firm_Agent::Produce_Goods(){
 
     labor_utilization = max((float)employee_count / float(working_capital_inventory*cons_workers_per_machine), float(1.0));
     machine_utilization = max((float)working_capital_inventory / float(employee_count/cons_workers_per_machine), float(1.0));
@@ -60,12 +60,21 @@ void Consumer_Firm_Agent::Produce_Consumer_Goods(){
 }
 
 
-/* Post Produced goods to market
+/* Post Produced goods to market - Only do this in initialization period
 */
 void Consumer_Firm_Agent::Send_Goods_To_Market(){
     //cout << "cons firm " << this << " sending goods to market" << endl;
     pPublic_Info_Board->Send_Cons_Good_To_Market(cons_goods_on_market);
 }
+
+/* Update the goods object via the stored pointer, the market already contains this pointer
+*/
+void Consumer_Firm_Agent::Update_Goods_On_Market(){
+    goods_on_market->Update_Price(good_price_current);
+    goods_on_market->Set_Quantity(inventory);
+}
+
+
 
 /* Update sentiment and post to public board*/
 void Consumer_Firm_Agent::Update_Sentiment(){

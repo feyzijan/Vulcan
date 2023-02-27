@@ -39,47 +39,33 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     std::cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
     
 
+
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Depreciate_Capital();
         firm_ptr->Cancel_Expired_Contracts();
         firm_ptr->Random_Experimentation();
         firm_ptr->Check_Sales();
-        firm_ptr->Pay_Dividends();
+        firm_ptr->Update_Average_Profit();
+        firm_ptr->Update_Average_Sales();
+        firm_ptr->Update_Sentiment();
         firm_ptr->Depreciate_Good_Inventory();
-        firm_ptr->Determine_New_Production();
-    }
-    
-    
+        firm_ptr->Determine_New_Production();}
+
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Depreciate_Capital();
         firm_ptr->Cancel_Expired_Contracts();
         firm_ptr->Random_Experimentation();
         firm_ptr->Check_Sales();
-        firm_ptr->Pay_Dividends();
+        firm_ptr->Update_Average_Profit();
+        firm_ptr->Update_Average_Sales();
+        firm_ptr->Update_Sentiment();
         firm_ptr->Depreciate_Good_Inventory();
-        firm_ptr->Determine_New_Production();
-    }
+        firm_ptr->Determine_New_Production();}
 
-    // special just for first time step
-    if( global_date > 1){
-        for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
-            firm_ptr->Update_Average_Profit();
-            firm_ptr->Update_Average_Sales();
-        }
-        for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-            firm_ptr->Update_Average_Profit();
-            firm_ptr->Update_Average_Sales();
-        }
-    } else {
-        for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
-            firm_ptr->Update_Average_Profits_T1();
-            firm_ptr->Update_Average_Sales_T1();
-        }
-        for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-            firm_ptr->Update_Average_Profits_T1();
-            firm_ptr->Update_Average_Sales_T1();
-        }
-    }
+
+
+
+
 
     // STEP 1.8: Firms set wage offers, labor target, and finance expected wage bill
     std::cout << " \n ------------ Step 1.8: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
@@ -115,12 +101,11 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     std::cout << " \n ------------ Step 1.81: Households Check if they are fired ----------------" <<endl;
     // Step 1.82: Households update reservation wages
     std::cout << " \n ------------ Step 1.82: Households update reservation wages ----------------" <<endl;
+    
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Check_Employment_Status();
         household_ptr->Update_Reservation_Wage();}
 
-
-    
 
     // STEP 1.83: Labor market matching process
     cout << " \n ------------ Step 1.83: Labor market matching process ----------------" <<endl;
@@ -160,13 +145,27 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // STEP 1.91: Firms produce their goods
     cout << " \n ------------ Step 1.91: Firms produce their goods ----------------" <<endl;
     
+    cout << "Consumer goods market before firms post goods ( what remains of the previous market): " << endl;
+    pConsumer_Goods_Market->Update_Price_Level();
+    pConsumer_Goods_Market->Print();
+    pConsumer_Goods_Market->Reset_Market();
+
 
     for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Make_Investment_Decision(); 
-        firm_ptr->Produce_Consumer_Goods();}
+        firm_ptr->Produce_Goods();
+        firm_ptr->Update_Goods_On_Market();}
+
+
+    cout << "Consumer goods market after firms post goods ( after resetting market): " << endl;
+    pConsumer_Goods_Market->Sort_Consumer_Goods_By_Price();
+    pConsumer_Goods_Market->Update_Price_Level();
+    pConsumer_Goods_Market->Print();
+
+
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Make_Investment_Decision();
-        firm_ptr->Produce_Capital_Goods();}
+        firm_ptr->Produce_Goods();}
 
     cout << "Firms wish to buy " << test_global_var << " machines" << endl;
 
@@ -186,18 +185,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     cout << "Households have set aside " << pPublic_Info_Board->Get_Consumption_Budget() << " to spend on consumer goods" << endl;
     
-    cout << "Consumer goods market before firms post goods ( what remains of the previous market): " << endl;
-    pConsumer_Goods_Market->Update_Price_Level();
-    pConsumer_Goods_Market->Print();
-    pConsumer_Goods_Market->Reset_Market();
-
-    for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
-        firm_ptr->Send_Goods_To_Market();}
-
-    cout << "Consumer goods market after firms post goods ( after resetting market): " << endl;
-    pConsumer_Goods_Market->Sort_Consumer_Goods_By_Price();
-    pConsumer_Goods_Market->Update_Price_Level();
-    pConsumer_Goods_Market->Print();
 
     for(Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Buy_Consumer_Goods();}
@@ -215,7 +202,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pCapital_Goods_Market->Reset_Market();
 
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-        firm_ptr->Send_Goods_To_Market();}
+        firm_ptr->Update_Goods_On_Market();}
 
     cout << "Firms have now posted capital goods " << endl;
 

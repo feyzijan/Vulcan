@@ -272,9 +272,13 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
 
     // Order of looping does not matter here
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
-        firm_ptr->Send_Goods_To_Market();}
+        firm_ptr->Send_Goods_To_Market();
+        firm_ptr->Update_Average_Profits_T1();
+        firm_ptr->Update_Average_Sales_T1();}
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-        firm_ptr->Send_Goods_To_Market();}
+        firm_ptr->Send_Goods_To_Market();
+        firm_ptr->Update_Average_Profits_T1();
+        firm_ptr->Update_Average_Sales_T1();}
 
     pConsumer_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Update_Price_Level();

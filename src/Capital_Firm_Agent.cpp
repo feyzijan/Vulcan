@@ -58,7 +58,7 @@ void Capital_Firm_Agent::Depreciate_Good_Inventory(){
 
 /* Increment Firm inventory by the number of machines, productivity per machine,
 */
-void Capital_Firm_Agent::Produce_Capital_Goods(){
+void Capital_Firm_Agent::Produce_Goods(){
     
     labor_utilization = max((float)employee_count / float(working_capital_inventory*cons_workers_per_machine), float(1.0));
     machine_utilization = max((float)working_capital_inventory / float(employee_count/cons_workers_per_machine), float(1.0));
@@ -84,6 +84,15 @@ void Capital_Firm_Agent::Send_Goods_To_Market(){
     //cout << "Cap firm " << this <<" sending goods to market" << endl;
     pPublic_Info_Board->Send_Cap_Good_To_Market(cap_goods_on_market);
 }
+
+/* Update goods on market*/
+void Capital_Firm_Agent::Update_Goods_On_Market(){
+    //cout << "Cap firm " << this <<" updating goods on market" << endl;
+    cap_goods_on_market->Update_Price(good_price_current);
+    cap_goods_on_market->Update_Quantity(inventory-quantity_sold);
+    cap_goods_on_market->Update_Value(cap_goods_on_market->Get_Quantity()*cap_goods_on_market->Get_Price());
+}
+
 
 /* Update sentiment and post to public board*/
 void Capital_Firm_Agent::Update_Sentiment(){

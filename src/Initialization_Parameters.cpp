@@ -67,14 +67,9 @@ const float init_res_wage_min = 100;
 const float init_res_wage_max = 999999;
 
 // Exogenous parameters for Households
-const float n_res_wage_decrease = 0.02; 
+const float n_res_wage_decrease = 0.05; 
 const float targeted_savings_to_income_ratio = 3.0;
-
-// Constants to initialize all firms with
-const float init_production_current_ratio = 0.4;
-const float init_quantity_sold_ratio = 0.25;
-const float init_good_price_past = 9.5;
-const float init_capital_good_price = 100.0;
+const float household_tax_rate = 0.2;
 
 
 
@@ -134,7 +129,7 @@ const float init_desired_inventory_factor_max = 4.0;
 
 // Exogenous parameters for Firms
 const int standard_employment_contract_length = 20;
-
+const float firm_tax_rate = 0.2;
 
 // Exogenous parameters for Consumer Firms
 const float cons_good_inv_depr_rate = 0.01;
@@ -148,6 +143,13 @@ const float cap_productivity = 10; // # units produced per worker machine pairin
 const int cap_workers_per_machine = 1;
 const int machine_lifespan = 100;
 const float cap_good_unit_cost = 2.0;
+
+// Constants to initialize all firms with
+const float init_production_current_ratio = 0.4;
+const float init_quantity_sold_ratio = 0.25;
+const float init_good_price_past = 9.5;
+const float init_capital_good_price = 100.0;
+
 
 //---------------------------------------------
 

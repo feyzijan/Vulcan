@@ -209,6 +209,7 @@ void Firm_Agent::Depreciate_Capital(){
     for (auto i = capital_goods_list.begin(); i !=  capital_goods_list.end(); ++i){
         (*i)->Depreciate();
     }
+    
 }
 
 
@@ -245,7 +246,10 @@ void Firm_Agent::Check_Sales(){
     revenue_sales = quantity_sold * good_price_current; // unsure if this gives float or int
     inventory_factor = float(inventory) / float(production_current);
     desired_inventory = desired_inventory_factor * production_current;
-    Update_Sentiment();
+
+    if (inventory != goods_on_market->Get_Quantity()){
+        cout << "Error - Firm Agent: Inventory and goods on market do not match" << endl;
+    }
 }
 
 
@@ -280,8 +284,6 @@ void Firm_Agent::Update_Average_Sales(){
 
 /* Pay dividends to firm owner- formula taken from Jamel*/
 int Firm_Agent::Pay_Dividends(){ 
-    dividend_payments = max(min(int(dividend_ratio * average_profit), cash_on_hand),0);
-    cash_on_hand -= dividend_payments;
     return dividend_payments; 
 }
 
@@ -303,6 +305,7 @@ void Firm_Agent::Determine_New_Production()
     }
     
     good_price_past = good_price_current; // store current price incase we want to see the change
+    production_past = production_current;
 
     bool inventory_high = inventory >= desired_inventory; 
     float p = Uniform_Dist_Float(0.0,0.5); // Random production adjustment
@@ -310,7 +313,7 @@ void Firm_Agent::Determine_New_Production()
 
     // Case a: Inventory low, Price high - > Maintain price, increase prod
     if (!inventory_high && price_high){
-        //production_planned*= (1.0+q);        
+        production_planned*= (1.0+q);        
     } // Case b: Inventory low, Price low - > Increase Price and production
     else if( !inventory_high && !price_high){
         good_price_current *= (1.0+p);
@@ -324,6 +327,7 @@ void Firm_Agent::Determine_New_Production()
 
     // below eq is from jamel paper - overrides above quantity adjustments
     production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
+    production_planned = max(production_planned,0); // maybe instead of 0 pick production_past/10 or smt
 }
 
 
@@ -339,13 +343,16 @@ void Firm_Agent::Adjust_Wage_Offers()
     bool wage_high = wage_offer >= average_wage;
 
     if (wage_high && need_worker){
-        //wage_offer *= (1+n_uniform);
-    } else if(wage_high && !need_worker){
         wage_offer *= (1-n_uniform);
+    } else if(wage_high && !need_worker){
+        //wage_offer *= (1-n_uniform);
     } else if(!wage_high && need_worker){
         wage_offer *= (1+n_uniform);
     } else{ // (!wage_high && !need_worker)
+        wage_offer *= (1+n_uniform);
     }
+
+    // Update posted jobs to match this wage
 }
 
 
@@ -354,56 +361,63 @@ The target is = minimum(#workers needed to operate machines needed to meet produ
 TODO: Recheck equation
 */
 void Firm_Agent::Determine_Labor_Need(){
+
+    // EQ to determine employee targets **Revise
     employee_count_desired = max(0, min(int(production_planned/cons_productivity*cons_workers_per_machine),working_capital_inventory*cons_workers_per_machine)) ; // Determine the workforce needed to meet production targets
-    pPublic_Info_Board->Update_Employee_Demand(min(employee_count_desired-employee_count,0));
-    need_worker = employee_count_desired > employee_count;
+    int employee_demand = employee_count_desired - employee_count;
+    
+    // Update public records    
+    pPublic_Info_Board->Update_Employee_Demand(min(employee_demand,0));
+
+    
+    need_worker = employee_demand > 0;
     n_active_job_postings = posted_job_list.size();
     
-    if (n_active_job_postings >  max(0,employee_count_desired - employee_count) ){
+    // We have too many job postings - remove some
+    if (n_active_job_postings >  employee_demand){
         Remove_Job_Postings();
     }
 
-
-    if(employee_count_desired < employee_count){
+    // Layoff excess employees and update expected wage bill
+    if(employee_demand < 0){
         Layoff_Excess_Workers(); // this will compute expected_wage_bill
     } else{
         expected_wage_bill = labor_wage_bill + (employee_count_desired - employee_count) * wage_offer;
     }
-
-    expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
+    expected_wage_bill_shortfall = expected_wage_bill-cash_on_hand;
     short_term_funding_gap = expected_wage_bill_shortfall;
+
+    // If there is a short term funding gap, seek a loan
     if (short_term_funding_gap > 0){
         Seek_Short_Term_Loan(); 
     }
 
     // If more job postings are needed and there is no short term funding gap, post jobs
-    if((short_term_funding_gap == 0) & (n_active_job_postings <  max(0,employee_count_desired - employee_count)) ){
-        test_global_var_2 += max(0,employee_count_desired - employee_count) -  n_active_job_postings;
-        pPublic_Info_Board->Update_New_Job_Postings(max(0,employee_count_desired - employee_count) -  n_active_job_postings);
+    if((short_term_funding_gap <= 0) & (n_active_job_postings <  max(0, employee_demand)) ){
+        // Update public records
+        pPublic_Info_Board->Update_New_Job_Postings(max(0,employee_demand) -  n_active_job_postings);
         Post_Jobs();
     }      
 }
 
-
-/* Compute the expected wage bill for the next period*/
-void Firm_Agent::Compute_Expected_Wage_Bill(){
-    expected_wage_bill = labor_wage_bill - layoff_wage_savings + (employee_count_desired - employee_count) * wage_offer;
-    expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
-}
-
-
-/* Function to seek short term unamortized loans from the bank to cover
-expected wage bill funding gap
+/* Function to remove job postings from the market
 */
-void Firm_Agent::Seek_Short_Term_Loan(){
-    Loan* new_loan = pPublic_Info_Board->Seek_Short_Term_Loan(this);
-    if (new_loan != nullptr){
-        loan_book.push_back(new_loan);
-        cash_on_hand += new_loan->Get_Principal_Amount();
-        expected_wage_bill_shortfall = max(0, expected_wage_bill-cash_on_hand);
-        short_term_funding_gap = expected_wage_bill_shortfall;
+void Firm_Agent::Remove_Job_Postings(){
+
+    int postings_needed = max(0, employee_count_desired - employee_count);
+    int postings_to_remove = max(0,n_active_job_postings - postings_needed);
+
+    // Update public records
+    pPublic_Info_Board->Update_Removed_Job_Postings(postings_to_remove);
+    
+    // Remove job postings from the market
+    for (int i=0; i<postings_to_remove; i++){
+        posted_job_list.back()->Update_Status(-1); // Job market will remove these on next update
+        posted_job_list.pop_back();
+        n_active_job_postings -=1;
     }
 }
+
 
 /* Function to layoff excess workers based on last in first out principle
 If the function is called with no excess workers it does nothing
@@ -425,35 +439,35 @@ void Firm_Agent::Layoff_Excess_Workers(){
         return;
     }
 
+    // Fire employees and calc how much you save on wage bills
     for (int i=0; i<layoff_count; i++){
-        //if (active_job_list.back() == nullptr){
-        //    cout << "Error: active_job_list.back() is nullptr" << endl;}
         layoff_wage_savings += active_job_list.back()->Get_Wage();
         active_job_list.back()->Update_Status(0); // Household will see they are laid off on next update
         active_job_list.pop_back();
     }
     employee_count -= layoff_count;
     expected_wage_bill = labor_wage_bill - layoff_wage_savings;
+
+    // Update public records
     pPublic_Info_Board->Update_Employee_Firings(layoff_count);
 }
 
-/* Function to remove job postings from the market
+
+
+/* Function to seek short term unamortized loans from the bank to cover
+expected wage bill funding gap
 */
-void Firm_Agent::Remove_Job_Postings(){
-    /* if (n_active_job_postings != 0){
-        bool flag = 1; // for debugging
-        }  */
+void Firm_Agent::Seek_Short_Term_Loan(){
+    Loan* new_loan = pPublic_Info_Board->Seek_Short_Term_Loan(this);
 
-    int postings_needed = max(0, employee_count_desired - employee_count);
-    int postings_to_remove = max(0,n_active_job_postings - postings_needed);
-    pPublic_Info_Board->Update_Removed_Job_Postings(postings_to_remove);
-    
-    for (int i=0; i<postings_to_remove; i++){
-        posted_job_list.back()->Update_Status(-1); // Job market will remove these on next update
-        posted_job_list.pop_back();
-        n_active_job_postings -=1;
+    if (new_loan != nullptr){
+        // Update records if a loan has been issued
+        loan_book.push_back(new_loan);
+        cash_on_hand += new_loan->Get_Principal_Amount();
+        new_loan_issuance = new_loan->Get_Principal_Amount();
+        expected_wage_bill_shortfall = expected_wage_bill-cash_on_hand;
+        short_term_funding_gap = expected_wage_bill_shortfall;
     }
-
 }
 
 
@@ -496,7 +510,8 @@ void Firm_Agent::Check_For_New_Employees(){
             temp ++;
         } else {it++;}
     }
-    pPublic_Info_Board->Update_Employee_Hires(temp);
+    pPublic_Info_Board->Update_Employee_Hires(temp); // Tell public board how many ppl have been hired
+    need_worker = employee_count < employee_count_desired;
 }
 
 
@@ -538,8 +553,10 @@ void Firm_Agent::Buy_Capital_Goods(){
     } */
     vector<Capital_Good*>* new_capital_goods = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
     // Calculate the number of machines bought by looping through new_capital_goods and incrementing quantity
+    
     int new_machines_bought = 0;
     float total_price_paid = 0;
+
     if (new_capital_goods->empty() == false){
         for (auto cap_good : *new_capital_goods){
             new_machines_bought += cap_good->Get_Quantity();
@@ -552,6 +569,7 @@ void Firm_Agent::Buy_Capital_Goods(){
     delete new_capital_goods;
     // Update the working capital inventory
     working_capital_inventory += new_machines_bought;
+    capital_costs = total_price_paid;
 
     pPublic_Info_Board->Update_Machine_spending(total_price_paid);
     pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
@@ -567,6 +585,7 @@ void Firm_Agent::Seek_Long_Term_Loan(){
     if (new_loan != nullptr){
         loan_book.push_back(new_loan);
         cash_on_hand += new_loan->Get_Principal_Amount();
+        new_loan_issuance = new_loan->Get_Principal_Amount();
     }
 }
 
@@ -577,15 +596,6 @@ void Firm_Agent::Seek_Long_Term_Loan(){
 // ---------------------------------------------------
 // Old functions, complete or delete
 
-
-/* TODO: Complete Function below
-Seeks loans needed to cover shortfall, returns new funding
-*/
-
-int Firm_Agent::Seek_Loans(int shortfall)
-{
-    return 1;
-}
 
 
 
@@ -600,23 +610,60 @@ int Firm_Agent::Seek_Loans(int shortfall)
 */
 
 void Firm_Agent::Pay_Liabilities(){
-    //Initialize debt payments to zero
-    debt_principal_payments, debt_interest_payments = 0;
-    
-    //Sum up all needed debt repayments
-    for (int i = 0; i++; i<sizeof(loan_book))
-    {
-        if (loan_book[i] != NULL){
-            debt_principal_payments += loan_book[i]->Calculate_Principal_Repayment();
-            debt_interest_payments += loan_book[i]->Calculate_Interest_Repayment();
-        }
+
+    // Calculate debt bill
+    debt_principal_payments = 0;
+    debt_interest_payments = 0;
+    for (Loan* loan_ptr : loan_book){
+        debt_principal_payments += loan_ptr->Calculate_Principal_Repayment();
+        debt_interest_payments += loan_ptr->Calculate_Interest_Repayment();
     }
 
-    //Sum up wage bill
+    // Calculate wage bill 
     labor_wage_bill = 0;
+    for (auto i = active_job_list.begin(); i != active_job_list.end(); ++i){ 
+    labor_wage_bill += (*i)->Get_Wage();}
+
+    // Other bills
+    // capital_costs; // calculated in Buy_Capital_Goods()
+    // dividend_payments; // calculated in Pay_Dividends()
+    // production_costs; // calculated in Produce_Goods() in subclass
+
+    // Tally up liabilities
+    total_liabilities = labor_wage_bill + debt_principal_payments + debt_interest_payments + capital_costs + production_costs;
+
+    // Tally up income
+    total_income = revenue_sales + subsidies;
+    cash_on_hand += total_income; // new_loan_issuance already added when loans were taken
+
+    if (cash_on_hand < total_liabilities){
+        // Go bankrupt
+        long_term_funding_gap = cash_on_hand - total_liabilities;
+        Seek_Long_Term_Loan();
+        bankrupt = true;
+    } else {
+        // Pay bills
+        cash_on_hand -= total_liabilities;
+        // Pay dividends and taxes
+        int excess_profits = max(0,total_income - total_liabilities);
+        dividend_payments = excess_profits * dividend_ratio;
+        excess_profits -= dividend_payments;
+        tax_payments = excess_profits * firm_tax_rate;
+        cash_on_hand -= dividend_payments + tax_payments;
+        Pay_Dividends();
+    }
     
-    for (auto i = active_job_list.begin(); i != active_job_list.end(); ++i) 
-        labor_wage_bill += (*i)->Get_Wage();
+
+    
+    // Calculate Tax payments
+    
+
+
+
+
+
+
+
 
 
 
@@ -625,7 +672,7 @@ void Firm_Agent::Pay_Liabilities(){
     int money_on_hand = revenue_sales + cash_on_hand < total_liabilities; 
     if (money_on_hand  < 0)
     {
-        new_loan_issuance = Seek_Loans(money_on_hand); // implement this method, have it update new_loan_issuance
+        //new_loan_issuance = Seek_Loans(money_on_hand); // implement this method, have it update new_loan_issuance
     }
 
     money_on_hand += new_loan_issuance;

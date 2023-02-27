@@ -98,7 +98,7 @@ void Household_Agent::Check_Employment_Status()
         unemployed = true;
         unemp_duration += 1;
     } else {
-        if (current_job->Get_Status() == 0){
+        if (current_job->Get_Status() == 0){ // Laid off by firm
             unemployed = true;
             unemp_duration += 1;
             delete current_job;
@@ -108,22 +108,24 @@ void Household_Agent::Check_Employment_Status()
             unemp_duration = 0;
         }
     }
+    // Update Public Records
     pPublic_Info_Board->Update_Employed_Workers(!unemployed);
     pPublic_Info_Board->Update_Unemployed_Workers(unemployed);
 }
 
 
-
 /* Function to update reservation wage
- If unemployed for longer than upper bound randomly reduce wage
+ If unemployed for longer than upper bound randomly reduce wage by a "lot", if not reduce by less
  TODO: Check if you want to keep the duration condition
 */
 void Household_Agent::Update_Reservation_Wage()
 {
+    float n_decrease = Uniform_Dist_Float(0.0,n_res_wage_decrease);
     if( unemp_duration > unemp_duration_upper_bound){
-        float n_uniform = Uniform_Dist_Float(0.0,1.0);
-        reservation_wage = reservation_wage * (1-n_uniform*n_res_wage_decrease);
-        }
+        reservation_wage = reservation_wage * (1-n_decrease);
+    } else {
+        reservation_wage = reservation_wage * (1-n_decrease/2.0);
+    }
 } 
 
 /* Function to update the income_current variable to sum of all incomes received

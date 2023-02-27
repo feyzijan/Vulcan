@@ -71,6 +71,7 @@ extern const float init_res_wage_max;
 // Exogenous parameters for Households
 extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
 extern const float targeted_savings_to_income_ratio;
+extern const float household_tax_rate;
 
 //---------------------------------------------
 
@@ -136,6 +137,7 @@ extern const float init_capital_good_price;
 
 // Exogenous parameters for Firms
 extern const int standard_employment_contract_length;
+extern const float firm_tax_rate;
 
 // Exogenous parameters for Consumer Firms
 extern const float cons_good_inv_depr_rate;

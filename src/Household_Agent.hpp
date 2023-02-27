@@ -26,6 +26,7 @@ class Household_Agent{
     // Main Loop methods
     void Check_Employment_Status();
     void Update_Reservation_Wage();
+
     void Consumption_Savings_Decisions();
     void Update_Income();
     void Update_Average_Income();
@@ -33,6 +34,7 @@ class Household_Agent{
     void Update_Savings(); // TO Implement
     void Determine_Consumer_Sentiment();
     void Determine_Consumption_Budget(); //(eq 18)
+    
     void Buy_Consumer_Goods(); 
     void Seek_Jobs();
     
