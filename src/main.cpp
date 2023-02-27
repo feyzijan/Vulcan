@@ -48,14 +48,11 @@ int main()
 
 
 
-
-
     //  -------- STEP 1 MAIN LOOP -------------------
     cout << "\n***************** Main Loop begun" << endl;
     global_date = 1;
 
-
-    for ( int i = 0; i < 36; i++){
+    for ( int i = 0; i < 2; i++){
         Time_Step_1(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector, 
         pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
         Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms);

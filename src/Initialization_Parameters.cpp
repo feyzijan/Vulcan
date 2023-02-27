@@ -7,9 +7,9 @@ int global_date = 0;// will be in main
 int test_global_var = 0; // for testing
 int test_global_var_2 = 0; // for testing
 
-const int n_households = 2;
-const int n_consumer_firms = 1;
-const int n_capital_firms = 1;
+const int n_households = 600;
+const int n_consumer_firms = 100;
+const int n_capital_firms = 50;
 const int n_max_employees = 100;
 
 
@@ -133,7 +133,7 @@ const float init_desired_inventory_factor_min = 0.1;
 const float init_desired_inventory_factor_max = 4.0;
 
 // Exogenous parameters for Firms
-const int standard_employment_contract_length = 12;
+const int standard_employment_contract_length = 20;
 
 
 // Exogenous parameters for Consumer Firms

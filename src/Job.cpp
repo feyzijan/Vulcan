@@ -12,7 +12,7 @@ Job::Job(Firm_Agent*  employer, Household_Agent* employee, int wage_offer, int p
     this->wage_offer = wage_offer;
     this->posting_date  = posting_date;
     this->contract_length = standard_employment_contract_length;
-    this->expiry_date = 99999; // Inially non expiring
+    this->expiry_date = posting_date + contract_length; // Inially non expiring
     status = 0;
 }
 

@@ -77,6 +77,9 @@ Targeted Consumption Expenditures: - some formula
 void Household_Agent::Consumption_Savings_Decisions(){
     Update_Reservation_Wage();
     Update_Income();
+    if (global_date == 1) {
+        Update_Average_Income_T1();
+    }
     Update_Average_Income();
     Update_Savings();
     Determine_Consumer_Sentiment();
@@ -135,6 +138,7 @@ void Household_Agent::Update_Income()
 
     // Check if the person is employed, if so get Wage
     if (!unemployed){
+
         income_wage = current_job->Get_Wage();
         income_current += income_wage;
     } else {
