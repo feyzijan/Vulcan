@@ -27,6 +27,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     virtual void Update_Goods_On_Market() override;
     virtual void Update_Sentiment() override;
 
+
     // Put up Consumer Goods for Sale
     
     protected:

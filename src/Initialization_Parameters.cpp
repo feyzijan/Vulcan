@@ -7,6 +7,8 @@ int global_date = 0;// will be in main
 int test_global_var = 0; // for testing
 int test_global_var_2 = 0; // for testing
 
+const int time_period = 12; // i.e. 12 timesteps make a year
+
 const int n_households = 600;
 const int n_consumer_firms = 100;
 const int n_capital_firms = 50;
@@ -165,6 +167,9 @@ const float bank_risk_premium = 1.0;
 const float bank_target_capital_ratio = 10.0;
 const int bank_short_term_loan_length = 12;
 const int bank_long_term_loan_length = 100;
+const float bank_leverage_ratio_lower_threshold = 60;
+const float bank_leverage_ratio_upper_threshold = 100;
+
 //---------------------------------------------
 
 

@@ -7,6 +7,9 @@ extern int global_date;
 extern int test_global_var; // for testing
 extern int test_global_var_2; // for testing
 
+extern const int time_period; 
+
+
 extern const int n_households;
 extern const int n_consumer_firms;
 extern const int n_capital_firms;
@@ -163,10 +166,14 @@ extern const float bank_initial_interest_rate;
 extern const float bank_inflation_reaction;
 extern const float bank_inflation_target; // yearly inflation target
 extern const float bank_inflation_target_monthly; // monthly inflation target
-extern const float bank_risk_premium; // added yearly interest rate to charge per leverage ratio
+extern const float bank_risk_premium; // added yearly interest rate to charge per leverage ratio above threshold
 extern const float bank_target_capital_ratio;
 extern const int bank_short_term_loan_length;
 extern const int bank_long_term_loan_length;
+extern const float bank_leverage_ratio_lower_threshold;
+extern const float bank_leverage_ratio_upper_threshold;
+
+
 //---------------------------------------------
 
 

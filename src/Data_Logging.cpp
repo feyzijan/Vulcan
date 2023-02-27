@@ -225,14 +225,13 @@ void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vecto
     std::vector<float> vec_long_term_funding_gap;
     std::vector<float> vec_expected_wage_bill;
     std::vector<float> vec_layoff_wage_savings;
-    std::vector<float> vec_expected_wage_bill_shortfall;
-    std::vector<float> vec_expected_long_term_shortfall;
     std::vector<float> vec_labor_utilization;
     std::vector<float> vec_desired_inventory;
     std::vector<float> vec_inventory_reaction_factor;
     std::vector<float> vec_machine_utilization;
     std::vector<float> vec_desired_machines;
     std::vector<float> vec_production_costs;
+    std::vector<float> vec_outstanding_debts;
 
     // Loop through Firm array and fill arrays
     vector<float>* pvec_params;
@@ -293,14 +292,13 @@ void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vecto
         vec_long_term_funding_gap.push_back(pvec_params->at(k++));
         vec_expected_wage_bill.push_back(pvec_params->at(k++));
         vec_layoff_wage_savings.push_back(pvec_params->at(k++));
-        vec_expected_wage_bill_shortfall.push_back(pvec_params->at(k++));
-        vec_expected_long_term_shortfall.push_back(pvec_params->at(k++));
         vec_labor_utilization.push_back(pvec_params->at(k++));
         vec_desired_inventory.push_back(pvec_params->at(k++));
         vec_inventory_reaction_factor.push_back(pvec_params->at(k++));
         vec_machine_utilization.push_back(pvec_params->at(k++));
         vec_desired_machines.push_back(pvec_params->at(k++));
         vec_production_costs.push_back(pvec_params->at(k++));
+        vec_outstanding_debts.push_back(pvec_params->at(k++));
 
         k=0;
         //delete[] pvec_params;
@@ -325,9 +323,9 @@ void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vecto
     {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm},
     {"average_profit", vec_average_profit},{"average_sale_quantity", vec_average_sale_quantity},{"short_term_funding_gap", vec_short_term_funding_gap},
     {"long_term_funding_gap", vec_long_term_funding_gap},{"expected_wage_bill", vec_expected_wage_bill},{"layoff_wage_savings", vec_layoff_wage_savings},
-    {"expected_wage_bill_shortfall", vec_expected_wage_bill_shortfall},{"expected_long_term_shortfall", vec_expected_long_term_shortfall},{"labor_utilization", vec_labor_utilization},
+    {"labor_utilization", vec_labor_utilization},
     {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines},
-    {"production_costs", vec_production_costs}
+    {"production_costs", vec_production_costs}, {"outstanding_debts", vec_outstanding_debts}
     };
 
 
@@ -398,14 +396,14 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
     std::vector<float> vec_long_term_funding_gap;
     std::vector<float> vec_expected_wage_bill;
     std::vector<float> vec_layoff_wage_savings;
-    std::vector<float> vec_expected_wage_bill_shortfall;
-    std::vector<float> vec_expected_long_term_shortfall;
     std::vector<float> vec_labor_utilization;
     std::vector<float> vec_desired_inventory;
     std::vector<float> vec_inventory_reaction_factor;
     std::vector<float> vec_machine_utilization;
     std::vector<float> vec_desired_machines;
     std::vector<float> vec_production_costs;
+    std::vector<float> vec_outstanding_debts;
+    
     
 
 
@@ -468,14 +466,13 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
         vec_long_term_funding_gap.push_back(pvec_params->at(k++));
         vec_expected_wage_bill.push_back(pvec_params->at(k++));
         vec_layoff_wage_savings.push_back(pvec_params->at(k++));
-        vec_expected_wage_bill_shortfall.push_back(pvec_params->at(k++));
-        vec_expected_long_term_shortfall.push_back(pvec_params->at(k++));
         vec_labor_utilization.push_back(pvec_params->at(k++));
         vec_desired_inventory.push_back(pvec_params->at(k++));
         vec_inventory_reaction_factor.push_back(pvec_params->at(k++));
         vec_machine_utilization.push_back(pvec_params->at(k++));
         vec_desired_machines.push_back(pvec_params->at(k++));
         vec_production_costs.push_back(pvec_params->at(k++));
+        vec_outstanding_debts.push_back(pvec_params->at(k++));
 
 
 
@@ -502,9 +499,9 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
     {"bankrupt", vec_bankrupt}, {"is_cons_firm", vec_is_cons_firm},
     {"average_profit", vec_average_profit},{"average_sale_quantity", vec_average_sale_quantity},{"short_term_funding_gap", vec_short_term_funding_gap},
     {"long_term_funding_gap", vec_long_term_funding_gap},{"expected_wage_bill", vec_expected_wage_bill},{"layoff_wage_savings", vec_layoff_wage_savings},
-    {"expected_wage_bill_shortfall", vec_expected_wage_bill_shortfall},{"expected_long_term_shortfall", vec_expected_long_term_shortfall},{"labor_utilization", vec_labor_utilization},
+    {"labor_utilization", vec_labor_utilization},
     {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines},
-    {"production_costs", vec_production_costs}
+    {"production_costs", vec_production_costs}, {"outstanding_debts", vec_outstanding_debts}
     };
     
 

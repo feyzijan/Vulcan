@@ -70,9 +70,8 @@ class Firm_Agent{
     virtual void Update_Goods_On_Market() {};
 
     void Seek_Long_Term_Loan();
-    virtual void Update_Supplier_Networks(); // TO Implement
+    void Update_Supplier_Network() {}; // To Implement in subclasses
     void Buy_Capital_Goods(); 
-    
 
     void Update_Leverage_Ratio();
     void Pay_Liabilities();
@@ -138,14 +137,15 @@ class Firm_Agent{
     int dividend_payments;
     int production_costs;
 
-    int expected_wage_bill; // NEWLY ADDED- 
-    int layoff_wage_savings; // NEWLY ADDED-
-    int expected_wage_bill_shortfall; // NEWLY ADDED- 
-    int expected_long_term_shortfall; // NEWLY ADDDED- 
+    int expected_wage_bill; 
+    int layoff_wage_savings; 
+
+    int outstanding_debt_total;
+    //int max_allowable_debt_total;
 
     // Assets and fianncials 
     int total_assets; // maybe this should be the same as cash in hand?
-    int leverage_ratio;
+    float leverage_ratio;
     int cash_on_hand;
 
     // Dividend characteristics

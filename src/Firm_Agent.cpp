@@ -56,8 +56,9 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     expected_wage_bill = 0;
     layoff_wage_savings = 0;
-    expected_wage_bill_shortfall = 0;
-    expected_long_term_shortfall = 0;
+
+    outstanding_debt_total = 0;
+
 
     // Assets and fianncials 
     leverage_ratio = 0; // correctly set
@@ -132,7 +133,6 @@ void Firm_Agent::Print(){
     cout << "Total Liabilities: " << total_liabilities << " Wage bill: " << labor_wage_bill << " Capital costs: " << capital_costs << " Tax: " << tax_payments << endl;
     cout << "Debt principal payments: " << debt_principal_payments << " Interest payments: " << debt_interest_payments << " Dividends: " << dividend_payments << endl;
     cout << "Production costs: " << production_costs <<  " Expected wage bill: " << expected_wage_bill << " Layoff wage savings: " << layoff_wage_savings << endl;
-    cout << "Expected wage bill shortfall: " << expected_wage_bill_shortfall << " Expected long term shortfall: " << expected_long_term_shortfall << endl;
 
     //Assets and financials
     cout << "Assets: " << total_assets << " Savings: " << cash_on_hand <<  " Leverage Ratio: " << leverage_ratio << endl;
@@ -352,7 +352,11 @@ void Firm_Agent::Adjust_Wage_Offers()
         wage_offer *= (1+n_uniform);
     }
 
-    // Update posted jobs to match this wage
+    // Loop through posted_job_list and call Update_Wage(wage_offer)
+    for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
+        (*it)->Update_Wage(wage_offer);
+    }
+
 }
 
 
@@ -369,7 +373,6 @@ void Firm_Agent::Determine_Labor_Need(){
     // Update public records    
     pPublic_Info_Board->Update_Employee_Demand(min(employee_demand,0));
 
-    
     need_worker = employee_demand > 0;
     n_active_job_postings = posted_job_list.size();
     
@@ -384,8 +387,7 @@ void Firm_Agent::Determine_Labor_Need(){
     } else{
         expected_wage_bill = labor_wage_bill + (employee_count_desired - employee_count) * wage_offer;
     }
-    expected_wage_bill_shortfall = expected_wage_bill-cash_on_hand;
-    short_term_funding_gap = expected_wage_bill_shortfall;
+    short_term_funding_gap = expected_wage_bill-cash_on_hand;
 
     // If there is a short term funding gap, seek a loan
     if (short_term_funding_gap > 0){
@@ -465,8 +467,8 @@ void Firm_Agent::Seek_Short_Term_Loan(){
         loan_book.push_back(new_loan);
         cash_on_hand += new_loan->Get_Principal_Amount();
         new_loan_issuance = new_loan->Get_Principal_Amount();
-        expected_wage_bill_shortfall = expected_wage_bill-cash_on_hand;
-        short_term_funding_gap = expected_wage_bill_shortfall;
+        short_term_funding_gap = expected_wage_bill-cash_on_hand;
+
     }
 }
 
@@ -517,11 +519,6 @@ void Firm_Agent::Check_For_New_Employees(){
 
 
 
-/* Remove certain suppliers from list
-*/
-void Firm_Agent::Update_Supplier_Networks(){
-
-}
 
 /* Buy enough machines to match full utilization with desired number of employees
 TODO: 
@@ -536,9 +533,9 @@ void Firm_Agent::Make_Investment_Decision(){
     }
     if (desired_machines >0){
         int estimated_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
-        expected_long_term_shortfall =  estimated_cost - cash_on_hand;
-        if (expected_long_term_shortfall > 0){Seek_Long_Term_Loan();}
-        expected_long_term_shortfall =  estimated_cost - cash_on_hand;
+        long_term_funding_gap =  estimated_cost - cash_on_hand;
+        if (long_term_funding_gap> 0){Seek_Long_Term_Loan();}
+        long_term_funding_gap =  estimated_cost - cash_on_hand;
     }
     // temporary override
     desired_machines = Uniform_Dist_Int(0,5);
@@ -592,24 +589,28 @@ void Firm_Agent::Seek_Long_Term_Loan(){
 
 
 
+/* Update leverage ratio
+*/
+void Firm_Agent::Update_Leverage_Ratio(){
+    outstanding_debt_total = 0;
+    // Loop through the loan book and add up the principal amounts
+    for (Loan* loan_ptr : loan_book){
+        outstanding_debt_total += loan_ptr->Get_Principal_Amount();
+    }
+    // Calculate leverage ratio
+    leverage_ratio = float(outstanding_debt_total)/ float(average_profit);
 
-// ---------------------------------------------------
-// Old functions, complete or delete
 
-
-
-
-
-
-
+}
 
 
 
 /* Function to pay liabilities and seek loans or go bankrupt if necessary
 
 */
-
 void Firm_Agent::Pay_Liabilities(){
+
+    total_liabilities = 0;
 
     // Calculate debt bill
     debt_principal_payments = 0;
@@ -636,11 +637,16 @@ void Firm_Agent::Pay_Liabilities(){
     total_income = revenue_sales + subsidies;
     cash_on_hand += total_income; // new_loan_issuance already added when loans were taken
 
+    // Update leverage ratio
+    Update_Leverage_Ratio();
+
     if (cash_on_hand < total_liabilities){
-        // Go bankrupt
+        // Need financing to avoid bankruptcy
         long_term_funding_gap = cash_on_hand - total_liabilities;
         Seek_Long_Term_Loan();
         bankrupt = true;
+        // what now?
+
     } else {
         // Pay bills
         cash_on_hand -= total_liabilities;
@@ -652,40 +658,6 @@ void Firm_Agent::Pay_Liabilities(){
         cash_on_hand -= dividend_payments + tax_payments;
         Pay_Dividends();
     }
-    
-
-    
-    // Calculate Tax payments
-    
-
-
-
-
-
-
-
-
-
-
-    total_liabilities = labor_wage_bill + debt_principal_payments + debt_interest_payments;
-
-    int money_on_hand = revenue_sales + cash_on_hand < total_liabilities; 
-    if (money_on_hand  < 0)
-    {
-        //new_loan_issuance = Seek_Loans(money_on_hand); // implement this method, have it update new_loan_issuance
-    }
-
-    money_on_hand += new_loan_issuance;
-
-    if (money_on_hand  < 0)
-    {
-       bankrupt = true;
-
-    } else {
-        dividend_payments = money_on_hand * dividend_ratio;
-    }
-
-
 }
 
 
@@ -744,14 +716,13 @@ std::vector<float>* Firm_Agent::Get_All_Params() {
     vec->push_back(long_term_funding_gap);
     vec->push_back(expected_wage_bill);
     vec->push_back(layoff_wage_savings);
-    vec->push_back(expected_wage_bill_shortfall);
-    vec->push_back(expected_long_term_shortfall);
     vec->push_back(labor_utilization);
     vec->push_back(desired_inventory);
     vec->push_back(inventory_reaction_factor);
     vec->push_back(machine_utilization);
     vec->push_back(desired_machines);
     vec->push_back(production_costs);
+    vec->push_back(outstanding_debt_total);
 
     return vec;
 }

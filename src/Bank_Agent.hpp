@@ -49,7 +49,7 @@ class Bank_Agent{
     // Interest rate 
     float r_rate;
     float r_reaction;
-    float risk_premium; //risk premium on doubtful debt
+    float risk_premium; //risk premium on doubtful debt - per leverage ratio above threshold
  
     // Inflation
     float inflation_current; // Inflation (trailing 12m)
@@ -76,6 +76,9 @@ class Bank_Agent{
     float capital_ratio;
     float target_capital_ratio;
 
+    // Risky loan evaluation
+    float leverage_ratio_lower_threshold;
+    float leverage_ratio_upper_threshold;
 
 };
 #endif

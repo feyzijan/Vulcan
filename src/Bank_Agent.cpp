@@ -47,7 +47,11 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
     capital_ratio = 1.0; // Unsure how to Initialize this
     target_capital_ratio = bank_target_capital_ratio;
 
+    // Risky loan evaluation
+    leverage_ratio_lower_threshold = bank_leverage_ratio_lower_threshold;
+    leverage_ratio_upper_threshold = bank_leverage_ratio_upper_threshold;
 }
+
 
 /* Destructor*/
 Bank_Agent::~Bank_Agent(){}
@@ -127,11 +131,10 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
     int long_term_funding_gap = pFirm->Get_Long_Term_Funding_Gap();
     float leverage_ratio = pFirm->Get_Leverage_Ratio();
 
-    float loan_rate = r_rate + risk_premium*leverage_ratio;
+    float excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
+    float loan_rate = r_rate + risk_premium*excess_leverage;
 
-    bool issue = true;
-
-    if(issue){
+    if(leverage_ratio < leverage_ratio_upper_threshold){
         int current_date = pPublic_Board->Get_Current_Date();
         Loan* new_loan = new Loan(pFirm,loan_rate,long_term_funding_gap, long_term_loan_length,0);
         // Update own records

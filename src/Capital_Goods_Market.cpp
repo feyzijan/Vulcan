@@ -18,11 +18,6 @@ Price level is updated as well
 void Capital_Goods_Market::Add_Capital_Good_To_Market(Capital_Good * cap_good)
 {
     cap_goods_list.push_back(cap_good);
-/*     int q = cap_good->Get_Quantity();
-    int p = cap_good->Get_Price();
-    n_total_goods += q;
-    total_weighed_price += float(p*q);
-    price_level = (float)total_weighed_price/(float)n_total_goods; */
 }
 
 
