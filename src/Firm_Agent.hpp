@@ -48,6 +48,7 @@ class Firm_Agent{
     void Cancel_Expired_Contracts();
     void Random_Experimentation();
     void Check_Sales();
+    virtual void Update_Sentiment();
     void Update_Average_Profit();
     void Update_Average_Sales();
     int Pay_Dividends();
@@ -135,6 +136,7 @@ class Firm_Agent{
     int debt_principal_payments;
     int debt_interest_payments;
     int dividend_payments;
+    int production_costs;
 
     int expected_wage_bill; // NEWLY ADDED- 
     int layoff_wage_savings; // NEWLY ADDED-

@@ -52,6 +52,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     debt_principal_payments = 0;
     debt_interest_payments = 0;
     dividend_payments = 0;
+    production_costs = 0;
 
     expected_wage_bill = 0;
     layoff_wage_savings = 0;
@@ -130,7 +131,7 @@ void Firm_Agent::Print(){
     //Expenditures
     cout << "Total Liabilities: " << total_liabilities << " Wage bill: " << labor_wage_bill << " Capital costs: " << capital_costs << " Tax: " << tax_payments << endl;
     cout << "Debt principal payments: " << debt_principal_payments << " Interest payments: " << debt_interest_payments << " Dividends: " << dividend_payments << endl;
-    cout << "Expected wage bill: " << expected_wage_bill << " Layoff wage savings: " << layoff_wage_savings << endl;
+    cout << "Production costs: " << production_costs <<  " Expected wage bill: " << expected_wage_bill << " Layoff wage savings: " << layoff_wage_savings << endl;
     cout << "Expected wage bill shortfall: " << expected_wage_bill_shortfall << " Expected long term shortfall: " << expected_long_term_shortfall << endl;
 
     //Assets and financials
@@ -244,7 +245,23 @@ void Firm_Agent::Check_Sales(){
     revenue_sales = quantity_sold * good_price_current; // unsure if this gives float or int
     inventory_factor = float(inventory) / float(production_current);
     desired_inventory = desired_inventory_factor * production_current;
+    Update_Sentiment();
 }
+
+
+/* Function to update sentiment based on past sales
+Will be overridden by base classes
+*/
+void Firm_Agent::Update_Sentiment(){
+    if (quantity_sold > average_sale_quantity){
+        sentiment = 1;
+    } else if (quantity_sold < average_sale_quantity){
+        sentiment = 0;
+    } else {
+        sentiment = 0;
+    }
+}
+
 
 /* Function to update the firm's average profit*/
 void Firm_Agent::Update_Average_Profit(){
@@ -687,6 +704,7 @@ std::vector<float>* Firm_Agent::Get_All_Params() {
     vec->push_back(inventory_reaction_factor);
     vec->push_back(machine_utilization);
     vec->push_back(desired_machines);
+    vec->push_back(production_costs);
 
     return vec;
 }

@@ -68,6 +68,7 @@ void Capital_Firm_Agent::Produce_Capital_Goods(){
     production_current = min(int(production_max*labor_utilization), production_planned);
     inventory += production_current;
     inventory_factor = float(inventory) / float(average_sale_quantity);
+    production_costs = production_current * cap_good_unit_cost;
 
     pPublic_Info_Board->Update_Capital_goods_production(production_current);
     pPublic_Info_Board->Update_Capital_goods_production_planned(production_planned);
@@ -83,6 +84,20 @@ void Capital_Firm_Agent::Send_Goods_To_Market(){
     //cout << "Cap firm " << this <<" sending goods to market" << endl;
     pPublic_Info_Board->Send_Cap_Good_To_Market(cap_goods_on_market);
 }
+
+/* Update sentiment and post to public board*/
+void Capital_Firm_Agent::Update_Sentiment(){
+    if (quantity_sold > average_sale_quantity){
+        sentiment = 1;
+    } else if (quantity_sold < average_sale_quantity){
+        sentiment = 0;
+    } else {
+        sentiment = 0;
+    }
+
+    pPublic_Info_Board->Update_Cap_firm_sentiment_sum(sentiment);
+}
+
 
 /* Determine new production - call the base class method but update public
 board accordingly*/

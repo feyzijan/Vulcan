@@ -48,6 +48,7 @@ void Consumer_Firm_Agent::Produce_Consumer_Goods(){
     production_current = min(int(production_max*labor_utilization), production_planned);
     inventory += production_current;
     inventory_factor = float(inventory) / float(average_sale_quantity);
+    production_costs = production_current * cons_good_unit_cost;
 
     pPublic_Info_Board->Update_Consumer_goods_production(production_current);
     pPublic_Info_Board->Update_Consumer_goods_production_planned(production_planned);
@@ -64,6 +65,19 @@ void Consumer_Firm_Agent::Produce_Consumer_Goods(){
 void Consumer_Firm_Agent::Send_Goods_To_Market(){
     //cout << "cons firm " << this << " sending goods to market" << endl;
     pPublic_Info_Board->Send_Cons_Good_To_Market(cons_goods_on_market);
+}
+
+/* Update sentiment and post to public board*/
+void Consumer_Firm_Agent::Update_Sentiment(){
+    if (quantity_sold > average_sale_quantity){
+        sentiment = 1;
+    } else if (quantity_sold < average_sale_quantity){
+        sentiment = 0;
+    } else {
+        sentiment = 0;
+    }
+
+    pPublic_Info_Board->Update_Cons_firm_sentiment_sum(sentiment);
 }
 
 

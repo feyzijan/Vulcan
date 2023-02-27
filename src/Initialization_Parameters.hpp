@@ -134,8 +134,6 @@ extern const float init_capital_good_price;
 
 
 
-
-
 // Exogenous parameters for Firms
 extern const int standard_employment_contract_length;
 
@@ -143,12 +141,14 @@ extern const int standard_employment_contract_length;
 extern const float cons_good_inv_depr_rate;
 extern const float cons_productivity; // # units produced per worker machine pairing
 extern const int cons_workers_per_machine;
+extern const float cons_good_unit_cost;
 
 // Exogenous parameters for Capital Firms
 extern const float cap_good_inv_depr_rate;
 extern const float cap_productivity; // # units produced per worker machine pairing
 extern const int cap_workers_per_machine;
 extern const int machine_lifespan;
+extern const float cap_good_unit_cost;
 
 
 //---------------------------------------------

@@ -8,6 +8,10 @@ Public_Info_Board::Public_Info_Board(){
     // Genereal price level
     price_level_current =0;
     price_level_previous = 0;
+
+    // Capital good price level
+    cap_price_level_current = 0;
+    cap_price_level_previous = 0;
     average_wage = 0;
     // Inflation and interest rates
     r_rate = 0;
@@ -145,8 +149,15 @@ float Public_Info_Board::Calculate_Inflation(){
     return 1.0 + (price_level_current - price_level_previous)/price_level_previous;
 }
 
+float Public_Info_Board::Calculate_Manufacturer_Inflation(){
+    cap_price_level_previous = cap_price_level_current;
+    cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
+    return 1.0 + (cap_price_level_current - cap_price_level_previous)/cap_price_level_previous;
+}
+
 void Public_Info_Board::Initialize_Price_Level(){
     price_level_current = pConsumer_Goods_Market->Get_Price_Level();
+    cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
 }
 
 //--------------------------------------------------
@@ -213,3 +224,63 @@ void Public_Info_Board::Print_Labor_Market() const{
     cout << "average_wage: " << average_wage <<  " # contract expiries: " << contract_expiries << endl;
 }
 
+/* Function to make string stream operator << work
+*/
+std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
+    os << "price_level_current " << obj.price_level_current << std::endl;
+    os << "price_level_previous " << obj.price_level_previous << std::endl;
+    os << "cap_price_level_current " << obj.cap_price_level_current << std::endl;
+    os << "cap_price_level_previous " << obj.cap_price_level_previous << std::endl;
+    os << "average_wage " << obj.average_wage << std::endl;
+    os << "r_rate " << obj.r_rate << std::endl;
+    os << "inflation_current " << obj.inflation_current << std::endl;
+    os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;
+    os << "household_sentiment_percentage " << obj.household_sentiment_percentage << std::endl;
+    os << "cons_firm_sentiment_sum " << obj.cons_firm_sentiment_sum << std::endl;
+    os << "cons_firm_sentiment_percentage " << obj.cons_firm_sentiment_percentage << std::endl;
+    os << "cap_firm_sentiment_sum " << obj.cap_firm_sentiment_sum << std::endl;
+    os << "cap_firm_sentiment_percentage " << obj.cap_firm_sentiment_percentage << std::endl;
+    os << "machine_orders " << obj.machine_orders << std::endl;
+    os << "machine_orders_planned " << obj.machine_orders_planned << std::endl;
+    os << "machine_spending " << obj.machine_spending << std::endl;
+    os << "consumer_orders " << obj.consumer_orders << std::endl;
+    os << "consumer_spending " << obj.consumer_spending << std::endl;
+    os << "consumption_budgets " << obj.consumption_budgets << std::endl;
+    os << "consumer_goods_production " << obj.consumer_goods_production << std::endl;
+    os << "capital_goods_production " << obj.capital_goods_production << std::endl;
+    os << "consumer_goods_production_planned " << obj.consumer_goods_production_planned << std::endl;
+    os << "Capital Goods Production Planned " << obj.capital_goods_production_planned << "\n";
+    os << "Number of Employed Workers " << obj.n_employed_workers << "\n";
+    os << "Number of Unemployed Workers " << obj.n_unemployed_workers << "\n";
+    os << "Unemployment Rate " << obj.unemployment_rate << "\n";
+    os << "Employee Hires " << obj.employee_hires << "\n";
+    os << "New Employee Demand " << obj.new_employee_demand << "\n";
+    os << "Employee Firings " << obj.employee_firings << "\n";
+    os << "Contract Expiries " << obj.contract_expiries << "\n";
+    os << "New Job Postings " << obj.new_job_postings << "\n";
+    os << "Removed Job Postings " << obj.removed_job_postings << "\n";
+    os << "Public Unemployment Benefit " << obj.public_unemployment_benefit << "\n";
+    os << "Time Step " << obj.time_step << "\n";
+    os << "Current Date " << obj.current_date << "\n";
+}
+
+
+/* Function to log all data: Create a vector of pairs where each entry has the member name and the value
+*/
+std::vector<std::pair<std::string, float>>* Public_Info_Board::Log_Data() {
+        current_date = global_date;
+        auto result = new std::vector<std::pair<std::string, float>>();
+
+        // Get the names and values of all member variables
+        std::stringstream ss;
+        ss << *this;
+        std::string line;
+        while (std::getline(ss, line)) {
+            std::string name;
+            float value;
+            std::stringstream(line) >> name >> value;
+            result->emplace_back(name, value);
+        }
+
+        return result;
+    }

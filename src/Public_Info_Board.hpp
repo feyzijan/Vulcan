@@ -20,6 +20,9 @@ class Consumer_Goods_Market;
 #include <algorithm>
 #include <vector>
 #include <queue>
+#include <sstream>
+#include <string>
+#include <utility>
 
 using namespace std;
 
@@ -53,6 +56,7 @@ class Public_Info_Board{
 
     // Inflation and price level
     float Calculate_Inflation();
+    float Calculate_Manufacturer_Inflation();
     void Initialize_Price_Level();
 
     // Loan issuance
@@ -61,9 +65,8 @@ class Public_Info_Board{
 
     // Global Data
     void Reset_Global_Data();
-
     
-    // Gathering and reading public sentiment - TO Implement all
+    // Gathering and reading public sentiment 
     float Get_Household_Sentiment() {return household_sentiment_percentage;}
     float Get_Cons_Firm_Sentiment() {return cons_firm_sentiment_percentage;}    
     float Get_Cap_Firm_Sentiment() {return cap_firm_sentiment_percentage;}
@@ -137,6 +140,10 @@ class Public_Info_Board{
     // Printing and Debugging
     void Print() const;
     void Print_Labor_Market() const;
+    // String stream operator
+    friend std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj);
+    // Data Logging
+    std::vector<std::pair<std::string, float>>*  Log_Data();
 
     protected:
     Job_Market* pJob_Market;
@@ -147,6 +154,8 @@ class Public_Info_Board{
     // General price level
     float price_level_current;
     float price_level_previous;
+    float cap_price_level_current;
+    float cap_price_level_previous;
     float average_wage; // Average wage in economy
 
     // Inflation and interest rate

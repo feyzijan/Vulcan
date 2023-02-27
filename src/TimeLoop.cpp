@@ -152,7 +152,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pPublic_Info_Board->Update_Household_Sentiment_Percentage();
     pPublic_Info_Board->Update_Cons_Firm_Sentiment_Percentage();
     pPublic_Info_Board->Update_Cap_Firm_Sentiment_Percentage();
-
+        
 
     
     // STEP 1.90: Firms make investment decisions and finance these

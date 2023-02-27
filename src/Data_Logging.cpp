@@ -232,6 +232,7 @@ void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vecto
     std::vector<float> vec_inventory_reaction_factor;
     std::vector<float> vec_machine_utilization;
     std::vector<float> vec_desired_machines;
+    std::vector<float> vec_production_costs;
 
     // Loop through Firm array and fill arrays
     vector<float>* pvec_params;
@@ -299,6 +300,7 @@ void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vecto
         vec_inventory_reaction_factor.push_back(pvec_params->at(k++));
         vec_machine_utilization.push_back(pvec_params->at(k++));
         vec_desired_machines.push_back(pvec_params->at(k++));
+        vec_production_costs.push_back(pvec_params->at(k++));
 
         k=0;
         //delete[] pvec_params;
@@ -324,7 +326,8 @@ void Log_Cons_Firm_Properties(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vecto
     {"average_profit", vec_average_profit},{"average_sale_quantity", vec_average_sale_quantity},{"short_term_funding_gap", vec_short_term_funding_gap},
     {"long_term_funding_gap", vec_long_term_funding_gap},{"expected_wage_bill", vec_expected_wage_bill},{"layoff_wage_savings", vec_layoff_wage_savings},
     {"expected_wage_bill_shortfall", vec_expected_wage_bill_shortfall},{"expected_long_term_shortfall", vec_expected_long_term_shortfall},{"labor_utilization", vec_labor_utilization},
-    {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines}
+    {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines},
+    {"production_costs", vec_production_costs}
     };
 
 
@@ -402,6 +405,8 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
     std::vector<float> vec_inventory_reaction_factor;
     std::vector<float> vec_machine_utilization;
     std::vector<float> vec_desired_machines;
+    std::vector<float> vec_production_costs;
+    
 
 
     // Loop through Firm array and fill arrays
@@ -470,6 +475,8 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
         vec_inventory_reaction_factor.push_back(pvec_params->at(k++));
         vec_machine_utilization.push_back(pvec_params->at(k++));
         vec_desired_machines.push_back(pvec_params->at(k++));
+        vec_production_costs.push_back(pvec_params->at(k++));
+
 
 
         k=0;
@@ -496,7 +503,8 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
     {"average_profit", vec_average_profit},{"average_sale_quantity", vec_average_sale_quantity},{"short_term_funding_gap", vec_short_term_funding_gap},
     {"long_term_funding_gap", vec_long_term_funding_gap},{"expected_wage_bill", vec_expected_wage_bill},{"layoff_wage_savings", vec_layoff_wage_savings},
     {"expected_wage_bill_shortfall", vec_expected_wage_bill_shortfall},{"expected_long_term_shortfall", vec_expected_long_term_shortfall},{"labor_utilization", vec_labor_utilization},
-    {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines}
+    {"desired_inventory", vec_desired_inventory},{"inventory_reaction_factor", vec_inventory_reaction_factor},{"machine_utilization", vec_machine_utilization}, {"desired_machines", vec_desired_machines},
+    {"production_costs", vec_production_costs}
     };
     
 
@@ -510,10 +518,50 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
 }
 
 
+ //---
+
+void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
+    // Open file for writing in append mode
+    std::ofstream log_file;
+    log_file.open("../DataLogs/Public_Info_Board.csv", std::ios_base::app);
+
+    // If file is empty, write the header row
+    if (log_file.tellp() == 0) {
+        // Get the header row
+        std::vector<std::pair<std::string, float>>* header_data = pPublic_Info_Board->Log_Data();
+        std::string header;
+        for (auto it = header_data->begin(); it != header_data->end(); ++it) {
+            header += it->first + ",";
+        }
+        header.pop_back();
+        header += "\n";
+        log_file << header;
+
+        delete header_data;
+    }
+
+    // Get the data row
+    std::vector<std::pair<std::string, float>>* data = pPublic_Info_Board->Log_Data();
+    std::string row;
+    for (auto it = data->begin(); it != data->end(); ++it) {
+        row += std::to_string(it->second) + ",";
+    }
+    row.pop_back();
+    row += "\n";
+    log_file << row;
+
+    delete data;
+    log_file.close(); 
+}
+
+
+
+
 void Log_Everything(vector<Household_Agent*> *pHousehold_vector,
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
-    int n_households, int n_consumer_firms, int n_capital_firms){
+    int n_households, int n_consumer_firms, int n_capital_firms,Public_Info_Board *pPublic_Info_Board){
     Log_Household_Properties(pHousehold_vector, n_households);
     Log_Cons_Firm_Properties(pConsumer_Firm_vector, n_consumer_firms);
     Log_Cap_Firm_Properties(pCapital_Firm_vector, n_capital_firms);
+    Log_Public_Info_Board(pPublic_Info_Board);
 }

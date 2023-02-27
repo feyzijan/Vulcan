@@ -24,6 +24,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     void Depreciate_Good_Inventory();
     void Produce_Consumer_Goods();
     void Send_Goods_To_Market();
+    virtual void Update_Sentiment() override;
 
     // Put up Consumer Goods for Sale
     
