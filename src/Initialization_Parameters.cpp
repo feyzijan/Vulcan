@@ -8,11 +8,13 @@ int test_global_var = 0; // for testing
 int test_global_var_2 = 0; // for testing
 
 const int time_period = 12; // i.e. 12 timesteps make a year
+const int n_loops = 36;
 
-const int n_households = 600;
-const int n_consumer_firms = 100;
+const int n_households = 10000;
+const int n_consumer_firms = 150;
 const int n_capital_firms = 50;
-const int n_max_employees = 100;
+const int n_firms = 200;
+const int n_max_employees = 100; //unused
 
 
 //------- Household parameters -----------
@@ -53,10 +55,10 @@ const float init_s_pessimist_std = 0.05;
 const float init_s_pessimist_min = 0.1;
 const float init_s_pessimist_max = 0.6;
 // Starting wealth : wealth
-const float init_wealth_mean = 100.0;
-const float init_wealth_std = 3000.0;
+const float init_wealth_mean = 1000.0;
+const float init_wealth_std = 300.0;
 const float init_wealth_min = 0.0;
-const float init_wealth_max = 999.0;
+const float init_wealth_max = 2000.0;
 // Maximum tolerable unemployment duration
 const float init_unemp_tolerance_mean = 4.0;
 const float init_unemp_tolerance_std = 2.0;
@@ -72,7 +74,7 @@ const float init_res_wage_max = 999999;
 const float n_res_wage_decrease = 0.05; 
 const float targeted_savings_to_income_ratio = 3.0;
 const float household_tax_rate = 0.2;
-
+const float init_unemployment_benefit = 500;
 
 
 //---------------------------------------------

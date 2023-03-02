@@ -8,11 +8,12 @@ extern int test_global_var; // for testing
 extern int test_global_var_2; // for testing
 
 extern const int time_period; 
-
+extern const int n_loops;
 
 extern const int n_households;
 extern const int n_consumer_firms;
 extern const int n_capital_firms;
+extern const int n_firms;
 extern const int n_max_employees;
 
 //------- Household parameters ------------------
@@ -70,11 +71,11 @@ extern const float init_res_wage_std;
 extern const float init_res_wage_min;
 extern const float init_res_wage_max;
 
-
 // Exogenous parameters for Households
 extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
 extern const float targeted_savings_to_income_ratio;
 extern const float household_tax_rate;
+extern const float init_unemployment_benefit;
 
 //---------------------------------------------
 

@@ -54,6 +54,9 @@ class Public_Info_Board{
     
     // Update Member Variables
 
+    // Policy Rules
+    void Update_Unemployment_Benefits(); // TO Implement later
+
     // Inflation and price level
     float Calculate_Inflation();
     float Calculate_Manufacturer_Inflation();
@@ -109,28 +112,23 @@ class Public_Info_Board{
     void Update_Household_sentiment_sum(int amount) { household_sentiment_sum += amount; }
     void Update_Cons_firm_sentiment_sum(int amount) { cons_firm_sentiment_sum += amount; }
     void Update_Cap_firm_sentiment_sum(int amount) { cap_firm_sentiment_sum += amount; }
-
     void Update_Machine_orders(int amount) { machine_orders += amount; }
     void Update_Machine_spending(int amount) { machine_spending += amount; }
     void Update_Consumer_orders(int amount) { consumer_orders += amount; }
     void Update_Consumer_spending(int amount) { consumer_spending += amount; }
     void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
-    
     void Update_Consumer_goods_production(int amount) { consumer_goods_production += amount; }
     void Update_Capital_goods_production(int amount) { capital_goods_production += amount; }
     void Update_Consumer_goods_production_planned(int amount) { consumer_goods_production_planned += amount; }
     void Update_Capital_goods_production_planned(int amount) { capital_goods_production_planned += amount; }
-    
     void Update_Employed_Workers(int amount) { n_employed_workers += amount; }
     void Update_Unemployed_Workers(int amount) { n_unemployed_workers += amount; }
-
     void Update_Employee_Demand(int amount) { new_employee_demand += amount; }
     void Update_Employee_Firings(int amount) { employee_firings += amount; }
     void Update_Employee_Hires(int amount) { employee_hires += amount; }
     void Update_Contract_Expiries(int amount) { contract_expiries += amount; }
     void Update_New_Job_Postings(int amount) { new_job_postings += amount; }
     void Update_Removed_Job_Postings(int amount) { removed_job_postings += amount; }
-
     void Update_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
     void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = household_sentiment_sum/n_households; }
     void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = cons_firm_sentiment_sum/n_consumer_firms; }
@@ -140,10 +138,8 @@ class Public_Info_Board{
     // Printing and Debugging
     void Print() const;
     void Print_Labor_Market() const;
-    // String stream operator
-    friend std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj);
-    // Data Logging
-    std::vector<std::pair<std::string, float>>*  Log_Data();
+    friend std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj); // String stream operator
+    std::vector<std::pair<std::string, float>>*  Log_Data();     // Data Logging
 
     protected:
     Job_Market* pJob_Market;

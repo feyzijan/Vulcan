@@ -134,6 +134,7 @@ void Household_Agent::Update_Reservation_Wage()
 - Check if the household is employed by checking if current_job pointer points to 0
     - It will do so if fired by the firm *** Firm has to manage this
 - If unemployed, add the unemployment_benefits, which should be determined beforehand
+TODO: Implement dividend income
 */
 void Household_Agent::Update_Income()
 {
@@ -146,11 +147,15 @@ void Household_Agent::Update_Income()
         income_wage = current_job->Get_Wage();
         income_current += income_wage;
     } else {
+        income_wage = 0;
+        income_unemployment_benefit = pPublic_Info_Board->Get_Unemployment_Benefit();
         income_current += income_unemployment_benefit;
     }
     income_current += income_gov_transfers; // Add any additional transfers
     
-    if (business_owner){income_current += income_firm_owner_dividend;}
+    if (business_owner){ 
+        //income_firm_owner_dividend = current_job->Get_Dividend();
+        income_current += income_firm_owner_dividend;}
 }
 
 /* Function to calculate average income and fill in array at t=1
@@ -327,8 +332,8 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "c_f " << obj.c_f << std::endl;
     os << "c_h " << obj.c_h << std::endl;
     os << "c_excess_money " << obj.c_excess_money << std::endl;
-    os << "p_majority_op_adoption " << obj.p_majority_op_adoption;
-    os << "current_date " << obj.current_date << std::endl;
+    os << "p_majority_op_adoption " << obj.p_majority_op_adoption << std::endl;
+    os << "date " << obj.current_date << std::endl;
 }
 
 std::vector<std::pair<std::string, float>>* Household_Agent::Log_Data() {

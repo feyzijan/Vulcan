@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <chrono>
 
 #include "Initialization_Parameters.hpp"
 #include "Public_Info_Board.hpp"
@@ -21,6 +21,10 @@ using namespace std;
 
 int main()
 {
+
+    // Time program
+     auto start = std::chrono::high_resolution_clock::now();
+
 
     cout << "************* Program has started" <<endl;
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
@@ -63,15 +67,24 @@ int main()
     cout << "\n***************** Main Loop begun" << endl;
     global_date = 1;
 
-    for ( int i = 0; i < 36; i++){
+    for ( int i = 0; i < n_loops; i++){
         Time_Step_1(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector, pAll_Firms_vector,
         pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
         Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1);
         global_date++;
     }
 
+    cout << "----------------------"<<endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
+
+    std::cout << "Execution time: " <<  elapsed_seconds << " s" << std::endl;
+    std::cout << "Program ran for " << n_loops << " timesteps with " << n_households << " households, " << n_consumer_firms<< " consumer firms and " << n_capital_firms << " capital firms." << std::endl;
 
     cout << "Program end :-)\n";
+    
+
+
     return 0;
 }
 

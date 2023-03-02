@@ -48,7 +48,7 @@ Public_Info_Board::Public_Info_Board(){
     contract_expiries = 0;
 
     // not using this as of yet
-    public_unemployment_benefit = 0;
+    public_unemployment_benefit = init_unemployment_benefit;
 
     // timestep - not using these for now
     time_step = 0;
@@ -249,19 +249,18 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "consumer_goods_production " << obj.consumer_goods_production << std::endl;
     os << "capital_goods_production " << obj.capital_goods_production << std::endl;
     os << "consumer_goods_production_planned " << obj.consumer_goods_production_planned << std::endl;
-    os << "Capital Goods Production Planned " << obj.capital_goods_production_planned << "\n";
-    os << "Number of Employed Workers " << obj.n_employed_workers << "\n";
-    os << "Number of Unemployed Workers " << obj.n_unemployed_workers << "\n";
-    os << "Unemployment Rate " << obj.unemployment_rate << "\n";
-    os << "Employee Hires " << obj.employee_hires << "\n";
-    os << "New Employee Demand " << obj.new_employee_demand << "\n";
-    os << "Employee Firings " << obj.employee_firings << "\n";
-    os << "Contract Expiries " << obj.contract_expiries << "\n";
-    os << "New Job Postings " << obj.new_job_postings << "\n";
-    os << "Removed Job Postings " << obj.removed_job_postings << "\n";
-    os << "Public Unemployment Benefit " << obj.public_unemployment_benefit << "\n";
-    os << "Time Step " << obj.time_step << "\n";
-    os << "Current Date " << obj.current_date << "\n";
+    os << "capital_goods_production_planned " << obj.capital_goods_production_planned << std::endl;
+    os << "n_employed " << obj.n_employed_workers << std::endl;
+    os << "n_unemployed " << obj.n_unemployed_workers << std::endl;
+    os << "unemp_rate " << obj.unemployment_rate << std::endl;
+    os << "empl_hires " << obj.employee_hires << std::endl;
+    os << "new_empl_demand " << obj.new_employee_demand << std::endl;
+    os << "empl_firings " << obj.employee_firings << std::endl;
+    os << "empl_contract_expiries " << obj.contract_expiries << std::endl;
+    os << "n_new_job_postings " << obj.new_job_postings << std::endl;
+    os << "n_removed_job_postings " << obj.removed_job_postings << std::endl;
+    os << "unempl_benefits " << obj.public_unemployment_benefit << std::endl;
+    os << "date " << obj.current_date << std::endl;
 }
 
 
