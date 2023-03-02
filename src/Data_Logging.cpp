@@ -515,6 +515,12 @@ void Log_Cap_Firm_Properties(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
 }
 
 
+
+
+
+
+
+
  //---
 
 void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
@@ -522,8 +528,11 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
     std::ofstream log_file;
     log_file.open("../DataLogs/Public_Info_Board.csv", std::ios_base::app);
 
+    // Write header row if file is empty
+    static bool header_written = false;
+
     // If file is empty, write the header row
-    if (log_file.tellp() == 0) {
+    if (!header_written && log_file.tellp() == 0) {
         // Get the header row
         std::vector<std::pair<std::string, float>>* header_data = pPublic_Info_Board->Log_Data();
         std::string header;
@@ -535,6 +544,7 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
         log_file << header;
 
         delete header_data;
+        header_written = true;
     }
 
     // Get the data row
@@ -554,11 +564,16 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
 
 
 
+
+
 void Log_Everything(vector<Household_Agent*> *pHousehold_vector,
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,vector<Capital_Firm_Agent*> *pCapital_Firm_vector, 
     int n_households, int n_consumer_firms, int n_capital_firms,Public_Info_Board *pPublic_Info_Board){
     Log_Household_Properties(pHousehold_vector, n_households);
     Log_Cons_Firm_Properties(pConsumer_Firm_vector, n_consumer_firms);
     Log_Cap_Firm_Properties(pCapital_Firm_vector, n_capital_firms);
+    Log_Firms(pConsumer_Firm_vector,true);
+    Log_Firms(pCapital_Firm_vector,false);
+    Log_Households(pHousehold_vector);
     Log_Public_Info_Board(pPublic_Info_Board);
 }

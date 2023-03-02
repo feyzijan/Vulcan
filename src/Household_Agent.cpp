@@ -59,6 +59,8 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
 
     // Unemployment status
     unemp_duration = 0;
+
+    current_date = 0;
 }
 
 Household_Agent::Household_Agent(Household_Agent&){}
@@ -295,6 +297,60 @@ void Household_Agent::Print() {
     Print_Characteristics(); 
     cout << "--------------------------------------" << endl;
 }
+
+
+std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
+    os << "wealth_financial " << obj.wealth_financial << std::endl;
+    os << "wealth_human " << obj.wealth_human << std::endl;
+    os << "expenditure_consumption " << obj.expenditure_consumption << std::endl;
+    os << "expenditure_tax " << obj.expenditure_tax << std::endl;
+    os << "consumption_propensity " << obj.consumption_propensity << std::endl;
+    os << "new_savings " << obj.new_savings << std::endl;
+    os << "cash_on_hand_real_desired " << obj.cash_on_hand_real_desired << std::endl;
+    os << "cash_on_hand_desired " << obj.cash_on_hand_desired << std::endl;
+    os << "cash_on_hand_current " << obj.cash_on_hand_current << std::endl;
+    os << "saving_propensity " << obj.saving_propensity << std::endl;
+    os << "saving_propensity_optimist " << obj.saving_propensity_optimist << std::endl;
+    os << "saving_propensity_pessimist " << obj.saving_propensity_pessimist << std::endl;
+    os << "income_current " << obj.income_current << std::endl;
+    os << "income_average " << obj.income_average << std::endl;
+    os << "income_wage " << obj.income_wage << std::endl;
+    os << "income_unemployment_benefit " << obj.income_unemployment_benefit << std::endl;
+    os << "income_gov_transfers " << obj.income_gov_transfers << std::endl;
+    os << "income_firm_owner_dividend " << obj.income_firm_owner_dividend << std::endl;
+    os << "unemployed " << obj.unemployed << std::endl;
+    os << "reservation_wage " << obj.reservation_wage << std::endl;
+    os << "unemp_duration " << obj.unemp_duration << std::endl;
+    os << "unemp_duration_upper_bound " << obj.unemp_duration_upper_bound << std::endl;
+    os << "positive_sentiment " << obj.positive_sentiment << std::endl;
+    os << "business_owner " << obj.business_owner << std::endl;
+    os << "c_f " << obj.c_f << std::endl;
+    os << "c_h " << obj.c_h << std::endl;
+    os << "c_excess_money " << obj.c_excess_money << std::endl;
+    os << "p_majority_op_adoption " << obj.p_majority_op_adoption;
+    os << "current_date " << obj.current_date << std::endl;
+}
+
+std::vector<std::pair<std::string, float>>* Household_Agent::Log_Data() {
+        current_date = global_date;
+        auto result = new std::vector<std::pair<std::string, float>>();
+
+        // Get the names and values of all member variables
+        std::stringstream ss;
+        ss << *this;
+        std::string line;
+        while (std::getline(ss, line)) {
+            std::string name;
+            float value;
+            std::stringstream(line) >> name >> value;
+            result->emplace_back(name, value);
+        }
+
+        return result;
+    }
+
+
+
 
 
 

@@ -281,6 +281,5 @@ std::vector<std::pair<std::string, float>>* Public_Info_Board::Log_Data() {
             std::stringstream(line) >> name >> value;
             result->emplace_back(name, value);
         }
-
         return result;
     }

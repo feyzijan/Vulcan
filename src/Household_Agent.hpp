@@ -5,6 +5,9 @@
 #include <random>
 #include <vector>
 #include <queue>
+#include <sstream>
+#include <string>
+
 
 class Public_Info_Board;
 #include "Public_Info_Board.hpp"
@@ -37,10 +40,7 @@ class Household_Agent{
     
     void Buy_Consumer_Goods(); 
     void Seek_Jobs();
-    
-    // Printing and Debugging
-    void Print();
-    void Print_Characteristics();
+
 
     //Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -53,6 +53,14 @@ class Household_Agent{
     float Get_C_h() {return c_h;}
     Public_Info_Board* Get_Public_Board() {return pPublic_Info_Board;};
     std::vector<float>* Get_All_Params();
+    
+    // Printing and Logging
+    void Print();
+    void Print_Characteristics();
+    friend std::ostream& operator<<(std::ostream& os, const Household_Agent& obj);
+    std::vector<std::pair<std::string, float>>* Log_Data();
+
+
 
     protected:
     Public_Info_Board* pPublic_Info_Board;
@@ -102,6 +110,8 @@ class Household_Agent{
     float c_h; // propensity to consume human wealth
     float c_excess_money; // propensity yo consume excess money balance 
     float p_majority_op_adoption; // mu^m : probablility of adopting majority opinion
+    
+    int current_date;
 };
 
 

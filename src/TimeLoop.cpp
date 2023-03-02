@@ -1,40 +1,38 @@
 #include "TimeLoop.hpp"
 
-
-/* Code for timestep t=1
- - TODO : Reorder steps to make code shorter
- - Move the Update_Profits_T1 methods to initialization phase
-*/
 void Time_Step_1(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, 
-vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Info_Board, Job_Market* pJob_Market,
+vector<Capital_Firm_Agent*> *pCapital_Firm_vector, vector<Firm_Agent*> *pFirm_vector, Public_Info_Board* pPublic_Info_Board, Job_Market* pJob_Market,
 Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank){
+    
+    using namespace std;
 
     cout << "\n___________________TIMESTEP #______________ " << global_date << endl;
+
     // STEP 1.1: Update Inflation Rate and Interest rate  -
-    std::cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
+    cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
     pBank->Update_Inflation_Rate();
     pBank->Update_Interest_Rate();
 
-    // Shuffle the vectors randomly using the random number generator
+    // Shuffle the firm and households vectors randomly using the random number generator
     std::random_device rd;
     std::shuffle(pHousehold_vector->begin(), pHousehold_vector->end(), std::default_random_engine(rd()));
     std::shuffle(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::default_random_engine(rd()));
     std::shuffle(pCapital_Firm_vector->begin(), pCapital_Firm_vector->end(), std::default_random_engine(rd()));
     
     // STEP 1.2: Depreciate Firm's Capital Goods
-    std::cout << "\n------------ Step 1.2: Depreciating capital goods ----------------" <<endl;
+    cout << "\n------------ Step 1.2: Depreciating capital goods ----------------" <<endl;
     // STEP 1.3: Layoff workers with expired contracts
-    std::cout << " \n ------------ Step 1.3: laying Off Workers Whose contracts expired ----------------" <<endl;
+    cout << " \n ------------ Step 1.3: laying Off Workers Whose contracts expired ----------------" <<endl;
     // STEP 1.4: Random experimentation - randomly tweak firm and household parameters
-    std::cout << " \n ------------ Step 1.4: Random experimentation ----------------" <<endl;
+    cout << " \n ------------ Step 1.4: Random experimentation ----------------" <<endl;
     // STEP 1.5: Firms assess past period's sales data
-    std::cout << " \n ------------ Step 1.5: Firms assess past period's sales data ----------------" <<endl;
+    cout << " \n ------------ Step 1.5: Firms assess past period's sales data ----------------" <<endl;
     // STEP 1.51: Firms pay dividends - not yet implemented
-    std::cout << " \n ------------ Step 1.51: Firms pay dividend ----------------" <<endl;
+    cout << " \n ------------ Step 1.51: Firms pay dividend ----------------" <<endl;
     // STEP 1.6: Depreciate Firms' Good Inventories
-    std::cout << "\n------------ Step 1.6: Depreciating Good inventories ----------------" <<endl;
+    cout << "\n------------ Step 1.6: Depreciating Good inventories ----------------" <<endl;
     // STEP 1.7: Firms set new price and production targets
-    std::cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
+    cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
     
 
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
@@ -60,20 +58,17 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Determine_New_Production();}
 
     // STEP 1.8: Firms set wage offers, labor target, and finance expected wage bill
-    std::cout << " \n ------------ Step 1.8: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
-
+    cout << " \n ------------ Step 1.8: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
 
     pJob_Market->Calculate_Average_Wage(); 
     pPublic_Info_Board->Update_Average_Wage();
-    std::cout << "Job market before any new operations" << std::endl;
-    pJob_Market->Print_Size();
-
+    cout << "Job market before any new operations" << std::endl; // debugging
+    pJob_Market->Print_Size(); //debugging
 
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();
     }
-    
     for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();
@@ -81,18 +76,18 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     pJob_Market->Sort_Jobs_by_Wage();
 
-    std::cout << "Job market after the requested " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings" << std::endl;
+    cout << "Job market after the requested " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings" << std::endl;
     pJob_Market->Print_Size();
 
     pJob_Market->Remove_Unwanted_Jobs();
-    std::cout << "Job market after the requested " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals" << std::endl;
+    cout << "Job market after the requested " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals" << std::endl;
     pJob_Market->Print_Size();
 
 
     // Step 1.81: Households Check if they are fired
-    std::cout << " \n ------------ Step 1.81: Households Check if they are fired ----------------" <<endl;
+    cout << " \n ------------ Step 1.81: Households Check if they are fired ----------------" <<endl;
     // Step 1.82: Households update reservation wages
-    std::cout << " \n ------------ Step 1.82: Households update reservation wages ----------------" <<endl;
+    cout << " \n ------------ Step 1.82: Households update reservation wages ----------------" <<endl;
     
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Check_Employment_Status();
@@ -220,5 +215,12 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pCapital_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Print();
     cout << "Cap Firms have spent " << pPublic_Info_Board->Get_Machine_Spending() << " on capital goods to buy " << pPublic_Info_Board->Get_Machine_Orders() << " capital goods" << endl;
+
+    // STEP 1.95: Firms pay liabilities
+    cout << " \n ------------ Step 1.95: Firms pay liabilities ----------------" <<endl;
+    for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+        firm_ptr->Pay_Liabilities();}
+    for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Pay_Liabilities();}
 
 }

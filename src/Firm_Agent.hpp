@@ -6,6 +6,8 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
+#include <sstream>
+#include <string>
 
 
 class Public_Info_Board;
@@ -28,19 +30,9 @@ class Firm_Agent{
     Firm_Agent(Firm_Agent&){}; 
     ~Firm_Agent(){}; 
 
-    //Print methods
-    void Print(); 
-    void Print_Posted_Jobs();
-    void Print_Active_Jobs();
-    void Print_Capital_Goods();
-
-    // Initialization methods t = 0
-    
-
     // Initialization methods t = 1
     void Update_Average_Profits_T1();
     void Update_Average_Sales_T1();
-
 
     // Main Loop Methods - in order
     void Depreciate_Capital();
@@ -54,41 +46,41 @@ class Firm_Agent{
     int Pay_Dividends();
     virtual void Depreciate_Good_Inventory() {};
     void Determine_New_Production();
-    
     void Adjust_Wage_Offers();
     void Determine_Labor_Need();
     void Remove_Job_Postings(); 
     void Layoff_Excess_Workers();
     void Seek_Short_Term_Loan();
-
     void Post_Jobs();
     void Check_For_New_Employees();
-    
     void Make_Investment_Decision(); // Complete
     virtual void Produce_Goods() {};
     virtual void Send_Goods_To_Market() {};
     virtual void Update_Goods_On_Market() {};
-
     void Seek_Long_Term_Loan();
     void Update_Supplier_Network() {}; // To Implement in subclasses
     void Buy_Capital_Goods(); 
-
     void Update_Leverage_Ratio();
     void Pay_Liabilities();
     
  
-
     // Getters
     std::vector<float>* Get_All_Params();
     int Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
     int Get_Long_Term_Funding_Gap() {return long_term_funding_gap;}
     float Get_Leverage_Ratio() {return leverage_ratio;}
     
-
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
     void Set_Wage_Offer(int wage) { this->wage_offer = wage;} // used in testing
 
+    //Print and logging methods
+    void Print(); 
+    void Print_Posted_Jobs();
+    void Print_Active_Jobs();
+    void Print_Capital_Goods();
+    friend std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj);
+    std::vector<std::pair<std::string, float>>*  Log_Data();
 
     
     protected:
@@ -106,12 +98,13 @@ class Firm_Agent{
     std::vector<Job*> active_job_list;
     std::vector<Job*> posted_job_list;
 
+
     // Production and sales figures
     int production_current; // Actual production at t
     int production_planned; // Production plan for t
     int production_past; // Production at t-1
     int quantity_sold; // Sales at t-1
-
+    
     // Inflows
     int total_income;
     int revenue_sales;
@@ -119,14 +112,13 @@ class Firm_Agent{
     int subsidies;
     float good_price_current; // good price set for t
     float good_price_past; // good price at t-1
-
-    int average_profit; // NEWLY ADDED - 
-    int average_sale_quantity; //NEWLY ADDED -
-  
+    int average_profit;  
+    int average_sale_quantity; 
+    
     // Loan Parameters
     int short_term_funding_gap; // NEWLY ADDED - 
     int long_term_funding_gap; // NEWLY ADDED - 
-
+    
     // Expenditures
     int total_liabilities; //Comprises of evt below
     int labor_wage_bill;
@@ -136,23 +128,21 @@ class Firm_Agent{
     int debt_interest_payments;
     int dividend_payments;
     int production_costs;
-
     int expected_wage_bill; 
     int layoff_wage_savings; 
-
     int outstanding_debt_total;
     //int max_allowable_debt_total;
-
+    
     // Assets and fianncials 
     int total_assets; // maybe this should be the same as cash in hand?
     float leverage_ratio;
     int cash_on_hand;
-
+    
     // Dividend characteristics
     float dividend_ratio;
     float dividend_ratio_optimist; // characteristic
     float dividend_ratio_pessimist; // characteristic
-
+    
     // Employee
     int employee_count; 
     int wage_offer;
@@ -160,9 +150,7 @@ class Firm_Agent{
     int n_active_job_postings;
     bool need_worker;
     int w_target; //Desired labor capacity utilization
-
     float labor_utilization; // NEWLY ADDDED
-
     
     // Inventories
     int inventory;
@@ -170,20 +158,18 @@ class Firm_Agent{
     float desired_inventory_factor; // a characteristic
     int desired_inventory; // NEWLY ADDED 
     float inventory_factor; 
-
     float inventory_reaction_factor;  // NEWLY ADDDED
-
     float machine_utilization;  // NEWLY ADDDED
     int desired_machines; // NEWLY ADDDED
 
     // Sentiment
     bool sentiment; // pessimistic, optimistic
-
     // Bankruptcy
-    bool bankrupt;;
-
-    // type identifier, may be useful
-    bool is_cons_firm;
+    bool bankrupt;
+    
+    bool is_cons_firm; // type identifier, may be useful
+    
+    int current_date;
 
 };
 

@@ -84,100 +84,11 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     //cout << " Created initial capital good " << endl;
     capital_goods_list.push_back(initial_capital_goods);
     //cout << "Passed capital good into list" << endl;; 
+
+    current_date = 0;
 }
 
-
-
-
-
-//-------------------------------------
-// Printing methods
-
-/* Print all Firm parameters
-TODO: Update to include newly added parameters
-*/
-void Firm_Agent::Print(){
-    using namespace std;
-    if (is_cons_firm){
-        cout << "------ Consumer Firm Agent at address : " << this << endl;
-    } else{
-        cout << "------ Capital Firm Agent at address : " << this << endl;
-    }    
-
-    // Employee info
-    cout << "Number of employees: " << employee_count << " Desired employees: " << employee_count_desired << 
-    " Need Worker: " << need_worker << " Current Wage Offer: " << wage_offer << endl;
-    cout << "Labor utilization current: " << labor_utilization << " Desired: " << w_target << endl;
-
-
-    // Inventory 
-    cout << "Desired Inventory Factor: " << desired_inventory_factor << " Current inventory: " << inventory << " Current Inv Factor: " 
-    << inventory_factor << endl << "Desired Inventory: " << desired_inventory <<  " Capital inventory: " << working_capital_inventory << endl;
-    cout << "Inventory reaction factor: " << inventory_reaction_factor << " Desired machines: " << desired_machines << " Machine utilization: " << machine_utilization << endl;
-
-    // Sentiment
-    cout << "Positive Sentiment: " << sentiment << " Bankruptcy: " << bankrupt <<endl;
-    
-    //Production, sales ,and price figures
-    cout << "Production - current/actual: " << production_current << " planned: " << production_planned << " past: " << production_past <<endl;
-    cout << "Quantity sold: " << quantity_sold << " Current price: " << good_price_current << " Past price: " << good_price_past << endl;
-    cout << "Average profit " << average_profit << " Average sale quantity: " << average_sale_quantity << endl;
-
-    //Inflows
-    cout << "Total income: " << total_income << " Sales Revenue: " << revenue_sales << " New loans: " << new_loan_issuance  << " subsidies: " << subsidies << endl;
-    
-    // Loan parameters
-    cout << "Short term funding gap: " << short_term_funding_gap << " Long term funding gap: " << long_term_funding_gap << endl;
-
-    //Expenditures
-    cout << "Total Liabilities: " << total_liabilities << " Wage bill: " << labor_wage_bill << " Capital costs: " << capital_costs << " Tax: " << tax_payments << endl;
-    cout << "Debt principal payments: " << debt_principal_payments << " Interest payments: " << debt_interest_payments << " Dividends: " << dividend_payments << endl;
-    cout << "Production costs: " << production_costs <<  " Expected wage bill: " << expected_wage_bill << " Layoff wage savings: " << layoff_wage_savings << endl;
-
-    //Assets and financials
-    cout << "Assets: " << total_assets << " Savings: " << cash_on_hand <<  " Leverage Ratio: " << leverage_ratio << endl;
-
-    //Dividend characteristics
-    cout << "Dividend ratio actual: " << dividend_ratio << " pessimist: " << dividend_ratio_pessimist << " optimist: " << dividend_ratio_optimist << endl;
-
-    //Public Board
-    cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
-    cout << "\n"<< endl;
-
-}
-
-
-/* Print Posted job offers
-*/
-void Firm_Agent::Print_Posted_Jobs(){
-    cout << "Firm Agent Printing Posted Jobs: " << endl;
-    for (auto i = posted_job_list.begin(); i !=  posted_job_list.end(); ++i){
-        (*i)->Print();
-    }
-}
-
-/* Print active(taken) job offers
-*/
-void Firm_Agent::Print_Active_Jobs(){
-    cout << "Firm Agent Printing Active Jobs: " << endl;
-    for (auto i = active_job_list.begin(); i !=  active_job_list.end(); ++i){
-        (*i)->Print();
-    }
-}
-
-/* Print all capital goods owned by the firm
-*/
-void Firm_Agent::Print_Capital_Goods(){
-    cout << "Firm Agent Printing Capital Good Inventory: " << endl;
-    for (auto i = capital_goods_list.begin(); i !=  capital_goods_list.end(); ++i){
-        (*i)->Print();
-    }
-}
-
-//--------------------------------------------------------------
-
-// ----------- Initialization methods t = 0
-
+//------------------------------------------
 
 // ----------- Initialization methods t = 1
 
@@ -479,12 +390,12 @@ void Firm_Agent::Seek_Short_Term_Loan(){
 void Firm_Agent::Post_Jobs(){
     using namespace std;
     int new_postings =  employee_count_desired - employee_count - n_active_job_postings ;
-    //cout << "Employee count desired: " << employee_count_desired << " Current employees: " << employee_count << endl;
+    //cout << "Employee count desired " << employee_count_desired << " Current employees " << employee_count << endl;
     //cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
     for(int i=0; i< new_postings;i++){
         //test_global_var_2 +=1;
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
-        //cout << "\n Firm Posting job with address: " <<  job <<" and wage: " << wage_offer <<endl;
+        //cout << "\n Firm Posting job with address " <<  job <<" and wage " << wage_offer <<endl;
         pPublic_Info_Board->Post_Job_To_Market(job);
         posted_job_list.push_back(job);
     }
@@ -726,3 +637,178 @@ std::vector<float>* Firm_Agent::Get_All_Params() {
 
     return vec;
 }
+
+
+//-------------------------------------
+// Printing methods
+
+/* Print all Firm parameters
+TODO: Update to include newly added parameters
+*/
+void Firm_Agent::Print(){
+    using namespace std;
+    if (is_cons_firm){
+        cout << "------ Consumer Firm Agent at address : " << this << endl;
+    } else{
+        cout << "------ Capital Firm Agent at address : " << this << endl;
+    }    
+
+    // Employee info
+    cout << "Number of employees: " << employee_count << " Desired employees: " << employee_count_desired << 
+    " Need Worker: " << need_worker << " Current Wage Offer: " << wage_offer << endl;
+    cout << "Labor utilization current: " << labor_utilization << " Desired: " << w_target << endl;
+
+
+    // Inventory 
+    cout << "Desired Inventory Factor: " << desired_inventory_factor << " Current inventory: " << inventory << " Current Inv Factor: " 
+    << inventory_factor << endl << "Desired Inventory: " << desired_inventory <<  " Capital inventory: " << working_capital_inventory << endl;
+    cout << "Inventory reaction factor: " << inventory_reaction_factor << " Desired machines: " << desired_machines << " Machine utilization: " << machine_utilization << endl;
+
+    // Sentiment
+    cout << "Positive Sentiment: " << sentiment << " Bankruptcy: " << bankrupt <<endl;
+    
+    //Production, sales ,and price figures
+    cout << "Production - current/actual: " << production_current << " planned: " << production_planned << " past: " << production_past <<endl;
+    cout << "Quantity sold: " << quantity_sold << " Current price: " << good_price_current << " Past price: " << good_price_past << endl;
+    cout << "Average profit " << average_profit << " Average sale quantity: " << average_sale_quantity << endl;
+
+    //Inflows
+    cout << "Total income: " << total_income << " Sales Revenue: " << revenue_sales << " New loans: " << new_loan_issuance  << " subsidies: " << subsidies << endl;
+    
+    // Loan parameters
+    cout << "Short term funding gap: " << short_term_funding_gap << " Long term funding gap: " << long_term_funding_gap << endl;
+
+    //Expenditures
+    cout << "Total Liabilities: " << total_liabilities << " Wage bill: " << labor_wage_bill << " Capital costs: " << capital_costs << " Tax: " << tax_payments << endl;
+    cout << "Debt principal payments: " << debt_principal_payments << " Interest payments: " << debt_interest_payments << " Dividends: " << dividend_payments << endl;
+    cout << "Production costs: " << production_costs <<  " Expected wage bill: " << expected_wage_bill << " Layoff wage savings: " << layoff_wage_savings << endl;
+
+    //Assets and financials
+    cout << "Assets: " << total_assets << " Savings: " << cash_on_hand <<  " Leverage Ratio: " << leverage_ratio << endl;
+
+    //Dividend characteristics
+    cout << "Dividend ratio actual: " << dividend_ratio << " pessimist: " << dividend_ratio_pessimist << " optimist: " << dividend_ratio_optimist << endl;
+
+    //Public Board
+    cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
+    cout << "\n"<< endl;
+
+}
+
+
+/* Print Posted job offers
+*/
+void Firm_Agent::Print_Posted_Jobs(){
+    cout << "Firm Agent Printing Posted Jobs: " << endl;
+    for (auto i = posted_job_list.begin(); i !=  posted_job_list.end(); ++i){
+        (*i)->Print();
+    }
+}
+
+/* Print active(taken) job offers
+*/
+void Firm_Agent::Print_Active_Jobs(){
+    cout << "Firm Agent Printing Active Jobs: " << endl;
+    for (auto i = active_job_list.begin(); i !=  active_job_list.end(); ++i){
+        (*i)->Print();
+    }
+}
+
+/* Print all capital goods owned by the firm
+*/
+void Firm_Agent::Print_Capital_Goods(){
+    cout << "Firm Agent Printing Capital Good Inventory: " << endl;
+    for (auto i = capital_goods_list.begin(); i !=  capital_goods_list.end(); ++i){
+        (*i)->Print();
+    }
+}
+
+/* String stream opearator for printing
+*/
+
+std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
+   /*  os << "pPublic_Info_Board: " << obj.pPublic_Info_Board << std::endl;
+    os << "goods_on_market " << obj.goods_on_market << std::endl;
+    os << "initial_capital_goods " << obj.initial_capital_goods << std::endl;
+    os << "capital_goods_list " << obj.capital_goods_list.size() << " items" << std::endl;
+    os << "loan_book " << obj.loan_book.size() << " loans" << std::endl;
+    os << "past_profits " << obj.past_profits.size() << " items" << std::endl;
+    os << "past_sale_quantities " << obj.past_sale_quantities.size() << " items" << std::endl;
+    os << "active_job_list " << obj.active_job_list.size() << " jobs" << std::endl;
+    os << "posted_job_list " << obj.posted_job_list.size() << " jobs" << std::endl; */
+    os << "production_current " << obj.production_current << std::endl;
+    os << "production_planned " << obj.production_planned << std::endl;
+    os << "production_past " << obj.production_past << std::endl;
+    os << "quantity_sold " << obj.quantity_sold << std::endl;
+    os << "total_income " << obj.total_income << std::endl;
+    os << "revenue_sales " << obj.revenue_sales << std::endl;
+    os << "new_loan_issuance " << obj.new_loan_issuance << std::endl;
+    os << "subsidies " << obj.subsidies << std::endl;
+    os << "good_price_current " << obj.good_price_current << std::endl;
+    os << "good_price_past " << obj.good_price_past << std::endl;
+    os << "average_profit " << obj.average_profit << std::endl;
+    os << "average_sale_quantity " << obj.average_sale_quantity << std::endl;
+    os << "short_term_funding_gap " << obj.short_term_funding_gap << std::endl;
+    os << "long_term_funding_gap " << obj.long_term_funding_gap << std::endl;
+    os << "total_liabilities " << obj.total_liabilities << std::endl;
+    os << "labor_wage_bill " << obj.labor_wage_bill << std::endl;
+    os << "capital_costs " << obj.capital_costs << std::endl;
+    os << "tax_payments " << obj.tax_payments << std::endl;
+    os << "debt_principal_payments " << obj.debt_principal_payments << std::endl;
+    os << "debt_interest_payments " << obj.debt_interest_payments << std::endl;
+    os << "dividend_payments " << obj.dividend_payments << std::endl;
+    os << "production_costs " << obj.production_costs << std::endl;
+    os << "expected_wage_bill " << obj.expected_wage_bill << std::endl;
+    os << "layoff_wage_savings " << obj.layoff_wage_savings << std::endl;
+    os << "outstanding_debt_total " << obj.outstanding_debt_total << std::endl;
+    os << "Total Assets " << obj.total_assets << std::endl;
+    os << "Leverage Ratio " << obj.leverage_ratio << std::endl;
+    os << "Cash on Hand " << obj.cash_on_hand << std::endl;
+    os << "Dividend Ratio " << obj.dividend_ratio << std::endl;
+    os << "Optimistic Dividend Ratio " << obj.dividend_ratio_optimist << std::endl;
+    os << "Pessimistic Dividend Ratio " << obj.dividend_ratio_pessimist << std::endl;
+    os << "Employee Count " << obj.employee_count << std::endl;
+    os << "Wage Offer " << obj.wage_offer << std::endl;
+    os << "Desired Employee Count " << obj.employee_count_desired << std::endl;
+    os << "Active Job Postings " << obj.n_active_job_postings << std::endl;
+    os << "Need Worker " << obj.need_worker << std::endl;
+    os << "Desired Labor Capacity Utilization " << obj.w_target << std::endl;
+    os << "Labor Utilization " << obj.labor_utilization << std::endl;
+    os << "Inventory " << obj.inventory << std::endl;
+    os << "Working Capital Inventory " << obj.working_capital_inventory << std::endl;
+    os << "Desired Inventory Factor " << obj.desired_inventory_factor << std::endl;
+    os << "desired_inventory " << obj.desired_inventory << std::endl;
+    os << "inventory_factor " << obj.inventory_factor << std::endl;
+    os << "inventory_reaction_factor " << obj.inventory_reaction_factor << std::endl;
+    os << "machine_utilization " << obj.machine_utilization << std::endl;
+    os << "desired_machines " << obj.desired_machines << std::endl;
+    os << "sentiment " << obj.sentiment << std::endl;
+    os << "bankrupt " << obj.bankrupt << std::endl;
+    os << "is_cons_firm " << obj.is_cons_firm << std::endl;
+    os << "date " << obj.current_date << std::endl;
+}
+
+/* Log method to be used for outputting data to csv
+
+*/
+
+std::vector<std::pair<std::string, float>>*  Firm_Agent::Log_Data() {
+    current_date = global_date;
+
+    auto result = new std::vector<std::pair<std::string, float>>();
+        // Get the names and values of all member variables
+        std::stringstream ss;
+        ss << *this;
+        std::string line;
+        while (std::getline(ss, line)) {
+            std::string name;
+            float value;
+            std::stringstream(line) >> name >> value;
+            result->emplace_back(name, value);
+        }
+        return result;
+}
+
+
+
+//--------------------------------------------------------------
