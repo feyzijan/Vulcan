@@ -55,7 +55,7 @@ int main()
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     cout << "Step 0.15: Log initial Household and Firm data" << endl;
-    Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms, pPublic_Board_1);
+    Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1);
 
 
 
@@ -63,10 +63,10 @@ int main()
     cout << "\n***************** Main Loop begun" << endl;
     global_date = 1;
 
-    for ( int i = 0; i < 5; i++){
+    for ( int i = 0; i < 36; i++){
         Time_Step_1(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector, pAll_Firms_vector,
         pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
-        Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, n_households, n_consumer_firms, n_capital_firms, pPublic_Board_1);
+        Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1);
         global_date++;
     }
 
