@@ -61,6 +61,7 @@ class Firm_Agent{
     void Update_Supplier_Network() {}; // To Implement in subclasses
     void Buy_Capital_Goods(); 
     void Update_Leverage_Ratio();
+    void Update_Loan_List(); // calledby Pay_Liabilities
     void Pay_Liabilities();
     
  

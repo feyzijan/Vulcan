@@ -79,10 +79,11 @@ Targeted Consumption Expenditures: - some formula
 void Household_Agent::Consumption_Savings_Decisions(){
     Update_Reservation_Wage();
     Update_Income();
-    if (global_date == 1) {
+    if (global_date > 1) {
+        Update_Average_Income();
+    } else {
         Update_Average_Income_T1();
     }
-    Update_Average_Income();
     Update_Savings();
     Determine_Consumer_Sentiment();
     Determine_Consumption_Budget();
@@ -110,6 +111,7 @@ void Household_Agent::Check_Employment_Status()
             unemp_duration = 0;
         }
     }
+
     // Update Public Records
     pPublic_Info_Board->Update_Employed_Workers(!unemployed);
     pPublic_Info_Board->Update_Unemployed_Workers(unemployed);
@@ -146,6 +148,7 @@ void Household_Agent::Update_Income()
 
         income_wage = current_job->Get_Wage();
         income_current += income_wage;
+        pPublic_Info_Board->Update_Average_Wage_Employed(income_wage);
     } else {
         income_wage = 0;
         income_unemployment_benefit = pPublic_Info_Board->Get_Unemployment_Benefit();
@@ -242,6 +245,7 @@ If job is accepted remove it from the job market
 */
 void Household_Agent::Seek_Jobs()
 {
+    if(unemployed){
     Job* best_job = pPublic_Info_Board->Get_Top_Job();
     if (best_job != NULL){
         if (best_job->Get_Wage() >= reservation_wage){
@@ -257,6 +261,7 @@ void Household_Agent::Seek_Jobs()
             //cout << "job not found" <<endl;
             Update_Reservation_Wage();
         }
+    }
     }
 }
 

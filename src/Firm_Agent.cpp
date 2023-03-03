@@ -249,9 +249,9 @@ TODO: Improve this as it is a bit too simplistic, maybe use JAMEL
 void Firm_Agent::Adjust_Wage_Offers()
 {
     float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
-    int average_wage = pPublic_Info_Board->Get_Average_Wage();
+    int average_wage_market = pPublic_Info_Board->Get_Average_Wage();
     
-    bool wage_high = wage_offer >= average_wage;
+    bool wage_high = wage_offer >= average_wage_market;
 
     if (wage_high && need_worker){
         wage_offer *= (1-n_uniform);
@@ -515,6 +515,18 @@ void Firm_Agent::Update_Leverage_Ratio(){
 }
 
 
+/* Function to go through loan list and delete loans that have been paid off
+*/
+void Firm_Agent::Update_Loan_List(){
+    auto it = loan_book.begin();
+    while(it !=  loan_book.end()) {
+        if((*it)->Get_Principal_Amount() <= 0) { 
+            delete *it; // delete the loan object
+            it = loan_book.erase(it); // delete the pointer from the vector
+        } else {it++;}
+    }
+}
+
 
 /* Function to pay liabilities and seek loans or go bankrupt if necessary
 
@@ -526,8 +538,13 @@ void Firm_Agent::Pay_Liabilities(){
     // Calculate debt bill
     debt_principal_payments = 0;
     debt_interest_payments = 0;
+
+    void Update_Loan_List();
+
     for (Loan* loan_ptr : loan_book){
-        debt_principal_payments += loan_ptr->Calculate_Principal_Repayment();
+        int current_principal_payment = loan_ptr->Calculate_Principal_Repayment();
+        debt_principal_payments += current_principal_payment;
+        loan_ptr->Deduct_Principal_Repayment(current_principal_payment);
         debt_interest_payments += loan_ptr->Calculate_Interest_Repayment();
     }
 
@@ -569,6 +586,8 @@ void Firm_Agent::Pay_Liabilities(){
         cash_on_hand -= dividend_payments + tax_payments;
         Pay_Dividends();
     }
+
+
 }
 
 

@@ -35,4 +35,5 @@ wrk/vulcan
 wrk/*.log
 
 Datalogs/*.csv
+Datalogs/*/*.csv
 

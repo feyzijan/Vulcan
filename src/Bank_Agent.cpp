@@ -26,6 +26,14 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
         inflation_history.push(bank_inflation_target_monthly);
     }
 
+    // Manufacturer inflation - start at 0 inflation
+    cap_inflation_previous = 1.0;
+    cap_inflation_past_month = 0;
+    for(int i=1;i<=12;i++){
+        cap_inflation_history.push(cap_inflation_previous);
+    }
+
+
     inflation_current = inflation_previous;
     
     // Repayments
@@ -73,6 +81,20 @@ void Bank_Agent::Update_Inflation_Rate(){
     // Update inflation_history
     inflation_history.pop();
     inflation_history.push(inflation_past_month);
+}
+
+/* Function to update manufacturer price level and inflation rate data
+Gets the latest inflation figure from the public board
+*/
+void Bank_Agent::Update_Manufacturer_Inflation_Rate(){
+    
+    cap_inflation_previous = cap_inflation_current;
+    cap_inflation_past_month = pPublic_Board->Calculate_Manufacturer_Inflation();
+    // Update inflation to match trailing 12m
+    cap_inflation_current = cap_inflation_previous / cap_inflation_history.front() * cap_inflation_past_month;
+    // Update inflation_history
+    cap_inflation_history.pop();
+    cap_inflation_history.push(cap_inflation_past_month);
 }
 
 

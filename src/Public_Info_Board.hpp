@@ -41,8 +41,8 @@ class Public_Info_Board{
     void Post_Job_To_Market(Job * pJob_Offer);
     void Take_Job(Job* pJob_Offer); // Notify employer and remove job from market
     void Sort_Job_Market();
-    void Update_Average_Wage() {average_wage = pJob_Market->Get_Average_Wage();};
-    
+    void Update_Average_Wage_Job_Market() {average_wage_market = pJob_Market->Get_Average_Wage();};
+
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
     std::pair<int, int> Buy_Consumer_Goods(int budget);
@@ -77,10 +77,11 @@ class Public_Info_Board{
 
     // Getters
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
-    int Get_Price_Level() { return price_level_current;}
+    float Get_Price_Level() { return cons_price_level_current;}
+    float Get_Cap_Price_Level() { return cap_price_level_current;}
     float Get_Capital_Good_Price_Level();
     float Get_Consumer_Good_Price_Level();
-    float Get_Average_Wage() { return average_wage;}
+    float Get_Average_Wage() { return average_wage_market;}
     Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
     int Get_Current_Date() { return current_date;}
     int Get_Machine_Orders() { return machine_orders;}
@@ -106,12 +107,13 @@ class Public_Info_Board{
     void Set_Consumer_Goods_Market(Consumer_Goods_Market* ptr) { pConsumer_Goods_Market = ptr;}
     void Set_Capital_Goods_Market(Capital_Goods_Market* ptr) { pCapital_Goods_Market = ptr;}
     void Set_Bank(Bank_Agent* ptr) { pBank = ptr;}
-    
+
 
     // Update global aggregate variables
-    void Update_Household_sentiment_sum(int amount) { household_sentiment_sum += amount; }
-    void Update_Cons_firm_sentiment_sum(int amount) { cons_firm_sentiment_sum += amount; }
-    void Update_Cap_firm_sentiment_sum(int amount) { cap_firm_sentiment_sum += amount; }
+    void Update_Household_sentiment_sum(bool amount) { household_sentiment_sum += amount; }
+    void Update_Cons_firm_sentiment_sum(bool amount) { cons_firm_sentiment_sum += amount; }
+    void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount; }
+    void Update_Average_Wage_Employed(int amount) { average_wage_employed += amount; }
     void Update_Machine_orders(int amount) { machine_orders += amount; }
     void Update_Machine_spending(int amount) { machine_spending += amount; }
     void Update_Consumer_orders(int amount) { consumer_orders += amount; }
@@ -130,10 +132,15 @@ class Public_Info_Board{
     void Update_New_Job_Postings(int amount) { new_job_postings += amount; }
     void Update_Removed_Job_Postings(int amount) { removed_job_postings += amount; }
     void Update_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
+    
     void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = household_sentiment_sum/n_households; }
     void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = cons_firm_sentiment_sum/n_consumer_firms; }
     void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = cap_firm_sentiment_sum/n_capital_firms; }
 
+    void Update_Inflation();
+    void Update_Manufacturer_Inflation();
+    void Update_Interest_Rate();
+    void Calc_Average_Wage_Employed() { average_wage_employed = average_wage_employed/n_employed_workers; }
 
     // Printing and Debugging
     void Print() const;
@@ -148,15 +155,18 @@ class Public_Info_Board{
     Capital_Goods_Market* pCapital_Goods_Market;
 
     // General price level
-    float price_level_current;
-    float price_level_previous;
+    float cons_price_level_current;
+    float cons_price_level_previous;
     float cap_price_level_current;
     float cap_price_level_previous;
-    float average_wage; // Average wage in economy
+    float average_wage_market; // Average wage in the hob market
+    float average_wage_employed; // Average wage in economy
+
 
     // Inflation and interest rate
     float r_rate; 
     float inflation_current; 
+    float cap_inflation_current;
 
 
     // Global aggregate varaibles

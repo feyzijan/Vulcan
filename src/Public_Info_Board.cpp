@@ -6,13 +6,14 @@
 
 Public_Info_Board::Public_Info_Board(){
     // Genereal price level
-    price_level_current =0;
-    price_level_previous = 0;
+    cons_price_level_current = 0;
+    cons_price_level_previous = 0;
 
     // Capital good price level
     cap_price_level_current = 0;
     cap_price_level_previous = 0;
-    average_wage = 0;
+    average_wage_market = 0;
+    average_wage_employed = 0;
     // Inflation and interest rates
     r_rate = 0;
     inflation_current = 0;
@@ -144,9 +145,9 @@ int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
 //--- Inflation and Price level
 
 float Public_Info_Board::Calculate_Inflation(){
-    price_level_previous = price_level_current;
-    price_level_current = pConsumer_Goods_Market->Get_Price_Level();
-    return 1.0 + (price_level_current - price_level_previous)/price_level_previous;
+    cons_price_level_previous = cons_price_level_current;
+    cons_price_level_current = pConsumer_Goods_Market->Get_Price_Level();
+    return 1.0 + (cons_price_level_current - cons_price_level_previous)/cons_price_level_previous;
 }
 
 float Public_Info_Board::Calculate_Manufacturer_Inflation(){
@@ -156,9 +157,22 @@ float Public_Info_Board::Calculate_Manufacturer_Inflation(){
 }
 
 void Public_Info_Board::Initialize_Price_Level(){
-    price_level_current = pConsumer_Goods_Market->Get_Price_Level();
+    cons_price_level_current = pConsumer_Goods_Market->Get_Price_Level();
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
 }
+
+void Public_Info_Board::Update_Inflation() { 
+    inflation_current = pBank->Get_Inflation_Rate();
+    }
+
+void Public_Info_Board::Update_Manufacturer_Inflation() { 
+    cap_inflation_current = pBank->Get_Manufacturer_Inflation_Rate();
+    }
+
+void Public_Info_Board::Update_Interest_Rate() { 
+    r_rate = pBank->Get_Interest_Rate();
+    }
+
 
 //--------------------------------------------------
 //--- Loan issuance
@@ -182,26 +196,63 @@ Loan* Public_Info_Board::Seek_Long_Term_Loan(Firm_Agent* pFirm){
 // Global Data
 /* Function to reset global data parameters to zero*/
 void Public_Info_Board::Reset_Global_Data(){
+    int reset_value = 0;
+
+    // General price level
+   /*  price_level_current = reset_value;
+    price_level_previous = reset_value;
+    cap_price_level_current = reset_value;
+    cap_price_level_previous = reset_value;
+    average_wage_market = reset_value; */
+
+    // Inflation and interest rate
+    r_rate = reset_value;
+    inflation_current = reset_value;
+    cap_inflation_current = reset_value;
+    average_wage_market = 0;
+    average_wage_employed = 0;
+
+
+    // Global aggregate varaibles
+
+    // Sentiments
+    household_sentiment_sum = reset_value;
+    household_sentiment_percentage = reset_value;
+    cons_firm_sentiment_sum = reset_value;
+    cons_firm_sentiment_percentage = reset_value;
+    cap_firm_sentiment_sum = reset_value;
+    cap_firm_sentiment_percentage = reset_value;
+
     // Capital expenditure
-    machine_orders = 0;
-    machine_spending = 0;
+    machine_orders = reset_value;
+    machine_orders_planned = reset_value;
+    machine_spending = reset_value;
+
     // Consumer expenditure
-    consumer_orders = 0;
-    consumer_spending = 0;
-    consumption_budgets = 0;
+    consumer_orders = reset_value;
+    consumer_spending = reset_value;
+    consumption_budgets = reset_value;
+    consumer_goods_production = reset_value;
+    capital_goods_production = reset_value;
+    consumer_goods_production_planned = reset_value;
+    capital_goods_production_planned = reset_value;
+
     // Production
-    consumer_goods_production = 0;
-    capital_goods_production = 0;
-    consumer_goods_production_planned = 0;
-    capital_goods_production_planned = 0;
+    n_employed_workers = reset_value;
+    n_unemployed_workers = reset_value;
+    unemployment_rate = reset_value;
+
     // Employment
-    n_employed_workers = 0;
-    n_unemployed_workers = 0;
-    new_employee_demand = 0;
-    employee_firings = 0;
-    employee_hires = 0;
-    unemployment_rate = 0.0;
-    contract_expiries = 0;
+    employee_hires = reset_value;
+    new_employee_demand = reset_value;
+    employee_firings = reset_value;
+    contract_expiries = reset_value;
+    new_job_postings = reset_value;
+    removed_job_postings = reset_value;
+    public_unemployment_benefit = reset_value;
+
+    time_step = reset_value;
+    current_date = reset_value;
 }
 
 
@@ -209,7 +260,7 @@ void Public_Info_Board::Reset_Global_Data(){
 
 void Public_Info_Board::Print() const{
     cout << " Public Infor Board at adress " << this << endl;
-    cout << " Price Level: " << price_level_current << " Interest Rate: " << r_rate <<endl;
+    cout << " Price Level: " << cons_price_level_current << " Interest Rate: " << r_rate <<endl;
     cout << " Current Inflation: " << inflation_current <<  endl;
     cout << " Household Optimism: " << household_sentiment_percentage << " COns Firm Optimism: " << cons_firm_sentiment_percentage << endl;
 }
@@ -221,17 +272,18 @@ void Public_Info_Board::Print_Labor_Market() const{
     cout << " # employed workers: " << n_employed_workers << " # unemployed workers: " << n_unemployed_workers << endl;
     cout << " # new employee demand: " << new_employee_demand << " # employee firings: " << employee_firings << endl;
     cout << " # new employee hires: " << employee_hires << " Unemployment Rate: " << unemployment_rate << endl;
-    cout << "average_wage: " << average_wage <<  " # contract expiries: " << contract_expiries << endl;
+    cout << "average_wage_market: " << average_wage_market <<  " # contract expiries: " << contract_expiries << endl;
 }
 
 /* Function to make string stream operator << work
 */
 std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
-    os << "price_level_current " << obj.price_level_current << std::endl;
-    os << "price_level_previous " << obj.price_level_previous << std::endl;
+    os << "price_level_current " << obj.cons_price_level_current << std::endl;
+    os << "price_level_previous " << obj.cons_price_level_previous << std::endl;
     os << "cap_price_level_current " << obj.cap_price_level_current << std::endl;
     os << "cap_price_level_previous " << obj.cap_price_level_previous << std::endl;
-    os << "average_wage " << obj.average_wage << std::endl;
+    os << "average_wage_market " << obj.average_wage_market << std::endl;
+    os << "average_wage_employed " << obj.average_wage_employed << std::endl;
     os << "r_rate " << obj.r_rate << std::endl;
     os << "inflation_current " << obj.inflation_current << std::endl;
     os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;

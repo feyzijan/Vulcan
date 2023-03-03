@@ -10,10 +10,10 @@ int test_global_var_2 = 0; // for testing
 const int time_period = 12; // i.e. 12 timesteps make a year
 const int n_loops = 36;
 
-const int n_households = 10000;
-const int n_consumer_firms = 150;
-const int n_capital_firms = 50;
-const int n_firms = 200;
+const int n_households = 100000;
+const int n_consumer_firms = 4000;
+const int n_capital_firms = 500;
+const int n_firms = 2;
 const int n_max_employees = 100; //unused
 
 
@@ -111,10 +111,10 @@ const float init_wage_offer_std = 300;
 const float init_wage_offer_min = 100;
 const float init_wage_offer_max = 999999;
 
-const float init_employee_count_desired_mean = 50;
+const float init_employee_count_desired_mean = 25;
 const float init_employee_count_desired_std = 5;
 const float init_employee_count_desired_min = 1;
-const float init_employee_count_desired_max = 999999;
+const float init_employee_count_desired_max = 100;
 
 const float init_inventory_mean = 1000;
 const float init_inventory_std = 100;

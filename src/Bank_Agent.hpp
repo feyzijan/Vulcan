@@ -26,10 +26,16 @@ class Bank_Agent{
     void Update_Inflation_Rate();
     void Update_Interest_Rate();
 
+    void Update_Manufacturer_Inflation_Rate();
+
     // Loan issuance
     Loan* Issue_Short_Term_Loan(Firm_Agent* pFirm);
     Loan* Issue_Long_Term_Loan(Firm_Agent* pFirm);
 
+    // Getters
+    float Get_Inflation_Rate() {return inflation_current;};
+    float Get_Manufacturer_Inflation_Rate() {return cap_inflation_current;};
+    float Get_Interest_Rate() {return r_rate;};
 
     // Printing and debugging
     void Print();
@@ -41,6 +47,7 @@ class Bank_Agent{
     Public_Info_Board* pPublic_Board;
     
     queue<float> inflation_history; // Array of past inflation
+    queue<float> cap_inflation_history; // Array of past manufacturer inflation
     queue<float> interest_rate_history; // Array of past interest rates
 
     vector<Loan*> short_term_loan_book; 
@@ -56,6 +63,12 @@ class Bank_Agent{
     float inflation_previous; // Inflation previous (trailing 12m)
     float inflation_target; // Inflation (next 12m target)
     float inflation_past_month; // Inflation MoM
+
+    // Manufacturer inflation
+    float cap_inflation_current; // Inflation (trailing 12m)
+    float cap_inflation_previous; // Inflation previous (trailing 12m)
+    float cap_inflation_past_month; // Inflation MoM
+
 
     // Repayments
     int new_principal_repayments;

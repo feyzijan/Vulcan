@@ -35,8 +35,9 @@ int Loan::Calculate_Principal_Repayment() const
     {
         return principal_amount;
     } else if (loan_type==0){
-        return int(principal_amount * (end_date - start_date));
-    }else{return 0;} 
+        return int(principal_amount * (end_date - start_date)) * 1.01; // round up by 1% to counteract int rounding 
+    } else {
+    return 0;} 
 }
 
 /* Dedduct Principal Payments from a loan

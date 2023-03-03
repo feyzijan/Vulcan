@@ -8,13 +8,19 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     cout << "\n___________________TIMESTEP #______________ " << global_date << endl;
 
+    pPublic_Info_Board->Reset_Global_Data();
+
     // STEP 1.1: Update Inflation Rate and Interest rate  -
     cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
+    
     pBank->Update_Inflation_Rate();
+    pBank->Update_Manufacturer_Inflation_Rate();
     pBank->Update_Interest_Rate();
+    pPublic_Info_Board->Update_Inflation();
+    pPublic_Info_Board->Update_Manufacturer_Inflation();
+    pPublic_Info_Board->Update_Interest_Rate();
 
-    // Reset global data used for debugging
-    pPublic_Info_Board->Reset_Global_Data();
+
 
     // Shuffle the firm and households vectors randomly using the random number generator
     std::random_device rd;
@@ -55,7 +61,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << " \n ------------ Step 1.8: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
 
     pJob_Market->Calculate_Average_Wage(); 
-    pPublic_Info_Board->Update_Average_Wage();
+    pPublic_Info_Board->Update_Average_Wage_Job_Market();
     cout << "Job market before any new operations" << std::endl; // debugging
     pJob_Market->Print_Size(); //debugging
 
@@ -90,7 +96,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     pPublic_Info_Board->Update_Unemployment_Rate();
     pJob_Market->Calculate_Average_Wage(); 
-    pPublic_Info_Board->Update_Average_Wage();
+    pPublic_Info_Board->Update_Average_Wage_Job_Market();
     pPublic_Info_Board->Print_Labor_Market();
 
     cout << "Commencing labor market matching with " << pJob_Market->Get_Size() << " job postings"  << endl;
@@ -151,6 +157,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Consumption_Savings_Decisions();}
+
+
+    pPublic_Info_Board->Calc_Average_Wage_Employed(); // update average wage data after households update their wages
     
     // STEP 1.93: Consumer good market commences
     cout << " \n ------------ Step 1.93: Consumer good market commences ----------------" <<endl;
