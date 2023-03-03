@@ -10,9 +10,9 @@ int test_global_var_2 = 0; // for testing
 const int time_period = 12; // i.e. 12 timesteps make a year
 const int n_loops = 36;
 
-const int n_households = 100000;
-const int n_consumer_firms = 4000;
-const int n_capital_firms = 500;
+const int n_households = 2;
+const int n_consumer_firms = 1;
+const int n_capital_firms = 1;
 const int n_firms = 2;
 const int n_max_employees = 100; //unused
 

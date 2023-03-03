@@ -44,7 +44,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // STEP 1.7: Firms set new price and production targets
     cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
 
-    for( Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+    for( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Depreciate_Capital();
         firm_ptr->Cancel_Expired_Contracts();
         firm_ptr->Random_Experimentation();
@@ -65,7 +65,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << "Job market before any new operations" << std::endl; // debugging
     pJob_Market->Print_Size(); //debugging
 
-    for( Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+    for( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();}
 
@@ -106,7 +106,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         household_ptr->Seek_Jobs();
         household_ptr->Check_Employment_Status();}
 
-    for(Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
+    for(Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Check_For_New_Employees();}
 
     pPublic_Info_Board->Update_Unemployment_Rate();
@@ -135,7 +135,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pCapital_Goods_Market->Print();
 
 
-    for (Firm_Agent * firm_ptr : *pConsumer_Firm_vector){
+    for (Firm_Agent * firm_ptr : *pFirm_vector){
         firm_ptr->Make_Investment_Decision(); 
         firm_ptr->Produce_Goods();
         firm_ptr->Update_Goods_On_Market();}
@@ -180,8 +180,8 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << " \n ------------ Step 1.94: Investment good market commences ----------------" <<endl;
     
 
-    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-        firm_ptr->Update_Goods_On_Market();}
+ /*    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
+        firm_ptr->Update_Goods_On_Market();} */
 
     cout << "Firms have now posted capital goods " << endl;
 
