@@ -28,6 +28,7 @@ class Household_Agent{
 
     // Main Loop methods
     void Check_Employment_Status();
+    void Update_Public_Board();
     void Update_Reservation_Wage();
 
     void Consumption_Savings_Decisions();

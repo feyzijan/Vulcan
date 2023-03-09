@@ -10,10 +10,10 @@ int test_global_var_2 = 0; // for testing
 const int time_period = 12; // i.e. 12 timesteps make a year
 const int n_loops = 36;
 
-const int n_households = 2;
-const int n_consumer_firms = 1;
-const int n_capital_firms = 1;
-const int n_firms = 2;
+const int n_households = 1000;
+const int n_consumer_firms = 35;
+const int n_capital_firms = 5;
+const int n_firms = 40;
 const int n_max_employees = 100; //unused
 
 
@@ -74,22 +74,15 @@ const float init_res_wage_max = 999999;
 const float n_res_wage_decrease = 0.05; 
 const float targeted_savings_to_income_ratio = 3.0;
 const float household_tax_rate = 0.2;
-const float init_unemployment_benefit = 500;
+const int init_unemployment_benefit = 500;
+const int init_minimum_wage = 600;
 
 
 //---------------------------------------------
 
 //---- Firm parameters----------------------
-//Firm initialization parameters 
-const float init_production_planned_mean = 1000;
-const float init_production_planned_std = 100;
-const float init_production_planned_min = 100;
-const float init_production_planned_max = 1900;
+// Consumer and Capital Firm initialization parameters
 
-const float init_good_price_current_mean = 10;
-const float init_good_price_current_std = 2;
-const float init_good_price_current_min = 1;
-const float init_good_price_current_max = 99;
 
 const float init_total_assets_mean = 10000;
 const float init_total_assets_std = 2500;
@@ -116,10 +109,22 @@ const float init_employee_count_desired_std = 5;
 const float init_employee_count_desired_min = 1;
 const float init_employee_count_desired_max = 100;
 
-const float init_inventory_mean = 1000;
-const float init_inventory_std = 100;
-const float init_inventory_min = 1;
-const float init_inventory_max = 999999;
+
+// Consumer Firm initialization parameters 
+const float init_cons_production_planned_mean = 1000;
+const float init_cons_production_planned_std = 100;
+const float init_cons_production_planned_min = 100;
+const float init_cons_production_planned_max = 1999;
+
+const float init_cons_good_price_current_mean = 10;
+const float init_cons_good_price_current_std = 2;
+const float init_cons_good_price_current_min = 1;
+const float init_cons_good_price_current_max = 99;
+
+const float init_cons_inventory_mean = 1000;
+const float init_cons_inventory_std = 100;
+const float init_cons_inventory_min = 1;
+const float init_cons_inventory_max = 999999;
 
 const float init_working_capital_inventory_mean = 60;
 const float init_working_capital_inventory_std = 5;
@@ -131,9 +136,31 @@ const float init_desired_inventory_factor_std = 0.25;
 const float init_desired_inventory_factor_min = 0.1;
 const float init_desired_inventory_factor_max = 4.0;
 
-// Exogenous parameters for Firms
-const int standard_employment_contract_length = 20;
+// Capital Firm Initialization parameters
+
+const float init_cap_production_planned_mean = 100;
+const float init_cap_production_planned_std = 10;
+const float init_cap_production_planned_min = 10;
+const float init_cap_production_planned_max = 999;
+
+const float init_cap_good_price_current_mean = 1000;
+const float init_cap_good_price_current_std = 200;
+const float init_cap_good_price_current_min = 100;
+const float init_cap_good_price_current_max = 9999;
+
+const float init_cap_inventory_mean = 100;
+const float init_cap_inventory_std = 10;
+const float init_cap_inventory_min = 1;
+const float init_cap_inventory_max = 9999;
+
+
+
+
+// Exogenous parameters for all Firms
+const int standard_employment_contract_length = 6;
 const float firm_tax_rate = 0.2;
+const int forced_machine_purchases_min = 5; 
+const int forced_machine_purchases_max = 5;
 
 // Exogenous parameters for Consumer Firms
 const float cons_good_inv_depr_rate = 0.01;

@@ -1,5 +1,8 @@
 #include <iostream>
 #include <chrono>
+#include <fstream>
+#include <Windows.h>
+#include <string>
 
 #include "Initialization_Parameters.hpp"
 #include "Public_Info_Board.hpp"
@@ -83,8 +86,18 @@ int main()
     std::cout << "Program ran for " << n_loops << " timesteps with " << n_households << " households, " << n_consumer_firms<< " consumer firms and " << n_capital_firms << " capital firms." << std::endl;
 
     cout << "Program end :-)\n";
-    
 
+
+
+    // Log short description of Simulation
+/*     string file_name= "Simulation_H_" + to_string(n_households) + "_Cons_" + to_string(n_consumer_firms) +"_Cap_" + to_string(n_capital_firms) + ".txt";
+    cout  << "File name: " << file_name << endl;
+    ofstream file( "DataLogs/" + file_name );
+    file << "Ran simulation with n_households = " << n_households << "n_consumer_firms = " << 
+    n_consumer_firms << "n_capital_firms = " << n_capital_firms << endl;
+    file.close();
+ */
+    
 
     return 0;
 }

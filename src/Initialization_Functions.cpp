@@ -55,10 +55,10 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
     Normal_Dist_Generator init_total_assets(init_total_assets_mean, init_total_assets_std, init_total_assets_min, init_total_assets_max);
     Normal_Dist_Generator init_employee_count_desired(init_employee_count_desired_mean, init_employee_count_desired_std, init_employee_count_desired_min, init_employee_count_desired_max);
     Normal_Dist_Generator init_working_capital_inventory(init_working_capital_inventory_mean, init_working_capital_inventory_std, init_working_capital_inventory_min, init_working_capital_inventory_max);
-    Normal_Dist_Generator init_inventory(init_inventory_mean, init_inventory_std, init_inventory_min, init_inventory_max);
+    Normal_Dist_Generator init_inventory(init_cons_inventory_mean, init_cons_inventory_std, init_cons_inventory_min, init_cons_inventory_max);
     Normal_Dist_Generator init_wage_offer(init_wage_offer_mean, init_wage_offer_std, init_wage_offer_min, init_wage_offer_max);
-    Normal_Dist_Generator init_production_planned(init_production_planned_mean, init_production_planned_std, init_production_planned_min, init_production_planned_max);
-    Normal_Dist_Generator init_good_price_current(init_good_price_current_mean, init_good_price_current_std, init_good_price_current_min, init_good_price_current_max);
+    Normal_Dist_Generator init_production_planned(init_cons_production_planned_mean, init_cons_production_planned_std, init_cons_production_planned_min, init_cons_production_planned_max);
+    Normal_Dist_Generator init_good_price_current(init_cons_good_price_current_mean, init_cons_good_price_current_std, init_cons_good_price_current_min, init_cons_good_price_current_max);
    
      for (int i=0; i<n_consumer_firms; i++) {
         //cout << " Cons firm initializing #" << i << endl;
@@ -120,10 +120,10 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     Normal_Dist_Generator init_employee_count_desired(init_employee_count_desired_mean, init_employee_count_desired_std, init_employee_count_desired_min, init_employee_count_desired_max);
     Normal_Dist_Generator init_working_capital_inventory(init_working_capital_inventory_mean, init_working_capital_inventory_std, init_working_capital_inventory_min, init_working_capital_inventory_max);
     
-    Normal_Dist_Generator init_inventory(init_inventory_mean, init_inventory_std, init_inventory_min, init_inventory_max);
+    Normal_Dist_Generator init_inventory(init_cap_inventory_mean, init_cap_inventory_std, init_cap_inventory_min, init_cap_inventory_max);
     Normal_Dist_Generator init_wage_offer(init_wage_offer_mean, init_wage_offer_std, init_wage_offer_min, init_wage_offer_max);
-    Normal_Dist_Generator init_production_planned(init_production_planned_mean, init_production_planned_std, init_production_planned_min, init_production_planned_max);
-    Normal_Dist_Generator init_good_price_current(init_good_price_current_mean, init_good_price_current_std, init_good_price_current_min, init_good_price_current_max);
+    Normal_Dist_Generator init_production_planned(init_cap_production_planned_mean, init_cap_production_planned_std, init_cap_production_planned_min, init_cap_production_planned_max);
+    Normal_Dist_Generator init_good_price_current(init_cap_good_price_current_mean, init_cap_good_price_current_std, init_cap_good_price_current_min, init_cap_good_price_current_max);
    
     for (int i=0; i<n_capital_firms; i++) {
         //cout << "cap firm initializing #: "<< i << endl;

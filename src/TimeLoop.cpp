@@ -104,7 +104,8 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Seek_Jobs();
-        household_ptr->Check_Employment_Status();}
+        household_ptr->Check_Employment_Status();
+        household_ptr->Update_Public_Board();}
 
     for(Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Check_For_New_Employees();}

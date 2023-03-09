@@ -75,21 +75,16 @@ extern const float init_res_wage_max;
 extern const float n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
 extern const float targeted_savings_to_income_ratio;
 extern const float household_tax_rate;
-extern const float init_unemployment_benefit;
+extern const int init_unemployment_benefit;
+extern const int init_minimum_wage;
 
 //---------------------------------------------
 
 //---- Firm initialization parameters -----------
 // Below values are used to generate distributions of initial parameters for firms
-extern const float init_production_planned_mean;
-extern const float init_production_planned_std;
-extern const float init_production_planned_min;
-extern const float init_production_planned_max;
 
-extern const float init_good_price_current_mean;
-extern const float init_good_price_current_std;
-extern const float init_good_price_current_min;
-extern const float init_good_price_current_max;
+// Consumer and Capital Firm initialization parameters
+
 
 extern const float init_total_assets_mean;
 extern const float init_total_assets_std;
@@ -116,10 +111,22 @@ extern const float init_employee_count_desired_std;
 extern const float init_employee_count_desired_min;
 extern const float init_employee_count_desired_max;
 
-extern const float init_inventory_mean;
-extern const float init_inventory_std;
-extern const float init_inventory_min;
-extern const float init_inventory_max;
+
+// Consumer Firm initialization parameters 
+extern const float init_cons_production_planned_mean;
+extern const float init_cons_production_planned_std;
+extern const float init_cons_production_planned_min;
+extern const float init_cons_production_planned_max;
+
+extern const float init_cons_good_price_current_mean;
+extern const float init_cons_good_price_current_std;
+extern const float init_cons_good_price_current_min;
+extern const float init_cons_good_price_current_max;
+
+extern const float init_cons_inventory_mean;
+extern const float init_cons_inventory_std;
+extern const float init_cons_inventory_min;
+extern const float init_cons_inventory_max;
 
 extern const float init_working_capital_inventory_mean;
 extern const float init_working_capital_inventory_std;
@@ -131,17 +138,30 @@ extern const float init_desired_inventory_factor_std;
 extern const float init_desired_inventory_factor_min;
 extern const float init_desired_inventory_factor_max;
 
-// Constants to initialize all firms with
-extern const float init_production_current_ratio;
-extern const float init_quantity_sold_ratio;
-extern const float init_good_price_past;
-extern const float init_capital_good_price;
 
+// Capital Firm Initialization parameters
+extern const float init_cap_production_planned_mean;
+extern const float init_cap_production_planned_std;
+extern const float init_cap_production_planned_min;
+extern const float init_cap_production_planned_max;
+
+extern const float init_cap_inventory_mean;
+extern const float init_cap_inventory_std;
+extern const float init_cap_inventory_min;
+extern const float init_cap_inventory_max;
+
+extern const float init_cap_good_price_current_mean;
+extern const float init_cap_good_price_current_std;
+extern const float init_cap_good_price_current_min;
+extern const float init_cap_good_price_current_max;
 
 
 // Exogenous parameters for Firms
 extern const int standard_employment_contract_length;
 extern const float firm_tax_rate;
+// Below parameters define lower and upper bound of a uniform distribution that forces machine purchases on companies
+extern const int forced_machine_purchases_min; 
+extern const int forced_machine_purchases_max;
 
 // Exogenous parameters for Consumer Firms
 extern const float cons_good_inv_depr_rate;
@@ -155,6 +175,13 @@ extern const float cap_productivity; // # units produced per worker machine pair
 extern const int cap_workers_per_machine;
 extern const int machine_lifespan;
 extern const float cap_good_unit_cost;
+
+// Constants to initialize all firms with
+extern const float init_production_current_ratio;
+extern const float init_quantity_sold_ratio;
+extern const float init_good_price_past;
+extern const float init_capital_good_price;
+
 
 
 //---------------------------------------------

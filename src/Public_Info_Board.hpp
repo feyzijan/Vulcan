@@ -101,6 +101,7 @@ class Public_Info_Board{
     int Get_Contract_Expiries() { return contract_expiries;}
     int Get_New_Job_Postings() { return new_job_postings;}
     int Get_Removed_Job_Postings() { return removed_job_postings;}
+    int Get_Minimum_Wage() { return minimum_wage;}
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
@@ -133,9 +134,9 @@ class Public_Info_Board{
     void Update_Removed_Job_Postings(int amount) { removed_job_postings += amount; }
     void Update_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
     
-    void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = household_sentiment_sum/n_households; }
-    void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = cons_firm_sentiment_sum/n_consumer_firms; }
-    void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = cap_firm_sentiment_sum/n_capital_firms; }
+    void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = static_cast<float>(household_sentiment_sum)/n_households; }
+    void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = static_cast<float>(cons_firm_sentiment_sum)/n_consumer_firms; }
+    void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = static_cast<float>(cap_firm_sentiment_sum)/n_capital_firms; }
 
     void Update_Inflation();
     void Update_Manufacturer_Inflation();
@@ -212,6 +213,9 @@ class Public_Info_Board{
 
     // Unemployment benefits
     int public_unemployment_benefit;
+
+    // Minimum wage
+    int minimum_wage;
 
     //timestep
     int time_step; // timestep in days

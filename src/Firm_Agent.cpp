@@ -263,6 +263,8 @@ void Firm_Agent::Adjust_Wage_Offers()
         wage_offer *= (1+n_uniform);
     }
 
+    wage_offer = max(wage_offer, pPublic_Info_Board->Get_Minimum_Wage()); // Make sure it is not below minimum wage
+
     // Loop through posted_job_list and call Update_Wage(wage_offer)
     for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
         (*it)->Update_Wage(wage_offer);
@@ -449,7 +451,8 @@ void Firm_Agent::Make_Investment_Decision(){
         long_term_funding_gap =  estimated_cost - cash_on_hand;
     }
     // temporary override
-    desired_machines = Uniform_Dist_Int(0,5);
+    desired_machines += Uniform_Dist_Int(forced_machine_purchases_min,forced_machine_purchases_max);
+
     test_global_var += desired_machines;
 }
 

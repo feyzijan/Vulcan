@@ -47,9 +47,12 @@ Public_Info_Board::Public_Info_Board(){
     employee_hires = 0;
     unemployment_rate = 0.0;
     contract_expiries = 0;
+    new_job_postings = 0;
+    removed_job_postings = 0;
 
     // not using this as of yet
     public_unemployment_benefit = init_unemployment_benefit;
+    minimum_wage = init_minimum_wage;
 
     // timestep - not using these for now
     time_step = 0;
@@ -249,7 +252,8 @@ void Public_Info_Board::Reset_Global_Data(){
     contract_expiries = reset_value;
     new_job_postings = reset_value;
     removed_job_postings = reset_value;
-    public_unemployment_benefit = reset_value;
+    //public_unemployment_benefit = reset_value; // Do not reset tis
+    // minimum_wage = reset_value // Do not reset this
 
     time_step = reset_value;
     current_date = reset_value;
@@ -312,6 +316,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "n_new_job_postings " << obj.new_job_postings << std::endl;
     os << "n_removed_job_postings " << obj.removed_job_postings << std::endl;
     os << "unempl_benefits " << obj.public_unemployment_benefit << std::endl;
+    os << "minimum_wage " << obj.minimum_wage << std::endl;
     os << "date " << obj.current_date << std::endl;
 }
 

@@ -111,10 +111,13 @@ void Household_Agent::Check_Employment_Status()
             unemp_duration = 0;
         }
     }
+}
 
-    // Update Public Records
-    pPublic_Info_Board->Update_Employed_Workers(!unemployed);
-    pPublic_Info_Board->Update_Unemployed_Workers(unemployed);
+/* Function to update public board with employment status*/
+void Household_Agent::Update_Public_Board()
+{
+    pPublic_Info_Board->Update_Employed_Workers(!unemployed); // add 1 if employed, 0 if unemployed
+    pPublic_Info_Board->Update_Unemployed_Workers(unemployed); // add 1 if unemployed, 0 if employed
 }
 
 
@@ -130,6 +133,9 @@ void Household_Agent::Update_Reservation_Wage()
     } else {
         reservation_wage = reservation_wage * (1-n_decrease/2.0);
     }
+
+    // Make sure it is not above minimum wage
+    reservation_wage = max(reservation_wage, pPublic_Info_Board->Get_Minimum_Wage()); 
 } 
 
 /* Function to update the income_current variable to sum of all incomes received
@@ -219,6 +225,14 @@ void Household_Agent::Determine_Consumption_Budget()
     } else {
         expenditure_consumption = (1.0-saving_propensity) * income_current + c_f * excess_savings;
     }
+
+    if (expenditure_consumption < 0)
+    {
+        cout << "Expenditure consumption is negative" << endl;
+    }
+    // make sure expenditure isnt negative
+    expenditure_consumption = max(expenditure_consumption, 0); 
+
     pPublic_Info_Board->Update_Consumption_Budgets(expenditure_consumption);
 }
 
