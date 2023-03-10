@@ -76,7 +76,7 @@ void Job_Market::Sort_Jobs_by_Wage(){
 void Job_Market::Remove_Unwanted_Jobs(){
     //cout << "Removing jobs from the market" <<endl;
     job_list.erase(std::remove_if(job_list.begin(), job_list.end(), [](Job* job) {
-        if (job->Get_Status() == -1) {
+        if (job->Get_Status() == -3) {
             delete job; // Free memory of removed object
             return true;
         }

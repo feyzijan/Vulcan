@@ -63,10 +63,11 @@ buying n goods, so simplify this
 TODO: Check how to properly return a vector of capital good pointers, memorywise
 */
 std::vector<Capital_Good*>* Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
-    std::vector<Capital_Good*>* sold_goods = new vector<Capital_Good*>();
+    std::vector<Capital_Good*>* sold_goods = new vector<Capital_Good*>(); // Vector of pointers to sold goods
     int q_current = 0; // quantity the firm is purchasing
     float total_price = 0;
     float average_price = 0;
+    
     for(auto cap_good : cap_goods_list){
         int q_on_market = cap_good->Get_Quantity();
         int q_sold = 0;

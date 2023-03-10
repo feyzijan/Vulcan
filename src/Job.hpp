@@ -46,7 +46,8 @@ class Job{
     //Setters
     void Update_Wage(int new_wage){wage_offer = new_wage;}
     void Set_Employee(Household_Agent* pemployee) {employee = pemployee;}
-    void Update_Status(int status) { this->status = status;}
+    void Update_Status(int status) { this->status = status;} 
+    // 1:taken by household, 0: on the market, -1:laid off, -2: empl quit, -3: firm requested the job be removed from market
     void Set_Expiry_Date() {expiry_date = global_date + contract_length;}
     
 

@@ -30,7 +30,7 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     // Set default initialization values
 
     unemployed = true;
-    positive_sentiment = true;
+    sentiment = true;
     business_owner = false;
     saving_propensity = saving_propensity_optimist;
 
@@ -101,9 +101,9 @@ void Household_Agent::Check_Employment_Status()
         unemployed = true;
         unemp_duration += 1;
     } else {
-        if (current_job->Get_Status() == 0){ // Laid off by firm
+        if (current_job->Get_Status() == -1){ // Laid off by firm
             unemployed = true;
-            unemp_duration += 1;
+            unemp_duration = 1;
             delete current_job;
             current_job = nullptr;
         } else {
@@ -199,18 +199,22 @@ Households randomly adopt majority opinion, otherwise check employment status
 */
 void Household_Agent::Determine_Consumer_Sentiment()
 {
-    if (unemployed){positive_sentiment = false;} 
-    else{positive_sentiment = true;}
+    if (unemployed){
+        sentiment = 0;} 
+    else{
+        sentiment = 1;}
 
     bool adopt_majority= Uniform_Dist_Float(0,1)  < p_majority_op_adoption;
     if(adopt_majority){
-        positive_sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
+        sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
 
-    if (positive_sentiment){saving_propensity = saving_propensity_optimist;
+    if (sentiment){saving_propensity = saving_propensity_optimist;
     } else{saving_propensity = saving_propensity_pessimist;}
 
     cash_on_hand_desired = saving_propensity * income_average;// Set targets for cash on hand
-    pPublic_Info_Board->Update_Household_sentiment_sum(positive_sentiment);
+
+    pPublic_Info_Board->Update_Household_sentiment_sum(sentiment);
+
 }
 
 
@@ -311,7 +315,7 @@ void Household_Agent::Print() {
     // Employment
     cout << "Unemployed: " << unemployed << " Reservation wage: " << reservation_wage << " unemp duration: " << unemp_duration << endl;
     // Sentiment
-    cout << "Positive Sentiment: " << positive_sentiment << endl;
+    cout << "Positive Sentiment: " << sentiment << endl;
     // Job 
     if (current_job != nullptr){
         cout << "Current job: " << endl;
@@ -346,7 +350,7 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "reservation_wage " << obj.reservation_wage << std::endl;
     os << "unemp_duration " << obj.unemp_duration << std::endl;
     os << "unemp_duration_upper_bound " << obj.unemp_duration_upper_bound << std::endl;
-    os << "positive_sentiment " << obj.positive_sentiment << std::endl;
+    os << "sentiment " << obj.sentiment << std::endl;
     os << "business_owner " << obj.business_owner << std::endl;
     os << "c_f " << obj.c_f << std::endl;
     os << "c_h " << obj.c_h << std::endl;
@@ -415,7 +419,7 @@ vector<float>* Household_Agent::Get_All_Params(){
     vec_pointer->push_back(reservation_wage);
     vec_pointer->push_back(unemp_duration);
     vec_pointer->push_back(unemp_duration_upper_bound);
-    vec_pointer->push_back(positive_sentiment);
+    vec_pointer->push_back(sentiment);
     vec_pointer->push_back(business_owner);
     vec_pointer->push_back(c_f);
     vec_pointer->push_back(c_h);

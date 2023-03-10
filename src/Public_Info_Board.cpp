@@ -31,9 +31,11 @@ Public_Info_Board::Public_Info_Board(){
     // Capital expenditure
     machine_orders = 0;
     machine_spending = 0;
+    machine_orders_planned = 0;
     // Consumer expenditure
     consumer_orders = 0;
     consumer_spending = 0;
+    consumption_budgets = 0;
     // Production
     consumer_goods_production = 0;
     capital_goods_production = 0;
@@ -98,7 +100,6 @@ void Public_Info_Board::Post_Job_To_Market(Job * pJob_Offer) {
  TODO: Edit this to deal with cases when taken job is not at the top of the list
 */
 void Public_Info_Board::Take_Job(Job* pJob_Offer) {
-
     // Remove from market
     Public_Info_Board::Remove_Top_Job_Offer();
     // Notify employer

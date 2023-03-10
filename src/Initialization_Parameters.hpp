@@ -168,6 +168,7 @@ extern const float cons_good_inv_depr_rate;
 extern const float cons_productivity; // # units produced per worker machine pairing
 extern const int cons_workers_per_machine;
 extern const float cons_good_unit_cost;
+extern const float max_cons_production_climbdown;
 
 // Exogenous parameters for Capital Firms
 extern const float cap_good_inv_depr_rate;

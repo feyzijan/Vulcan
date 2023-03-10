@@ -54,7 +54,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Update_Sentiment();
         firm_ptr->Depreciate_Good_Inventory();
         firm_ptr->Determine_New_Production();
-
     }
 
     // STEP 1.8: Firms set wage offers, labor target, and finance expected wage bill
@@ -180,10 +179,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // STEP 1.94: Capital good market commences
     cout << " \n ------------ Step 1.94: Investment good market commences ----------------" <<endl;
     
-
- /*    for(Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector){
-        firm_ptr->Update_Goods_On_Market();} */
-
     cout << "Firms have now posted capital goods " << endl;
 
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
@@ -202,5 +197,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     for( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Pay_Liabilities();}
+
+        
 
 }

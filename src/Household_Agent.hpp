@@ -103,7 +103,7 @@ class Household_Agent{
     int unemp_duration_upper_bound;
 
     // Sentiment 
-    bool positive_sentiment; // pessimistic, optimistic
+    bool sentiment; // pessimistic, optimistic
 
     // Pre-set constants
     bool business_owner; // If True will receive dividend income

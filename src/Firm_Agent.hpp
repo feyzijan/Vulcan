@@ -37,6 +37,7 @@ class Firm_Agent{
     // Main Loop Methods - in order
     void Depreciate_Capital();
     //void Depreciate_Good_Inventory();
+    void Check_Employees_Quitting();
     void Cancel_Expired_Contracts();
     void Random_Experimentation();
     void Check_Sales();

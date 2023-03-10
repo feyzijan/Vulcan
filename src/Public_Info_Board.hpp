@@ -116,6 +116,7 @@ class Public_Info_Board{
     void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount; }
     void Update_Average_Wage_Employed(int amount) { average_wage_employed += amount; }
     void Update_Machine_orders(int amount) { machine_orders += amount; }
+    void Update_Machine_orders_planned(int amount) { machine_orders_planned += amount; }
     void Update_Machine_spending(int amount) { machine_spending += amount; }
     void Update_Consumer_orders(int amount) { consumer_orders += amount; }
     void Update_Consumer_spending(int amount) { consumer_spending += amount; }

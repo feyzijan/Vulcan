@@ -78,14 +78,7 @@ void Consumer_Firm_Agent::Update_Goods_On_Market(){
 
 /* Update sentiment and post to public board*/
 void Consumer_Firm_Agent::Update_Sentiment(){
-    if (quantity_sold > average_sale_quantity){
-        sentiment = 1;
-    } else if (quantity_sold < average_sale_quantity){
-        sentiment = 0;
-    } else {
-        sentiment = 0;
-    }
-
+    Firm_Agent::Update_Sentiment();
     pPublic_Info_Board->Update_Cons_firm_sentiment_sum(sentiment);
 }
 

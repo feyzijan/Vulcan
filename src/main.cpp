@@ -30,6 +30,14 @@ int main()
 
 
     cout << "************* Program has started" <<endl;
+
+    std::ofstream output_file("../DataLogs/SimulationOutput.txt"); // create output file
+    std::streambuf* old_cout_buf = std::cout.rdbuf(); // save old cout buffer
+    std::cout.rdbuf(output_file.rdbuf()); // redirect cout to file
+
+    
+
+
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun*********" << endl;
 
@@ -85,6 +93,8 @@ int main()
     std::cout << "Execution time: " <<  elapsed_seconds << " s" << std::endl;
     std::cout << "Program ran for " << n_loops << " timesteps with " << n_households << " households, " << n_consumer_firms<< " consumer firms and " << n_capital_firms << " capital firms." << std::endl;
 
+
+    std::cout.rdbuf(old_cout_buf);
     cout << "Program end :-)\n";
 
 

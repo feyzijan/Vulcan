@@ -167,6 +167,7 @@ const float cons_good_inv_depr_rate = 0.01;
 const float cons_productivity = 100; // # units produced per worker machine pairing
 const int cons_workers_per_machine = 1;
 const float cons_good_unit_cost = 1.0;
+const float max_cons_production_climbdown = 0.25;
 
 // Exogenous parameters for Capital Firms
 const float cap_good_inv_depr_rate = 0.01;
