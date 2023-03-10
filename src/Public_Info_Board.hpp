@@ -133,8 +133,10 @@ class Public_Info_Board{
     void Update_Contract_Expiries(int amount) { contract_expiries += amount; }
     void Update_New_Job_Postings(int amount) { new_job_postings += amount; }
     void Update_Removed_Job_Postings(int amount) { removed_job_postings += amount; }
+    void Update_Employees_Quitting(int amount) { n_employees_quitting += amount; }
+
+
     void Update_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
-    
     void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = static_cast<float>(household_sentiment_sum)/n_households; }
     void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = static_cast<float>(cons_firm_sentiment_sum)/n_consumer_firms; }
     void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = static_cast<float>(cap_firm_sentiment_sum)/n_capital_firms; }
@@ -201,6 +203,7 @@ class Public_Info_Board{
     int n_employed_workers;
     int n_unemployed_workers;
     float unemployment_rate;
+    int n_employees_quitting;
 
     int employee_hires;
     int new_employee_demand;

@@ -102,12 +102,15 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
+        household_ptr->Seek_Better_Jobs(); 
         household_ptr->Seek_Jobs();
         household_ptr->Check_Employment_Status();
         household_ptr->Update_Public_Board();}
 
     for(Firm_Agent* firm_ptr : *pFirm_vector){
-        firm_ptr->Check_For_New_Employees();}
+        firm_ptr->Check_For_New_Employees();
+        firm_ptr->Check_Employees_Quitting();
+        }
 
     pPublic_Info_Board->Update_Unemployment_Rate();
     cout << "Labor market matching ended with " << pJob_Market->Get_Size() << " job postings remaining"  << endl;

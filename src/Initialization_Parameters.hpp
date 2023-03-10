@@ -77,6 +77,7 @@ extern const float targeted_savings_to_income_ratio;
 extern const float household_tax_rate;
 extern const int init_unemployment_benefit;
 extern const int init_minimum_wage;
+extern const float p_seek_better_job;
 
 //---------------------------------------------
 

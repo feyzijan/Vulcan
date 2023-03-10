@@ -31,9 +31,12 @@ int main()
 
     cout << "************* Program has started" <<endl;
 
+    // Output print lines to file
     std::ofstream output_file("../DataLogs/SimulationOutput.txt"); // create output file
     std::streambuf* old_cout_buf = std::cout.rdbuf(); // save old cout buffer
     std::cout.rdbuf(output_file.rdbuf()); // redirect cout to file
+
+    std::cout.rdbuf(old_cout_buf); // uncomment if you want to output to console
 
     
 

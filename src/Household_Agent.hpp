@@ -41,6 +41,7 @@ class Household_Agent{
     
     void Buy_Consumer_Goods(); 
     void Seek_Jobs();
+    void Seek_Better_Jobs();
 
 
     //Setters

@@ -283,6 +283,28 @@ void Household_Agent::Seek_Jobs()
     }
 }
 
+/* Function to seek jobs with a higher wage than the current job with probability 
+p_seek_better_job
+*/
+void Household_Agent::Seek_Better_Jobs()
+{
+    // execute code with probabilty equal to p_seek_better_job
+    bool seek_better_job = Uniform_Dist_Float(0,1)  < p_seek_better_job;
+    if ( !unemployed && seek_better_job) {  
+        Job* best_job = pPublic_Info_Board->Get_Top_Job();
+        if (best_job != NULL){
+            if (best_job->Get_Wage() > current_job->Get_Wage()){
+                current_job->Update_Status(-2); // mark as quit so firm can update own records 
+                current_job = best_job;
+                current_job->Set_Employee(this); // update job object
+                current_job->Set_Expiry_Date();
+                pPublic_Info_Board->Take_Job(current_job);
+            }
+        }
+    }
+}
+
+
 
 //-----------------------------------------------------------------
 
