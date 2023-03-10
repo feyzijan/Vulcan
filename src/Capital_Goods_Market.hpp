@@ -26,6 +26,7 @@ class Capital_Goods_Market{
     void Sort_Capital_Goods_By_Price();
     int Get_Cost_For_Given_Quantity(int q_desired);
     std::vector<Capital_Good*>* Buy_Capital_Goods(int q_desired);
+    int* Buy_Capital_Goods_Simple(int q_desired);
     void Update_Price_Level();
     void Reset_Market(); 
 

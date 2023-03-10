@@ -49,6 +49,9 @@ class Public_Info_Board{
 
     // Capital Good Market
     std::vector<Capital_Good*>*  Buy_Capital_Goods(int q_desired);
+    int*  Buy_Capital_Goods_Simple(int q_desired);
+
+
     void Send_Cap_Good_To_Market(Capital_Good* pGood);
     int Get_Cost_For_Desired_Cap_Goods(int q_desired);
     
@@ -133,13 +136,13 @@ class Public_Info_Board{
     void Update_Contract_Expiries(int amount) { contract_expiries += amount; }
     void Update_New_Job_Postings(int amount) { new_job_postings += amount; }
     void Update_Removed_Job_Postings(int amount) { removed_job_postings += amount; }
-    void Update_Employees_Quitting(int amount) { n_employees_quitting += amount; }
+    void Update_Employees_Quitting() { n_employees_quitting += 1; }
 
 
     void Update_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
-    void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = static_cast<float>(household_sentiment_sum)/n_households; }
-    void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = static_cast<float>(cons_firm_sentiment_sum)/n_consumer_firms; }
-    void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = static_cast<float>(cap_firm_sentiment_sum)/n_capital_firms; }
+    void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = float(household_sentiment_sum)/ float(n_households); }
+    void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
+    void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
 
     void Update_Inflation();
     void Update_Manufacturer_Inflation();

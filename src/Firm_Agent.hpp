@@ -61,6 +61,7 @@ class Firm_Agent{
     void Seek_Long_Term_Loan();
     void Update_Supplier_Network() {}; // To Implement in subclasses
     void Buy_Capital_Goods(); 
+    void Buy_Capital_Goods_Simple();
     void Update_Leverage_Ratio();
     void Update_Loan_List(); // calledby Pay_Liabilities
     void Pay_Liabilities();

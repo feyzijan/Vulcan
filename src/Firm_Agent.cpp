@@ -510,12 +510,25 @@ void Firm_Agent::Buy_Capital_Goods(){
         vector<Capital_Good*>* new_capital_goods = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
 
         // Calculate the number of machines bought by looping through new_capital_goods and incrementing quantity
-        if (new_capital_goods->empty() == false){
-            for (auto cap_good : *new_capital_goods){
-                new_machines_bought += cap_good->Get_Quantity();
-                total_price_paid += cap_good->Get_Quantity() * cap_good->Get_Price();
+        if (new_capital_goods != nullptr) {
+            if (new_capital_goods->empty() == false){
+                for (std::vector<Capital_Good*>::iterator it = new_capital_goods->begin(); it != new_capital_goods->end(); ++it) {
+                    Capital_Good* cap_good = *it;
+                    if (cap_good == nullptr) {
+                        // Error
+                    } else {
+                        new_machines_bought += cap_good->Get_Quantity();
+                        total_price_paid += cap_good->Get_Quantity() * cap_good->Get_Price();
+                    }
                 }
+                /* for (auto cap_good : *new_capital_goods){
+                    new_machines_bought += cap_good->Get_Quantity();
+                    total_price_paid += cap_good->Get_Quantity() * cap_good->Get_Price();
+                    }
+                } */
             }
+        }
+        
 
         // Copy all the objects in the new_capital_goods vector to the capital_goods vector
         capital_goods_list.insert(capital_goods_list.end(), new_capital_goods->begin(), new_capital_goods->end());
@@ -534,6 +547,42 @@ void Firm_Agent::Buy_Capital_Goods(){
     pPublic_Info_Board->Update_Machine_spending(total_price_paid);
     pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
 }
+
+
+/* Alternative functoin to buy capital goods
+*/
+
+void Firm_Agent::Buy_Capital_Goods_Simple(){
+
+    int new_machines_bought = 0;
+    int total_price_paid = 0;
+    capital_costs = 0;
+
+    if (desired_machines > 0){
+        // Buy machines from the market
+        int* arr = pPublic_Info_Board->Buy_Capital_Goods_Simple(desired_machines);
+        new_machines_bought = arr[0];
+        total_price_paid = arr[1];
+        // delete arr
+        delete [] arr;
+
+        // Create new capital good with given quantitty and average price
+        Capital_Good* new_capital_good = new Capital_Good(nullptr,new_machines_bought, total_price_paid/new_machines_bought, machine_lifespan);
+        capital_goods_list.push_back(new_capital_good);
+
+        working_capital_inventory += new_machines_bought;
+        capital_costs = total_price_paid;
+    }
+
+    
+    if (new_machines_bought < desired_machines) {
+        std::cout << "Capital good demand not satisfied" << this << " only bought " << new_machines_bought << " out of " << desired_machines << endl;
+    }
+
+    pPublic_Info_Board->Update_Machine_spending(total_price_paid);
+    pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
+}
+
 
 
 

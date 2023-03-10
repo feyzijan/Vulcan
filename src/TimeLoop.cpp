@@ -185,11 +185,12 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << "Firms have now posted capital goods " << endl;
 
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
-    pCapital_Goods_Market->Update_Price_Level();
+    pCapital_Goods_Market->Update_Price_Level(); 
     pCapital_Goods_Market->Print();
 
     for ( Firm_Agent* firm_ptr : *pFirm_vector){
-        firm_ptr->Buy_Capital_Goods();}
+        //firm_ptr->Buy_Capital_Goods();
+        firm_ptr->Buy_Capital_Goods_Simple();}
     
 
     cout << "Firms have spent " << pPublic_Info_Board->Get_Machine_Spending() << " on capital goods to buy " << pPublic_Info_Board->Get_Machine_Orders() << " capital goods" << endl;

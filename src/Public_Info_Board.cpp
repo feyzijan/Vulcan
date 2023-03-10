@@ -138,6 +138,15 @@ void Public_Info_Board::Send_Cap_Good_To_Market(Capital_Good* pGood){
 std::vector<Capital_Good*>*  Public_Info_Board::Buy_Capital_Goods(int q_desired){
     return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);
 }
+
+/* 
+*/
+int*  Public_Info_Board::Buy_Capital_Goods_Simple(int q_desired){
+    return pCapital_Goods_Market->Buy_Capital_Goods_Simple(q_desired);
+}
+
+
+
 /* Return how much it would cost to buy the desired # machines
 */
 int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){

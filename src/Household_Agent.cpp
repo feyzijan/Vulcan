@@ -299,6 +299,7 @@ void Household_Agent::Seek_Better_Jobs()
                 current_job->Set_Employee(this); // update job object
                 current_job->Set_Expiry_Date();
                 pPublic_Info_Board->Take_Job(current_job);
+                pPublic_Info_Board->Update_Employees_Quitting();
             }
         }
     }
