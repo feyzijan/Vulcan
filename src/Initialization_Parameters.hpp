@@ -2,6 +2,8 @@
 #define INITIALIZATION_PARAMETERS_HPP
 
 
+#include <string>
+
 // Global parameters to be used throughout the simulation
 extern int global_date; 
 extern int test_global_var; // for testing
@@ -184,6 +186,16 @@ extern const float init_quantity_sold_ratio;
 extern const float init_good_price_past;
 extern const float init_capital_good_price;
 
+
+// Consumer Firm Sectors
+struct Consumer_Firm_Sector {
+    std::string sector_name;
+    float consumption_weighing; // % of consumption that goes to this sector
+    int sector_id; // unique id for this sector
+
+    Consumer_Firm_Sector(std::string name, float weighing, int id)
+        : sector_name(name), consumption_weighing(weighing), sector_id(id) {}
+};
 
 
 //---------------------------------------------

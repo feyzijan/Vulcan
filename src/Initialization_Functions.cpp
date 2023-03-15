@@ -325,4 +325,49 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
 
 }
 
+void Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector) {
+    std::ifstream file("../InitializationData/Consumer_Firm_Sectors.csv"); // Open the file
 
+    if (!file.is_open()) { // Check if file is open
+        std::cout << "Error opening file" << std::endl;
+        return;
+    }
+
+    std::string line;
+    std::getline(file, line); // Get the first line (headers)
+
+    while (std::getline(file, line)) { // Loop through the rest of the lines
+        std::stringstream ss(line); // Create a stringstream from the line
+        std::string sector_name;
+        std::string consumption_weighing_str;
+        std::string sector_id_str;
+        std::string firm_weighing_str;
+
+        if (std::getline(ss, sector_name, ',') // Parse the comma separated values into separate variables
+            && std::getline(ss, consumption_weighing_str, ',')
+            && std::getline(ss, sector_id_str, ',')
+            && std::getline(ss, firm_weighing_str, ',')) {
+            float consumption_weighing = std::stof(consumption_weighing_str); // Convert strings to float and int
+            int sector_id = std::stoi(sector_id_str);
+            float firm_weighing = std::stof(firm_weighing_str);
+
+            Consumer_Firm_Sector *pSector = new Consumer_Firm_Sector(sector_name, consumption_weighing, sector_id); // Create new instance of Consumer_Firm_Sector struct
+            pConsumer_Firm_Sector_vector->push_back(pSector); // Add it to the vector
+
+            // Push the pair of sector_id and firm_weighing to the vector
+            std::pair<int, float> pair(sector_id, firm_weighing);
+            pFirm_Weighing_vector->push_back(pair);
+        }
+    }
+
+    file.close(); // Close the file
+}
+
+
+/* Function to allocate consumer firms to a sector based on sector weighings
+
+*/
+void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
+ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector){
+    
+ }

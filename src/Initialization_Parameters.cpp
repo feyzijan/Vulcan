@@ -155,8 +155,6 @@ const float init_cap_inventory_min = 1;
 const float init_cap_inventory_max = 9999;
 
 
-
-
 // Exogenous parameters for all Firms
 const int standard_employment_contract_length = 6;
 const float firm_tax_rate = 0.2;
@@ -182,6 +180,9 @@ const float init_production_current_ratio = 0.4;
 const float init_quantity_sold_ratio = 0.25;
 const float init_good_price_past = 9.5;
 const float init_capital_good_price = 100.0;
+
+
+
 
 
 //---------------------------------------------

@@ -36,7 +36,7 @@ int main()
     std::streambuf* old_cout_buf = std::cout.rdbuf(); // save old cout buffer
     std::cout.rdbuf(output_file.rdbuf()); // redirect cout to file
 
-    //std::cout.rdbuf(old_cout_buf); // uncomment if you want to output to console
+    std::cout.rdbuf(old_cout_buf); // uncomment if you want to output to console
 
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun*********" << endl;
@@ -56,6 +56,9 @@ int main()
     vector<Household_Agent*> *pHousehold_vector = new vector<Household_Agent*>();
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector = new vector<Consumer_Firm_Agent*>();
     vector<Capital_Firm_Agent*> *pCapital_Firm_vector = new vector<Capital_Firm_Agent*>();
+    // Consumer Firm Sectors
+    vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector = new vector<Consumer_Firm_Sector*>();
+    std::vector<std::pair<int, float>>* pFirm_Weighing_vector = new vector<std::pair<int, float>>();
 
 
     Initialize_Households_Firms_Jobs(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector,
@@ -67,14 +70,14 @@ int main()
     std::copy(pCapital_Firm_vector->begin(), pCapital_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
 
  
+    Create_Sectors(pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
+    //Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
 
 
-    
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     cout << "Step 0.15: Log initial Household and Firm data" << endl;
     Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1);
-
 
 
     //  -------- STEP 1 MAIN LOOP -------------------

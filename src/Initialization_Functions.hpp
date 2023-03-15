@@ -7,6 +7,9 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 
 #include "Firm_Agent.hpp"
@@ -42,20 +45,22 @@ void Initialize_Household_Jobs(vector<Household_Agent*> *pHousehold_vector,  int
 void Initialize_Household_Firm_Owners(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector,
  vector<Capital_Firm_Agent*> *pCapital_Firm_vector);
 
-
-
-
-
 // Function to set up Job market at t=0
 void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     Public_Info_Board* pPublic_Info_Board);
 
-
 // Function to set up Consumer Goods market at t=0
 void Initialize_Cons_Cap_Goods_Markets( vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board);
 
+
+// Initialize Sectors
+void Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector);
+
+// Allocate firms to sectors
+void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
+ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector);
 
 
 #endif

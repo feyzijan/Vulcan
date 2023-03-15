@@ -206,6 +206,11 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     for( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Pay_Liabilities();}
 
+
+    // STEP 1.96: Update Public board before logging data
+    pPublic_Info_Board->Calculate_Average_Dividend_Income();
+    pPublic_Info_Board->Calculate_Average_Total_Income();
+
         
 
 }
