@@ -25,13 +25,14 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     // Set Pointers
     //Public_Info_Board* pPublic_Info_Board = pPublic_Board;
     this->pPublic_Info_Board = pPublic_Board;
-    this->current_job = nullptr;
+    current_job = nullptr;
+    owned_firm = nullptr;
 
     // Set default initialization values
 
     unemployed = true;
     sentiment = true;
-    business_owner = false;
+    firm_owner = false;
     saving_propensity = saving_propensity_optimist;
 
     // Set everything else to zero initiallly
@@ -66,6 +67,19 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
 Household_Agent::Household_Agent(Household_Agent&){}
 Household_Agent::~Household_Agent(){} 
 
+// --- Initialization Functions
+
+/* Set the household as a firm owner
+*/
+void Household_Agent::Set_Firm_Owner(Firm_Agent* firm_ptr){
+    firm_owner = true;
+    owned_firm = firm_ptr;
+    unemployed = false;
+}
+
+
+
+
 //----- Main Loop
 
 
@@ -97,16 +111,18 @@ and set the current_job pointer to nullptr
 */
 void Household_Agent::Check_Employment_Status()
 {
-    if (current_job == nullptr){
+    if (current_job == nullptr && firm_owner == false){
         unemployed = true;
         unemp_duration += 1;
     } else {
-        if (current_job->Get_Status() == -1){ // Laid off by firm
+        if (firm_owner){
+            unemployed = false;
+        } else if (current_job->Get_Status() == -1){ // Laid off by firm
             unemployed = true;
             unemp_duration = 1;
             delete current_job;
             current_job = nullptr;
-        } else {
+        } else { // Either has a job or is a firm owner
             unemployed = false;
             unemp_duration = 0;
         }
@@ -150,11 +166,13 @@ void Household_Agent::Update_Income()
     income_current = 0; // Initialize to zero
 
     // Check if the person is employed, if so get Wage
-    if (!unemployed){
-
+    if (!unemployed && !firm_owner){
         income_wage = current_job->Get_Wage();
         income_current += income_wage;
         pPublic_Info_Board->Update_Average_Wage_Employed(income_wage);
+    } else if (firm_owner){
+        income_firm_owner_dividend = owned_firm->Pay_Dividend();
+
     } else {
         income_wage = 0;
         income_unemployment_benefit = pPublic_Info_Board->Get_Unemployment_Benefit();
@@ -162,7 +180,7 @@ void Household_Agent::Update_Income()
     }
     income_current += income_gov_transfers; // Add any additional transfers
     
-    if (business_owner){ 
+    if (firm_owner){ 
         //income_firm_owner_dividend = current_job->Get_Dividend();
         income_current += income_firm_owner_dividend;}
 }
@@ -264,22 +282,22 @@ If job is accepted remove it from the job market
 void Household_Agent::Seek_Jobs()
 {
     if(unemployed){
-    Job* best_job = pPublic_Info_Board->Get_Top_Job();
-    if (best_job != NULL){
-        if (best_job->Get_Wage() >= reservation_wage){
-            //cout << "Job found" <<endl;
-            current_job = best_job;
-            current_job->Set_Employee(this); // update job object
-            int expiry_date = global_date + current_job->Get_Contract_Length();
-            current_job->Set_Expiry_Date();
-            unemployed = false;
-            pPublic_Info_Board->Take_Job(current_job);
+        Job* best_job = pPublic_Info_Board->Get_Top_Job();
+        if (best_job != NULL){
+            if (best_job->Get_Wage() >= reservation_wage){
+                //cout << "Job found" <<endl;
+                current_job = best_job;
+                current_job->Set_Employee(this); // update job object
+                int expiry_date = global_date + current_job->Get_Contract_Length();
+                current_job->Set_Expiry_Date();
+                unemployed = false;
+                pPublic_Info_Board->Take_Job(current_job);
+            }
+            else {
+                //cout << "job not found" <<endl;
+                Update_Reservation_Wage();
+            }
         }
-        else {
-            //cout << "job not found" <<endl;
-            Update_Reservation_Wage();
-        }
-    }
     }
 }
 
@@ -290,7 +308,7 @@ void Household_Agent::Seek_Better_Jobs()
 {
     // execute code with probabilty equal to p_seek_better_job
     bool seek_better_job = Uniform_Dist_Float(0,1)  < p_seek_better_job;
-    if ( !unemployed && seek_better_job) {  
+    if ( !unemployed && seek_better_job && !firm_owner) {  
         Job* best_job = pPublic_Info_Board->Get_Top_Job();
         if (best_job != NULL){
             if (best_job->Get_Wage() > current_job->Get_Wage()){
@@ -374,7 +392,7 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "unemp_duration " << obj.unemp_duration << std::endl;
     os << "unemp_duration_upper_bound " << obj.unemp_duration_upper_bound << std::endl;
     os << "sentiment " << obj.sentiment << std::endl;
-    os << "business_owner " << obj.business_owner << std::endl;
+    os << "business_owner " << obj.firm_owner << std::endl;
     os << "c_f " << obj.c_f << std::endl;
     os << "c_h " << obj.c_h << std::endl;
     os << "c_excess_money " << obj.c_excess_money << std::endl;
@@ -443,7 +461,7 @@ vector<float>* Household_Agent::Get_All_Params(){
     vec_pointer->push_back(unemp_duration);
     vec_pointer->push_back(unemp_duration_upper_bound);
     vec_pointer->push_back(sentiment);
-    vec_pointer->push_back(business_owner);
+    vec_pointer->push_back(firm_owner);
     vec_pointer->push_back(c_f);
     vec_pointer->push_back(c_h);
     vec_pointer->push_back(c_excess_money);

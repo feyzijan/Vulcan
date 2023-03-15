@@ -120,8 +120,12 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // Step 1.84: Sentiments Updating
     cout << " \n ------------ Step 1.84: Sentiments Updating ----------------" <<endl;
     pPublic_Info_Board->Update_Household_Sentiment_Percentage();
+    cout << "Household Sentiment Percentage: " << pPublic_Info_Board->Get_Household_Sentiment() << endl;
     pPublic_Info_Board->Update_Cons_Firm_Sentiment_Percentage();
+    cout << "Consumer Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cons_Firm_Sentiment() << endl;
     pPublic_Info_Board->Update_Cap_Firm_Sentiment_Percentage();
+    cout << "Capital Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cap_Firm_Sentiment() << endl;
+
         
 
     

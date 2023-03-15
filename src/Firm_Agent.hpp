@@ -44,7 +44,7 @@ class Firm_Agent{
     virtual void Update_Sentiment();
     void Update_Average_Profit();
     void Update_Average_Sales();
-    int Pay_Dividends();
+    int Pay_Dividend() ;
     virtual void Depreciate_Good_Inventory() {};
     void Determine_New_Production();
     void Adjust_Wage_Offers();

@@ -20,13 +20,16 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     Initialize_Capital_Firms(pCapital_Firm_vector, pPublic_Board,n_capital_firms);
 
 
-    //----------- STEP 0.12: Initialize job market
-    cout << " Step 0.12: Initialize job market" << endl;
+    //----------- STEP 0.12 Initialize Firm Owners
+    cout << " Step 0.12: Initialize Firm Owners" << endl;
+    Initialize_Household_Firm_Owners(pHousehold_vector,pConsumer_Firm_vector, pCapital_Firm_vector);
+
+    //----------- STEP 0.13: Initialize job market
+    cout << " Step 0.13: Initialize job market" << endl;
     Initialize_Job_Market(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector,pPublic_Board);
     pJob_Market->Print_Size();
     pPublic_Board->Print_Labor_Market();
 
-    //----------- STEP 0.13 Assign firm owners - Todo later, minor thing
 
 
     //----------- STEP 0.16: Send initial goods to markets and initialize price level
@@ -215,6 +218,41 @@ void Initialize_Household_Jobs(vector<Household_Agent*> *pHousehold_vector,  int
     for (Household_Agent* household_ptr : *pHousehold_vector) {
         household_ptr->Seek_Jobs();}
 }
+
+
+/* Loop through all households and randomly set a total of n_firms of them to be firm owners
+*/
+void Initialize_Household_Firm_Owners(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector,
+ vector<Capital_Firm_Agent*> *pCapital_Firm_vector) {
+
+    int temp = n_consumer_firms + n_capital_firms;  // Number of owners we need 
+
+
+    // Create a local vector called firms that contains all firms
+    vector<Firm_Agent*> firms_vector;
+    for (Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector) {
+        firms_vector.push_back(firm_ptr);}
+    for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector) {
+        firms_vector.push_back(firm_ptr); }
+
+
+    // Shuffle the household vector
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(pHousehold_vector->begin(), pHousehold_vector->end(), g);
+
+    // Set the first `temp` households as firm owners and decrement `temp` each time
+    for (Household_Agent* household_ptr : *pHousehold_vector) {
+        if (temp <= 0) {
+        break; }
+        household_ptr->Set_Firm_Owner(firms_vector[0]);  // Set the firm owner to the first firm in the shuffled firm vector
+
+        firms_vector.erase(firms_vector.begin());  // Remove the first firm from the shuffled firm vector
+        temp--;  // Decrement the number of households left to set as firm owners
+    }
+    cout << "Finished setting firm owners" << n_consumer_firms + n_firms - temp << " households are owners" << endl;
+}
+
 
 
 

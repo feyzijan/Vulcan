@@ -38,11 +38,13 @@ int main()
 
     //std::cout.rdbuf(old_cout_buf); // uncomment if you want to output to console
 
-    
-
-
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun*********" << endl;
+    cout << "This simulation is with the following parameters: " << endl;
+    cout << "n_households: " << n_households << endl;
+    cout << "n_consumer_firms: " << n_consumer_firms << endl;
+    cout << "n_capital_firms: " << n_capital_firms << endl;
+    cout << "n_loops: " << n_loops  << endl;
 
     // Allocate memory
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
@@ -55,18 +57,16 @@ int main()
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector = new vector<Consumer_Firm_Agent*>();
     vector<Capital_Firm_Agent*> *pCapital_Firm_vector = new vector<Capital_Firm_Agent*>();
 
+
     Initialize_Households_Firms_Jobs(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector,
     pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
-
-
-    // Create vector housing all firms
+    
+    // Create vector housing all firms 
     std::vector<Firm_Agent*> *pAll_Firms_vector = new vector<Firm_Agent*>();
-
-    // Copy pointers from consumer_firms to combined_firms
     std::copy(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
-
-    // Copy pointers from capital_firms to combined_firms
     std::copy(pCapital_Firm_vector->begin(), pCapital_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
+
+ 
 
 
     

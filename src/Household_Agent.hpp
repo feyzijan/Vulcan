@@ -26,6 +26,9 @@ class Household_Agent{
     Household_Agent(Household_Agent&);
     ~Household_Agent();
 
+    // Initialization methods
+    void Set_Firm_Owner(Firm_Agent* firm_ptr);
+
     // Main Loop methods
     void Check_Employment_Status();
     void Update_Public_Board();
@@ -68,6 +71,7 @@ class Household_Agent{
     Public_Info_Board* pPublic_Info_Board;
     Job * current_job;
     queue<int> past_incomes;
+    Firm_Agent * owned_firm;
 
     // Wealth
     int wealth_financial; //W_f in equations 
@@ -107,7 +111,7 @@ class Household_Agent{
     bool sentiment; // pessimistic, optimistic
 
     // Pre-set constants
-    bool business_owner; // If True will receive dividend income
+    bool firm_owner; // If True will receive dividend income
     float c_f; // propensity to consume financial wealth
     float c_h; // propensity to consume human wealth
     float c_excess_money; // propensity yo consume excess money balance 

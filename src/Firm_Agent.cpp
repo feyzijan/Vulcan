@@ -51,7 +51,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     tax_payments =0; 
     debt_principal_payments = 0;
     debt_interest_payments = 0;
-    dividend_payments = 0;
+    dividend_payments = wage_offer; // initialize this to non-zero as this will be paid in t=1
     production_costs = 0;
 
     expected_wage_bill = 0;
@@ -216,7 +216,7 @@ void Firm_Agent::Update_Average_Sales(){
 
 
 /* Pay dividends to firm owner- formula taken from Jamel*/
-int Firm_Agent::Pay_Dividends(){ 
+int Firm_Agent::Pay_Dividend(){ 
     return dividend_payments; 
 }
 
@@ -646,6 +646,7 @@ void Firm_Agent::Update_Loan_List(){
 */
 void Firm_Agent::Pay_Liabilities(){
 
+    // Set everything to zero
     total_liabilities = 0;
 
     // Calculate debt bill
@@ -693,12 +694,12 @@ void Firm_Agent::Pay_Liabilities(){
         // Pay bills
         cash_on_hand -= total_liabilities;
         // Pay dividends and taxes
-        int excess_profits = max(0,total_income - total_liabilities);
-        dividend_payments = excess_profits * dividend_ratio;
-        excess_profits -= dividend_payments;
-        tax_payments = excess_profits * firm_tax_rate;
-        cash_on_hand -= dividend_payments + tax_payments;
-        Pay_Dividends();
+        int excess_profits = max(0,total_income - total_liabilities); // Calculate excess profits
+        tax_payments = excess_profits * firm_tax_rate; // Calculate taxes
+        excess_profits -= tax_payments; // Deduct taxes from excess profits
+        dividend_payments = excess_profits * dividend_ratio; // Decide dividends
+        excess_profits -= dividend_payments; // Deduct dividends from excess profits
+        cash_on_hand -= dividend_payments + tax_payments; // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
     }
 
 
