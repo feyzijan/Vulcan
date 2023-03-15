@@ -93,7 +93,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << " \n ------------ Step 1.83: Labor market matching process ----------------" <<endl;
     pJob_Market->Sort_Jobs_by_Wage();
 
-    pPublic_Info_Board->Update_Unemployment_Rate();
+    pPublic_Info_Board->Calculate_Unemployment_Rate();
     pJob_Market->Calculate_Average_Wage(); 
     pPublic_Info_Board->Update_Average_Wage_Job_Market();
     pPublic_Info_Board->Print_Labor_Market();
@@ -112,18 +112,18 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Check_Employees_Quitting();
         }
 
-    pPublic_Info_Board->Update_Unemployment_Rate();
+    pPublic_Info_Board->Calculate_Unemployment_Rate();
     cout << "Labor market matching ended with " << pJob_Market->Get_Size() << " job postings remaining"  << endl;
     pPublic_Info_Board->Print_Labor_Market();
 
 
     // Step 1.84: Sentiments Updating
     cout << " \n ------------ Step 1.84: Sentiments Updating ----------------" <<endl;
-    pPublic_Info_Board->Update_Household_Sentiment_Percentage();
+    pPublic_Info_Board->Calculate_Household_Sentiment_Percentage();
     cout << "Household Sentiment Percentage: " << pPublic_Info_Board->Get_Household_Sentiment() << endl;
-    pPublic_Info_Board->Update_Cons_Firm_Sentiment_Percentage();
+    pPublic_Info_Board->Calculate_Cons_Firm_Sentiment_Percentage();
     cout << "Consumer Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cons_Firm_Sentiment() << endl;
-    pPublic_Info_Board->Update_Cap_Firm_Sentiment_Percentage();
+    pPublic_Info_Board->Calculate_Cap_Firm_Sentiment_Percentage();
     cout << "Capital Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cap_Firm_Sentiment() << endl;
 
         
@@ -166,7 +166,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         household_ptr->Consumption_Savings_Decisions();}
 
 
-    pPublic_Info_Board->Calc_Average_Wage_Employed(); // update average wage data after households update their wages
+    pPublic_Info_Board->Calculate_Average_Wage_Employed(); // update average wage data after households update their wages
     
     // STEP 1.93: Consumer good market commences
     cout << " \n ------------ Step 1.93: Consumer good market commences ----------------" <<endl;

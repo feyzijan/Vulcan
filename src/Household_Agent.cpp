@@ -132,8 +132,8 @@ void Household_Agent::Check_Employment_Status()
 /* Function to update public board with employment status*/
 void Household_Agent::Update_Public_Board()
 {
-    pPublic_Info_Board->Update_Employed_Workers(!unemployed); // add 1 if employed, 0 if unemployed
-    pPublic_Info_Board->Update_Unemployed_Workers(unemployed); // add 1 if unemployed, 0 if employed
+    pPublic_Info_Board->Update_Employed_Worker_Count(!unemployed); // add 1 if employed, 0 if unemployed
+    pPublic_Info_Board->Update_Unemployed_Worker_Count(unemployed); // add 1 if unemployed, 0 if employed
 }
 
 
@@ -168,11 +168,13 @@ void Household_Agent::Update_Income()
     // Check if the person is employed, if so get Wage
     if (!unemployed && !firm_owner){
         income_wage = current_job->Get_Wage();
+        pPublic_Info_Board->Update_Household_Wage(income_wage);
         income_current += income_wage;
-        pPublic_Info_Board->Update_Average_Wage_Employed(income_wage);
+
     } else if (firm_owner){
         income_firm_owner_dividend = owned_firm->Pay_Dividend();
-
+        pPublic_Info_Board->Update_Household_Dividends(income_firm_owner_dividend);
+        income_current += income_firm_owner_dividend;
     } else {
         income_wage = 0;
         income_unemployment_benefit = pPublic_Info_Board->Get_Unemployment_Benefit();
@@ -180,9 +182,8 @@ void Household_Agent::Update_Income()
     }
     income_current += income_gov_transfers; // Add any additional transfers
     
-    if (firm_owner){ 
-        //income_firm_owner_dividend = current_job->Get_Dividend();
-        income_current += income_firm_owner_dividend;}
+    pPublic_Info_Board->Update_Household_Total_Income(income_current);
+
 }
 
 /* Function to calculate average income and fill in array at t=1

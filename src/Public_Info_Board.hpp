@@ -114,22 +114,33 @@ class Public_Info_Board{
 
 
     // Update global aggregate variables
+    // Sentiment sums
     void Update_Household_sentiment_sum(bool amount) { household_sentiment_sum += amount; }
     void Update_Cons_firm_sentiment_sum(bool amount) { cons_firm_sentiment_sum += amount; }
     void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount; }
-    void Update_Average_Wage_Employed(int amount) { average_wage_employed += amount; }
+
+    // Wages and Income
+    void Update_Household_Wage(int amount) { household_wage_sum += amount; }
+    void Update_Household_Dividends(int amount) {household_dividends_sum += amount; }
+    void Update_Household_Total_Income(int amount) { household_total_income_sum += amount; }
+
+    // Capital Goods
     void Update_Machine_orders(int amount) { machine_orders += amount; }
     void Update_Machine_orders_planned(int amount) { machine_orders_planned += amount; }
     void Update_Machine_spending(int amount) { machine_spending += amount; }
+    void Update_Capital_goods_production(int amount) { capital_goods_production += amount; }
+    void Update_Capital_goods_production_planned(int amount) { capital_goods_production_planned += amount; }
+
+    // Consumer Goods and Consumption
     void Update_Consumer_orders(int amount) { consumer_orders += amount; }
     void Update_Consumer_spending(int amount) { consumer_spending += amount; }
     void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
     void Update_Consumer_goods_production(int amount) { consumer_goods_production += amount; }
-    void Update_Capital_goods_production(int amount) { capital_goods_production += amount; }
     void Update_Consumer_goods_production_planned(int amount) { consumer_goods_production_planned += amount; }
-    void Update_Capital_goods_production_planned(int amount) { capital_goods_production_planned += amount; }
-    void Update_Employed_Workers(int amount) { n_employed_workers += amount; }
-    void Update_Unemployed_Workers(int amount) { n_unemployed_workers += amount; }
+
+    // Labor Figures
+    void Update_Employed_Worker_Count(int amount) { n_employed_workers += amount; }
+    void Update_Unemployed_Worker_Count(int amount) { n_unemployed_workers += amount; }
     void Update_Employee_Demand(int amount) { new_employee_demand += amount; }
     void Update_Employee_Firings(int amount) { employee_firings += amount; }
     void Update_Employee_Hires(int amount) { employee_hires += amount; }
@@ -139,15 +150,22 @@ class Public_Info_Board{
     void Update_Employees_Quitting() { n_employees_quitting += 1; }
 
 
-    void Update_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
-    void Update_Household_Sentiment_Percentage() { household_sentiment_percentage = float(household_sentiment_sum)/ float(n_households); }
-    void Update_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
-    void Update_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
+    // Calculating rates based on aggregate data
+    void Calculate_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
+    void Calculate_Average_Wage_Employed() { average_wage_employed = float(household_wage_sum)/float(n_employed_workers-n_firms); }
+    void Calculate_Average_Dividend_Income() { average_dividend_income = float(household_dividends_sum)/float(n_firms); }
+    void Calculate_Average_Total_Income() { average_total_income = float(household_total_income_sum)/float(n_households); }
 
+    void Calculate_Household_Sentiment_Percentage() { household_sentiment_percentage = float(household_sentiment_sum)/ float(n_households); }
+    void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
+    void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
+
+
+    // Inflation and Interest Rate
     void Update_Inflation();
     void Update_Manufacturer_Inflation();
     void Update_Interest_Rate();
-    void Calc_Average_Wage_Employed() { average_wage_employed = average_wage_employed/n_employed_workers; }
+
 
     // Printing and Debugging
     void Print() const;
@@ -166,8 +184,17 @@ class Public_Info_Board{
     float cons_price_level_previous;
     float cap_price_level_current;
     float cap_price_level_previous;
-    float average_wage_market; // Average wage in the hob market
-    float average_wage_employed; // Average wage in economy
+
+    // Income and wage figures
+    float average_wage_market; // Average wage in the job market
+    float average_wage_employed; // Average active employee wage
+    float average_dividend_income; // Average dividend in the market
+    float average_total_income; // Average income of all households (wage/unemp benefit/dividend)
+
+    int household_wage_sum;  // Sum of wages of households
+    int household_dividends_sum; // Sum of dividends of households
+    int household_total_income_sum;
+
 
 
     // Inflation and interest rate

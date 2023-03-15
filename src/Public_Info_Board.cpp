@@ -12,8 +12,17 @@ Public_Info_Board::Public_Info_Board(){
     // Capital good price level
     cap_price_level_current = 0;
     cap_price_level_previous = 0;
-    average_wage_market = 0;
-    average_wage_employed = 0;
+
+    // Income figures
+    average_wage_market = 0.0;
+    average_wage_employed = 0.0;
+    average_dividend_income = 0.0;
+    average_total_income = 0.0,
+    household_wage_sum = 0;
+    household_dividends_sum = 0;
+    household_total_income_sum = 0;
+
+
     // Inflation and interest rates
     r_rate = 0;
     inflation_current = 0;
@@ -223,8 +232,17 @@ void Public_Info_Board::Reset_Global_Data(){
     r_rate = reset_value;
     inflation_current = reset_value;
     cap_inflation_current = reset_value;
-    average_wage_market = 0;
-    average_wage_employed = 0;
+
+    // Income Figures
+    average_wage_market = reset_value;
+    average_wage_employed = reset_value;
+    average_dividend_income = reset_value;
+    average_total_income = reset_value;
+
+    household_wage_sum = reset_value;
+    household_dividends_sum = reset_value;
+    household_total_income_sum = reset_value;
+    
 
 
     // Global aggregate varaibles
@@ -300,7 +318,12 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "cap_price_level_current " << obj.cap_price_level_current << std::endl;
     os << "cap_price_level_previous " << obj.cap_price_level_previous << std::endl;
     os << "average_wage_market " << obj.average_wage_market << std::endl;
-    os << "average_wage_employed " << obj.average_wage_employed << std::endl;
+    os << "average_wage_employed" << obj.average_wage_employed << std::endl;
+    os << "average_dividend_income " << obj.average_dividend_income << std::endl;
+    os << "average_total_income " << obj.average_total_income << std::endl;
+    os << "household_wage_sum " << obj.household_wage_sum << std::endl;
+    os << "household_dividends_sum " << obj.household_dividends_sum << std::endl;
+    os << " household_total_income_sum " << obj.household_total_income_sum << std::endl;
     os << "r_rate " << obj.r_rate << std::endl;
     os << "inflation_current " << obj.inflation_current << std::endl;
     os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;
