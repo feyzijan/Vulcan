@@ -17,6 +17,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     goods_on_market = cap_goods_on_market;
     // Put goods on Market
     //Send_Goods_To_Market();
+    sector_id = 0;
 }
 
 

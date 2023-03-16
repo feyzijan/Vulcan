@@ -72,8 +72,15 @@ int main()
  
     Create_Sectors(pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
     //Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
+    Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
+
+    // Wait for user input before continuing
+    cout << "Press any key to continue" << endl;
+    cin.get();
+    //
 
 
+    
 
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     cout << "Step 0.15: Log initial Household and Firm data" << endl;

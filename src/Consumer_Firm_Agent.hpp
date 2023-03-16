@@ -27,12 +27,13 @@ class Consumer_Firm_Agent: public Firm_Agent{
     virtual void Update_Goods_On_Market() override;
     virtual void Update_Sentiment() override;
 
+    void Assign_Sector(Consumer_Firm_Sector* pSector_Struct);
 
     // Put up Consumer Goods for Sale
     
     protected:
     Consumer_Good* cons_goods_on_market;
-    int cons_sector_id;
+
 
 };
 

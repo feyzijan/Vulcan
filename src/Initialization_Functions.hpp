@@ -10,6 +10,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <cstdlib>
+#include <ctime>
+#include <utility>
 
 
 #include "Firm_Agent.hpp"

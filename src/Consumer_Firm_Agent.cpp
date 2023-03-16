@@ -15,7 +15,7 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold);
     goods_on_market = cons_goods_on_market;
     //Send_Goods_To_Market();
-    cons_sector_id = 0;
+    sector_id = 1;
 }
 
 
@@ -83,6 +83,23 @@ void Consumer_Firm_Agent::Update_Sentiment(){
     pPublic_Info_Board->Update_Cons_firm_sentiment_sum(sentiment);
 }
 
+
+/* Function that receives pointer to the sector struct and assigns the firm to that sector
+Needs to update: 
+*/
+void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
+
+    // Update the sector of the firm
+    sector_id = pSector_Struct->sector_id;
+
+    // Update the sector of the consumer goods the firm is producing
+    goods_on_market->Set_Sector_ID(pSector_Struct->sector_id);
+
+    // Update any other necessary variables
+
+
+
+}
 
 
 //--------------------------------------------------------------   

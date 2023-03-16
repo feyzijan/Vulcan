@@ -13,18 +13,18 @@ class Consumer_Good: public General_Good{
 
     public:
     // Constructor
-    Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, int seller_quantity);
+    Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, int seller_quantity, int seller_sector);
+    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity);
 
     //Printing and Debugging
     void Print();
     // Getters
     Consumer_Firm_Agent* GetSeller() {return pSeller;}
-    int GetQuantity() {return quantity;}
-    float GetPrice() {return price;}
-    
+
 
     protected:
     Consumer_Firm_Agent*  pSeller;
+
 
 };
 #endif

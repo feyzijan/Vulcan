@@ -364,10 +364,63 @@ void Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_ve
 }
 
 
-/* Function to allocate consumer firms to a sector based on sector weighings
+/* Function to allocate consumer firms to a sector based on sector weighings, which are given in the pFirm_Weighing_vector
 
 */
 void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
  vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector){
-    
+
+        
+    std::srand(std::time(0)); // used for random generation
+    int total_firms = n_consumer_firms;
+    int total_allocation = 0; // keep track of how many firms we have allocated
+
+    // Shuffle the consumer firm vector to ensure randomness
+    std::shuffle(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::default_random_engine(std::time(0)));
+
+
+    // Assign sectors sequentially to the shuffled firms
+    int start_index = 0;
+    for (auto& weighing_pair : *pFirm_Weighing_vector) // Loop through the vector weighing
+    { 
+        // Calculate the number of firms to allocate to this sector - round the value up to ensure we allocate all firms
+        int sector_id = weighing_pair.first;
+        float sector_weighing = weighing_pair.second;
+        int firms_to_allocate = static_cast<int>(std::ceil(total_firms * sector_weighing));
+        int allocation_counter = 0;
+        cout << "Planning to allocate " << firms_to_allocate << " firms to sector #" << sector_id << endl;
+
+        // Find the corresponding sector from the sector vector
+        Consumer_Firm_Sector* target_sector = nullptr;
+        for (Consumer_Firm_Sector* sector : *pConsumer_Firm_Sector_vector) {
+            if (sector->sector_id == sector_id) {
+                target_sector = sector;
+                break;
+            }
+        }
+
+        if (target_sector == nullptr) {
+            // Sector not found, skip this iteration
+            cout << "Error: Sector "<< sector_id << " not found " << endl;
+            continue;
+        }
+
+        // Randomly allocate firms to the sector
+        for (int i = 0; i < firms_to_allocate; ++i) {
+
+            // Due to the rounding of int firms_to_allocate, we will try to allocate more firms than we have
+            if (start_index >= pConsumer_Firm_vector->size()) {
+                break;
+            }
+
+            Consumer_Firm_Agent* selected_firm = (*pConsumer_Firm_vector)[start_index];
+            selected_firm->Assign_Sector(target_sector);
+            start_index++;
+            allocation_counter++;
+            total_allocation++;
+        }
+        cout << " Allocated " << allocation_counter << " firms to sector " << sector_id << endl;
+    }
+    cout << "Allocated a total of " << total_allocation << " firms out of  " << n_consumer_firms << " to a sector" <<  endl;
+
  }

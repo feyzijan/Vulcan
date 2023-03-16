@@ -72,6 +72,7 @@ class Firm_Agent{
     int Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
     int Get_Long_Term_Funding_Gap() {return long_term_funding_gap;}
     float Get_Leverage_Ratio() {return leverage_ratio;}
+    int Get_Sector_ID() {return sector_id;}
     
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -96,6 +97,8 @@ class Firm_Agent{
 
     queue<int> past_profits;
     queue<int> past_sale_quantities;
+
+    int sector_id; //0 for capital firms, 1-n for consumer goods firms
 
     // Employees
     std::vector<Job*> active_job_list;

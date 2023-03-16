@@ -12,6 +12,7 @@ Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_pr
     depreciation_period = life_span;
     sold_date = global_date;
     expiry_date = sold_date + depreciation_period;
+    sector_id = 0;
 }
 
 /* Copy constructor*/
