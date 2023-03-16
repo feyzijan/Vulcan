@@ -80,7 +80,7 @@ const float household_tax_rate = 0.2;
 const int init_unemployment_benefit = 500;
 const int init_minimum_wage = 600;
 const float p_seek_better_job = 0.1;
-
+const float sector_spending_randomization = 0.1;
 
 //---------------------------------------------
 

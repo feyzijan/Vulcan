@@ -45,7 +45,9 @@ class Public_Info_Board{
 
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
-    std::pair<int, int> Buy_Consumer_Goods(int budget);
+    pair<int, int> Buy_Consumer_Goods(int budget);
+    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& planned_expenditure_by_sector);
+
 
     // Capital Good Market
     std::vector<Capital_Good*>*  Buy_Capital_Goods(int q_desired);
@@ -111,7 +113,7 @@ class Public_Info_Board{
     void Set_Consumer_Goods_Market(Consumer_Goods_Market* ptr) { pConsumer_Goods_Market = ptr;}
     void Set_Capital_Goods_Market(Capital_Goods_Market* ptr) { pCapital_Goods_Market = ptr;}
     void Set_Bank(Bank_Agent* ptr) { pBank = ptr;}
-
+    void Set_Sector_Count(int count);
 
     // Update global aggregate variables
     // Sentiment sums
@@ -137,6 +139,10 @@ class Public_Info_Board{
     void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
     void Update_Consumer_goods_production(int amount) { consumer_goods_production += amount; }
     void Update_Consumer_goods_production_planned(int amount) { consumer_goods_production_planned += amount; }
+
+    // To implement
+    void Update_Planned_Consumer_Spending_by_Sector( const vector<int>& planned_spending);
+    void Update_Consumer_Spending_by_Sector(  const vector<int>& actual_spending );
 
     // Labor Figures
     void Update_Employed_Worker_Count(int amount) { n_employed_workers += amount; }
@@ -195,8 +201,6 @@ class Public_Info_Board{
     int household_dividends_sum; // Sum of dividends of households
     int household_total_income_sum;
 
-
-
     // Inflation and interest rate
     float r_rate; 
     float inflation_current; 
@@ -222,6 +226,10 @@ class Public_Info_Board{
     int consumer_orders;
     int consumer_spending;
     int consumption_budgets;
+
+    vector<int> planned_spending_by_sector;
+    vector<int> actual_spending_by_sector;
+    int sector_count;
     
     // Production
     int consumer_goods_production;

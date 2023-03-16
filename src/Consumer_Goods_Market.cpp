@@ -119,8 +119,8 @@ std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
         3. The remaining budget after buying from all sectors
         4. The total quantity bought from all sectors
 */
-std::tuple<std::vector<float>, std::vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector(int budget, const std::vector<float>& spending_array ){
-
+    pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& spending_array ){
+    
     
     vector<float> remaining_budget_by_sector; // initialize remaining budget vector
     vector<int> quantity_bought_by_sector; // initialize quantity bought vector
@@ -133,7 +133,7 @@ std::tuple<std::vector<float>, std::vector<int>> Consumer_Goods_Market::Buy_Cons
         std::vector<Consumer_Good*>& goods_for_sector = cons_good_list_by_sector[i].second;
 
         // calculate the amount to spend in this sector
-        float sector_budget = floor(budget * spending_array[i]);
+        int sector_budget = spending_array[i];
 
         // buy goods from this sector
         float sector_budget_remaining = sector_budget;
@@ -161,7 +161,8 @@ std::tuple<std::vector<float>, std::vector<int>> Consumer_Goods_Market::Buy_Cons
         quantity_bought_by_sector.push_back(sector_quantity_bought);
         total_spending += sector_budget - sector_budget_remaining;
     }   
-    tuple<vector<float>, vector<int>> result = make_tuple(remaining_budget_by_sector, quantity_bought_by_sector);
+
+    pair<vector<float>, vector<int>> result = make_pair(remaining_budget_by_sector, quantity_bought_by_sector);
     return result;
 }
 

@@ -36,7 +36,7 @@ int main()
     std::streambuf* old_cout_buf = std::cout.rdbuf(); // save old cout buffer
     std::cout.rdbuf(output_file.rdbuf()); // redirect cout to file
 
-    std::cout.rdbuf(old_cout_buf); // uncomment if you want to output to console
+    //std::cout.rdbuf(old_cout_buf); // uncomment if you want to output to console
 
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "*****************Initialization Phase begun*********" << endl;
@@ -74,9 +74,12 @@ int main()
     //Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
     Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
 
+
+
+
     // Wait for user input before continuing
-    cout << "Press any key to continue" << endl;
-    cin.get();
+    //cout << "Press any key to continue" << endl;
+    //cin.get();
     //
 
 

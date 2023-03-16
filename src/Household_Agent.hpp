@@ -28,11 +28,14 @@ class Household_Agent{
 
     // Initialization methods
     void Set_Firm_Owner(Firm_Agent* firm_ptr);
+    void Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
 
     // Main Loop methods
     void Check_Employment_Status();
     void Update_Public_Board();
     void Update_Reservation_Wage();
+
+    void Random_Experimentation();
 
     void Consumption_Savings_Decisions();
     void Update_Income();
@@ -41,8 +44,9 @@ class Household_Agent{
     void Update_Savings(); // TO Implement
     void Determine_Consumer_Sentiment();
     void Determine_Consumption_Budget(); //(eq 18)
-    
+
     void Buy_Consumer_Goods(); 
+    void Buy_Consumer_Goods_By_Sector();
     void Seek_Jobs();
     void Seek_Better_Jobs();
 
@@ -72,6 +76,7 @@ class Household_Agent{
     Job * current_job;
     queue<int> past_incomes;
     Firm_Agent * owned_firm;
+    vector<float> spending_weight_by_sector;
 
     // Wealth
     int wealth_financial; //W_f in equations 

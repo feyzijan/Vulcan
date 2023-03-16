@@ -45,6 +45,8 @@ Public_Info_Board::Public_Info_Board(){
     consumer_orders = 0;
     consumer_spending = 0;
     consumption_budgets = 0;
+    sector_count = 0;
+
     // Production
     consumer_goods_production = 0;
     capital_goods_production = 0;
@@ -75,6 +77,32 @@ Public_Info_Board::Public_Info_Board(){
 Public_Info_Board::~Public_Info_Board(){}
 Public_Info_Board::Public_Info_Board(Public_Info_Board&){}
 //------------------------------------
+// Dealing with sectors
+
+/* Set the number of sectors, initialize spending by sector vectors with 0
+*/
+void Public_Info_Board::Set_Sector_Count(int count){
+    sector_count = count;
+    actual_spending_by_sector = vector<int>(sector_count, 0);
+    planned_spending_by_sector = vector<int>(sector_count, 0);
+}
+
+/*
+*/
+void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<int>& planned_spending){
+
+}
+
+
+
+/*
+*/
+void Public_Info_Board::Update_Consumer_Spending_by_Sector(  const vector<int>& actual_spending ){
+    
+}
+
+
+
 
 //--- Job Market
 
@@ -132,9 +160,23 @@ void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood){
 
 /* Call the Consumer good Market with the budget, and return the remaining budget
 */
-std::pair<int, int> Public_Info_Board::Buy_Consumer_Goods(int budget){
+pair<int, int> Public_Info_Board::Buy_Consumer_Goods(int budget){
     return pConsumer_Goods_Market->Buy_Consumer_Goods(budget);
- }
+}
+
+
+/* Call the consumer good markets relevant method to buy goods by sector
+*/
+pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& planned_expenditure_by_sector){
+    return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector(budget, planned_expenditure_by_sector);
+}
+
+
+
+
+//--------------------------------------------------
+
+
 
 /* Add Capital good to the capital goods market
 */
@@ -265,9 +307,12 @@ void Public_Info_Board::Reset_Global_Data(){
     consumer_spending = reset_value;
     consumption_budgets = reset_value;
     consumer_goods_production = reset_value;
+    sector_count = reset_value;
+
     capital_goods_production = reset_value;
     consumer_goods_production_planned = reset_value;
     capital_goods_production_planned = reset_value;
+
 
 
     // Production

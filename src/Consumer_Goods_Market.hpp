@@ -28,7 +28,9 @@ class Consumer_Goods_Market{
     void Sort_Consumer_Goods_By_Price();
     void Sort_Cons_Goods_By_Sector_By_Price();
     pair<int, int>  Buy_Consumer_Goods(int budget);
-    tuple<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& spending_array );
+    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& spending_array);
+    
+    
     void Update_Price_Level();
     void Reset_Market(); 
 
@@ -39,8 +41,8 @@ class Consumer_Goods_Market{
 
 
     private:
-    std::vector<Consumer_Good*> cons_goods_list;
-    std::vector<std::pair<int, std::vector<Consumer_Good*>>> cons_good_list_by_sector;
+    vector<Consumer_Good*> cons_goods_list;
+    vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector;
 
 
 

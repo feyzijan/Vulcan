@@ -78,6 +78,16 @@ void Household_Agent::Set_Firm_Owner(Firm_Agent* firm_ptr){
 }
 
 
+/* Loop thourgh each sector, and push back to the spending_weighibg_by_sector vector the weight of the sector
+*/
+void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
+    for (int i = 0; i < pConsumer_Firm_Sector_vector->size(); i++){
+        spending_weight_by_sector.push_back(pConsumer_Firm_Sector_vector->at(i)->consumption_weighing);
+    }
+}
+
+
+
 
 
 //----- Main Loop
@@ -153,6 +163,31 @@ void Household_Agent::Update_Reservation_Wage()
     // Make sure it is not above minimum wage
     reservation_wage = max(reservation_wage, pPublic_Info_Board->Get_Minimum_Wage()); 
 } 
+
+/* Randomly alter some household properties
+- Loop through the spending_weight_by_sector vector and randomly alter the weights by x%, where x ranges between -0.05 and 0.05 
+- Make sure that the total of the weights is 1
+*/
+void Household_Agent::Random_Experimentation(){
+
+    // Randomly alter desired spending weights for each sector
+    float weighing_change = Uniform_Dist_Float(1.0-sector_spending_randomization , 1.0+sector_spending_randomization);
+
+    for (int i = 0; i < spending_weight_by_sector.size(); i++){
+        spending_weight_by_sector[i] = spending_weight_by_sector[i] * (weighing_change);
+    }
+    // Make sure the total is 1
+    float sum = 0;
+    for (int i = 0; i < spending_weight_by_sector.size(); i++){
+        sum += spending_weight_by_sector[i];
+    }
+    for (int i = 0; i < spending_weight_by_sector.size(); i++){
+        spending_weight_by_sector[i] = spending_weight_by_sector[i] / sum;
+    }
+
+}
+
+
 
 /* Function to update the income_current variable to sum of all incomes received
 - Check if the household is employed by checking if current_job pointer points to 0
@@ -249,15 +284,16 @@ void Household_Agent::Determine_Consumption_Budget()
         expenditure_consumption = (1.0-saving_propensity) * income_current + c_f * excess_savings;
     }
 
-    if (expenditure_consumption < 0)
-    {
-        cout << "Expenditure consumption is negative" << endl;
+    if (expenditure_consumption < 0) { // make sure expenditure isnt negative
+        cout << "Error Expenditure consumption is negative" << endl;
+        expenditure_consumption = max(expenditure_consumption, 0); 
     }
-    // make sure expenditure isnt negative
-    expenditure_consumption = max(expenditure_consumption, 0); 
+
 
     pPublic_Info_Board->Update_Consumption_Budgets(expenditure_consumption);
 }
+
+
 
 /* Interact with the market through public board to buy goods
 - Spend as much of the consumption budget as it can, only buying integer multiple # goods,
@@ -269,12 +305,57 @@ void Household_Agent::Buy_Consumer_Goods(){
     std::pair<int, int> purchase = pPublic_Info_Board->Buy_Consumer_Goods(expenditure_consumption);
     int remaining_consumption_budget = purchase.first;
     int goods_bought = purchase.second;
+
     expenditure_consumption -= remaining_consumption_budget;
     new_savings += remaining_consumption_budget;
     wealth_financial += remaining_consumption_budget;
+
     pPublic_Info_Board->Update_Consumer_spending(expenditure_consumption);
     pPublic_Info_Board->Update_Consumer_orders(goods_bought);
 }
+
+
+/*  Interact with the market through the public board to buy goods
+- Pass in the consumption budget along with the vector with the sector weights
+- Receive back a pair of two vectors, leftover budget and goods bought for each secto
+*/
+void Household_Agent::Buy_Consumer_Goods_By_Sector(){
+
+    // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
+    std::vector<int> planned_expenditure_by_sector(spending_weight_by_sector.size());
+
+    for (int i = 0; i < spending_weight_by_sector.size(); ++i) {
+        planned_expenditure_by_sector[i] = floor(spending_weight_by_sector[i] * expenditure_consumption);
+    }
+
+    // Buy consumer goods and receive leftover budget and quantity bought for each sector
+    pair<vector<float>, vector<int>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector(expenditure_consumption, planned_expenditure_by_sector);
+
+    vector<float> remaining_consumption_budget =  purchases_by_sector.first;
+    vector<int> goods_bought =  purchases_by_sector.second;
+    vector<int> actual_spending_by_sector(planned_expenditure_by_sector);
+
+    int total_goods_bought = 0;
+
+    for (int i=0; i<remaining_consumption_budget.size(); i++){
+        // Deal with the leftover budget
+        expenditure_consumption -= remaining_consumption_budget[i];
+        new_savings += remaining_consumption_budget[i];
+        wealth_financial += remaining_consumption_budget[i]; 
+        actual_spending_by_sector[i] -= remaining_consumption_budget[i];
+
+        // Add up tally of goods bought
+        total_goods_bought += goods_bought[i];
+    }
+    pPublic_Info_Board->Update_Consumer_spending(expenditure_consumption);
+    pPublic_Info_Board->Update_Consumer_orders(total_goods_bought);
+    pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
+    pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
+    
+}
+
+
+
 
 
 /* Function to seek jobs and accept any above the reservation wage
