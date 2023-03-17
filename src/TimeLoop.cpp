@@ -126,7 +126,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pPublic_Info_Board->Calculate_Cap_Firm_Sentiment_Percentage();
     cout << "Capital Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cap_Firm_Sentiment() << endl;
 
-        
 
     
     // STEP 1.90: Firms make investment decisions and finance these
@@ -135,7 +134,8 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << " \n ------------ Step 1.91: Firms produce their goods ----------------" <<endl;
     
     cout << "Consumer goods market before firms post goods ( what remains of the previous market): " << endl;
-    pConsumer_Goods_Market->Update_Price_Level();
+    //pConsumer_Goods_Market->Update_Price_Level();
+    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
     pConsumer_Goods_Market->Print();
     cout << "Capital goods market before firms post goods ( what remains of the previous market): " << endl;
     pCapital_Goods_Market->Update_Price_Level();
@@ -148,10 +148,13 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Update_Goods_On_Market();}
 
     cout << "Consumer goods market after firms post goods ( after resetting market): " << endl;
-    pConsumer_Goods_Market->Sort_Consumer_Goods_By_Price();
-    pConsumer_Goods_Market->Update_Price_Level();
+    //pConsumer_Goods_Market->Sort_Consumer_Goods_By_Price();
+    //pConsumer_Goods_Market->Update_Price_Level();
+    pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
+    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
     pConsumer_Goods_Market->Print();
     cout << "Consumer Firms have produced " << pPublic_Info_Board->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Info_Board->Get_Consumer_Goods_Production_Planned() << endl;
+    
     cout << "Capital goods market after firms post goods ( after resetting market): " << endl;
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
     pCapital_Goods_Market->Update_Price_Level();
@@ -175,11 +178,13 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     
 
     for(Household_Agent* household_ptr : *pHousehold_vector){
-        household_ptr->Buy_Consumer_Goods();}
+        //household_ptr->Buy_Consumer_Goods();
+        household_ptr->Buy_Consumer_Goods_By_Sector();}
 
     cout << "Households have spent " << pPublic_Info_Board->Get_Consumer_Spending() << " on consumer goods to buy " << pPublic_Info_Board->Get_Consumer_Orders() << " consumer goods" << endl;
     cout <<  float(pPublic_Info_Board->Get_Consumer_Spending()) / float(pPublic_Info_Board->Get_Consumption_Budget())*100 << "% of household budgets have been spent " << endl;
-    pConsumer_Goods_Market->Update_Price_Level();
+    //pConsumer_Goods_Market->Update_Price_Level();
+    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
     pConsumer_Goods_Market->Print();
 
 

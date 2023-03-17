@@ -81,10 +81,14 @@ Public_Info_Board::Public_Info_Board(Public_Info_Board&){}
 
 /* Set the number of sectors, initialize spending by sector vectors with 0
 */
-void Public_Info_Board::Set_Sector_Count(int count){
-    sector_count = count;
+void Public_Info_Board::Set_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors){
+    sector_count = num_sectors;
     actual_spending_by_sector = vector<int>(sector_count, 0);
     planned_spending_by_sector = vector<int>(sector_count, 0);
+    // Loop through each sector in the consumer_firm_sector vector and add the sector weighing to the consumer_sector_weighing_vector
+    for (int i = 0; i < sector_count; i++){
+        consumer_sector_weights.push_back(pConsumer_Firm_Sector_vector->at(i)->consumption_weighing);
+    }
 }
 
 /*
@@ -216,10 +220,24 @@ int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
 //--- Inflation and Price level
 
 float Public_Info_Board::Calculate_Inflation(){
+    
     cons_price_level_previous = cons_price_level_current;
-    cons_price_level_current = pConsumer_Goods_Market->Get_Price_Level();
+    // Call the price_evel_array_by_Sector method of the consumer goods market
+    // Multiply each value by the weights in the consumer_sector_weights vector
+    // Sum the values and divide by the sum of the weights
+    // Return the result
+    vector<float> price_level_array = pConsumer_Goods_Market->Get_Price_Level_array_by_Sector();
+    float sum = 0.0;
+    float sum_weights = 0.0;
+    for (int i = 0; i < sector_count; i++){
+        sum += price_level_array[i] * consumer_sector_weights[i];
+        sum_weights += consumer_sector_weights[i];
+    }
+    cons_price_level_current = sum/sum_weights;
+
     return 1.0 + (cons_price_level_current - cons_price_level_previous)/cons_price_level_previous;
 }
+
 
 float Public_Info_Board::Calculate_Manufacturer_Inflation(){
     cap_price_level_previous = cap_price_level_current;
@@ -312,6 +330,14 @@ void Public_Info_Board::Reset_Global_Data(){
     consumer_orders = reset_value;
     consumer_spending = reset_value;
     consumption_budgets = reset_value;
+
+    for (int i = 0; i < sector_count; i++) {
+        planned_spending_by_sector[i]  = reset_value;
+    } 
+    for (int i = 0; i < sector_count; i++) {
+        actual_spending_by_sector[i] = reset_value;
+    }
+
     consumer_goods_production = reset_value;
     sector_count = reset_value;
 

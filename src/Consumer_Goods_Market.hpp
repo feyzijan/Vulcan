@@ -41,6 +41,7 @@ class Consumer_Goods_Market{
     // Getters
     float Get_Price_Level() {return price_level;}
     float Get_Price_Level_by_Sector( int sector_id) {return price_level_by_sector[sector_id];}
+    const vector<float>& Get_Price_Level_array_by_Sector() {return price_level_by_sector;}
 
 
     private:

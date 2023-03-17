@@ -113,7 +113,7 @@ class Public_Info_Board{
     void Set_Consumer_Goods_Market(Consumer_Goods_Market* ptr) { pConsumer_Goods_Market = ptr;}
     void Set_Capital_Goods_Market(Capital_Goods_Market* ptr) { pCapital_Goods_Market = ptr;}
     void Set_Bank(Bank_Agent* ptr) { pBank = ptr;}
-    void Set_Sector_Count(int count);
+    void Set_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors);
 
     // Update global aggregate variables
     // Sentiment sums
@@ -190,6 +190,9 @@ class Public_Info_Board{
     float cons_price_level_previous;
     float cap_price_level_current;
     float cap_price_level_previous;
+    vector<float> consumer_sector_weights;
+    vector<float> consumer_sectors_price_levels;
+
 
     // Income and wage figures
     float average_wage_market; // Average wage in the job market

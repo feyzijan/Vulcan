@@ -325,12 +325,12 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
 
 }
 
-void Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector) {
+int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector) {
     std::ifstream file("../InitializationData/Consumer_Firm_Sectors.csv"); // Open the file
 
     if (!file.is_open()) { // Check if file is open
         std::cout << "Error opening file" << std::endl;
-        return;
+        return 0;
     }
 
     std::string line;
@@ -365,6 +365,7 @@ void Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_ve
     file.close(); // Close the file
 
     const int n_sectors = temp; // Set the number of sectors as a global parameter
+    return temp;
 }
 
 
@@ -438,6 +439,6 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
         }
         cout << "Now allocated a total of " << total_allocation << " firms out of  " << n_consumer_firms << " to a sector" <<  endl;
     }
-    
+
 
  }

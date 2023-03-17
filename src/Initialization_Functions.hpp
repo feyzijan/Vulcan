@@ -59,7 +59,7 @@ void Initialize_Cons_Cap_Goods_Markets( vector<Consumer_Firm_Agent*> *pConsumer_
 
 
 // Initialize Sectors
-void Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector);
+int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector);
 
 // Allocate firms to sectors
 void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,

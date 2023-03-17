@@ -536,15 +536,14 @@ void Firm_Agent::Buy_Capital_Goods(){
 
         // Update the working capital inventory
         working_capital_inventory += new_machines_bought;
-        capital_costs = total_price_paid;
+        capital_costs = int(total_price_paid);
 
         if (new_machines_bought < desired_machines) {
             cout << "Capital good demand not satisfied" << this << " only bought " << new_machines_bought << " out of " << desired_machines << endl;
         }
     }
 
-
-    pPublic_Info_Board->Update_Machine_spending(total_price_paid);
+    pPublic_Info_Board->Update_Machine_spending(int(total_price_paid));
     pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
 }
 
