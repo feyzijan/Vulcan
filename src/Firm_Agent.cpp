@@ -567,9 +567,17 @@ void Firm_Agent::Buy_Capital_Goods_Simple(){
         delete [] arr;
 
         // Create new capital good with given quantitty and average price
-        Capital_Good* new_capital_good = new Capital_Good(nullptr,new_machines_bought, total_price_paid/new_machines_bought, machine_lifespan);
-        capital_goods_list.push_back(new_capital_good);
-
+        if (new_machines_bought > 0) {
+            Capital_Good* new_capital_good = new Capital_Good(nullptr,new_machines_bought, total_price_paid/new_machines_bought, machine_lifespan);
+            capital_goods_list.push_back(new_capital_good);
+        } else if (new_machines_bought < 0) {
+            cout << "Error: negative number of machines bought n = " << new_machines_bought <<  endl;
+            new_machines_bought = 0;
+        }
+        if (total_price_paid <0){
+            cout << "Error negative price paid =  " << total_price_paid << endl;
+            total_price_paid = 0;
+        }
         working_capital_inventory += new_machines_bought;
         capital_costs = total_price_paid;
     }

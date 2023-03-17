@@ -390,7 +390,7 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
         // Calculate the number of firms to allocate to this sector - round the value up to ensure we allocate all firms
         int sector_id = weighing_pair.first;
         float sector_weighing = weighing_pair.second;
-        int firms_to_allocate = static_cast<int>(std::ceil(total_firms * sector_weighing));
+        int firms_to_allocate = max(1, static_cast<int>(round(total_firms * sector_weighing)));
         int allocation_counter = 0;
         cout << "Planning to allocate " << firms_to_allocate << " firms to sector #" << sector_id << endl;
 
@@ -426,5 +426,18 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
         cout << " Allocated " << allocation_counter << " firms to sector " << sector_id << endl;
     }
     cout << "Allocated a total of " << total_allocation << " firms out of  " << n_consumer_firms << " to a sector" <<  endl;
+
+
+    if (total_allocation != n_consumer_firms) {
+        cout << "Problem: Not all firms have been allocated to a sector, allocating remaining firms to last sector " << endl;
+        // Allocate remaining firms to the first sector
+        for (int i = start_index; i < pConsumer_Firm_vector->size(); ++i) {
+            Consumer_Firm_Agent* selected_firm = (*pConsumer_Firm_vector)[i];
+            selected_firm->Assign_Sector((*pConsumer_Firm_Sector_vector)[0]);
+            total_allocation ++;
+        }
+        cout << "Now allocated a total of " << total_allocation << " firms out of  " << n_consumer_firms << " to a sector" <<  endl;
+    }
+    
 
  }

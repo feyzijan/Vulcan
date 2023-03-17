@@ -73,7 +73,7 @@ std::vector<Capital_Good*>* Capital_Goods_Market::Buy_Capital_Goods(int q_desire
         int q_sold = 0;
         float price = cap_good->Get_Price();
         if ( q_on_market > 0) {
-            if(q_current + q_on_market >= q_desired){  // This posting is enough to satisfy all our demand
+            if( q_current + q_on_market >= q_desired){  // This posting is enough to satisfy all our demand
                 q_sold = q_desired - q_current; // How much we will buy
                 q_current  = q_desired; // all demand is satisfied
                 // Add good to our list
@@ -107,41 +107,49 @@ int* Capital_Goods_Market::Buy_Capital_Goods_Simple(int q_desired){
     int q_current = 0; // quantity the firm is purchasing
     float total_price = 0; // total price paid
 
-    
-    for (std::vector<Capital_Good*>::iterator it = cap_goods_list.begin(); it != cap_goods_list.end(); ++it) 
-    { // Loop through the capital goods list
-        Capital_Good* cap_good = *it; // select current good
-        int q_on_market = cap_good->Get_Quantity();
-        int q_sold = 0; // how much of this one good we are buying
-        float price = cap_good->Get_Price(); 
-        if (q_on_market > 0) 
-        {
-            if (q_current + q_on_market >= q_desired) // This posting is enough to satisfy all our demand
-            {  
-                q_sold = q_desired - q_current; // We buy only enough to satisfy our demand
-                q_current = q_desired; // all demand is satisfied
-                
-                cap_good->Update_Quantity(-q_sold); // Deduct quantity from the original good on the market
-                n_total_goods -= q_sold; // Deduct quantity from market
+    if (n_total_goods ==0){
+        int* arr = new int[2];
+        arr[0] = 0;
+        arr[1] = 0;
+        return arr;
+    } else{
 
-            } else { // Not enough to satisfy our demand, so we will buy all and move on
-                q_current += q_on_market; // Update number of goods purchased by firm
-                cap_good->Set_Quantity(0); // Deduct quantity from the original good on the market 
-                n_total_goods -= q_on_market;
-            }
-
-            if (q_current == q_desired || n_total_goods == 0 ) // We satisfied our demand or the shop is empty so lets return
+        for (std::vector<Capital_Good*>::iterator it = cap_goods_list.begin(); it != cap_goods_list.end(); ++it) 
+        { // Loop through the capital goods list
+            Capital_Good* cap_good = *it; // select current good
+            int q_on_market = cap_good->Get_Quantity();
+            int q_sold = 0; // how much of this one good we are buying
+            float price = cap_good->Get_Price(); 
+            if (q_on_market > 0) 
             {
-            int* arr = new int[2];  // allocate array of size 2 on the heap
-            arr[0] = q_current;  // store first integer in array
-            arr[1] = total_price;  // store second integer in array
-            return arr;
-            } else{
+                if (q_current + q_on_market >= q_desired) // This posting is enough to satisfy all our demand
+                {  
+                    q_sold = q_desired - q_current; // We buy only enough to satisfy our demand
+                    q_current = q_desired; // all demand is satisfied
+                    
+                    cap_good->Update_Quantity(-q_sold); // Deduct quantity from the original good on the market
+                    n_total_goods -= q_sold; // Deduct quantity from market
+
+                } else { // Not enough to satisfy our demand, so we will buy all and move on
+                    q_current += q_on_market; // Update number of goods purchased by firm
+                    cap_good->Set_Quantity(0); // Deduct quantity from the original good on the market 
+                    n_total_goods -= q_on_market;
+                }
+
+                if (q_current == q_desired || n_total_goods == 0 ) // We satisfied our demand or the shop is now empty so lets return
+                {
+                    int* arr = new int[2];  // allocate array of size 2 on the heap
+                    arr[0] = q_current;  // store first integer in array
+                    arr[1] = total_price;  // store second integer in array
+                    return arr;
+                } else {
+                    continue;
+                }
+            } else { // this good is all sold out
                 continue;
             }
+
         }
-
-
     }
 
 }
@@ -160,6 +168,8 @@ void Capital_Goods_Market::Update_Price_Level(){
     }
     price_level = (float)total_weighed_price/(float)n_total_goods;
 }
+
+
 
 /* Function to reset market, emptying the list of goods
 */
