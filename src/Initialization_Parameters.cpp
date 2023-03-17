@@ -11,10 +11,11 @@ const int time_period = 12; // i.e. 12 timesteps make a year - Unused
 
 // Size of simulation - Set properly!
 const int n_loops = 60;
-const int n_households = 10000;
-const int n_consumer_firms = 350;
-const int n_capital_firms = 50;
-const int n_firms = 400; 
+const int n_households = 1000;
+const int n_consumer_firms = 35;
+const int n_capital_firms = 5;
+const int n_firms = 40; 
+
 
 
 const int n_max_employees = 100; //unused

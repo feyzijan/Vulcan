@@ -17,6 +17,8 @@ extern const int n_consumer_firms;
 extern const int n_capital_firms;
 extern const int n_firms;
 extern const int n_max_employees;
+extern const int n_sectors;
+
 
 //------- Household parameters ------------------
 // Household initialization parameters

@@ -168,7 +168,6 @@ std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
 
 
 
-
 /* Update the price level of the market
 */
 void Consumer_Goods_Market::Update_Price_Level(){
@@ -182,6 +181,31 @@ void Consumer_Goods_Market::Update_Price_Level(){
     }
     price_level = (float)total_weighed_price/(float)n_total_goods;
 }
+
+/* Update the price level of the market by sector
+*/
+void Consumer_Goods_Market::Update_Price_Level_by_Sector(){
+    // Loop through the cons_good_list_by_sector vector of pairs, calculating the weighted price for each sector
+    // store these in order in the price_level_by_sector vector
+
+    for (int i = 0; i < cons_good_list_by_sector.size(); ++i) { // Loop through the sectors
+        int n_total_goods = 0;
+        int total_weighed_price = 0;
+        std::vector<Consumer_Good*>& goods_for_sector = cons_good_list_by_sector[i].second; // Get the goods for this sector
+
+        for(Consumer_Good* pgood : goods_for_sector){ // Loop through the goods list, from cheapest to most expensive
+            int q = pgood->Get_Quantity();
+            float p = pgood->Get_Price();
+            n_total_goods += q;
+            total_weighed_price += float(p*q);
+        }
+        price_level_by_sector[i] = (float)total_weighed_price/(float)n_total_goods;
+        n_goods_by_sector[i] = n_total_goods;
+    }
+}
+
+
+
 
 /* Reset the market
 */

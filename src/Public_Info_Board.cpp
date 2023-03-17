@@ -90,7 +90,10 @@ void Public_Info_Board::Set_Sector_Count(int count){
 /*
 */
 void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<int>& planned_spending){
-
+    // loop through the planned_spending vector and add to the planned_spending_by_sector vector
+    for (int i = 0; i < sector_count; i++){
+        planned_spending_by_sector[i] += planned_spending[i];
+    }
 }
 
 
@@ -98,7 +101,10 @@ void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector
 /*
 */
 void Public_Info_Board::Update_Consumer_Spending_by_Sector(  const vector<int>& actual_spending ){
-    
+    // loop though the actual_spending vector and add to the actual_spending_by_sector vector
+    for (int i = 0; i < sector_count; i++){
+        actual_spending_by_sector[i] += actual_spending[i];
+    }
 }
 
 
@@ -358,31 +364,47 @@ void Public_Info_Board::Print_Labor_Market() const{
 /* Function to make string stream operator << work
 */
 std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
+    
+    os << "r_rate " << obj.r_rate << std::endl;
+    os << "inflation_current " << obj.inflation_current << std::endl;
     os << "price_level_current " << obj.cons_price_level_current << std::endl;
     os << "price_level_previous " << obj.cons_price_level_previous << std::endl;
     os << "cap_price_level_current " << obj.cap_price_level_current << std::endl;
     os << "cap_price_level_previous " << obj.cap_price_level_previous << std::endl;
+
     os << "average_wage_market " << obj.average_wage_market << std::endl;
     os << "average_wage_employed" << obj.average_wage_employed << std::endl;
     os << "average_dividend_income " << obj.average_dividend_income << std::endl;
     os << "average_total_income " << obj.average_total_income << std::endl;
+    
     os << "household_wage_sum " << obj.household_wage_sum << std::endl;
     os << "household_dividends_sum " << obj.household_dividends_sum << std::endl;
     os << " household_total_income_sum " << obj.household_total_income_sum << std::endl;
-    os << "r_rate " << obj.r_rate << std::endl;
-    os << "inflation_current " << obj.inflation_current << std::endl;
+    
+    
     os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;
     os << "household_sentiment_percentage " << obj.household_sentiment_percentage << std::endl;
     os << "cons_firm_sentiment_sum " << obj.cons_firm_sentiment_sum << std::endl;
     os << "cons_firm_sentiment_percentage " << obj.cons_firm_sentiment_percentage << std::endl;
     os << "cap_firm_sentiment_sum " << obj.cap_firm_sentiment_sum << std::endl;
     os << "cap_firm_sentiment_percentage " << obj.cap_firm_sentiment_percentage << std::endl;
+    
     os << "machine_orders " << obj.machine_orders << std::endl;
     os << "machine_orders_planned " << obj.machine_orders_planned << std::endl;
     os << "machine_spending " << obj.machine_spending << std::endl;
+    
     os << "consumer_orders " << obj.consumer_orders << std::endl;
     os << "consumer_spending " << obj.consumer_spending << std::endl;
     os << "consumption_budgets " << obj.consumption_budgets << std::endl;
+    
+    for (int i = 0; i < obj.planned_spending_by_sector.size(); i++) {
+        os << "planned_spending_on_sector_" << i << " " << obj.planned_spending_by_sector[i] << std::endl;
+    } 
+    for (int i = 0; i < obj.actual_spending_by_sector.size(); i++) {
+        os << "actual_spending_on_sector_" << i << " " << obj.actual_spending_by_sector[i] << std::endl;
+    }
+    
+    
     os << "consumer_goods_production " << obj.consumer_goods_production << std::endl;
     os << "capital_goods_production " << obj.capital_goods_production << std::endl;
     os << "consumer_goods_production_planned " << obj.consumer_goods_production_planned << std::endl;
@@ -399,6 +421,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "unempl_benefits " << obj.public_unemployment_benefit << std::endl;
     os << "minimum_wage " << obj.minimum_wage << std::endl;
     os << "n_employees_quitting " << obj.n_employees_quitting << std::endl;
+
     os << "date " << obj.current_date << std::endl;
 }
 

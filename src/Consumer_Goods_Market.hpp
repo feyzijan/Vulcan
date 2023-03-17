@@ -32,19 +32,22 @@ class Consumer_Goods_Market{
     
     
     void Update_Price_Level();
+    void Update_Price_Level_by_Sector();
+
     void Reset_Market(); 
 
 
 
     // Getters
     float Get_Price_Level() {return price_level;}
+    float Get_Price_Level_by_Sector( int sector_id) {return price_level_by_sector[sector_id];}
 
 
     private:
     vector<Consumer_Good*> cons_goods_list;
     vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector;
-
-
+    vector<float> price_level_by_sector;
+    vector<int> n_goods_by_sector;
 
     int n_total_goods;
     float total_weighed_price;

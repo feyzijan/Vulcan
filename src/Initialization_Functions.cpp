@@ -336,6 +336,8 @@ void Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_ve
     std::string line;
     std::getline(file, line); // Get the first line (headers)
 
+    int temp = 0; // keep track of sector counts
+
     while (std::getline(file, line)) { // Loop through the rest of the lines
         std::stringstream ss(line); // Create a stringstream from the line
         std::string sector_name;
@@ -353,7 +355,7 @@ void Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_ve
 
             Consumer_Firm_Sector *pSector = new Consumer_Firm_Sector(sector_name, consumption_weighing, sector_id); // Create new instance of Consumer_Firm_Sector struct
             pConsumer_Firm_Sector_vector->push_back(pSector); // Add it to the vector
-
+            temp ++;
             // Push the pair of sector_id and firm_weighing to the vector
             std::pair<int, float> pair(sector_id, firm_weighing);
             pFirm_Weighing_vector->push_back(pair);
@@ -361,6 +363,8 @@ void Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_ve
     }
 
     file.close(); // Close the file
+
+    const int n_sectors = temp; // Set the number of sectors as a global parameter
 }
 
 
