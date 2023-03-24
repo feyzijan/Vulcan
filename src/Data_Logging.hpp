@@ -22,12 +22,13 @@
 void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<float>>> dataset);
 
 void Log_Everything(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
-vector<Capital_Firm_Agent*> *pCapital_Firm_vector,Public_Info_Board *pPublic_Info_Board);
-
+vector<Capital_Firm_Agent*> *pCapital_Firm_vector,Public_Info_Board *pPublic_Info_Board,Bank_Agent *pBank);
 
 void Log_Households(std::vector<Household_Agent*>* pHousehold_vector);
 
 void Log_Public_Info_Board(Public_Info_Board *pPublic_Info_Board);
+
+void Log_Bank(Bank_Agent *pBank);
 
 
 

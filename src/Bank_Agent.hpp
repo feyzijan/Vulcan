@@ -17,58 +17,52 @@ using namespace std;
 class Bank_Agent{
 
     public:
-    // Constructors and Destructors
+    // Constructor
     Bank_Agent(Public_Info_Board* pPublic_Info_Board); 
-    Bank_Agent(Bank_Agent&); 
-    ~Bank_Agent();
 
     // Inflation and Interest Rate Policies
-    void Update_Inflation_Rate();
+    void Update_Inflation();
     void Update_Interest_Rate();
-
-    void Update_Manufacturer_Inflation_Rate();
 
     // Loan issuance
     Loan* Issue_Short_Term_Loan(Firm_Agent* pFirm);
     Loan* Issue_Long_Term_Loan(Firm_Agent* pFirm);
 
     // Getters
-    float Get_Inflation_Rate() {return inflation_current;};
-    float Get_Manufacturer_Inflation_Rate() {return cap_inflation_current;};
     float Get_Interest_Rate() {return r_rate;};
 
     // Printing and debugging
     void Print();
     void Print_Inflation_History();
     void Print_Interest_Rate_History(); // To Implement
-    
+    friend std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj);
+    std::vector<std::pair<std::string, float>>*  Log_Data();
 
     protected:
     Public_Info_Board* pPublic_Board;
-    
-    queue<float> inflation_history; // Array of past inflation
-    queue<float> cap_inflation_history; // Array of past manufacturer inflation
-    queue<float> interest_rate_history; // Array of past interest rates
+    queue<float> cons_inflation_history; 
+    queue<float> cap_inflation_history; 
+    queue<float> interest_rate_history; 
 
     vector<Loan*> short_term_loan_book; 
     vector<Loan*> long_term_loan_book; 
 
-    // Interest rate 
+    // Interest rates 
     float r_rate;
-    float r_reaction;
-    float risk_premium; //risk premium on doubtful debt - per leverage ratio above threshold
+    float r_reaction; // How much the interest rate changes in response to inflation
+    float risk_premium; // How much to increase interest rate per leverage ratio above threshold
  
     // Inflation
-    float inflation_current; // Inflation (trailing 12m)
-    float inflation_previous; // Inflation previous (trailing 12m)
-    float inflation_target; // Inflation (next 12m target)
-    float inflation_past_month; // Inflation MoM
+    float cons_inflation_current; // Inflation (trailing 12m)
+    float cons_inflation_previous; // Inflation previous (i.e. last month) (trailing 12m)
+    float cons_inflation_target; // Inflation (next 12m target)
+    float cons_inflation_past_month; // Inflation Month on Month
 
     // Manufacturer inflation
     float cap_inflation_current; // Inflation (trailing 12m)
     float cap_inflation_previous; // Inflation previous (trailing 12m)
+    //float cap_inflation_target; // Inflation (next 12m target) - No capital inflation target yet
     float cap_inflation_past_month; // Inflation MoM
-
 
     // Repayments
     int new_principal_repayments;
@@ -78,8 +72,14 @@ class Bank_Agent{
 
     // Loan issuance totals
     int total_loan_issuance_to_date; 
-    int new_loan_issuance;
-    int outstanding_loans;
+    int short_term_loan_issuance_to_date;
+    int long_term_loan_issuance_to_date;
+    int total_new_loan_issuance;
+    int new_short_term_loan_issuance;
+    int new_long_term_loan_issuance;
+    int total_outstanding_loans;
+    int outstanding_short_term_loans;
+    int outstanding_long_term_loans;
 
     // Loan parameters
     int short_term_loan_length;
@@ -92,6 +92,8 @@ class Bank_Agent{
     // Risky loan evaluation
     float leverage_ratio_lower_threshold;
     float leverage_ratio_upper_threshold;
+
+    int current_date;
 
 };
 #endif

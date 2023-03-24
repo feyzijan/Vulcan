@@ -78,6 +78,44 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
     log_file.close(); 
 }
 
+void Log_Bank(Bank_Agent *pBank){
+        // Open file for writing in append mode
+    std::ofstream log_file;
+    log_file.open("../DataLogs/Bank.csv", std::ios_base::app);
+
+    // Write header row if file is empty
+    static bool header_written = false;
+
+    // If file is empty, write the header row
+    if (!header_written && log_file.tellp() == 0) {
+        // Get the header row
+        std::vector<std::pair<std::string, float>>* header_data = pBank->Log_Data();
+        std::string header;
+        for (auto it = header_data->begin(); it != header_data->end(); ++it) {
+            header += it->first + ",";
+        }
+        header.pop_back();
+        header += "\n";
+        log_file << header;
+
+        delete header_data;
+        header_written = true;
+    }
+
+    // Get the data row
+    std::vector<std::pair<std::string, float>>* data = pBank->Log_Data();
+    std::string row;
+    for (auto it = data->begin(); it != data->end(); ++it) {
+        row += std::to_string(it->second) + ",";
+    }
+    row.pop_back();
+    row += "\n";
+    log_file << row;
+
+    delete data;
+    log_file.close(); 
+}
+
 
 
 /* Function to log all firm data 
@@ -128,10 +166,11 @@ void Log_Households(std::vector<Household_Agent*>* pHousehold_vector) {
 
 
 
-void Log_Everything(vector<Household_Agent*> *pHousehold_vector,
-    vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,vector<Capital_Firm_Agent*> *pCapital_Firm_vector,Public_Info_Board *pPublic_Info_Board){
+void Log_Everything(vector<Household_Agent*> *pHousehold_vector,vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
+vector<Capital_Firm_Agent*> *pCapital_Firm_vector,Public_Info_Board *pPublic_Info_Board,Bank_Agent *pBank){
     Log_Firms(pConsumer_Firm_vector,true);
     Log_Firms(pCapital_Firm_vector,false);
     Log_Households(pHousehold_vector);
     Log_Public_Info_Board(pPublic_Info_Board);
+    Log_Bank(pBank);
 }

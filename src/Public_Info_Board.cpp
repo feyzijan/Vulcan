@@ -25,7 +25,7 @@ Public_Info_Board::Public_Info_Board(){
 
     // Inflation and interest rates
     r_rate = 0;
-    inflation_current = 0;
+    cons_inflation_current = 0;
 
     // Global aggregate variables
 
@@ -95,8 +95,10 @@ void Public_Info_Board::Set_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pCon
 */
 void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<int>& planned_spending){
     // loop through the planned_spending vector and add to the planned_spending_by_sector vector
+    planned_spending_by_sector.clear();
     for (int i = 0; i < sector_count; i++){
-        planned_spending_by_sector[i] += planned_spending[i];
+        int temp = planned_spending[i];
+        planned_spending_by_sector.push_back(temp);
     }
 }
 
@@ -104,11 +106,14 @@ void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector
 
 /*
 */
-void Public_Info_Board::Update_Consumer_Spending_by_Sector(  const vector<int>& actual_spending ){
+void Public_Info_Board::Update_Consumer_Spending_by_Sector( const vector<int>& actual_spending ){
     // loop though the actual_spending vector and add to the actual_spending_by_sector vector
+    actual_spending_by_sector.clear();
     for (int i = 0; i < sector_count; i++){
-        actual_spending_by_sector[i] += actual_spending[i];
+        int temp = actual_spending[i];
+        actual_spending_by_sector.push_back(temp);
     }
+
 }
 
 
@@ -126,17 +131,7 @@ void Public_Info_Board::Remove_Top_Job_Offer(){
     pJob_Market->Remove_Top_Job_Offer();
 }
 
-/* Function to return average capital good price level
-*/
-float Public_Info_Board::Get_Capital_Good_Price_Level(){
-    return pCapital_Goods_Market->Get_Price_Level();
-}
 
-/* Function to return average consumer good price level
-*/
-float Public_Info_Board::Get_Consumer_Good_Price_Level(){
-    return pConsumer_Goods_Market->Get_Price_Level();
-}
 
 /* Called by firm to place a job into the market*/
 void Public_Info_Board::Post_Job_To_Market(Job * pJob_Offer) {
@@ -217,53 +212,62 @@ int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
 
 //--------------------------------------------------
 
-//--- Inflation and Price level
+//--- Inflation and Price level --------------------
 
-float Public_Info_Board::Calculate_Inflation(){
+/*  Calculate consumer price level given each sector's price level and weighing in the consumer basket
+    Also updates consumer inflation records
+*/
+void Public_Info_Board::Update_Consumer_Price_Level(){
+    cons_price_level_previous = cons_price_level_current; // update previous price level
     
-    cons_price_level_previous = cons_price_level_current;
-    // Call the price_evel_array_by_Sector method of the consumer goods market
-    // Multiply each value by the weights in the consumer_sector_weights vector
-    // Sum the values and divide by the sum of the weights
-    // Return the result
-    vector<float> price_level_array = pConsumer_Goods_Market->Get_Price_Level_array_by_Sector();
+    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels();
+
     float sum = 0.0;
     float sum_weights = 0.0;
     for (int i = 0; i < sector_count; i++){
-        sum += price_level_array[i] * consumer_sector_weights[i];
+        sum += consumer_sectors_price_levels[i] * consumer_sector_weights[i];
         sum_weights += consumer_sector_weights[i];
     }
-    cons_price_level_current = sum/sum_weights;
+    cons_price_level_current = sum/sum_weights; // incase the sums don't match due to rounding errors
 
-    return 1.0 + (cons_price_level_current - cons_price_level_previous)/cons_price_level_previous;
+    // Update inflation 
+    cons_inflation_current = 1.0 + (cons_price_level_current - cons_price_level_previous)/cons_price_level_previous;
+
 }
 
-
-float Public_Info_Board::Calculate_Manufacturer_Inflation(){
+/* Update capital price level by simply getting the data from the market
+    Also updates capital inflation records
+*/
+void Public_Info_Board::Update_Capital_Price_Level(){
     cap_price_level_previous = cap_price_level_current;
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
-    return 1.0 + (cap_price_level_current - cap_price_level_previous)/cap_price_level_previous;
+    cap_inflation_current = 1.0 + (cap_price_level_current - cap_price_level_previous)/cap_price_level_previous;
 }
 
-void Public_Info_Board::Initialize_Price_Level(){
-    cons_price_level_current = pConsumer_Goods_Market->Get_Price_Level();
+
+/* Initialize price levels at t=0 , without updating inflation
+*/
+void Public_Info_Board::Initialize_Price_Levels(){
+
+    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels();
+
+    float sum = 0.0;
+    float sum_weights = 0.0;
+    for (int i = 0; i < sector_count; i++){
+        sum += consumer_sectors_price_levels[i] * consumer_sector_weights[i];
+        sum_weights += consumer_sector_weights[i];
+    }
+    cons_price_level_current = sum/sum_weights; // incase the sums don't match due to rounding errors
+
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
-    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Level_array_by_Sector();
-    
 
 }
 
-void Public_Info_Board::Update_Inflation() { 
-    inflation_current = pBank->Get_Inflation_Rate();
-    }
-
-void Public_Info_Board::Update_Manufacturer_Inflation() { 
-    cap_inflation_current = pBank->Get_Manufacturer_Inflation_Rate();
-    }
-
-void Public_Info_Board::Update_Interest_Rate() { 
+/* Get the interest rate from the bank
+*/
+void Public_Info_Board::Update_Interest_Rate(){
     r_rate = pBank->Get_Interest_Rate();
-    }
+}
 
 
 //--------------------------------------------------
@@ -299,7 +303,7 @@ void Public_Info_Board::Reset_Global_Data(){
 
     // Inflation and interest rate
     r_rate = reset_value;
-    inflation_current = reset_value;
+    cons_inflation_current = reset_value;
     cap_inflation_current = reset_value;
 
     // Income Figures
@@ -334,12 +338,8 @@ void Public_Info_Board::Reset_Global_Data(){
     consumer_spending = reset_value;
     consumption_budgets = reset_value;
 
-    for (int i = 0; i < sector_count; i++) {
-        planned_spending_by_sector[i]  = reset_value;
-    } 
-    for (int i = 0; i < sector_count; i++) {
-        actual_spending_by_sector[i] = reset_value;
-    }
+    planned_spending_by_sector.clear();
+    actual_spending_by_sector.clear();
 
     consumer_goods_production = reset_value;
     sector_count = reset_value;
@@ -376,7 +376,7 @@ void Public_Info_Board::Reset_Global_Data(){
 void Public_Info_Board::Print() const{
     cout << " Public Infor Board at adress " << this << endl;
     cout << " Price Level: " << cons_price_level_current << " Interest Rate: " << r_rate <<endl;
-    cout << " Current Inflation: " << inflation_current <<  endl;
+    cout << " Current Inflation: " << cons_inflation_current <<  endl;
     cout << " Household Optimism: " << household_sentiment_percentage << " COns Firm Optimism: " << cons_firm_sentiment_percentage << endl;
 }
 
@@ -395,7 +395,7 @@ void Public_Info_Board::Print_Labor_Market() const{
 std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     
     os << "r_rate " << obj.r_rate << std::endl;
-    os << "inflation_current " << obj.inflation_current << std::endl;
+    os << "cons_inflation_current " << obj.cons_inflation_current << std::endl;
     os << "price_level_current " << obj.cons_price_level_current << std::endl;
     os << "price_level_previous " << obj.cons_price_level_previous << std::endl;
     os << "cap_price_level_current " << obj.cap_price_level_current << std::endl;

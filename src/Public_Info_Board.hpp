@@ -62,10 +62,11 @@ class Public_Info_Board{
     // Policy Rules
     void Update_Unemployment_Benefits(); // TO Implement later
 
-    // Inflation and price level
-    float Calculate_Inflation();
-    float Calculate_Manufacturer_Inflation();
-    void Initialize_Price_Level();
+    // Inflation, price level, interest rate
+    void Update_Consumer_Price_Level();
+    void Update_Capital_Price_Level();
+    void Initialize_Price_Levels();
+    void Update_Interest_Rate();
 
     // Loan issuance
     Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm);
@@ -81,11 +82,16 @@ class Public_Info_Board{
     float Get_Unemployment_Rate() { return unemployment_rate;}
 
     // Getters
+    float Get_Consumer_Inflation() {return cons_inflation_current;}
+    float Get_Capital_Inflation() {return cap_inflation_current;}
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
-    float Get_Price_Level() { return cons_price_level_current;}
+    float Get_Cons_Price_Level() { return cons_price_level_current;}
+    float Get_Cons_Sector_Price_Level(int sector_id) { return consumer_sectors_price_levels[sector_id]; }
     float Get_Cap_Price_Level() { return cap_price_level_current;}
-    float Get_Capital_Good_Price_Level();
-    float Get_Consumer_Good_Price_Level();
+
+    float Get_Capital_Good_Price_Level(){return cap_price_level_current;}
+    float Get_Consumer_Good_Price_Level() {return cons_price_level_current;}
+
     float Get_Average_Wage() { return average_wage_market;}
     Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
     int Get_Current_Date() { return current_date;}
@@ -166,10 +172,7 @@ class Public_Info_Board{
     void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
     void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
 
-    // Inflation and Interest Rate
-    void Update_Inflation();
-    void Update_Manufacturer_Inflation();
-    void Update_Interest_Rate();
+
 
 
     // Printing and Debugging
@@ -205,7 +208,7 @@ class Public_Info_Board{
 
     // Inflation and interest rate
     float r_rate; 
-    float inflation_current; 
+    float cons_inflation_current; 
     float cap_inflation_current;
 
 

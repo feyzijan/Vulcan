@@ -13,11 +13,8 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // STEP 1.1: Update Inflation Rate and Interest rate  -
     cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
     
-    pBank->Update_Inflation_Rate();
-    pBank->Update_Manufacturer_Inflation_Rate();
+    pBank->Update_Inflation();
     pBank->Update_Interest_Rate();
-    pPublic_Info_Board->Update_Inflation();
-    pPublic_Info_Board->Update_Manufacturer_Inflation();
     pPublic_Info_Board->Update_Interest_Rate();
 
 

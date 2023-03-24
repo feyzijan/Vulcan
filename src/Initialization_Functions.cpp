@@ -317,7 +317,7 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
     pConsumer_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Update_Price_Level();
 
-    pPublic_Info_Board->Initialize_Price_Level();
+    pPublic_Info_Board->Initialize_Price_Levels();
 
 }
 

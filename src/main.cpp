@@ -26,7 +26,7 @@ int main()
 {
 
     // Time program
-     auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
 
     cout << "************* Program has started" <<endl;
@@ -55,25 +55,23 @@ int main()
     vector<Household_Agent*> *pHousehold_vector = new vector<Household_Agent*>();
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector = new vector<Consumer_Firm_Agent*>();
     vector<Capital_Firm_Agent*> *pCapital_Firm_vector = new vector<Capital_Firm_Agent*>();
+
     vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector = new vector<Consumer_Firm_Sector*>();
-    std::vector<std::pair<int, float>>* pFirm_Weighing_vector = new vector<std::pair<int, float>>();
+    vector<pair<int, float>>* pFirm_Weighing_vector = new vector<pair<int, float>>();
 
 
     Initialize_Households_Firms_Jobs(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector,
     pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
-    
-
-   
-    // Create vector housing all firms 
-    vector<Firm_Agent*> *pAll_Firms_vector = new vector<Firm_Agent*>();
-    std::copy(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
-    std::copy(pCapital_Firm_vector->begin(), pCapital_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
-
-    // ------ Consumer Firm Sectors ----------------
     int num_sectors = Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, 
     pFirm_Weighing_vector, pPublic_Board_1, pConsumer_Goods_Market_1, pHousehold_vector);
 
     cout << "There are " << num_sectors << " sectors" << endl;
+   
+
+    // Create vector housing all firms 
+    vector<Firm_Agent*> *pAll_Firms_vector = new vector<Firm_Agent*>();
+    std::copy(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
+    std::copy(pCapital_Firm_vector->begin(), pCapital_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
     
     // Wait for user input before continuing
     //cout << "Press any key to continue" << endl;
@@ -81,7 +79,7 @@ int main()
     
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     cout << "Step 0.15: Log initial Household and Firm data" << endl;
-    //Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1);
+    Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1, pBank_1);
 
 
     //  -------- STEP 1 MAIN LOOP -------------------
@@ -92,7 +90,7 @@ int main()
         Time_Step_1(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector, pAll_Firms_vector,
         pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
         cout << "Time step " << i << " completed - Logging data now" << endl;
-        //Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1);
+        Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1,pBank_1);
         global_date++;
     }
 
@@ -118,7 +116,6 @@ int main()
     file.close();
  */
     
-
     return 0;
 }
 
