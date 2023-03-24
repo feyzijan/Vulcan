@@ -254,12 +254,8 @@ void Initialize_Household_Firm_Owners(vector<Household_Agent*> *pHousehold_vecto
 }
 
 
+// ----------------------- Job market ------------------------------//
 
-
-
-
-
-// ----------------------- Job market
 /*Function to set up Job market at t=0
 Needs pointers to agent arrays and public board
 */
@@ -325,6 +321,30 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
 
 }
 
+
+// ----------------------- Consumer Sectors ------------------------------//
+int Initialize_Consumer_Firm_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,
+vector<pair<int, float>>* pFirm_Weighing_vector, Public_Info_Board* pPublic_Info_Board, Consumer_Goods_Market* pConsumer_Goods_Market,
+vector<Household_Agent*> *pHousehold_vector){
+    // Create the sectors
+    int n_sectors = Create_Sectors(pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
+    // Assign firms to sectors
+    Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
+    // Set up sectors in the public board
+    pPublic_Info_Board->Set_Consumer_Sectors(pConsumer_Firm_Sector_vector, n_sectors);
+    // Set up the consumer goods market's sector lists
+    pConsumer_Goods_Market->Divide_Goods_Into_Sectors(n_sectors);
+    // Sort each sector by price
+    pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
+    
+    // Notify Households
+    for (Household_Agent* pHousehold : *pHousehold_vector){
+        pHousehold->Initialize_Sector_Weights(pConsumer_Firm_Sector_vector);
+    }
+ 
+    return n_sectors;
+}
+
 int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector) {
     std::ifstream file("../InitializationData/Consumer_Firm_Sectors.csv"); // Open the file
 
@@ -373,7 +393,7 @@ int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vec
 
 */
 void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
- vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector){
+ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,vector<pair<int, float>>* pFirm_Weighing_vector){
 
         
     std::srand(std::time(0)); // used for random generation

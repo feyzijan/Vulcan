@@ -82,7 +82,12 @@ void Household_Agent::Set_Firm_Owner(Firm_Agent* firm_ptr){
 */
 void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     for (int i = 0; i < pConsumer_Firm_Sector_vector->size(); i++){
-        spending_weight_by_sector.push_back(pConsumer_Firm_Sector_vector->at(i)->consumption_weighing);
+        float temp = pConsumer_Firm_Sector_vector->at(i)->consumption_weighing;
+        temp = std::round(temp * 1000) / 1000.0; // round to the nearest three decimals
+        spending_weight_by_sector.push_back(temp);
+        if (temp < 0){
+            cout << "Error Sector weight is negative" << endl;
+        }
     }
 }
 
@@ -289,7 +294,7 @@ void Household_Agent::Determine_Consumption_Budget()
         expenditure_consumption = max(expenditure_consumption, 0); 
     }
 
-
+    // Let the public board know how much the household has set aside to consume
     pPublic_Info_Board->Update_Consumption_Budgets(expenditure_consumption);
 }
 
@@ -322,10 +327,15 @@ void Household_Agent::Buy_Consumer_Goods(){
 void Household_Agent::Buy_Consumer_Goods_By_Sector(){
 
     // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
-    std::vector<int> planned_expenditure_by_sector(spending_weight_by_sector.size());
+    vector<int> planned_expenditure_by_sector;
 
+    // Fill this with the planned spending numbers
     for (int i = 0; i < spending_weight_by_sector.size(); ++i) {
-        planned_expenditure_by_sector[i] = floor(spending_weight_by_sector[i] * expenditure_consumption);
+        if (spending_weight_by_sector[i] < 0){
+            cout << "Error: Spending weight by sector is negative" << endl;
+            spending_weight_by_sector[i] = max(spending_weight_by_sector[i], 0.0f);
+        }
+        planned_expenditure_by_sector.push_back(spending_weight_by_sector[i] * expenditure_consumption);
     }
 
     // Buy consumer goods and receive leftover budget and quantity bought for each sector

@@ -24,7 +24,7 @@ class Consumer_Goods_Market{
 
     // Market operations
     void Add_Consumer_Good_To_Market(Consumer_Good * cons_good);
-    void Divide_Goods_Into_Sectors(int* sector_id_list, int n_sectors);
+    void Divide_Goods_Into_Sectors(int n_sectors);
     void Sort_Consumer_Goods_By_Price();
     void Sort_Cons_Goods_By_Sector_By_Price();
     pair<int, int>  Buy_Consumer_Goods(int budget);

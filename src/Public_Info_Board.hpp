@@ -166,7 +166,6 @@ class Public_Info_Board{
     void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
     void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
 
-
     // Inflation and Interest Rate
     void Update_Inflation();
     void Update_Manufacturer_Inflation();

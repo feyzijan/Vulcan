@@ -93,7 +93,7 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     sector_id = pSector_Struct->sector_id;
 
     // Update the sector of the consumer goods the firm is producing
-    goods_on_market->Set_Sector_ID(pSector_Struct->sector_id);
+    cons_goods_on_market->Set_Sector_ID(pSector_Struct->sector_id);
 
     // Update any other necessary variables
 

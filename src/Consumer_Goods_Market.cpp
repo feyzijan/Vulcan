@@ -23,16 +23,15 @@ void Consumer_Goods_Market::Add_Consumer_Good_To_Market(Consumer_Good * cons_goo
     The pair contains the sector_id and a vector of consumer goods
     The vector of consumer goods can be initially empty
 */
-void Consumer_Goods_Market::Divide_Goods_Into_Sectors(int* sector_id_list, int n_sectors){
-
+void Consumer_Goods_Market::Divide_Goods_Into_Sectors(int n_sectors){
     
     // Create each pair
-    for (int i = 0; i < n_sectors; i++){
-        cons_good_list_by_sector.push_back(std::make_pair(sector_id_list[i], std::vector<Consumer_Good*>()));
+    for (int i = 1; i < n_sectors+1; i++){
+        cons_good_list_by_sector.push_back(std::make_pair(i, vector<Consumer_Good*>()));
     }
 
     // Loop through the cons_goods_list and add each good to the correct sector
-    // May be slow but only done once
+    // May be slow but this is only done once at t = 0
     for (auto i = cons_goods_list.begin(); i != cons_goods_list.end(); i++){
         int sector_id = (*i)->Get_Sector_ID();
         for (auto j = cons_good_list_by_sector.begin(); j != cons_good_list_by_sector.end(); j++){
@@ -119,7 +118,7 @@ std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
         3. The remaining budget after buying from all sectors
         4. The total quantity bought from all sectors
 */
-    pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& spending_array ){
+pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& spending_array ){
     
     
     vector<float> remaining_budget_by_sector; // initialize remaining budget vector
@@ -188,19 +187,23 @@ void Consumer_Goods_Market::Update_Price_Level_by_Sector(){
     // Loop through the cons_good_list_by_sector vector of pairs, calculating the weighted price for each sector
     // store these in order in the price_level_by_sector vector
 
+    price_level_by_sector.clear();
+    n_goods_by_sector.clear();
+
+
     for (int i = 0; i < cons_good_list_by_sector.size(); ++i) { // Loop through the sectors
         int n_total_goods = 0;
         int total_weighed_price = 0;
-        std::vector<Consumer_Good*>& goods_for_sector = cons_good_list_by_sector[i].second; // Get the goods for this sector
+        vector<Consumer_Good*>* pgoods_for_sector = &(cons_good_list_by_sector[i].second); // Get the goods for this sector
 
-        for(Consumer_Good* pgood : goods_for_sector){ // Loop through the goods list, from cheapest to most expensive
+        for(Consumer_Good* pgood : *pgoods_for_sector){ // Loop through the goods list, from cheapest to most expensive
             int q = pgood->Get_Quantity();
             float p = pgood->Get_Price();
             n_total_goods += q;
             total_weighed_price += float(p*q);
         }
-        price_level_by_sector[i] = (float)total_weighed_price/(float)n_total_goods;
-        n_goods_by_sector[i] = n_total_goods;
+        price_level_by_sector.push_back((float)total_weighed_price/(float)n_total_goods);
+        n_goods_by_sector.push_back(n_total_goods);
     }
 }
 

@@ -52,11 +52,9 @@ int main()
     Bank_Agent* pBank_1 = new Bank_Agent(pPublic_Board_1);
     Consumer_Goods_Market* pConsumer_Goods_Market_1 = new Consumer_Goods_Market();
     Capital_Goods_Market* pCapital_Goods_Market_1 = new Capital_Goods_Market();
-
     vector<Household_Agent*> *pHousehold_vector = new vector<Household_Agent*>();
     vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector = new vector<Consumer_Firm_Agent*>();
     vector<Capital_Firm_Agent*> *pCapital_Firm_vector = new vector<Capital_Firm_Agent*>();
-    // Consumer Firm Sectors
     vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector = new vector<Consumer_Firm_Sector*>();
     std::vector<std::pair<int, float>>* pFirm_Weighing_vector = new vector<std::pair<int, float>>();
 
@@ -65,42 +63,22 @@ int main()
     pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
     
 
-    // ------ Consumer Firm Sectors ----------------
+   
     // Create vector housing all firms 
     vector<Firm_Agent*> *pAll_Firms_vector = new vector<Firm_Agent*>();
     std::copy(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
     std::copy(pCapital_Firm_vector->begin(), pCapital_Firm_vector->end(), std::back_inserter(*pAll_Firms_vector));
 
- 
-    int num_sectors = Create_Sectors(pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
-    //Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
-    Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
-    
+    // ------ Consumer Firm Sectors ----------------
+    int num_sectors = Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, 
+    pFirm_Weighing_vector, pPublic_Board_1, pConsumer_Goods_Market_1, pHousehold_vector);
+
     cout << "There are " << num_sectors << " sectors" << endl;
-    // Let the public board know of the sectors
-    pPublic_Board_1->Set_Consumer_Sectors(pConsumer_Firm_Sector_vector, num_sectors);
-
-    // Let households know of the sectors
-    for (Household_Agent* pHousehold : *pHousehold_vector){
-        pHousehold->Initialize_Sector_Weights(pConsumer_Firm_Sector_vector);
-    }
-
-    // Firms have already been notified in the Allocate_Firms_to_Sectors function
-    // Consumer goods market have been notified when firms posted their goods - now just let them sor
-    pConsumer_Goods_Market_1->Sort_Cons_Goods_By_Sector_By_Price();
-
-
-
-
-
+    
     // Wait for user input before continuing
     //cout << "Press any key to continue" << endl;
     //cin.get();
     
-
-
-    
-
     // STEP 0.15: Save all Household and Firm properties to a csv file to check success of initialization
     cout << "Step 0.15: Log initial Household and Firm data" << endl;
     //Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1);

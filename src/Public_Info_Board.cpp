@@ -248,6 +248,9 @@ float Public_Info_Board::Calculate_Manufacturer_Inflation(){
 void Public_Info_Board::Initialize_Price_Level(){
     cons_price_level_current = pConsumer_Goods_Market->Get_Price_Level();
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
+    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Level_array_by_Sector();
+    
+
 }
 
 void Public_Info_Board::Update_Inflation() { 
