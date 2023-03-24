@@ -167,20 +167,6 @@ pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Se
 
 
 
-/* Update the price level of the market
-*/
-void Consumer_Goods_Market::Update_Price_Level(){
-    n_total_goods = 0;
-    total_weighed_price = 0;
-    for(auto i=cons_goods_list.begin(); i!=cons_goods_list.end();i++){
-        int q = (*i)->Get_Quantity();
-        float p = (*i)->Get_Price();
-        n_total_goods += q;
-        total_weighed_price += float(p*q);
-    }
-    price_level = (float)total_weighed_price/(float)n_total_goods;
-}
-
 /* Update the price level of the market by sector
 */
 void Consumer_Goods_Market::Update_Price_Level_by_Sector(){

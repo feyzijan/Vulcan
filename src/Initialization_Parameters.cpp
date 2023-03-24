@@ -11,10 +11,10 @@ const int time_period = 12; // i.e. 12 timesteps make a year - Unused
 
 // Size of simulation - Set properly!
 const int n_loops = 60;
-const int n_households = 2000;
-const int n_consumer_firms = 80;
-const int n_capital_firms = 20;
-const int n_firms = 100; 
+const int n_households = 1000;
+const int n_consumer_firms = 45;
+const int n_capital_firms = 5;
+const int n_firms = 50; 
 
 
 
@@ -109,7 +109,7 @@ const float init_wage_offer_std = 300;
 const float init_wage_offer_min = 100;
 const float init_wage_offer_max = 999999;
 
-const float init_employee_count_desired_mean = 25;
+const float init_employee_count_desired_mean = 20;
 const float init_employee_count_desired_std = 5;
 const float init_employee_count_desired_min = 1;
 const float init_employee_count_desired_max = 100;
@@ -167,7 +167,7 @@ const int forced_machine_purchases_max = 5;
 
 // Exogenous parameters for Consumer Firms
 const float cons_good_inv_depr_rate = 0.01;
-const float cons_productivity = 100; // # units produced per worker machine pairing
+const float cons_productivity = 1000; // # units produced per worker machine pairing
 const int cons_workers_per_machine = 1;
 const float cons_good_unit_cost = 1.0;
 const float max_cons_production_climbdown = 0.25;

@@ -434,6 +434,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     }
     
     
+    
     os << "consumer_goods_production " << obj.consumer_goods_production << std::endl;
     os << "capital_goods_production " << obj.capital_goods_production << std::endl;
     os << "consumer_goods_production_planned " << obj.consumer_goods_production_planned << std::endl;

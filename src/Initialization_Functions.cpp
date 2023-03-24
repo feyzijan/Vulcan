@@ -3,7 +3,8 @@
 // General Initialization Function
 void Initialize_Households_Firms_Jobs( vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
  vector<Capital_Firm_Agent*> *pCapital_Firm_vector,  Public_Info_Board* pPublic_Board, Job_Market* pJob_Market,
-Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank ){
+Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank,
+vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, vector<pair<int, float>>* pFirm_Weighing_vector){
         
     // STEP 0.10: Initalize Public Board, Job Market, Bank, Markets
     cout << " Step 0.10: Initalize Public Board, Job Market, Bank, Markets" << endl;
@@ -30,13 +31,15 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pJob_Market->Print_Size();
     pPublic_Board->Print_Labor_Market();
 
-
+    //----------- STEP 0.14: Initialize consumer firm sectors
+    int n_sectors =  Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector,
+    pFirm_Weighing_vector,  pPublic_Board, pConsumer_Goods_Market, pHousehold_vector);
 
     //----------- STEP 0.16: Send initial goods to markets and initialize price level
     cout << "Step 0.16: Send initial goods to markets and initialize price level" << endl;
 
     Initialize_Cons_Cap_Goods_Markets(pConsumer_Firm_vector,  pCapital_Firm_vector, pConsumer_Goods_Market,
-    pCapital_Goods_Market,pPublic_Board);
+    pCapital_Goods_Market,pPublic_Board, n_sectors);
 
 
 }
@@ -302,7 +305,7 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
 // ---- Consumer and Capital goods market
 // Function to set up Consumer Goods market at t=0
 void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
-    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board){
+    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board, int n_sectors){
 
     // Order of looping does not matter here
     for(Consumer_Firm_Agent* firm_ptr : *pConsumer_Firm_vector){
@@ -314,9 +317,16 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
         firm_ptr->Update_Average_Profits_T1();
         firm_ptr->Update_Average_Sales_T1();}
 
-    pConsumer_Goods_Market->Update_Price_Level();
+
+    // Set up the consumer goods market's sector lists
+    pConsumer_Goods_Market->Divide_Goods_Into_Sectors(n_sectors);
+    // Sort each sector by price
+    pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
+    // Update the price levels in each sector
+    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
     pCapital_Goods_Market->Update_Price_Level();
 
+    // Initialize the price levels in public board with these sectors
     pPublic_Info_Board->Initialize_Price_Levels();
 
 }
@@ -332,10 +342,6 @@ vector<Household_Agent*> *pHousehold_vector){
     Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
     // Set up sectors in the public board
     pPublic_Info_Board->Set_Consumer_Sectors(pConsumer_Firm_Sector_vector, n_sectors);
-    // Set up the consumer goods market's sector lists
-    pConsumer_Goods_Market->Divide_Goods_Into_Sectors(n_sectors);
-    // Sort each sector by price
-    pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
     
     // Notify Households
     for (Household_Agent* pHousehold : *pHousehold_vector){
@@ -343,6 +349,7 @@ vector<Household_Agent*> *pHousehold_vector){
     }
  
     return n_sectors;
+
 }
 
 int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector) {

@@ -30,8 +30,7 @@ class Consumer_Goods_Market{
     pair<int, int>  Buy_Consumer_Goods(int budget);
     pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& spending_array);
     
-    
-    void Update_Price_Level();
+    // Price level operations
     void Update_Price_Level_by_Sector();
 
     void Reset_Market(); 

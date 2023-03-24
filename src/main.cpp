@@ -61,9 +61,10 @@ int main()
 
 
     Initialize_Households_Firms_Jobs(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector,
-    pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
-    int num_sectors = Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, 
-    pFirm_Weighing_vector, pPublic_Board_1, pConsumer_Goods_Market_1, pHousehold_vector);
+    pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1, pConsumer_Firm_Sector_vector,
+    pFirm_Weighing_vector);
+    
+    int num_sectors = pConsumer_Firm_Sector_vector->size();
 
     cout << "There are " << num_sectors << " sectors" << endl;
    

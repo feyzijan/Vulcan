@@ -21,14 +21,13 @@ class Public_Info_Board;
 #include "Initialization_Parameters.hpp"
 
 
+using namespace std;
 class Firm_Agent{
 
     public:
     // Constructors and Destructor
     Firm_Agent() {}; 
     Firm_Agent(float float_vals[4], int int_vals[6]);
-    Firm_Agent(Firm_Agent&){}; 
-    ~Firm_Agent(){}; 
 
     // Initialization methods t = 1
     void Update_Average_Profits_T1();
@@ -36,7 +35,6 @@ class Firm_Agent{
 
     // Main Loop Methods - in order
     void Depreciate_Capital();
-    //void Depreciate_Good_Inventory();
     void Check_Employees_Quitting();
     void Cancel_Expired_Contracts();
     void Random_Experimentation();
@@ -168,13 +166,10 @@ class Firm_Agent{
     float machine_utilization;  // NEWLY ADDDED
     int desired_machines; // NEWLY ADDDED
 
-    // Sentiment
+    // Others
     bool sentiment; // pessimistic, optimistic
-    // Bankruptcy
     bool bankrupt;
-    
     bool is_cons_firm; // type identifier, may be useful
-    
     int current_date;
 
 };

@@ -1,8 +1,9 @@
 #include "Firm_Agent.hpp"
 
-using namespace std;
-// Constructors
 
+
+/* Create Firm agent with given characteristics and starting values
+*/
 Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 {
     dividend_ratio_optimist = float_vals[0];
@@ -17,7 +18,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     inventory = 0;
     wage_offer = int_vals[4];
     //production_current= int_vals[5]; // this may be useles
-    production_current= 0; // set in subclass constructor
+    production_current=  0 ; // set in subclass constructor
 
     need_worker = 1;
     sentiment = 1;
@@ -58,7 +59,6 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     layoff_wage_savings = 0;
 
     outstanding_debt_total = 0;
-
 
     // Assets and fianncials 
     leverage_ratio = 0; // correctly set
@@ -120,7 +120,6 @@ void Firm_Agent::Depreciate_Capital(){
     for (auto i = capital_goods_list.begin(); i !=  capital_goods_list.end(); ++i){
         (*i)->Depreciate();
     }
-    
 }
 
 
@@ -173,10 +172,10 @@ void Firm_Agent::Random_Experimentation(){
 void Firm_Agent::Check_Sales(){
     quantity_sold = inventory -  goods_on_market->Get_Quantity(); // determine how much has been sold
     inventory -= quantity_sold;
-    revenue_sales = quantity_sold * good_price_current; // unsure if this gives float or int
+    revenue_sales = quantity_sold * good_price_current; 
 
     if (revenue_sales < 0){
-        cout << "Error - Firm Agent: Revenue is negative with sales: " << quantity_sold << " and price:" << good_price_current << endl;
+        cout << "Error - Firm Agent.Check_Sales(): Revenue is negative with sales: " << quantity_sold << " and price:" << good_price_current << endl;
     }
 
     inventory_factor = float(inventory) / float(production_current);
@@ -232,7 +231,7 @@ void Firm_Agent::Determine_New_Production()
 {
     bool price_high;
     if (is_cons_firm){
-        price_high = good_price_current >= pPublic_Info_Board->Get_Consumer_Good_Price_Level();
+        price_high = good_price_current >= pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
     } else {
         price_high = good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
     }
@@ -259,7 +258,6 @@ void Firm_Agent::Determine_New_Production()
         good_price_current *= (1.0+p);}
 
     
-
     // set floor on prices at 0
     good_price_current = max(good_price_current, 0.0f);
 
@@ -382,12 +380,16 @@ void Firm_Agent::Layoff_Excess_Workers(){
 
     // check for errors
     if (active_job_list.size() == 0){
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() == 0" << endl;
         return;
     } else if ( active_job_list.size() != employee_count){
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() != employee_count" << endl;
         return;
     } else if ( layoff_count > active_job_list.size() ){
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - layoff_count > active_job_list.size()" << endl;
         return;
     } else if ( layoff_count < 0 ){
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - layoff_count < 0" << endl;
         return;
     }
 
@@ -415,9 +417,15 @@ void Firm_Agent::Seek_Short_Term_Loan(){
     if (new_loan != nullptr){
         // Update records if a loan has been issued
         loan_book.push_back(new_loan);
-        cash_on_hand += new_loan->Get_Principal_Amount();
-        new_loan_issuance = new_loan->Get_Principal_Amount();
-        short_term_funding_gap = max(expected_wage_bill-cash_on_hand,0);
+        int principal = new_loan->Get_Principal_Amount();
+        cash_on_hand += principal;
+        new_loan_issuance = principal;
+        short_term_funding_gap = 0;
+        if (principal <0){
+            cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0" << endl;
+        }
+    } else{
+        cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - new_loan == nullptr" << endl;
     }
 }
 
@@ -599,9 +607,14 @@ expected long term funding gap
 void Firm_Agent::Seek_Long_Term_Loan(){
     Loan* new_loan = pPublic_Info_Board->Seek_Long_Term_Loan(this);
     if (new_loan != nullptr){
+        int principal = new_loan->Get_Principal_Amount();
         loan_book.push_back(new_loan);
-        cash_on_hand += new_loan->Get_Principal_Amount();
-        new_loan_issuance = new_loan->Get_Principal_Amount();
+        cash_on_hand += principal;
+        new_loan_issuance = principal;
+        long_term_funding_gap = 0;
+        if(principal < 0){
+            cout << "Error in Firm_Agent::Seek_Long_Term_Loan(), negative principal amount" << endl;
+        }
     }
 }
 
@@ -613,13 +626,13 @@ void Firm_Agent::Seek_Long_Term_Loan(){
 void Firm_Agent::Update_Leverage_Ratio(){
     outstanding_debt_total = 0;
     // Loop through the loan book and add up the principal amounts
-    for (Loan* loan_ptr : loan_book){
-        int temp = loan_ptr->Get_Principal_Amount();
+    for (int i = 0; i < loan_book.size(); i++){
+        int temp = loan_book[i]->Get_Principal_Amount();
         
         if (temp < 0){
-            //cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative loan principal amount";
+            cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative loan principal amount";
             temp = 0;
-            }
+        }
         outstanding_debt_total += temp;
     }
 
@@ -627,7 +640,7 @@ void Firm_Agent::Update_Leverage_Ratio(){
     leverage_ratio = float(outstanding_debt_total)/ float(average_profit);
     if (leverage_ratio < 0)
     {
-        //cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative leverage ratio" << endl;
+        cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative leverage ratio" << endl;
         leverage_ratio = 0;
     }
         
