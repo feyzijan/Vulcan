@@ -50,8 +50,7 @@ class Public_Info_Board{
 
 
     // Capital Good Market
-    std::vector<Capital_Good*>*  Buy_Capital_Goods(int q_desired);
-    int*  Buy_Capital_Goods_Simple(int q_desired);
+    int*  Buy_Capital_Goods(int q_desired);
 
 
     void Send_Cap_Good_To_Market(Capital_Good* pGood);

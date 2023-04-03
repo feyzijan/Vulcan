@@ -1,14 +1,12 @@
 #ifndef FIRM_AGENT_HPP
 #define FIRM_AGENT_HPP
 
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <queue>
 #include <sstream>
 #include <string>
-
 
 class Public_Info_Board;
 #include "Loan.hpp"
@@ -49,17 +47,16 @@ class Firm_Agent{
     void Determine_Labor_Need();
     void Remove_Job_Postings(); 
     void Layoff_Excess_Workers();
-    void Seek_Short_Term_Loan();
     void Post_Jobs();
     void Check_For_New_Employees();
     void Make_Investment_Decision(); // Complete
     virtual void Produce_Goods() {};
     virtual void Send_Goods_To_Market() {};
     virtual void Update_Goods_On_Market() {};
+    void Seek_Short_Term_Loan();
     void Seek_Long_Term_Loan();
     void Update_Supplier_Network() {}; // To Implement in subclasses
-    void Buy_Capital_Goods(); 
-    void Buy_Capital_Goods_Simple();
+    void Buy_Capital_Goods();
     void Update_Leverage_Ratio();
     void Update_Loan_List(); // calledby Pay_Liabilities
     void Pay_Liabilities();

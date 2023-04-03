@@ -97,9 +97,11 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 void Firm_Agent::Update_Average_Profits_T1(){
     for(int i=1; i<=12; i++){
         past_profits.push(revenue_sales);
-    }
-    average_profit = revenue_sales;
 }
+    average_profit = revenue_sales;
+    cash_on_hand += revenue_sales;
+}
+
 /* Function to fill past average sale quantity queue with initial profits
 */
 void Firm_Agent::Update_Average_Sales_T1(){
@@ -109,16 +111,23 @@ void Firm_Agent::Update_Average_Sales_T1(){
     average_sale_quantity = quantity_sold;
 }
 
-
 //--------------------------------------------------------------
+
 
 // ------- Main Loop Methods in order --
 
 /* Function to depreciate the value of each capital in the inventory
+if the value of the capital falls below the minimum value, remove it from the list
+TODO: Check below loop works properly once I update i
 */
 void Firm_Agent::Depreciate_Capital(){
-    for (auto i = capital_goods_list.begin(); i !=  capital_goods_list.end(); ++i){
-        (*i)->Depreciate();
+    auto it = capital_goods_list.begin();
+    while(it !=  capital_goods_list.end()) {
+        (*it)->Depreciate(); 
+        if((*it)->Check_Depreciation() == true) {
+            working_capital_inventory -= (*it)->Get_Quantity();
+            it = capital_goods_list.erase(it);
+        } else {it++;}
     }
 }
 
@@ -136,20 +145,21 @@ void Firm_Agent::Check_Employees_Quitting(){
             employee_count -=1;
         } else {it++;}
     }
-
-    //Add public board tracker for this
-    //pPublic_Info_Board->Update_Employee_Quits(temp);
+    // Public Board is already updated by households when they quit
 }
 
 
 /* Function to lay off active employees with expired contracts
+Loop through the list of active jobs, remove ones that have expired
+The households are notified by
 */
 void Firm_Agent::Cancel_Expired_Contracts(){
-    int temp = 0;
+    int temp = 0; // keep track of # expired contracts
     auto it = active_job_list.begin();
     while(it !=  active_job_list.end()) {
         if((*it)->Get_Expiry_Status() == 1) { 
             temp ++;
+            (*it)->Update_Status(-1); // Let household know it has been laid off
             it = active_job_list.erase(it);
             employee_count -=1;
         } else {it++;}
@@ -157,8 +167,10 @@ void Firm_Agent::Cancel_Expired_Contracts(){
     pPublic_Info_Board->Update_Contract_Expiries(temp);
 }
 
+
 /*  Function to randomly alter some firm parameters, such as targeted leverage, markup
-    TODO: Read from Global Params */
+    TODO: Read randomness parameters from Global Params
+    Add more characteristics to change */
 void Firm_Agent::Random_Experimentation(){
     desired_inventory_factor *= Uniform_Dist_Float(0.8,1.2);
     dividend_ratio_optimist *= Uniform_Dist_Float(0.8,1.2);
@@ -170,43 +182,40 @@ void Firm_Agent::Random_Experimentation(){
     TODO: Check if this is correct, not sure what the inventory value is at this point
     it should be the inventory at the end of the last period*/
 void Firm_Agent::Check_Sales(){
-    quantity_sold = inventory -  goods_on_market->Get_Quantity(); // determine how much has been sold
+    quantity_sold = inventory -  goods_on_market->Get_Quantity(); // Originally the amount on market was equal to the inventory
     inventory -= quantity_sold;
     revenue_sales = quantity_sold * good_price_current; 
 
-    if (revenue_sales < 0){
-        cout << "Error - Firm Agent.Check_Sales(): Revenue is negative with sales: " << quantity_sold << " and price:" << good_price_current << endl;
+    if (revenue_sales < 0 || revenue_sales <0){ // DEBUG Lines
+        cout << "Error - Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << endl;
     }
 
     inventory_factor = float(inventory) / float(production_current);
     desired_inventory = desired_inventory_factor * production_current;
-
-    if (inventory != goods_on_market->Get_Quantity()){
-        cout << "Error - Firm Agent: Inventory and goods on market do not match" << endl;
-    }
 }
 
 
 /* Function to update sentiment based on past sales
-Will be overridden by base classes
+Will be overridden by base classes, which will update the public board 
 */
 void Firm_Agent::Update_Sentiment(){
     if (quantity_sold >= average_sale_quantity){
         sentiment = 1;
-    } else if (quantity_sold < average_sale_quantity){
-        sentiment = 0;
-    }
+    } else { sentiment = 0; }
 }
 
 
-/* Function to update the firm's average profit*/
+/* Function to update the firm's average profit
+Remove the element from 12m ago and add the most recent data*/
 void Firm_Agent::Update_Average_Profit(){
     average_profit += (revenue_sales - past_profits.front())/12;
     past_profits.pop();
     past_profits.push(revenue_sales);
+    cash_on_hand += revenue_sales;
 }
 
-/* Function to update the firm's average quantity sold*/
+/* Function to update the firm's average quantity sold
+Remove the element from 12m ago and add the most recent data*/
 void Firm_Agent::Update_Average_Sales(){
     average_sale_quantity += (quantity_sold - past_sale_quantities.front())/12;
     past_sale_quantities.pop();
@@ -222,10 +231,10 @@ int Firm_Agent::Pay_Dividend(){
 
 /* Function to update new price and quantity based on past sales and price level
 Updates good_price_current and production_planned variables
-Follows EQ 38 from the general paper for pricing and Jamel for quantity setting
-Note: I have not implemented the quantity adjustment in eq 38, but may do so 
-TODO: Update random variation in price and quantity
- - Make random adjustments take global parameters as limits
+There are many different ways to do this
+I follow EQ 38 from the general paper for pricing and Jamel for quantity setting 
+with some variation
+TODO: Update random variation in price and quantity (p,q) to use global params
 */
 void Firm_Agent::Determine_New_Production()
 {
@@ -249,7 +258,7 @@ void Firm_Agent::Determine_New_Production()
     } // Case b: Inventory low, Price low - > Increase Price and production
     else if( !inventory_high && !price_high){
         good_price_current *= (1.0+p);
-        //production_planned*= (1.0+q);
+        production_planned*= (1.0+q);
     } // Case c: Inventory high, Price high - > Reduce price, maintain prod
     else if (inventory_high && price_high){
         good_price_current *= (1.0-p);
@@ -297,7 +306,6 @@ void Firm_Agent::Adjust_Wage_Offers()
     for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
         (*it)->Update_Wage(wage_offer);
     }
-
 }
 
 
@@ -307,13 +315,13 @@ TODO: Recheck equation
 */
 void Firm_Agent::Determine_Labor_Need(){
 
-    // EQ to determine employee targets **Revise
-
     // Determine the workforce needed to meet production targets
     int employees_to_meet_production = production_planned/ (cons_productivity*cons_workers_per_machine);
-    int employees_to_operate_current_machines = inventory/cons_workers_per_machine;
+    int employees_to_operate_current_machines = working_capital_inventory/cons_workers_per_machine;
 
-    employee_count_desired = max(0, min(employees_to_meet_production, employees_to_operate_current_machines)) ; 
+    // Determine Employee demand
+    //employee_count_desired = max(0, min(employees_to_meet_production, employees_to_operate_current_machines)) ;
+    employee_count_desired = max(0, employees_to_meet_production); 
     int employee_demand = employee_count_desired - employee_count; // let this be negative for now
     
     // Update public records    
@@ -330,8 +338,10 @@ void Firm_Agent::Determine_Labor_Need(){
     // Layoff excess employees and update expected wage bill
     if(employee_demand < 0){
         Layoff_Excess_Workers(); // this will compute expected_wage_bill
-    } else{
-        expected_wage_bill = labor_wage_bill + (employee_count_desired - employee_count) * wage_offer;
+    } else{ 
+        // Compute expected wage bill ( this is computed in Layoff_Excess_Workers() as well)
+        // This will be the wage bill if firm can hire everyone it wants to
+        expected_wage_bill = labor_wage_bill + (employee_demand) * wage_offer;
     }
 
     // Compute the short term funding gap - positive if there is a funding gap
@@ -351,6 +361,7 @@ void Firm_Agent::Determine_Labor_Need(){
 }
 
 /* Function to remove job postings from the market
+Called in Determine_Labour_Need if (n_active_job_postings >  employee_demand){
 */
 void Firm_Agent::Remove_Job_Postings(){
 
@@ -370,9 +381,9 @@ void Firm_Agent::Remove_Job_Postings(){
 
 
 /* Function to layoff excess workers based on last in first out principle
-If the function is called with no excess workers it does nothing
+Called in the Determine_Labour_Need method if(employee_demand < 0)
 Remove the last n elements from the ordered vector of employees
-Also remove active job postings from the market
+Calculate expected wage bill after the layoffs
 */
 void Firm_Agent::Layoff_Excess_Workers(){
     layoff_wage_savings = 0;
@@ -407,59 +418,28 @@ void Firm_Agent::Layoff_Excess_Workers(){
 }
 
 
-
-/* Function to seek short term unamortized loans from the bank to cover
-expected wage bill funding gap
-*/
-void Firm_Agent::Seek_Short_Term_Loan(){
-    Loan* new_loan = pPublic_Info_Board->Seek_Short_Term_Loan(this);
-
-    if (new_loan != nullptr){
-        // Update records if a loan has been issued
-        loan_book.push_back(new_loan);
-        int principal = new_loan->Get_Principal_Amount();
-        cash_on_hand += principal;
-        new_loan_issuance = principal;
-        short_term_funding_gap = 0;
-        if (principal <0){
-            cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0" << endl;
-        }
-    } else{
-        cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - new_loan == nullptr" << endl;
-    }
-}
-
-
 /* Function to post jobs to the job market and update current postings with new wage offer
- TODO: Remove job offers on the market if we don't need them anymore
+ Called in Determine_New_Labour_need method if((short_term_funding_gap <= 0) & (n_active_job_postings <  max(0, employee_demand))
 */
 void Firm_Agent::Post_Jobs(){
-    using namespace std;
+    
     int new_postings =  employee_count_desired - employee_count - n_active_job_postings ;
-    //cout << "Employee count desired " << employee_count_desired << " Current employees " << employee_count << endl;
-    //cout << "Firm " << this << " posting " << new_postings << " job offers" << endl;
+    
     for(int i=0; i< new_postings;i++){
-        //test_global_var_2 +=1;
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
-        //cout << "\n Firm Posting job with address " <<  job <<" and wage " << wage_offer <<endl;
         pPublic_Info_Board->Post_Job_To_Market(job);
         posted_job_list.push_back(job);
     }
     n_active_job_postings += new_postings;
-
-    // Loop through the posted_job_list and update wage_offer
-    for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
-        (*it)->Update_Wage(wage_offer);
-    }
 }
 
 
-/* Loop through the firm's posted_job_listings array, 
-and move the ones marked as taken to the active_job_list arrays, and update employee counts
+/* Loop through the firm's posted_job_listings array and move the ones marked 
+as taken( status =1) to the active_job_list arrays, and update employee counts
 */
 void Firm_Agent::Check_For_New_Employees(){
-    auto it = posted_job_list.begin();
     int temp = 0;
+    auto it = posted_job_list.begin();
     while(it !=  posted_job_list.end()) {
         if((*it)->Get_Status() == 1) { 
             active_job_list.push_back(*it);
@@ -475,29 +455,21 @@ void Firm_Agent::Check_For_New_Employees(){
 
 
 
-
-
 /* Buy enough machines to match full utilization with desired number of employees
 TODO: 
 - Jamel has a complicated method, for now I will use a simpler one
 */
 void Firm_Agent::Make_Investment_Decision(){
-    desired_machines = 0;
-    if(working_capital_inventory == 0) {
-        desired_machines = 1;
-    } else {
-        desired_machines = max(0,employee_count_desired/cons_workers_per_machine - working_capital_inventory);
-    }
+    desired_machines = max(0,employee_count_desired/cons_workers_per_machine - working_capital_inventory);
 
-    if (desired_machines >0){
-        // Check if there is enough money to buy the goods, and if not take a loan
+    // Check if there is enough money to buy the goods, and if not take a loan
+    if (desired_machines > 0){
+        // Check how much it would cost to buy that many machines in the market right now
         int estimated_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
-        long_term_funding_gap =  max(estimated_cost - cash_on_hand,0);
+        long_term_funding_gap =  max(estimated_cost - cash_on_hand,0); // Funding gap must be positive
         if (long_term_funding_gap> 0){
             Seek_Long_Term_Loan();
         }
-        // Update the funding gap here 
-        long_term_funding_gap =  max(estimated_cost - cash_on_hand,0);
     }
 
     // temporary override
@@ -506,96 +478,73 @@ void Firm_Agent::Make_Investment_Decision(){
     pPublic_Info_Board->Update_Machine_orders_planned(desired_machines);
 }
 
+
+/* Function to buy capital goods
+*/
 void Firm_Agent::Buy_Capital_Goods(){
 
-
-    int new_machines_bought = 0;
-    float total_price_paid = 0;
-    capital_costs = 0;
-
-    if (desired_machines > 0){
-        // Buy machines from the market
-        vector<Capital_Good*>* new_capital_goods = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
-
-        // Calculate the number of machines bought by looping through new_capital_goods and incrementing quantity
-        if (new_capital_goods != nullptr) {
-            if (new_capital_goods->empty() == false){
-                for (std::vector<Capital_Good*>::iterator it = new_capital_goods->begin(); it != new_capital_goods->end(); ++it) {
-                    Capital_Good* cap_good = *it;
-                    if (cap_good == nullptr) {
-                        // Error
-                    } else {
-                        new_machines_bought += cap_good->Get_Quantity();
-                        total_price_paid += cap_good->Get_Quantity() * cap_good->Get_Price();
-                    }
-                }
-                /* for (auto cap_good : *new_capital_goods){
-                    new_machines_bought += cap_good->Get_Quantity();
-                    total_price_paid += cap_good->Get_Quantity() * cap_good->Get_Price();
-                    }
-                } */
-            }
-        }
-        
-
-        // Copy all the objects in the new_capital_goods vector to the capital_goods vector
-        capital_goods_list.insert(capital_goods_list.end(), new_capital_goods->begin(), new_capital_goods->end());
-        delete new_capital_goods;
-
-        // Update the working capital inventory
-        working_capital_inventory += new_machines_bought;
-        capital_costs = int(total_price_paid);
-
-        if (new_machines_bought < desired_machines) {
-            cout << "Capital good demand not satisfied" << this << " only bought " << new_machines_bought << " out of " << desired_machines << endl;
-        }
-    }
-
-    pPublic_Info_Board->Update_Machine_spending(int(total_price_paid));
-    pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
-}
-
-
-/* Alternative functoin to buy capital goods
-*/
-
-void Firm_Agent::Buy_Capital_Goods_Simple(){
-
-    int new_machines_bought = 0;
+    int n_new_machines_bought = 0;
     int total_price_paid = 0;
+    int average_price = 0;
     capital_costs = 0;
 
     if (desired_machines > 0){
-        // Buy machines from the market
-        int* arr = pPublic_Info_Board->Buy_Capital_Goods_Simple(desired_machines);
-        new_machines_bought = arr[0];
+        // Buy machines from the market - returns array: [quantity, total_price]
+        int* arr = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
+        n_new_machines_bought = arr[0];
         total_price_paid = arr[1];
+        average_price = total_price_paid/n_new_machines_bought;
         // delete arr
         delete [] arr;
 
         // Create new capital good with given quantitty and average price
-        if (new_machines_bought > 0) {
-            Capital_Good* new_capital_good = new Capital_Good(nullptr,new_machines_bought, total_price_paid/new_machines_bought, machine_lifespan);
+        if (n_new_machines_bought > 0) {
+            Capital_Good* new_capital_good = new Capital_Good(nullptr,average_price, n_new_machines_bought, machine_lifespan);
             capital_goods_list.push_back(new_capital_good);
-        } else if (new_machines_bought < 0) {
-            cout << "Error: negative number of machines bought n = " << new_machines_bought <<  endl;
-            new_machines_bought = 0;
+        } else if (n_new_machines_bought < 0) {
+            cout << "Error: negative number of machines bought n = " << n_new_machines_bought <<  endl;
+            n_new_machines_bought = 0;
         }
         if (total_price_paid <0){
             cout << "Error negative price paid =  " << total_price_paid << endl;
             total_price_paid = 0;
         }
-        working_capital_inventory += new_machines_bought;
+        working_capital_inventory += n_new_machines_bought;
         capital_costs = total_price_paid;
     }
 
-    
-    if (new_machines_bought < desired_machines) {
-        std::cout << "Capital good demand not satisfied" << this << " only bought " << new_machines_bought << " out of " << desired_machines << endl;
+    // Check if demand was not satisfied
+    if (n_new_machines_bought < desired_machines) {
+        cout << "Firm_Agent::Buy_Capital_Goods() - Capital good demand not satisfied" << this << " only bought " << n_new_machines_bought << " out of " << desired_machines << endl;
     }
 
+    // Update public records
     pPublic_Info_Board->Update_Machine_spending(total_price_paid);
-    pPublic_Info_Board->Update_Machine_orders(new_machines_bought);
+    pPublic_Info_Board->Update_Machine_orders(n_new_machines_bought);
+}
+
+
+
+/* Function to seek short term unamortized loans from the bank to cover
+expected wage bill funding gap
+*/
+void Firm_Agent::Seek_Short_Term_Loan(){
+    Loan* new_loan = pPublic_Info_Board->Seek_Short_Term_Loan(this);
+
+    if (new_loan != nullptr){
+        // Update records if a loan has been issued
+        loan_book.push_back(new_loan);
+        int principal = new_loan->Get_Principal_Amount();
+        cash_on_hand += principal;
+        new_loan_issuance += principal;
+        short_term_funding_gap = 0;
+        if (principal <0){
+            cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0" << endl;
+        }
+    } else{
+        // This is an error becuase firms should always get a short term loan ( for now)
+        cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - new_loan == nullptr" << endl;
+    }
 }
 
 
@@ -605,19 +554,22 @@ void Firm_Agent::Buy_Capital_Goods_Simple(){
 expected long term funding gap
 */
 void Firm_Agent::Seek_Long_Term_Loan(){
+    Update_Leverage_Ratio();
+
     Loan* new_loan = pPublic_Info_Board->Seek_Long_Term_Loan(this);
     if (new_loan != nullptr){
         int principal = new_loan->Get_Principal_Amount();
         loan_book.push_back(new_loan);
         cash_on_hand += principal;
-        new_loan_issuance = principal;
+        new_loan_issuance += principal;
         long_term_funding_gap = 0;
         if(principal < 0){
             cout << "Error in Firm_Agent::Seek_Long_Term_Loan(), negative principal amount" << endl;
         }
+    } else{
+        cout << " Firm_Agent::Seek_Long_Term_Loan() - Loan rejected" << endl;
     }
 }
-
 
 
 
@@ -628,16 +580,15 @@ void Firm_Agent::Update_Leverage_Ratio(){
     // Loop through the loan book and add up the principal amounts
     for (int i = 0; i < loan_book.size(); i++){
         int temp = loan_book[i]->Get_Principal_Amount();
-        
         if (temp < 0){
-            cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative loan principal amount";
+            cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative loan principal amount found";
             temp = 0;
         }
         outstanding_debt_total += temp;
     }
 
-    // Calculate leverage ratio
-    leverage_ratio = float(outstanding_debt_total)/ float(average_profit);
+    // Calculate leverage ratio : how many years of profits it would take to pay off all debt
+    leverage_ratio = float(outstanding_debt_total)/ float(average_profit*12);
     if (leverage_ratio < 0)
     {
         cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative leverage ratio" << endl;
@@ -662,34 +613,38 @@ void Firm_Agent::Update_Loan_List(){
 
 
 /* Function to pay liabilities and seek loans or go bankrupt if necessary
-
+TODO: *** CHECK if any of the below bills has already been deducted from cash on hand
 */
 void Firm_Agent::Pay_Liabilities(){
 
-    // Set everything to zero
     total_liabilities = 0;
 
-    // Calculate debt bill
+    // ----Loans -----
+    // Make loan repayments and tally up payments
     debt_principal_payments = 0;
     debt_interest_payments = 0;
-
-    void Update_Loan_List();
-
     for (Loan* loan_ptr : loan_book){
         int current_principal_payment = loan_ptr->Calculate_Principal_Repayment();
-        debt_principal_payments += current_principal_payment;
         loan_ptr->Deduct_Principal_Repayment(current_principal_payment);
+        debt_principal_payments += current_principal_payment;
         debt_interest_payments += loan_ptr->Calculate_Interest_Repayment();
     }
+    Update_Loan_List(); // Delete loans that have been paid off
+    Update_Leverage_Ratio();
+    // Note that newly issued loans' principals at time t have been added to cash on hand
 
+    //-------------------
+
+    //------ Wages ------
     // Calculate wage bill 
     labor_wage_bill = 0;
     for (auto i = active_job_list.begin(); i != active_job_list.end(); ++i){ 
     labor_wage_bill += (*i)->Get_Wage();}
+    
+    // -------------------
 
-    // Other bills
+    // ------ Other bills
     // capital_costs; // calculated in Buy_Capital_Goods()
-    // dividend_payments; // calculated in Pay_Dividends()
     // production_costs; // calculated in Produce_Goods() in subclass
 
     // Tally up liabilities
@@ -699,16 +654,17 @@ void Firm_Agent::Pay_Liabilities(){
     total_income = revenue_sales + subsidies;
     cash_on_hand += total_income; // new_loan_issuance already added when loans were taken
 
-    // Update leverage ratio
-    Update_Leverage_Ratio();
-
-
     long_term_funding_gap = max(total_liabilities - cash_on_hand,0);
     if (long_term_funding_gap > 0){
         // Need financing to avoid bankruptcy
         Seek_Long_Term_Loan();
-        bankrupt = true;
-        // what now?
+        if (long_term_funding_gap > 0){ // If loan was taken this will be 0
+            bankrupt = true;
+            // Avoid_Bankruptcy()
+            // Initiate_Bankruptcy()
+        } else{
+            bankrupt = false;
+        }
 
     } else {
         // Pay bills
@@ -722,6 +678,10 @@ void Firm_Agent::Pay_Liabilities(){
         cash_on_hand -= dividend_payments + tax_payments; // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
     }
 
+
+    // Reset parameters before next time step
+    new_loan_issuance = 0;
+    total_liabilities = 0;
 
 }
 

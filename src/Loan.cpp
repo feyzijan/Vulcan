@@ -20,11 +20,6 @@ Loan::Loan(Loan&){}
 // --- Calculating Payments
 
 
-/* Function called by firms that calculates interest to be paid on a loan
-*/
-int Loan::Calculate_Interest_Repayment() const{
-    return principal_amount * interest_rate; // Will update this
-}
 
 
 /* Function called by firmsto calculate principal to be paid on a loan
@@ -35,17 +30,12 @@ int Loan::Calculate_Principal_Repayment() const
     {
         return principal_amount;
     } else if (loan_type==0){
-        return int(principal_amount * (end_date - start_date)) * 1.01; // round up by 1% to counteract int rounding 
+        return int(principal_amount * (end_date - start_date)) * 1.001; // round up by .1% to counteract int rounding 
     } else {
     return 0;} 
 }
 
-/* Dedduct Principal Payments from a loan
-*/
-void Loan::Deduct_Principal_Repayment(int principal_repayment)
-{
-    principal_amount -= principal_repayment;
-}
+
 
 //--- Printing and debugging
 

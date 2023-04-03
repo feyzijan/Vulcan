@@ -1,16 +1,15 @@
 #ifndef CAPITAL_GOOD_HPP
 #define CAPITAL_GOOD_HPP
 
-
-
 #include <iostream>
-using namespace std;
 
 #include "General_Good.hpp"
 #include "Initialization_Parameters.hpp"
+
 class Capital_Firm_Agent; // Forward Declaration of Capital Firm Agent
 
 
+using namespace std;
 class Capital_Good: public General_Good{
 
     public:
@@ -27,6 +26,7 @@ class Capital_Good: public General_Good{
     Capital_Firm_Agent * GetSeller() {return pSeller;}
     float Get_Value() const {return value;}
     int Get_Depreciation_Period() const {return depreciation_period;}
+    bool Check_Depreciation() const {return depreciated;}
 
     // Setters
     void Update_Value(float new_value) {value = new_value;}
@@ -37,5 +37,6 @@ class Capital_Good: public General_Good{
     int sold_date;
     int depreciation_period;
     int expiry_date;
+    bool depreciated;
 };
 #endif

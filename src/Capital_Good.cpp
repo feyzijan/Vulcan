@@ -37,9 +37,11 @@ void Capital_Good::Print() const{
 }
 
 /* Depreciate by selling_price/depreciation_period * quantity
+NOTE: Depreciation may be off by 1 timestep because the division may not be exact, but this is not a big deal
 */
 void Capital_Good::Depreciate(){
-    value -= price/depreciation_period*quantity;
+    value -= price/(depreciation_period*quantity);
+    if (value <= 0){ depreciated = true;}
 }
 
 

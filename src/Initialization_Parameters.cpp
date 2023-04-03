@@ -177,7 +177,7 @@ const float cap_good_inv_depr_rate = 0.01;
 const float cap_productivity = 10; // # units produced per worker machine pairing
 const int cap_workers_per_machine = 1;
 const int machine_lifespan = 100;
-const float cap_good_unit_cost = 2.0;
+const float cap_good_unit_cost = 20.0;
 
 // Constants to initialize all firms with
 const float init_production_current_ratio = 0.4;
