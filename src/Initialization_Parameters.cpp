@@ -10,7 +10,7 @@ int test_global_var_2 = 0; // for testing
 const int time_period = 12; // i.e. 12 timesteps make a year - Unused
 
 // Size of simulation - Set properly!
-const int n_loops = 60;
+const int n_loops = 36;
 const int n_households = 1000;
 const int n_consumer_firms = 45;
 const int n_capital_firms = 5;

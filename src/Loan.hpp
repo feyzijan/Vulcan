@@ -19,8 +19,8 @@ class Loan {
 
 
     // Calculating Payments 
-    int Calculate_Interest_Repayment() const;
-    int Calculate_Principal_Repayment() const { return principal_amount * interest_rate/12;}
+    int Calculate_Interest_Repayment() const {return principal_amount * interest_rate/12;}
+    int Calculate_Principal_Repayment() const;
     
     // Deducting Payments
     void Deduct_Principal_Repayment(int principal_repayment) {principal_amount -= principal_repayment;}

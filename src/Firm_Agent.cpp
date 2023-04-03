@@ -475,8 +475,43 @@ void Firm_Agent::Make_Investment_Decision(){
     // temporary override
     //desired_machines = Uniform_Dist_Int(forced_machine_purchases_min,forced_machine_purchases_max);
     
-    pPublic_Info_Board->Update_Machine_orders_planned(desired_machines);
+    pPublic_Info_Board->Update_Machine_Orders_Planned(desired_machines);
 }
+
+
+/* Function to produce goods based on plans and capacity
+*/
+void Firm_Agent::Produce_Goods(){
+    
+    labor_utilization = min(float(working_capital_inventory*workers_per_machine) / (float)employee_count , float(1.0));
+    machine_utilization = min( float(employee_count/workers_per_machine)/ (float)working_capital_inventory , float(1.0));
+
+    // Check for erroneous values - debugging
+    if ( labor_utilization < 0 || labor_utilization > 1){
+        cout << "Error at Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
+        labor_utilization = 0;
+    } else if ( machine_utilization < 0 || machine_utilization > 1){
+        cout << "Error at Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
+        machine_utilization = 0;
+    }
+
+    // Calculate the production
+
+    int production_max = working_capital_inventory * output_per_machine;
+    
+    production_current = min(int(production_max*labor_utilization), production_planned);
+
+    if ( production_current < 0 || production_max < 0){
+        cout << "Error: Production current or max is negative" << endl;
+        production_current = 0;
+    }
+
+    // Update the inventory
+    inventory += production_current;
+    inventory_factor = float(inventory) / float(average_sale_quantity);
+    production_costs = production_current * unit_good_cost;
+}
+
 
 
 /* Function to buy capital goods
@@ -519,8 +554,8 @@ void Firm_Agent::Buy_Capital_Goods(){
     }
 
     // Update public records
-    pPublic_Info_Board->Update_Machine_spending(total_price_paid);
-    pPublic_Info_Board->Update_Machine_orders(n_new_machines_bought);
+    pPublic_Info_Board->Update_Machine_Spending(total_price_paid);
+    pPublic_Info_Board->Update_Machine_Orders(n_new_machines_bought);
 }
 
 
@@ -581,7 +616,7 @@ void Firm_Agent::Update_Leverage_Ratio(){
     for (int i = 0; i < loan_book.size(); i++){
         int temp = loan_book[i]->Get_Principal_Amount();
         if (temp < 0){
-            cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative loan principal amount found";
+            cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative loan principal amount found" << endl;
             temp = 0;
         }
         outstanding_debt_total += temp;
@@ -678,79 +713,12 @@ void Firm_Agent::Pay_Liabilities(){
         cash_on_hand -= dividend_payments + tax_payments; // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
     }
 
-
     // Reset parameters before next time step
     new_loan_issuance = 0;
     total_liabilities = 0;
 
 }
 
-
-
-
-
-
-
-/* Function to return a vector containing all class parameters
-*/
-std::vector<float>* Firm_Agent::Get_All_Params() {
-
-    std::vector<float>* vec = new std::vector<float>;
-
-    vec->push_back(production_current);
-    vec->push_back(production_planned);
-    vec->push_back(production_past);
-    vec->push_back(quantity_sold);
-    vec->push_back(total_income);
-    vec->push_back(revenue_sales);
-    vec->push_back(new_loan_issuance);
-    vec->push_back(subsidies);
-    vec->push_back(good_price_current);
-    vec->push_back(good_price_past);
-    vec->push_back(total_liabilities);
-    vec->push_back(labor_wage_bill);
-    vec->push_back(capital_costs);
-    vec->push_back(tax_payments);
-    vec->push_back(debt_principal_payments);
-    vec->push_back(debt_interest_payments);
-    vec->push_back(dividend_payments);
-    vec->push_back(total_assets);
-    vec->push_back(leverage_ratio);
-    vec->push_back(cash_on_hand);
-    vec->push_back(dividend_ratio);
-    vec->push_back(dividend_ratio_optimist);
-    vec->push_back(dividend_ratio_pessimist);
-    vec->push_back(employee_count);
-    vec->push_back(wage_offer);
-    vec->push_back(employee_count_desired);
-    vec->push_back(n_active_job_postings);
-    vec->push_back(need_worker);
-    vec->push_back(w_target);
-    vec->push_back(labor_utilization);
-    vec->push_back(inventory);
-    vec->push_back(working_capital_inventory);
-    vec->push_back(desired_inventory_factor);
-    vec->push_back(inventory_factor);
-    vec->push_back(sentiment);
-    vec->push_back(bankrupt);
-    vec->push_back(is_cons_firm);
-
-    vec->push_back(average_profit);
-    vec->push_back(average_sale_quantity);
-    vec->push_back(short_term_funding_gap);
-    vec->push_back(long_term_funding_gap);
-    vec->push_back(expected_wage_bill);
-    vec->push_back(layoff_wage_savings);
-    vec->push_back(labor_utilization);
-    vec->push_back(desired_inventory);
-    vec->push_back(inventory_reaction_factor);
-    vec->push_back(machine_utilization);
-    vec->push_back(desired_machines);
-    vec->push_back(production_costs);
-    vec->push_back(outstanding_debt_total);
-
-    return vec;
-}
 
 
 //-------------------------------------
@@ -922,7 +890,5 @@ std::vector<std::pair<std::string, float>>*  Firm_Agent::Log_Data() {
         }
         return result;
 }
-
-
 
 //--------------------------------------------------------------

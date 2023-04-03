@@ -7,6 +7,11 @@
 Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): Firm_Agent::Firm_Agent(float_vals,int_vals)
 {
     is_cons_firm = true;
+
+    workers_per_machine = cons_workers_per_machine;
+    output_per_machine = cons_productivity;
+    unit_good_cost = cons_good_unit_cost;
+
     production_current = max(working_capital_inventory * cons_workers_per_machine * cons_productivity,employee_count_desired / cons_workers_per_machine * cons_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
     quantity_sold = inventory *  init_quantity_sold_ratio; 
@@ -41,23 +46,11 @@ void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
 */
 void Consumer_Firm_Agent::Produce_Goods(){
 
-    labor_utilization = max((float)employee_count / float(working_capital_inventory*cons_workers_per_machine), float(1.0));
-    machine_utilization = max((float)working_capital_inventory / float(employee_count/cons_workers_per_machine), float(1.0));
-    
-    int production_max = working_capital_inventory * cons_productivity;
-    
-    production_current = min(int(production_max*labor_utilization), production_planned);
-    inventory += production_current;
-    inventory_factor = float(inventory) / float(average_sale_quantity);
-    production_costs = production_current * cons_good_unit_cost;
+   Firm_Agent::Produce_Goods();
+    // Update the public info board
 
-    pPublic_Info_Board->Update_Consumer_goods_production(production_current);
-    pPublic_Info_Board->Update_Consumer_goods_production_planned(production_planned);
-
-    if ( production_current > production_planned){
-        bool debug = true;
-    }
-
+    pPublic_Info_Board->Update_Consumer_Goods_Production(sector_id, production_current);
+    pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
 }
 
 

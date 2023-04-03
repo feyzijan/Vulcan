@@ -315,8 +315,8 @@ void Household_Agent::Buy_Consumer_Goods(){
     new_savings += remaining_consumption_budget;
     wealth_financial += remaining_consumption_budget;
 
-    pPublic_Info_Board->Update_Consumer_spending(expenditure_consumption);
-    pPublic_Info_Board->Update_Consumer_orders(goods_bought);
+    pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
+    pPublic_Info_Board->Update_Consumer_Orders(goods_bought);
 }
 
 
@@ -357,8 +357,8 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
         // Add up tally of goods bought
         total_goods_bought += goods_bought[i];
     }
-    pPublic_Info_Board->Update_Consumer_spending(expenditure_consumption);
-    pPublic_Info_Board->Update_Consumer_orders(total_goods_bought);
+    pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
+    pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
     pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
     

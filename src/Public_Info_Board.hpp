@@ -132,18 +132,18 @@ class Public_Info_Board{
     void Update_Household_Total_Income(int amount) { household_total_income_sum += amount; }
 
     // Capital Goods
-    void Update_Machine_orders(int amount) { machine_orders += amount; }
-    void Update_Machine_orders_planned(int amount) { machine_orders_planned += amount; }
-    void Update_Machine_spending(int amount) { machine_spending += amount; }
-    void Update_Capital_goods_production(int amount) { capital_goods_production += amount; }
-    void Update_Capital_goods_production_planned(int amount) { capital_goods_production_planned += amount; }
+    void Update_Machine_Orders(int amount) { machine_orders += amount; }
+    void Update_Machine_Orders_Planned(int amount) { machine_orders_planned += amount; }
+    void Update_Machine_Spending(int amount) { machine_spending += amount; }
+    void Update_Capital_Goods_Production(int amount) { capital_goods_production += amount; }
+    void Update_Capital_Goods_Production_Planned(int amount) { capital_goods_production_planned += amount; }
 
     // Consumer Goods and Consumption
-    void Update_Consumer_orders(int amount) { consumer_orders += amount; }
-    void Update_Consumer_spending(int amount) { consumer_spending += amount; }
+    void Update_Consumer_Orders(int amount) { consumer_orders += amount; }
+    void Update_Consumer_Spending(int amount) { consumer_spending += amount; }
     void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
-    void Update_Consumer_goods_production(int amount) { consumer_goods_production += amount; }
-    void Update_Consumer_goods_production_planned(int amount) { consumer_goods_production_planned += amount; }
+    void Update_Consumer_Goods_Production(int sector_id, int amount) { actual_production_by_sector[sector_id-1] += amount; }
+    void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { planned_production_by_sector[sector_id-1] += amount; }
 
     // To implement
     void Update_Planned_Consumer_Spending_by_Sector( const vector<int>& planned_spending);
@@ -172,13 +172,11 @@ class Public_Info_Board{
     void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
 
 
-
-
     // Printing and Debugging
     void Print() const;
     void Print_Labor_Market() const;
     friend std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj); // String stream operator
-    std::vector<std::pair<std::string, float>>*  Log_Data();     // Data Logging
+    vector<pair<string, float>>*  Log_Data();     // Data Logging
 
     protected:
     Job_Market* pJob_Market;
@@ -240,6 +238,9 @@ class Public_Info_Board{
     int capital_goods_production;
     int consumer_goods_production_planned;
     int capital_goods_production_planned;
+
+    vector<int> planned_production_by_sector;
+    vector<int> actual_production_by_sector;
 
     // Employment
     int n_employed_workers;

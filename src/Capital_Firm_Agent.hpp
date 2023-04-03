@@ -28,6 +28,8 @@ class Capital_Firm_Agent: public Firm_Agent{
     protected:
     Capital_Good* cap_goods_on_market;
 
+    
+
 };
 
 

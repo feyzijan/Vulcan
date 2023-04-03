@@ -50,7 +50,7 @@ class Firm_Agent{
     void Post_Jobs();
     void Check_For_New_Employees();
     void Make_Investment_Decision(); // Complete
-    virtual void Produce_Goods() {};
+    virtual void Produce_Goods();
     virtual void Send_Goods_To_Market() {};
     virtual void Update_Goods_On_Market() {};
     void Seek_Short_Term_Loan();
@@ -63,7 +63,6 @@ class Firm_Agent{
     
  
     // Getters
-    std::vector<float>* Get_All_Params();
     int Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
     int Get_Long_Term_Funding_Gap() {return long_term_funding_gap;}
     float Get_Leverage_Ratio() {return leverage_ratio;}
@@ -117,8 +116,8 @@ class Firm_Agent{
     int average_sale_quantity; 
     
     // Loan Parameters
-    int short_term_funding_gap; // NEWLY ADDED - 
-    int long_term_funding_gap; // NEWLY ADDED - 
+    int short_term_funding_gap; 
+    int long_term_funding_gap; 
     
     // Expenditures
     int total_liabilities; //Comprises of evt below
@@ -151,17 +150,22 @@ class Firm_Agent{
     int n_active_job_postings;
     bool need_worker;
     int w_target; //Desired labor capacity utilization
-    float labor_utilization; // NEWLY ADDDED
+    float labor_utilization; 
     
     // Inventories
     int inventory;
     int working_capital_inventory;
     float desired_inventory_factor; // a characteristic
-    int desired_inventory; // NEWLY ADDED 
+    int desired_inventory; 
     float inventory_factor; 
-    float inventory_reaction_factor;  // NEWLY ADDDED
-    float machine_utilization;  // NEWLY ADDDED
-    int desired_machines; // NEWLY ADDDED
+    float inventory_reaction_factor;  
+    float machine_utilization;  
+    int desired_machines; 
+
+    // productivities and stuff 
+    int workers_per_machine; // NEWLY ADDDED
+    int output_per_machine; // NEWLY ADDDED
+    float unit_good_cost; // NEWLY ADDDED
 
     // Others
     bool sentiment; // pessimistic, optimistic

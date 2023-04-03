@@ -20,8 +20,6 @@ Loan::Loan(Loan&){}
 // --- Calculating Payments
 
 
-
-
 /* Function called by firmsto calculate principal to be paid on a loan
 */
 int Loan::Calculate_Principal_Repayment() const

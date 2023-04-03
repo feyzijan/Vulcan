@@ -337,21 +337,22 @@ void Public_Info_Board::Reset_Global_Data(){
     planned_spending_by_sector.clear();
     actual_spending_by_sector.clear();
 
+    // Production
     consumer_goods_production = reset_value;
-    sector_count = reset_value;
-
     capital_goods_production = reset_value;
+
     consumer_goods_production_planned = reset_value;
     capital_goods_production_planned = reset_value;
 
+    planned_production_by_sector.clear();
+    actual_production_by_sector.clear();
 
-
-    // Production
+    
+    // Employment
     n_employed_workers = reset_value;
     n_unemployed_workers = reset_value;
     unemployment_rate = reset_value;
 
-    // Employment
     employee_hires = reset_value;
     new_employee_demand = reset_value;
     employee_firings = reset_value;
@@ -424,12 +425,10 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     
     for (int i = 0; i < obj.planned_spending_by_sector.size(); i++) {
         os << "planned_spending_on_sector_" << i << " " << obj.planned_spending_by_sector[i] << std::endl;
-    } 
-    for (int i = 0; i < obj.actual_spending_by_sector.size(); i++) {
         os << "actual_spending_on_sector_" << i << " " << obj.actual_spending_by_sector[i] << std::endl;
-    }
-    
-    
+        os << "planned_production_on_sector_" << i << " " << obj.planned_production_by_sector[i] << std::endl;
+        os << "actual_production_on_sector_" << i << " " << obj.actual_production_by_sector[i] << std::endl;
+    } 
     
     os << "consumer_goods_production " << obj.consumer_goods_production << std::endl;
     os << "capital_goods_production " << obj.capital_goods_production << std::endl;
@@ -454,18 +453,18 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
 
 /* Function to log all data: Create a vector of pairs where each entry has the member name and the value
 */
-std::vector<std::pair<std::string, float>>* Public_Info_Board::Log_Data() {
+vector<pair<string, float>>* Public_Info_Board::Log_Data() {
         current_date = global_date;
-        auto result = new std::vector<std::pair<std::string, float>>();
+        auto result = new vector<pair<string, float>>();
 
         // Get the names and values of all member variables
-        std::stringstream ss;
+        stringstream ss;
         ss << *this;
-        std::string line;
+        string line;
         while (std::getline(ss, line)) {
-            std::string name;
+            string name;
             float value;
-            std::stringstream(line) >> name >> value;
+            stringstream(line) >> name >> value;
             result->emplace_back(name, value);
         }
         return result;

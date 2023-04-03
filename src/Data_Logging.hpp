@@ -11,20 +11,21 @@
 #include <type_traits>
 
 
-
 #include "Household_Agent.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
 #include "Public_Info_Board.hpp"
 
+using namespace std;
+
 // Write given vector pairings to a csv file
-void write_csv(std::string filename, std::vector<std::pair<std::string, std::vector<float>>> dataset);
+void write_csv(string filename, vector<pair<string, vector<float>>> dataset);
 
 void Log_Everything(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
 vector<Capital_Firm_Agent*> *pCapital_Firm_vector,Public_Info_Board *pPublic_Info_Board,Bank_Agent *pBank);
 
-void Log_Households(std::vector<Household_Agent*>* pHousehold_vector);
+void Log_Households(vector<Household_Agent*>* pHousehold_vector);
 
 void Log_Public_Info_Board(Public_Info_Board *pPublic_Info_Board);
 
@@ -35,10 +36,10 @@ void Log_Bank(Bank_Agent *pBank);
 /* Function to log all firm data - func is either passed a consumer or capital firm vector
 */
 template <typename T>
-void Log_Firms(std::vector<T*>* pFirm_vector, bool cons_firm) {
+void Log_Firms(vector<T*>* pFirm_vector, bool cons_firm) {
     // Open file for writing in append mode
     
-    std::string file_name = cons_firm ? "../DataLogs/Consumer_Firms.csv" : "../DataLogs/Capital_Firms.csv";
+    string file_name = cons_firm ? "../DataLogs/Consumer_Firms.csv" : "../DataLogs/Capital_Firms.csv";
 
     std::ofstream log_file;
     log_file.open(file_name, std::ios_base::app);
@@ -49,8 +50,8 @@ void Log_Firms(std::vector<T*>* pFirm_vector, bool cons_firm) {
     // If file is empty, write the header row
     if (!header_written && log_file.tellp() == 0) {
         // Get the header row from the first firm
-        std::vector<std::pair<std::string, float>>* header_data = (*pFirm_vector)[0]->Log_Data();
-        std::string header;
+        vector<pair<string, float>>* header_data = (*pFirm_vector)[0]->Log_Data();
+        string header;
         for (auto it = header_data->begin(); it != header_data->end(); ++it) {
             header += it->first + ",";
         }
@@ -64,8 +65,8 @@ void Log_Firms(std::vector<T*>* pFirm_vector, bool cons_firm) {
 
     // Write data rows for all firms
     for (auto firm_ptr : *pFirm_vector) {
-        std::vector<std::pair<std::string, float>>* data = firm_ptr->Log_Data();
-        std::string row;
+        vector<pair<string, float>>* data = firm_ptr->Log_Data();
+        string row;
         for (auto it = data->begin(); it != data->end(); ++it) {
             row += std::to_string(it->second) + ",";
         }

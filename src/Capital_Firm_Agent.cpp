@@ -8,6 +8,9 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
 {
     //identifier
     is_cons_firm = false;
+    workers_per_machine = cap_workers_per_machine; // global param
+    output_per_machine = cap_productivity; // global param
+    unit_good_cost = cap_good_unit_cost; // global param
     production_current = max(working_capital_inventory * cap_workers_per_machine * cap_productivity, employee_count_desired / cap_workers_per_machine * cap_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
     quantity_sold = inventory *  init_quantity_sold_ratio; 
@@ -44,33 +47,10 @@ void Capital_Firm_Agent::Depreciate_Good_Inventory(){
 /* Increment Firm inventory by the number of machines, productivity per machine,
 */
 void Capital_Firm_Agent::Produce_Goods(){
-    
-    labor_utilization = min(float(working_capital_inventory*cons_workers_per_machine) / (float)employee_count , float(1.0));
-    machine_utilization = min( float(employee_count/cons_workers_per_machine)/ (float)working_capital_inventory , float(1.0));
-    
-    // Check for negative values - debugging
-    if (labor_utilization < 0 || machine_utilization < 0){
-        cout << "Error: Labor or machine utilization is negative" << endl;
-        labor_utilization = 0;
-        machine_utilization = 0;
-    }
-
-
-    int production_max = working_capital_inventory * cap_productivity;
-    
-    production_current = min(int(production_max*labor_utilization), production_planned);
-
-    inventory += production_current;
-    inventory_factor = float(inventory) / float(average_sale_quantity);
-    production_costs = production_current * cap_good_unit_cost;
-
-    if ( production_current < 0){
-        cout << "Error: Production current is negative" << endl;
-        production_current = 0;
-    }
-    
-    pPublic_Info_Board->Update_Capital_goods_production(production_current);
-    pPublic_Info_Board->Update_Capital_goods_production_planned(production_planned);
+    Firm_Agent::Produce_Goods();
+    // Update the public info board
+    pPublic_Info_Board->Update_Capital_Goods_Production(production_current);
+    pPublic_Info_Board->Update_Capital_Goods_Production_Planned(production_planned);
 }
 
 /* Post Produced goods to market - only do this once at the beinning
