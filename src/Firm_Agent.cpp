@@ -517,31 +517,29 @@ void Firm_Agent::Produce_Goods(){
 /* Function to buy capital goods
 */
 void Firm_Agent::Buy_Capital_Goods(){
-
     int n_new_machines_bought = 0;
     int total_price_paid = 0;
     int average_price = 0;
     capital_costs = 0;
 
-    if (desired_machines > 0){
-        // Buy machines from the market - returns array: [quantity, total_price]
+    if (desired_machines > 0){ // Buy machines from the market - returns array: [quantity, total_price]
         int* arr = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
         n_new_machines_bought = arr[0];
         total_price_paid = arr[1];
-        average_price = total_price_paid/n_new_machines_bought;
-        // delete arr
         delete [] arr;
+        
 
-        // Create new capital good with given quantitty and average price
+        // Create new capital good with given quantity and average price
         if (n_new_machines_bought > 0) {
+            average_price = total_price_paid/n_new_machines_bought;
             Capital_Good* new_capital_good = new Capital_Good(nullptr,average_price, n_new_machines_bought, machine_lifespan);
             capital_goods_list.push_back(new_capital_good);
         } else if (n_new_machines_bought < 0) {
-            cout << "Error: negative number of machines bought n = " << n_new_machines_bought <<  endl;
+            cout << "Error in Firm_Agent::Buy_Capital_Goods(): negative number of machines bought n = " << n_new_machines_bought <<  endl;
             n_new_machines_bought = 0;
         }
-        if (total_price_paid <0){
-            cout << "Error negative price paid =  " << total_price_paid << endl;
+        if (total_price_paid < 0){
+            cout << "Error in Firm_Agent::Buy_Capital_Goods(): negative price paid =  " << total_price_paid << endl;
             total_price_paid = 0;
         }
         working_capital_inventory += n_new_machines_bought;
@@ -550,7 +548,7 @@ void Firm_Agent::Buy_Capital_Goods(){
 
     // Check if demand was not satisfied
     if (n_new_machines_bought < desired_machines) {
-        cout << "Firm_Agent::Buy_Capital_Goods() - Capital good demand not satisfied" << this << " only bought " << n_new_machines_bought << " out of " << desired_machines << endl;
+        cout << "Firm_Agent::Buy_Capital_Goods() - Capital good demand not satisfied - only bought " << n_new_machines_bought << " out of " << desired_machines << endl;
     }
 
     // Update public records

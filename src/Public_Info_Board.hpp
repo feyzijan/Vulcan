@@ -44,16 +44,14 @@ class Public_Info_Board{
     void Update_Average_Wage_Job_Market() {average_wage_market = pJob_Market->Get_Average_Wage();};
 
     // Consumer Good Market
-    void Send_Cons_Good_To_Market(Consumer_Good* pGood) { pConsumer_Goods_Market->Add_Consumer_Good_To_Market(pGood);}
-    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector) {
-        return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector(budget, planned_expenditure_by_sector);}
+    void Send_Cons_Good_To_Market(Consumer_Good* pGood);
+    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector);
 
 
     // Capital Good Market
-    int*  Buy_Capital_Goods(int q_desired) {return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);}
-
-    void Send_Cap_Good_To_Market(Capital_Good* pGood) { pCapital_Goods_Market->Add_Capital_Good_To_Market(pGood);}
-    int Get_Cost_For_Desired_Cap_Goods(int q_desired){  return pCapital_Goods_Market->Get_Cost_For_Given_Quantity(q_desired);}
+    int*  Buy_Capital_Goods(int q_desired);
+    void Send_Cap_Good_To_Market(Capital_Good* pGood);
+    int Get_Cost_For_Desired_Cap_Goods(int q_desired);
     
     // Update Member Variables
 
@@ -64,11 +62,11 @@ class Public_Info_Board{
     void Update_Consumer_Price_Level();
     void Update_Capital_Price_Level();
     void Initialize_Price_Levels();
-    void Update_Interest_Rate() {r_rate = pBank->Get_Interest_Rate();} // Get latest interest rate from the bank
+    void Update_Interest_Rate();
 
     // Loan issuance
-    Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm){return pBank->Issue_Short_Term_Loan(pFirm);}
-    Loan* Seek_Long_Term_Loan(Firm_Agent* pFirm) {return pBank->Issue_Long_Term_Loan(pFirm);}
+    Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm);
+    Loan* Seek_Long_Term_Loan(Firm_Agent* pFirm); 
 
     // Global Data
     void Reset_Global_Data();

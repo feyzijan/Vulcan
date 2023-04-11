@@ -99,8 +99,8 @@ int main()
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
 
-    std::cout << "Execution time: " <<  elapsed_seconds << " s" << std::endl;
-    std::cout << "Program ran for " << n_loops << " timesteps with " << n_households << " households, " << n_consumer_firms<< " consumer firms and " << n_capital_firms << " capital firms." << std::endl;
+    cout << "Program has finished. Execution time: " <<  elapsed_seconds << " s" << endl;
+    cout << "Program ran for " << n_loops << " timesteps with " << n_households << " households, " << n_consumer_firms<< " consumer firms and " << n_capital_firms << " capital firms." << endl;
 
 
     std::cout.rdbuf(old_cout_buf);

@@ -96,6 +96,8 @@ void Public_Info_Board::Set_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pCon
 
 }
 
+// ----- Updating Member variables
+
 /* Update the planned consumer spending on each sector by adding the planned spending array figures passed by the
 Household agent that calls this method
 */
@@ -127,6 +129,45 @@ void Public_Info_Board::Calculate_Consumer_Demand_Shortfall_by_Sector() {
         demand_shortfall_by_sector[i] += planned_spending_by_sector[i] - actual_spending_by_sector[i];
         }
 };
+
+/* Get latest interest rate from the bank*/
+void Public_Info_Board::Update_Interest_Rate() {r_rate = pBank->Get_Interest_Rate();} // Get latest interest rate from the bank
+
+//------------ Interfacing with good, labor, and financial markets ----------------
+
+// Loan market
+Loan* Public_Info_Board::Seek_Short_Term_Loan(Firm_Agent* pFirm)
+    {return pBank->Issue_Short_Term_Loan(pFirm);
+}
+
+Loan* Public_Info_Board::Seek_Long_Term_Loan(Firm_Agent* pFirm) {
+    return pBank->Issue_Long_Term_Loan(pFirm);
+}
+
+// Capital goods market
+
+int*  Public_Info_Board::Buy_Capital_Goods(int q_desired) {
+    return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);
+}
+
+void Public_Info_Board::Send_Cap_Good_To_Market(Capital_Good* pGood) {
+    pCapital_Goods_Market->Add_Capital_Good_To_Market(pGood);
+}
+
+int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
+    return pCapital_Goods_Market->Get_Cost_For_Given_Quantity(q_desired);
+}
+
+// Consumer Good Market
+void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood) { 
+    pConsumer_Goods_Market->Add_Consumer_Good_To_Market(pGood);
+}
+
+pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector) {
+    return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector(budget, planned_expenditure_by_sector);
+}
+
+
 
 
 
