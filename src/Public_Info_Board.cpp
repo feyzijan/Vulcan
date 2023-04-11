@@ -48,9 +48,9 @@ Public_Info_Board::Public_Info_Board(){
     sector_count = 0;
 
     // Production
-    consumer_goods_production = 0;
+    consumer_goods_production_total = 0;
     capital_goods_production = 0;
-    consumer_goods_production_planned = 0;
+    consumer_goods_production_total_planned = 0;
     capital_goods_production_planned = 0;
     // Employment
     n_employed_workers = 0;
@@ -83,38 +83,50 @@ Public_Info_Board::Public_Info_Board(Public_Info_Board&){}
 */
 void Public_Info_Board::Set_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors){
     sector_count = num_sectors;
-    actual_spending_by_sector = vector<int>(sector_count, 0);
-    planned_spending_by_sector = vector<int>(sector_count, 0);
+    actual_spending_by_sector = vector<float>(sector_count, 0);
+    planned_spending_by_sector = vector<float>(sector_count, 0);
+    demand_shortfall_by_sector = vector<float>(sector_count, 0);
+    actual_production_by_sector = vector<int>(sector_count, 0);
+    planned_production_by_sector = vector<int>(sector_count, 0);
+
     // Loop through each sector in the consumer_firm_sector vector and add the sector weighing to the consumer_sector_weighing_vector
     for (int i = 0; i < sector_count; i++){
         consumer_sector_weights.push_back(pConsumer_Firm_Sector_vector->at(i)->consumption_weighing);
     }
+
 }
 
-/*
+/* Update the planned consumer spending on each sector by adding the planned spending array figures passed by the
+Household agent that calls this method
 */
-void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<int>& planned_spending){
+void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending){
     // loop through the planned_spending vector and add to the planned_spending_by_sector vector
-    planned_spending_by_sector.clear();
     for (int i = 0; i < sector_count; i++){
         int temp = planned_spending[i];
-        planned_spending_by_sector.push_back(temp);
+        planned_spending_by_sector[i] += temp;
     }
 }
 
 
-
-/*
+/* Update the actual consumer spending on each sector by adding the planned spending array figures passed by the
+Household agent that calls this method
 */
-void Public_Info_Board::Update_Consumer_Spending_by_Sector( const vector<int>& actual_spending ){
+void Public_Info_Board::Update_Consumer_Spending_by_Sector( const vector<float>& actual_spending ){
     // loop though the actual_spending vector and add to the actual_spending_by_sector vector
-    actual_spending_by_sector.clear();
     for (int i = 0; i < sector_count; i++){
         int temp = actual_spending[i];
-        actual_spending_by_sector.push_back(temp);
+        actual_spending_by_sector[i] += temp;
     }
-
 }
+
+/* Update the shortfall between planned and actual consumer spending on each sector by subtracting the two vectors
+This method should only be called once per time step in the main loop
+*/
+void Public_Info_Board::Calculate_Consumer_Demand_Shortfall_by_Sector() { 
+        for (int i = 0; i < sector_count; i++) {
+        demand_shortfall_by_sector[i] += planned_spending_by_sector[i] - actual_spending_by_sector[i];
+        }
+};
 
 
 
@@ -155,63 +167,11 @@ void Public_Info_Board::Sort_Job_Market(){
 }
 
 //--------------------------------------------------
-// Consumer Good Market
 
-/* Add Consumer good to the consumer goods market
-*/
-void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood){
-    pConsumer_Goods_Market->Add_Consumer_Good_To_Market(pGood);
-}
+//----------------Inflation and Price level --------------------
 
-/* Call the Consumer good Market with the budget, and return the remaining budget
-*/
-pair<int, int> Public_Info_Board::Buy_Consumer_Goods(int budget){
-    return pConsumer_Goods_Market->Buy_Consumer_Goods(budget);
-}
-
-
-/* Call the consumer good markets relevant method to buy goods by sector
-*/
-pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& planned_expenditure_by_sector){
-    return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector(budget, planned_expenditure_by_sector);
-}
-
-
-
-
-//--------------------------------------------------
-
-
-
-/* Add Capital good to the capital goods market
-*/
-void Public_Info_Board::Send_Cap_Good_To_Market(Capital_Good* pGood){
-    pCapital_Goods_Market->Add_Capital_Good_To_Market(pGood);
-}
-
-
-
-/* 
-*/
-int*  Public_Info_Board::Buy_Capital_Goods(int q_desired){
-    return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);
-}
-
-
-
-/* Return how much it would cost to buy the desired # machines
-*/
-int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
-    return pCapital_Goods_Market->Get_Cost_For_Given_Quantity(q_desired);
-}
-
-
-//--------------------------------------------------
-
-//--- Inflation and Price level --------------------
-
-/*  Calculate consumer price level given each sector's price level and weighing in the consumer basket
-    Also updates consumer inflation records
+/* Function to calculate consumer price level given each sector's price level and weighing in the 
+consumer basket. Also updates consumer inflation records
 */
 void Public_Info_Board::Update_Consumer_Price_Level(){
     cons_price_level_previous = cons_price_level_current; // update previous price level
@@ -231,7 +191,7 @@ void Public_Info_Board::Update_Consumer_Price_Level(){
 
 }
 
-/* Update capital price level by simply getting the data from the market
+/* Function to update capital price level by simply getting the data from the market
     Also updates capital inflation records
 */
 void Public_Info_Board::Update_Capital_Price_Level(){
@@ -244,48 +204,23 @@ void Public_Info_Board::Update_Capital_Price_Level(){
 /* Initialize price levels at t=0 , without updating inflation
 */
 void Public_Info_Board::Initialize_Price_Levels(){
-
+    
     consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels();
-
     float sum = 0.0;
     float sum_weights = 0.0;
+    
     for (int i = 0; i < sector_count; i++){
         sum += consumer_sectors_price_levels[i] * consumer_sector_weights[i];
         sum_weights += consumer_sector_weights[i];
     }
+    
     cons_price_level_current = sum/sum_weights; // incase the sums don't match due to rounding errors
-
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
-
-}
-
-/* Get the interest rate from the bank
-*/
-void Public_Info_Board::Update_Interest_Rate(){
-    r_rate = pBank->Get_Interest_Rate();
 }
 
 
 //--------------------------------------------------
-//--- Loan issuance
 
-
-/* Function to call the bank's short term loan method
-This function will be called by the firm agent
-*/
-Loan* Public_Info_Board::Seek_Short_Term_Loan(Firm_Agent* pFirm){
-    return pBank->Issue_Short_Term_Loan(pFirm);
-}
-
-/* Function to call the bank's long term loan method
-This function will be called by the firm agent
-*/
-Loan* Public_Info_Board::Seek_Long_Term_Loan(Firm_Agent* pFirm){
-    return pBank->Issue_Long_Term_Loan(pFirm);
-}
-
-//--------------------------------------------------
-// Global Data
 /* Function to reset global data parameters to zero*/
 void Public_Info_Board::Reset_Global_Data(){
     int reset_value = 0;
@@ -312,8 +247,6 @@ void Public_Info_Board::Reset_Global_Data(){
     household_dividends_sum = reset_value;
     household_total_income_sum = reset_value;
     
-
-
     // Global aggregate varaibles
 
     // Sentiments
@@ -334,19 +267,18 @@ void Public_Info_Board::Reset_Global_Data(){
     consumer_spending = reset_value;
     consumption_budgets = reset_value;
 
-    planned_spending_by_sector.clear();
-    actual_spending_by_sector.clear();
-
+    actual_spending_by_sector = vector<float>(sector_count, 0);
+    planned_spending_by_sector = vector<float>(sector_count, 0);
+    demand_shortfall_by_sector = vector<float>(sector_count, 0);
+    
     // Production
-    consumer_goods_production = reset_value;
+    consumer_goods_production_total = reset_value;
     capital_goods_production = reset_value;
-
-    consumer_goods_production_planned = reset_value;
+    consumer_goods_production_total_planned = reset_value;
     capital_goods_production_planned = reset_value;
 
-    planned_production_by_sector.clear();
-    actual_production_by_sector.clear();
-
+    actual_production_by_sector = vector<int>(sector_count, 0);
+    planned_production_by_sector = vector<int>(sector_count, 0);
     
     // Employment
     n_employed_workers = reset_value;
@@ -367,25 +299,7 @@ void Public_Info_Board::Reset_Global_Data(){
     current_date = reset_value;
 }
 
-
-// Printing and Debugging
-
-void Public_Info_Board::Print() const{
-    cout << " Public Infor Board at adress " << this << endl;
-    cout << " Price Level: " << cons_price_level_current << " Interest Rate: " << r_rate <<endl;
-    cout << " Current Inflation: " << cons_inflation_current <<  endl;
-    cout << " Household Optimism: " << household_sentiment_percentage << " COns Firm Optimism: " << cons_firm_sentiment_percentage << endl;
-}
-
-
-/* Function to print labor market related variables
-*/
-void Public_Info_Board::Print_Labor_Market() const{
-    cout << " # employed workers: " << n_employed_workers << " # unemployed workers: " << n_unemployed_workers << endl;
-    cout << " # new employee demand: " << new_employee_demand << " # employee firings: " << employee_firings << endl;
-    cout << " # new employee hires: " << employee_hires << " Unemployment Rate: " << unemployment_rate << endl;
-    cout << "average_wage_market: " << average_wage_market <<  " # contract expiries: " << contract_expiries << endl;
-}
+//-------------------------------------------------------------
 
 /* Function to make string stream operator << work
 */
@@ -426,13 +340,14 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     for (int i = 0; i < obj.planned_spending_by_sector.size(); i++) {
         os << "planned_spending_on_sector_" << i << " " << obj.planned_spending_by_sector[i] << std::endl;
         os << "actual_spending_on_sector_" << i << " " << obj.actual_spending_by_sector[i] << std::endl;
+        os << "demand_shortfall_on_sector_" << i << " " << obj.demand_shortfall_by_sector[i] << std::endl;
         os << "planned_production_on_sector_" << i << " " << obj.planned_production_by_sector[i] << std::endl;
         os << "actual_production_on_sector_" << i << " " << obj.actual_production_by_sector[i] << std::endl;
     } 
     
-    os << "consumer_goods_production " << obj.consumer_goods_production << std::endl;
+    os << "consumer_goods_production_total " << obj.consumer_goods_production_total << std::endl;
     os << "capital_goods_production " << obj.capital_goods_production << std::endl;
-    os << "consumer_goods_production_planned " << obj.consumer_goods_production_planned << std::endl;
+    os << "consumer_goods_production_total_planned " << obj.consumer_goods_production_total_planned << std::endl;
     os << "capital_goods_production_planned " << obj.capital_goods_production_planned << std::endl;
     os << "n_employed " << obj.n_employed_workers << std::endl;
     os << "n_unemployed " << obj.n_unemployed_workers << std::endl;
@@ -454,18 +369,40 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
 /* Function to log all data: Create a vector of pairs where each entry has the member name and the value
 */
 vector<pair<string, float>>* Public_Info_Board::Log_Data() {
-        current_date = global_date;
-        auto result = new vector<pair<string, float>>();
+    current_date = global_date;
+    auto result = new vector<pair<string, float>>();
 
-        // Get the names and values of all member variables
-        stringstream ss;
-        ss << *this;
-        string line;
-        while (std::getline(ss, line)) {
-            string name;
-            float value;
-            stringstream(line) >> name >> value;
-            result->emplace_back(name, value);
-        }
-        return result;
+    // Get the names and values of all member variables
+    stringstream ss;
+    ss << *this;
+    string line;
+    while (std::getline(ss, line)) {
+        string name;
+        float value;
+        stringstream(line) >> name >> value;
+        result->emplace_back(name, value);
     }
+    return result;
+}
+
+
+
+
+// Printing and Debugging
+
+void Public_Info_Board::Print() const{
+    cout << " Public Infor Board at adress " << this << endl;
+    cout << " Price Level: " << cons_price_level_current << " Interest Rate: " << r_rate <<endl;
+    cout << " Current Inflation: " << cons_inflation_current <<  endl;
+    cout << " Household Optimism: " << household_sentiment_percentage << " COns Firm Optimism: " << cons_firm_sentiment_percentage << endl;
+}
+
+
+/* Function to print labor market related variables
+*/
+void Public_Info_Board::Print_Labor_Market() const{
+    cout << " # employed workers: " << n_employed_workers << " # unemployed workers: " << n_unemployed_workers << endl;
+    cout << " # new employee demand: " << new_employee_demand << " # employee firings: " << employee_firings << endl;
+    cout << " # new employee hires: " << employee_hires << " Unemployment Rate: " << unemployment_rate << endl;
+    cout << "average_wage_market: " << average_wage_market <<  " # contract expiries: " << contract_expiries << endl;
+}

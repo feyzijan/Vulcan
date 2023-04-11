@@ -44,17 +44,16 @@ class Public_Info_Board{
     void Update_Average_Wage_Job_Market() {average_wage_market = pJob_Market->Get_Average_Wage();};
 
     // Consumer Good Market
-    void Send_Cons_Good_To_Market(Consumer_Good* pGood);
-    pair<int, int> Buy_Consumer_Goods(int budget);
-    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& planned_expenditure_by_sector);
+    void Send_Cons_Good_To_Market(Consumer_Good* pGood) { pConsumer_Goods_Market->Add_Consumer_Good_To_Market(pGood);}
+    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector) {
+        return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector(budget, planned_expenditure_by_sector);}
 
 
     // Capital Good Market
-    int*  Buy_Capital_Goods(int q_desired);
+    int*  Buy_Capital_Goods(int q_desired) {return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);}
 
-
-    void Send_Cap_Good_To_Market(Capital_Good* pGood);
-    int Get_Cost_For_Desired_Cap_Goods(int q_desired);
+    void Send_Cap_Good_To_Market(Capital_Good* pGood) { pCapital_Goods_Market->Add_Capital_Good_To_Market(pGood);}
+    int Get_Cost_For_Desired_Cap_Goods(int q_desired){  return pCapital_Goods_Market->Get_Cost_For_Given_Quantity(q_desired);}
     
     // Update Member Variables
 
@@ -65,11 +64,11 @@ class Public_Info_Board{
     void Update_Consumer_Price_Level();
     void Update_Capital_Price_Level();
     void Initialize_Price_Levels();
-    void Update_Interest_Rate();
+    void Update_Interest_Rate() {r_rate = pBank->Get_Interest_Rate();} // Get latest interest rate from the bank
 
     // Loan issuance
-    Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm);
-    Loan* Seek_Long_Term_Loan(Firm_Agent* pFirm);
+    Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm){return pBank->Issue_Short_Term_Loan(pFirm);}
+    Loan* Seek_Long_Term_Loan(Firm_Agent* pFirm) {return pBank->Issue_Long_Term_Loan(pFirm);}
 
     // Global Data
     void Reset_Global_Data();
@@ -99,9 +98,9 @@ class Public_Info_Board{
     int Get_Consumer_Orders() { return consumer_orders;}
     int Get_Consumer_Spending() { return consumer_spending;}
     int Get_Consumption_Budget() { return consumption_budgets;}
-    int Get_Consumer_Goods_Production() { return consumer_goods_production;}
+    int Get_Consumer_Goods_Production() { return consumer_goods_production_total;}
     int Get_Capital_Goods_Production() { return capital_goods_production;}
-    int Get_Consumer_Goods_Production_Planned() { return consumer_goods_production_planned;}
+    int Get_Consumer_Goods_Production_Planned() { return consumer_goods_production_total_planned;}
     int Get_Capital_Goods_Production_Planned() { return capital_goods_production_planned;}
     int Get_Employed_Workers() { return n_employed_workers;}
     int Get_Unemployed_Workers() { return n_unemployed_workers;}
@@ -120,35 +119,31 @@ class Public_Info_Board{
     void Set_Bank(Bank_Agent* ptr) { pBank = ptr;}
     void Set_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors);
 
-    // Update global aggregate variables
+    //-----------Update global aggregate variables ----------------
     // Sentiment sums
     void Update_Household_sentiment_sum(bool amount) { household_sentiment_sum += amount; }
     void Update_Cons_firm_sentiment_sum(bool amount) { cons_firm_sentiment_sum += amount; }
     void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount; }
-
     // Wages and Income
     void Update_Household_Wage(int amount) { household_wage_sum += amount; }
     void Update_Household_Dividends(int amount) {household_dividends_sum += amount; }
     void Update_Household_Total_Income(int amount) { household_total_income_sum += amount; }
-
     // Capital Goods
     void Update_Machine_Orders(int amount) { machine_orders += amount; }
     void Update_Machine_Orders_Planned(int amount) { machine_orders_planned += amount; }
     void Update_Machine_Spending(int amount) { machine_spending += amount; }
     void Update_Capital_Goods_Production(int amount) { capital_goods_production += amount; }
     void Update_Capital_Goods_Production_Planned(int amount) { capital_goods_production_planned += amount; }
-
     // Consumer Goods and Consumption
     void Update_Consumer_Orders(int amount) { consumer_orders += amount; }
     void Update_Consumer_Spending(int amount) { consumer_spending += amount; }
     void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
-    void Update_Consumer_Goods_Production(int sector_id, int amount) { actual_production_by_sector[sector_id-1] += amount; }
-    void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { planned_production_by_sector[sector_id-1] += amount; }
-
-    // To implement
-    void Update_Planned_Consumer_Spending_by_Sector( const vector<int>& planned_spending);
-    void Update_Consumer_Spending_by_Sector(  const vector<int>& actual_spending );
-
+    void Update_Consumer_Goods_Production(int sector_id, int amount) { actual_production_by_sector[sector_id-1] += amount;
+    consumer_goods_production_total += amount; }
+    void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { planned_production_by_sector[sector_id-1] += amount;
+    consumer_goods_production_total_planned += amount; }
+    void Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending);
+    void Update_Consumer_Spending_by_Sector(  const vector<float>& actual_spending );
     // Labor Figures
     void Update_Employed_Worker_Count(int amount) { n_employed_workers += amount; }
     void Update_Unemployed_Worker_Count(int amount) { n_unemployed_workers += amount; }
@@ -161,15 +156,18 @@ class Public_Info_Board{
     void Update_Employees_Quitting() { n_employees_quitting += 1; }
 
 
-    // Calculating rates based on aggregate data
+    // ---- Calculate Global Aggregate Variables ----
+    // Labor Figures
     void Calculate_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
     void Calculate_Average_Wage_Employed() { average_wage_employed = float(household_wage_sum)/float(n_employed_workers-n_firms); }
     void Calculate_Average_Dividend_Income() { average_dividend_income = float(household_dividends_sum)/float(n_firms); }
     void Calculate_Average_Total_Income() { average_total_income = float(household_total_income_sum)/float(n_households); }
-
+    // Sentiments
     void Calculate_Household_Sentiment_Percentage() { household_sentiment_percentage = float(household_sentiment_sum)/ float(n_households); }
     void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
     void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
+    // Consumer Market
+    void Calculate_Consumer_Demand_Shortfall_by_Sector();
 
 
     // Printing and Debugging
@@ -209,7 +207,7 @@ class Public_Info_Board{
     float cap_inflation_current;
 
 
-    // Global aggregate varaibles
+    // Global aggregate variables
 
     // Sentiments
     int household_sentiment_sum; // Sum of household sentiment: +1 for each positive
@@ -229,14 +227,16 @@ class Public_Info_Board{
     int consumer_spending;
     int consumption_budgets;
 
-    vector<int> planned_spending_by_sector;
-    vector<int> actual_spending_by_sector;
+    vector<float> planned_spending_by_sector;
+    vector<float> actual_spending_by_sector;
+    vector<float> demand_shortfall_by_sector; 
+
     int sector_count;
     
     // Production
-    int consumer_goods_production;
+    int consumer_goods_production_total;
     int capital_goods_production;
-    int consumer_goods_production_planned;
+    int consumer_goods_production_total_planned;
     int capital_goods_production_planned;
 
     vector<int> planned_production_by_sector;

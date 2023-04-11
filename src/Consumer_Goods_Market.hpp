@@ -27,8 +27,7 @@ class Consumer_Goods_Market{
     void Divide_Goods_Into_Sectors(int n_sectors);
     void Sort_Consumer_Goods_By_Price();
     void Sort_Cons_Goods_By_Sector_By_Price();
-    pair<int, int>  Buy_Consumer_Goods(int budget);
-    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& spending_array);
+    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& spending_array);
     
     // Price level operations
     void Update_Price_Level_by_Sector();

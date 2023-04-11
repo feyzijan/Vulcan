@@ -73,42 +73,6 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price()
 
 
 
-
-
-/* Satisfy the household purccahse budget with as many goods as possible
-Loop through the market, sell the household as much goods as it can afford, return 
-remaining budget when it can no longer afford to buy anything else
-TODO: Test loop and simplify code, evaluate runtime
-TODO: Doesn't return quantity, maybe return array that includes this
-*/
-std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
-    int remaining_budget = budget;
-    int quantity_bought = 0;
-    for(auto i=cons_goods_list.begin(); i!=cons_goods_list.end();i++){
-        int q = (*i)->Get_Quantity();
-        float p = (*i)->Get_Price();
-        int n = remaining_budget/p; // How much the household can afford to buy
-        if (n>=q){ // Household buys all the goods, likely not satisfied
-            n = q;
-            (*i)->Update_Quantity(-n);
-            quantity_bought += n;
-            remaining_budget -= n*p;
-        } else if (n==0) // Household can no longer afford to buy anything
-        {
-            break; // exit loop
-        } else{ // Household can't buy all, so will run out of budget after this purchase
-            (*i)->Update_Quantity(-n);
-            remaining_budget -= n*p;
-            quantity_bought += n;
-            break; // exit loop
-        }
-    }
-    // Update price level and quantity for the market
-    return std::make_pair(remaining_budget, quantity_bought);
-}
-
-
-
 /* Function to buy goods from each consumer sector
  The function receives an array with float values corresponding to the spending share of each sector from 1 to n
  Demand from each sector is attempted to be satisfied - this is usually not completely met because we can't buy fractions of goods
@@ -118,7 +82,7 @@ std::pair<int, int> Consumer_Goods_Market::Buy_Consumer_Goods(int budget){
         3. The remaining budget after buying from all sectors
         4. The total quantity bought from all sectors
 */
-pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector(int budget, const vector<int>& spending_array ){
+pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& spending_array ){
     
     
     vector<float> remaining_budget_by_sector; // initialize remaining budget vector

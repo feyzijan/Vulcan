@@ -183,6 +183,8 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pConsumer_Goods_Market->Update_Price_Level_by_Sector();
     pConsumer_Goods_Market->Print();
 
+    pPublic_Info_Board->Calculate_Consumer_Demand_Shortfall_by_Sector();
+
 
     // STEP 1.94: Capital good market commences
     cout << " \n ------------ Step 1.94: Investment good market commences ----------------" <<endl;

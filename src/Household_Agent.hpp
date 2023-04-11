@@ -45,7 +45,6 @@ class Household_Agent{
     void Determine_Consumer_Sentiment();
     void Determine_Consumption_Budget(); //(eq 18)
 
-    void Buy_Consumer_Goods(); 
     void Buy_Consumer_Goods_By_Sector();
     void Seek_Jobs();
     void Seek_Better_Jobs();

@@ -300,26 +300,6 @@ void Household_Agent::Determine_Consumption_Budget()
 
 
 
-/* Interact with the market through public board to buy goods
-- Spend as much of the consumption budget as it can, only buying integer multiple # goods,
-- Add the unspent consumption budget to savings
-TODO: Update this method once the called Buy_Consumer_Goods method is updated to return other variables
-TODO: Check if the savings should be added now or later, to avoid double counting
-*/
-void Household_Agent::Buy_Consumer_Goods(){
-    std::pair<int, int> purchase = pPublic_Info_Board->Buy_Consumer_Goods(expenditure_consumption);
-    int remaining_consumption_budget = purchase.first;
-    int goods_bought = purchase.second;
-
-    expenditure_consumption -= remaining_consumption_budget;
-    new_savings += remaining_consumption_budget;
-    wealth_financial += remaining_consumption_budget;
-
-    pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
-    pPublic_Info_Board->Update_Consumer_Orders(goods_bought);
-}
-
-
 /*  Interact with the market through the public board to buy goods
 - Pass in the consumption budget along with the vector with the sector weights
 - Receive back a pair of two vectors, leftover budget and goods bought for each secto
@@ -327,7 +307,7 @@ void Household_Agent::Buy_Consumer_Goods(){
 void Household_Agent::Buy_Consumer_Goods_By_Sector(){
 
     // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
-    vector<int> planned_expenditure_by_sector;
+    vector<float> planned_expenditure_by_sector;
 
     // Fill this with the planned spending numbers
     for (int i = 0; i < spending_weight_by_sector.size(); ++i) {
@@ -343,7 +323,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
 
     vector<float> remaining_consumption_budget =  purchases_by_sector.first;
     vector<int> goods_bought =  purchases_by_sector.second;
-    vector<int> actual_spending_by_sector(planned_expenditure_by_sector);
+    vector<float> actual_spending_by_sector(planned_expenditure_by_sector);
 
     int total_goods_bought = 0;
 
@@ -361,7 +341,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
     pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
     pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
-    
+
 }
 
 
