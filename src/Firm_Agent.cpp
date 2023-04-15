@@ -117,15 +117,19 @@ void Firm_Agent::Update_Average_Sales_T1(){
 // ------- Main Loop Methods in order --
 
 /* Function to depreciate the value of each capital in the inventory
-if the value of the capital falls below the minimum value, remove it from the list
+As it depreciates each capital object, check if it has fully depreciated, and if so remove the capital
 TODO: Check below loop works properly once I update i
 */
 void Firm_Agent::Depreciate_Capital(){
     auto it = capital_goods_list.begin();
     while(it !=  capital_goods_list.end()) {
         (*it)->Depreciate(); 
-        if((*it)->Check_Depreciation() == true) {
+        if((*it)->Check_Depreciation() == true) { // Check if capital good has fully depreciated
             working_capital_inventory -= (*it)->Get_Quantity();
+            if (working_capital_inventory < 0) {
+                cout << "Error in Firm_Agent::Depreciate_Capital() - working_capital_inventory < 0" << endl;
+                working_capital_inventory = 0;
+            } 
             it = capital_goods_list.erase(it);
         } else {it++;}
     }
@@ -488,10 +492,10 @@ void Firm_Agent::Produce_Goods(){
 
     // Check for erroneous values - debugging
     if ( labor_utilization < 0 || labor_utilization > 1){
-        cout << "Error at Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
+        cout << "Error in Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
         labor_utilization = 0;
     } else if ( machine_utilization < 0 || machine_utilization > 1){
-        cout << "Error at Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
+        cout << "Error in Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
         machine_utilization = 0;
     }
 
@@ -501,9 +505,12 @@ void Firm_Agent::Produce_Goods(){
     
     production_current = min(int(production_max*labor_utilization), production_planned);
 
-    if ( production_current < 0 || production_max < 0){
-        cout << "Error: Production current or max is negative" << endl;
-        production_current = 0;
+    if ( production_current < 0 ){
+        cout << "Error in Produce_Goods(): Production current is negative : p_current = " << production_current << endl;
+    } else if( production_max < 0){
+        cout << "Error in Produce_Goods(): Production max is negative : p_max = " << production_max << " working_capital_inventory: " << 
+        working_capital_inventory << " output_per_machine" << output_per_machine <<  endl;
+        production_max = 0;
     }
 
     // Update the inventory
@@ -530,10 +537,12 @@ void Firm_Agent::Buy_Capital_Goods(){
         
 
         // Create new capital good with given quantity and average price
-        if (n_new_machines_bought > 0) {
+        if (n_new_machines_bought > 0 || total_price_paid > 0) {
             average_price = total_price_paid/n_new_machines_bought;
             Capital_Good* new_capital_good = new Capital_Good(nullptr,average_price, n_new_machines_bought, machine_lifespan);
             capital_goods_list.push_back(new_capital_good);
+            working_capital_inventory += n_new_machines_bought;
+            capital_costs = total_price_paid;
         } else if (n_new_machines_bought < 0) {
             cout << "Error in Firm_Agent::Buy_Capital_Goods(): negative number of machines bought n = " << n_new_machines_bought <<  endl;
             n_new_machines_bought = 0;
@@ -542,8 +551,6 @@ void Firm_Agent::Buy_Capital_Goods(){
             cout << "Error in Firm_Agent::Buy_Capital_Goods(): negative price paid =  " << total_price_paid << endl;
             total_price_paid = 0;
         }
-        working_capital_inventory += n_new_machines_bought;
-        capital_costs = total_price_paid;
     }
 
     // Check if demand was not satisfied
@@ -592,7 +599,7 @@ void Firm_Agent::Seek_Long_Term_Loan(){
     Loan* new_loan = pPublic_Info_Board->Seek_Long_Term_Loan(this);
     if (new_loan != nullptr){
         int principal = new_loan->Get_Principal_Amount();
-        loan_book.push_back(new_loan);
+        loan_book.push_back(new_loan); // Add the new loan to the loan book
         cash_on_hand += principal;
         new_loan_issuance += principal;
         long_term_funding_gap = 0;

@@ -68,6 +68,8 @@
         "fstream": "cpp",
         "queue": "cpp",
         "deque": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "filesystem": "cpp",
+        "variant": "cpp"
     }
 }

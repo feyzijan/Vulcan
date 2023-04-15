@@ -36,6 +36,10 @@ void write_csv(string filename, vector<pair<string, vector<float>>> dataset){
     myFile.close();
 }
 
+/* Delete the .csv and .txt files in the datalogs folder so we don'T append*/
+
+
+
 
 /* Function to log public info board
 */
@@ -145,7 +149,7 @@ void Log_Households(vector<Household_Agent*>* pHousehold_vector) {
         header_written = true;
     }
 
-    // Write data rows for all firms
+    // Write data rows for elements in the vector
     for (auto h_ptr : *pHousehold_vector) {
         vector<pair<string, float>>* data = h_ptr->Log_Data();
         string row;

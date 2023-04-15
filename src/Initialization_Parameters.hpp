@@ -3,11 +3,27 @@
 
 
 #include <string>
+#include <map>
+#include <variant>
+#include <fstream>
+#include <sstream>
+#include <vector>
 
-// Global parameters to be used throughout the simulation
+using namespace std;
+
+// Declare the initialization_parameters map as an extern variable,
+// so it can be accessed from other source files.
+extern std::map<string, std::variant<int, float>> initialization_parameters;
+extern std::map<string, std::variant<int, float>> main_loop_parameters;
+extern std::map<string, std::variant<int, float>> randomness_parameters;
+
+
+// Declare the Read_Parameters function.
+void Read_Parameters(map<string, std::variant<int, float>>& parameter_map, const string& filename);
+
+
+// Global parameters to be used throughout the simulation  
 extern int global_date; 
-extern int test_global_var; // for testing
-extern int test_global_var_2; // for testing
 
 extern const int time_period; 
 extern const int n_loops;

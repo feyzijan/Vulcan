@@ -11,6 +11,7 @@
 #include <type_traits>
 
 
+
 #include "Household_Agent.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
@@ -79,6 +80,7 @@ void Log_Firms(vector<T*>* pFirm_vector, bool cons_firm) {
 
     log_file.close(); 
 }
+
 
 
 

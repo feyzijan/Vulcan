@@ -2,6 +2,11 @@
 #include "Initialization_Parameters.hpp"
 
 
+// Define the initialization_parameters map.
+std::map<string, std::variant<int, float>> initialization_parameters;
+
+
+
 // Global parameters to be used throughout the simulation
 int global_date = 0;// will be in main
 int test_global_var = 0; // for testing
@@ -87,7 +92,6 @@ const float sector_spending_randomization = 0.1;
 
 //---- Firm parameters----------------------
 // Consumer and Capital Firm initialization parameters
-
 
 const float init_total_assets_mean = 10000;
 const float init_total_assets_std = 2500;
@@ -209,6 +213,65 @@ const float bank_leverage_ratio_upper_threshold = 100;
 //---------------------------------------------
 
 
+// Function to split a string by a delimiter and return a vector of tokens.
+vector<string> split(const std::string &s, char delimiter) {
+    vector<string> result;
+    std::istringstream iss(s);
+    string token;
+
+    // Read tokens from the string and add them to the result vector.
+    while (std::getline(iss, token, delimiter)) {
+        result.push_back(token);
+    }
+
+    return result;
+}
+
+
+// Function to read the values from the CSV file and populate the
+// initialization_parameters map.
+void Read_Parameters(map<string, std::variant<int, float>>& parameter_map, const string& filename) {
+    // Open the CSV file.
+    std::ifstream file(filename);
+    string line;
+
+    // Read lines from the file until the end of the file is reached.
+    while (std::getline(file, line)) {
+        // Split the line into columns using the split function.
+        vector<string> columns = split(line, ',');
+        // Get the variable name from the first column.
+        const string &var_name = columns[0];
+        // Get the variable value from the second column.
+        const string &var_value = columns[1];
+
+        // Insert the variable name and value into the initialization_parameters map.
+        parameter_map[var_name] = std::stof(var_value);
+    }
+
+    // Close the CSV file.
+    file.close();
+}
+
+
+// Read the values from the CSV file and populate the initialization_parameters map.
+/* 
+Read_Parameters(initialization_parameters, "../Initialization_Data/Initialization_Parameters.csv");
+Read_Parameters(main_loop_parameters, "../Initialization_Data/Main_Loop_Paramaters.csv");
+Read_Parameters(randomness_parameters, "../Initialization_Data/Randomness_Parameters.csv");
+ */
+
+
+/* // Loop through the initialization_parameters map
+for (const auto &[var_name, var_value] : initialization_parameters) {
+    // Use std::visit to handle different types of values in the map
+    std::visit(
+        [&](const auto &value) {
+            std::cout << var_name << ": " << value << std::endl;
+        },
+        var_value);
+}
+
+std::cout << std::get<float>(initialization_parameters["house_liabilities"]) << std::endl; */
 
 
 

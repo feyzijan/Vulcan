@@ -1,0 +1,47 @@
+global_date, 0
+test_global_var, 0
+test_global_var_2, 0
+time_period, 12
+n_loops, 36
+n_households, 1000
+n_consumer_firms, 45
+n_capital_firms, 5
+n_firms, 50
+n_max_employees, 100
+init_c_mean, 0.5
+
+household_n_res_wage_decrease, 0.05
+household_targeted_savings_to_income_ratio, 3.0
+household_tax_rate, 0.2
+household_p_seek_better_job, 0.1
+household_sector_spending_randomization, 0.1
+
+standard_employment_contract_length, 6
+firm_tax_rate, 0.2
+forced_machine_purchases_min, 0
+forced_machine_purchases_max, 0
+
+firm_cons_inv_depr_rate, 0.01
+firm_cons_productivity, 1000
+firm_cons_workers_per_machine, 1
+firm_cons_good_unit_cost, 1.0
+firm_cons_max_production_climbdown, 0.25
+
+firm_cap_inv_depr_rate, 0.01
+firm_cap_productivity, 10
+firm_cap_workers_per_machine, 1
+firm_cap_good_unit_cost, 20.0
+firm_cap_max_production_climbdown, 0.25
+firm_cap_machine_lifespan, 100
+
+
+
+bank_inflation_reaction, 1.5
+bank_inflation_target, 1.05
+bank_inflation_target_monthly, 1.004
+bank_risk_premium, 1.0
+bank_target_capital_ratio, 10.0
+bank_short_term_loan_length, 12
+bank_long_term_loan_length, 100
+bank_leverage_ratio_lower_threshold, 60
+bank_leverage_ratio_upper_threshold, 100

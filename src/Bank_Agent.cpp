@@ -126,10 +126,10 @@ Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
 
     // Gather data to issue loan, give a little extra then is required to smooth things over
     float extra_funding = 1.01;
-
     int short_term_funding_gap = pFirm->Get_Short_Term_Funding_Gap();
+    
     if (short_term_funding_gap <= 0){
-        cout << "Bank_Agent::Issue_Short_Term_Loan() - ERROR: Firm has no short term funding gap" << endl;
+        cout << "Error in Bank_Agent::Issue_Short_Term_Loan() - Firm has no short term funding gap" << endl;
     }
 
     int loan_amount = short_term_funding_gap * extra_funding;
@@ -160,16 +160,15 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
 
     // Gather data to issue loan, give a little extra to smooth things over
     float extra_funding = 1.01;
-
-    int long_term_funding_gap = pFirm->Get_Long_Term_Funding_Gap();
+    int long_term_funding_gap = pFirm->Get_Long_Term_Funding_Gap(); 
 
     if (long_term_funding_gap <= 0){
-        cout << "Bank_Agent::Issue_Long_Term_Loan() - ERROR: long_term_funding_gap <= 0" << endl;
+        cout << "Error in Bank_Agent::Issue_Long_Term_Loan() - long_term_funding_gap <= 0" << endl;
     }
 
     float leverage_ratio = pFirm->Get_Leverage_Ratio();
     if (leverage_ratio < 0){
-        cout << "Bank_Agent::Issue_Long_Term_Loan() - ERROR: leverage_ratio < 0" << endl;
+        cout << "Error in Bank_Agent::Issue_Long_Term_Loan() - leverage_ratio < 0" << endl;
     }
 
     if(leverage_ratio < leverage_ratio_upper_threshold){
@@ -294,20 +293,21 @@ std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
     os << "target_capital_ratio: " << obj.target_capital_ratio << std::endl;
     os << "leverage_ratio_lower_threshold: " << obj.leverage_ratio_lower_threshold << std::endl;
     os << "leverage_ratio_upper_threshold: " << obj.leverage_ratio_upper_threshold << std::endl;
-    os << "date " << obj.current_date << std::endl;
+    os << "date: " << obj.current_date << std::endl;
     //return os;
 }
 
-std::vector<std::pair<std::string, float>>* Bank_Agent::Log_Data() {
+/* Log data function */
+vector<pair<string, float>>* Bank_Agent::Log_Data() {
         current_date = global_date;
         auto result = new std::vector<std::pair<std::string, float>>();
 
         // Get the names and values of all member variables
         std::stringstream ss;
         ss << *this;
-        std::string line;
+        string line;
         while (std::getline(ss, line)) {
-            std::string name;
+            string name;
             float value;
             std::stringstream(line) >> name >> value;
             result->emplace_back(name, value);
