@@ -158,7 +158,7 @@ void Household_Agent::Update_Public_Board()
 */
 void Household_Agent::Update_Reservation_Wage()
 {
-    float n_decrease = Uniform_Dist_Float(0.0,n_res_wage_decrease);
+    float n_decrease = Uniform_Dist_Float(0.0,household_n_res_wage_decrease);
     if( unemp_duration > unemp_duration_upper_bound){
         reservation_wage = reservation_wage * (1-n_decrease);
     } else {
@@ -176,7 +176,7 @@ void Household_Agent::Update_Reservation_Wage()
 void Household_Agent::Random_Experimentation(){
 
     // Randomly alter desired spending weights for each sector
-    float weighing_change = Uniform_Dist_Float(1.0-sector_spending_randomization , 1.0+sector_spending_randomization);
+    float weighing_change = Uniform_Dist_Float(1.0-household_sector_spending_randomization , 1.0+household_sector_spending_randomization);
 
     for (int i = 0; i < spending_weight_by_sector.size(); i++){
         spending_weight_by_sector[i] = spending_weight_by_sector[i] * (weighing_change);
@@ -249,7 +249,7 @@ void Household_Agent::Update_Average_Income()
 void Household_Agent::Update_Savings()
 {
     int effective_savings = cash_on_hand_current - income_average; // maybe make this the same as current savings
-    cash_on_hand_desired = targeted_savings_to_income_ratio * income_average;
+    cash_on_hand_desired = household_targeted_savings_to_income_ratio * income_average;
 }
 
 /* Determine Household sentiment, and thereby savings propensity and desired cash on hand
@@ -379,7 +379,7 @@ p_seek_better_job
 void Household_Agent::Seek_Better_Jobs()
 {
     // execute code with probabilty equal to p_seek_better_job
-    bool seek_better_job = Uniform_Dist_Float(0,1)  < p_seek_better_job;
+    bool seek_better_job = Uniform_Dist_Float(0,1)  < household_p_seek_better_job;
     if ( !unemployed && seek_better_job && !firm_owner) {  
         Job* best_job = pPublic_Info_Board->Get_Top_Job();
         if (best_job != NULL){
@@ -470,6 +470,7 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "c_excess_money " << obj.c_excess_money << std::endl;
     os << "p_majority_op_adoption " << obj.p_majority_op_adoption << std::endl;
     os << "date " << obj.current_date << std::endl;
+    return os;
 }
 
 std::vector<std::pair<std::string, float>>* Household_Agent::Log_Data() {

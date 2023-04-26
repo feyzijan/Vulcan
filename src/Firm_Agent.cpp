@@ -37,7 +37,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     total_income = revenue_sales;
     new_loan_issuance =0; 
     subsidies = 0;
-    good_price_past = init_good_price_past;
+    good_price_past = firm_cons_init_good_price;
     average_profit = revenue_sales;
     average_sale_quantity = 0;
     
@@ -80,7 +80,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     pPublic_Info_Board = nullptr;
 
     // Initialize capital good inventory
-    initial_capital_goods = new Capital_Good(nullptr,init_capital_good_price,working_capital_inventory,machine_lifespan);
+    initial_capital_goods = new Capital_Good(nullptr,firm_cap_init_good_price,working_capital_inventory,firm_cap_machine_lifespan);
     //cout << " Created initial capital good " << endl;
     capital_goods_list.push_back(initial_capital_goods);
     //cout << "Passed capital good into list" << endl;; 
@@ -278,7 +278,7 @@ void Firm_Agent::Determine_New_Production()
     production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
 
     // Impose limit on how much they can tone down production - maybe just change bariables above?
-    production_planned = max(production_planned, static_cast<int>(production_past*(1-max_cons_production_climbdown))); 
+    production_planned = max(production_planned, static_cast<int>(production_past*(1-firm_max_cons_production_climbdown))); 
     
 }
 
@@ -320,8 +320,8 @@ TODO: Recheck equation
 void Firm_Agent::Determine_Labor_Need(){
 
     // Determine the workforce needed to meet production targets
-    int employees_to_meet_production = production_planned/ (cons_productivity*cons_workers_per_machine);
-    int employees_to_operate_current_machines = working_capital_inventory/cons_workers_per_machine;
+    int employees_to_meet_production = production_planned/ (firm_cons_productivity*firm_cons_workers_per_machine);
+    int employees_to_operate_current_machines = working_capital_inventory/firm_cons_workers_per_machine;
 
     // Determine Employee demand
     //employee_count_desired = max(0, min(employees_to_meet_production, employees_to_operate_current_machines)) ;
@@ -464,7 +464,7 @@ TODO:
 - Jamel has a complicated method, for now I will use a simpler one
 */
 void Firm_Agent::Make_Investment_Decision(){
-    desired_machines = max(0,employee_count_desired/cons_workers_per_machine - working_capital_inventory);
+    desired_machines = max(0,employee_count_desired/firm_cons_workers_per_machine - working_capital_inventory);
 
     // Check if there is enough money to buy the goods, and if not take a loan
     if (desired_machines > 0){
@@ -539,7 +539,7 @@ void Firm_Agent::Buy_Capital_Goods(){
         // Create new capital good with given quantity and average price
         if (n_new_machines_bought > 0 || total_price_paid > 0) {
             average_price = total_price_paid/n_new_machines_bought;
-            Capital_Good* new_capital_good = new Capital_Good(nullptr,average_price, n_new_machines_bought, machine_lifespan);
+            Capital_Good* new_capital_good = new Capital_Good(nullptr,average_price, n_new_machines_bought, firm_cap_machine_lifespan);
             capital_goods_list.push_back(new_capital_good);
             working_capital_inventory += n_new_machines_bought;
             capital_costs = total_price_paid;
@@ -873,6 +873,7 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "bankrupt " << obj.bankrupt << std::endl;
     os << "is_cons_firm " << obj.is_cons_firm << std::endl;
     os << "date " << obj.current_date << std::endl;
+    return os;
 }
 
 /* Log method to be used for outputting data to csv

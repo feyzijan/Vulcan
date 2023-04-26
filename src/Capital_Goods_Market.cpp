@@ -103,13 +103,14 @@ int* Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
                 } else {
                     continue;
                 }
-            } else { // this good is all sold out
+            } else { // this good is all sold out, so the above checks are not made
                 continue;
             }
-
-        }
+        } //  We have looped through the entire market, so return whatever we have
+        int* arr = new int[2]{q_current, int(total_price)};
+        return arr;
     }
-
+    
 }
 
 

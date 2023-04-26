@@ -12,7 +12,7 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
     this->pPublic_Board = pPublic_Info_Board;
 
     // Interest rate 
-    r_rate = bank_initial_interest_rate; // preset Global param
+    r_rate = bank_init_interest_rate; // preset Global param
     risk_premium = bank_risk_premium; // preset Global param
     r_reaction = bank_inflation_reaction; // preset Global param
 
@@ -294,7 +294,7 @@ std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
     os << "leverage_ratio_lower_threshold: " << obj.leverage_ratio_lower_threshold << std::endl;
     os << "leverage_ratio_upper_threshold: " << obj.leverage_ratio_upper_threshold << std::endl;
     os << "date: " << obj.current_date << std::endl;
-    //return os;
+    return os;
 }
 
 /* Log data function */

@@ -8,15 +8,15 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
 {
     //identifier
     is_cons_firm = false;
-    workers_per_machine = cap_workers_per_machine; // global param
-    output_per_machine = cap_productivity; // global param
-    unit_good_cost = cap_good_unit_cost; // global param
-    production_current = max(working_capital_inventory * cap_workers_per_machine * cap_productivity, employee_count_desired / cap_workers_per_machine * cap_productivity);
+    workers_per_machine = firm_cap_workers_per_machine; // global param
+    output_per_machine = firm_cap_productivity; // global param
+    unit_good_cost = firm_cap_good_unit_cost; // global param
+    production_current = max(working_capital_inventory * firm_cap_workers_per_machine * firm_cap_productivity, employee_count_desired / firm_cap_workers_per_machine * firm_cap_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
-    quantity_sold = inventory *  init_quantity_sold_ratio; 
+    quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
     
-    cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, machine_lifespan);
+    cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, firm_cap_machine_lifespan);
     goods_on_market = cap_goods_on_market;
     // Put goods on Market
     //Send_Goods_To_Market();
@@ -38,7 +38,7 @@ The depreciation rate is set exogenously in the initialization parameter for all
 */
 
 void Capital_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(float(inventory)*(1.0-cap_good_inv_depr_rate));
+    inventory  = int(float(inventory)*(1.0-firm_cap_good_inv_depr_rate));
 }
 
 

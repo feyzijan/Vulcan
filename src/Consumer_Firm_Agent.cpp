@@ -8,13 +8,13 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
 {
     is_cons_firm = true;
 
-    workers_per_machine = cons_workers_per_machine;
-    output_per_machine = cons_productivity;
-    unit_good_cost = cons_good_unit_cost;
+    workers_per_machine = firm_cons_workers_per_machine;
+    output_per_machine = firm_cons_productivity;
+    unit_good_cost = firm_cons_good_unit_cost;
 
-    production_current = max(working_capital_inventory * cons_workers_per_machine * cons_productivity,employee_count_desired / cons_workers_per_machine * cons_productivity);
+    production_current = max(working_capital_inventory * firm_cons_workers_per_machine * firm_cons_productivity,employee_count_desired / firm_cons_workers_per_machine * firm_cons_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
-    quantity_sold = inventory *  init_quantity_sold_ratio; 
+    quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
 
     cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold);
@@ -38,7 +38,7 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent(){}
 The depreciation rate is set exogenously in the initialization parameter for all firms
 */
 void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(float(inventory)*(1.0-cons_good_inv_depr_rate));
+    inventory  = int(float(inventory)*(1.0-firm_cons_good_inv_depr_rate));
 }
 
 

@@ -65,8 +65,8 @@ Public_Info_Board::Public_Info_Board(){
     n_employees_quitting = 0;
 
     // not using this as of yet
-    public_unemployment_benefit = init_unemployment_benefit;
-    minimum_wage = init_minimum_wage;
+    public_unemployment_benefit = public_init_unemployment_benefit;
+    minimum_wage = public_init_minimum_wage;
 
     // timestep - not using these for now
     time_step = 0;
@@ -404,6 +404,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "n_employees_quitting " << obj.n_employees_quitting << std::endl;
 
     os << "date " << obj.current_date << std::endl;
+    return os;
 }
 
 

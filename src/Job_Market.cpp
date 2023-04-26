@@ -5,7 +5,7 @@ using namespace std;
 
 // Constructor and destructors
 Job_Market::Job_Market(){
-    average_wage = init_wage_offer_mean;
+    average_wage = firm_cons_init_wage_offer_mean;
 }
 
 
