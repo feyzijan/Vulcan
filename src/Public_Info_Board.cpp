@@ -65,8 +65,8 @@ Public_Info_Board::Public_Info_Board(){
     n_employees_quitting = 0;
 
     // not using this as of yet
-    public_unemployment_benefit = public_init_unemployment_benefit;
-    minimum_wage = public_init_minimum_wage;
+    public_unemployment_benefit = household_init_unemployment_benefit;
+    minimum_wage = household_init_minimum_wage;
 
     // timestep - not using these for now
     time_step = 0;

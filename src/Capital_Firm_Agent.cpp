@@ -38,7 +38,7 @@ The depreciation rate is set exogenously in the initialization parameter for all
 */
 
 void Capital_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(float(inventory)*(1.0-firm_cap_good_inv_depr_rate));
+    inventory  = int(float(inventory)*(1.0-firm_cap_inv_depr_rate));
 }
 
 

@@ -44,9 +44,9 @@ int main()
     cout << "***************** Initialization Phase begun *********" << endl;
 
     // Read parameters
-    Read_Parameters(initialization_parameters,"../InitializationData/Initialization_Parameters.csv");
-    Read_Parameters(main_loop_parameters,"../InitializationData/Main_Loop_Parameters.csv");
-    Read_Parameters(randomness_parameters,"../InitializationData/Randomness_Parameters.csv");
+    Read_Parameters(initialization_parameters, "../InitializationData/Initialization_Parameters.csv");
+    Read_Parameters(main_loop_parameters, "../InitializationData/Main_Loop_Parameters.csv");
+    Read_Parameters(randomness_parameters, "../InitializationData/Randomness_Parameters.csv");
 
 
 
