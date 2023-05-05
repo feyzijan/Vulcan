@@ -1,3 +1,5 @@
+test_init_int_var,1
+test_init_float_var, 1.1
 household_init_c_std, 0.15
 household_init_c_min, 0.1
 household_init_c_max, 0.9
@@ -37,11 +39,8 @@ household_init_res_wage_mean, 950
 household_init_res_wage_std, 300
 household_init_res_wage_min, 100
 household_init_res_wage_max, 999999
-
 household_init_unemployment_benefit, 500
 household_init_minimum_wage, 600
-
-
 firm_cons_init_total_assets_mean, 10000
 firm_cons_init_total_assets_std, 2500
 firm_cons_init_total_assets_min, 1
@@ -82,7 +81,6 @@ firm_cons_init_desired_inventory_factor_mean, 1.5
 firm_cons_init_desired_inventory_factor_std, 0.25
 firm_cons_init_desired_inventory_factor_min, 0.1
 firm_cons_init_desired_inventory_factor_max, 4.0
-
 firm_cap_init_total_assets_mean, 10000
 firm_cap_init_total_assets_std, 2500
 firm_cap_init_total_assets_min, 1
@@ -123,17 +121,10 @@ firm_cap_init_desired_inventory_factor_mean, 1.5
 firm_cap_init_desired_inventory_factor_std, 0.25
 firm_cap_init_desired_inventory_factor_min, 0.1
 firm_cap_init_desired_inventory_factor_max, 4.0
-
-
 firm_cons_init_production_current_ratio, 0.4
 firm_cons_init_quantity_sold_ratio, 0.25
 firm_cons_init_good_price_, 9.5
-
 firm_cap_init_production_current_ratio, 0.4
 firm_cap_init_quantity_sold_ratio, 0.25
 firm_cap_init_good_price, 100.0
-
-
 bank_init_interest_rate, 0.02
-
-

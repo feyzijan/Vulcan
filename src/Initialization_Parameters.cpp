@@ -8,6 +8,60 @@ std::map<string, std::variant<int, float>> main_loop_parameters;
 std::map<string, std::variant<int, float>> randomness_parameters;
 
 
+// Function to split a string by a delimiter and return a vector of tokens.
+vector<string> split(const std::string &s, char delimiter) {
+    vector<string> result;
+    std::istringstream iss(s);
+    string token;
+
+    // Read tokens from the string and add them to the result vector.
+    while (std::getline(iss, token, delimiter)) {
+        result.push_back(token);
+    }
+
+    return result;
+}
+
+// Function to read the values from the CSV file and populate the
+// initialization_parameters map.
+void Read_Parameters(map<string, std::variant<int, float>>& parameter_map, const string& filename) {
+    // Open the CSV file.
+    std::ifstream file(filename);
+    string line;
+    int line_num = 0;
+
+    // Read lines from the file until the end of the file is reached.
+    while (std::getline(file, line)) {
+
+        cout << "Reading line " << ++line_num << endl;
+        // Split the line into columns using the split function.
+        vector<string> columns = split(line, ',');
+        // Get the variable name from the first column.
+        const string &var_name = columns[0];
+        // Get the variable value from the second column.
+        const string &var_value = columns[1];
+
+        // Insert the variable name and value into the initialization_parameters map.
+        parameter_map[var_name] = std::stof(var_value);
+    }
+
+    // Close the CSV file.
+    file.close();
+}
+
+void Print_Parameter_Map(map<string, std::variant<int, float>>& parameter_map){
+        for (const auto& [key, value] : parameter_map) {
+        std::cout << key << ": ";
+        if (std::holds_alternative<int>(value)) {
+            std::cout << std::get<int>(value) << std::endl;
+        } else if (std::holds_alternative<float>(value)) {
+            std::cout << std::get<float>(value) << std::endl;
+        }
+    }
+}
+
+
+
 //-------------------- Simulation Size Parameters ---------------
 int global_date = 0; // dont put this in a map
 const int n_loops = 36;
@@ -259,44 +313,9 @@ const float bank_leverage_ratio_upper_threshold = 100;
 //---------------------------------------------
 
 
-// Function to split a string by a delimiter and return a vector of tokens.
-vector<string> split(const std::string &s, char delimiter) {
-    vector<string> result;
-    std::istringstream iss(s);
-    string token;
-
-    // Read tokens from the string and add them to the result vector.
-    while (std::getline(iss, token, delimiter)) {
-        result.push_back(token);
-    }
-
-    return result;
-}
 
 
-// Function to read the values from the CSV file and populate the
-// initialization_parameters map.
-void Read_Parameters(map<string, std::variant<int, float>>& parameter_map, const string& filename) {
-    // Open the CSV file.
-    std::ifstream file(filename);
-    string line;
 
-    // Read lines from the file until the end of the file is reached.
-    while (std::getline(file, line)) {
-        // Split the line into columns using the split function.
-        vector<string> columns = split(line, ',');
-        // Get the variable name from the first column.
-        const string &var_name = columns[0];
-        // Get the variable value from the second column.
-        const string &var_value = columns[1];
-
-        // Insert the variable name and value into the initialization_parameters map.
-        parameter_map[var_name] = std::stof(var_value);
-    }
-
-    // Close the CSV file.
-    file.close();
-}
 
 
 // Read the values from the CSV file and populate the initialization_parameters map.
