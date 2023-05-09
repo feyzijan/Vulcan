@@ -1,58 +1,80 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "cppbuild",
-			"label": "C/C++: g++.exe build active file",
-			"command": "C:\\MinGW\\bin\\g++.exe",
-			"args": [
-				"-fdiagnostics-color=always",
-				"-g",
-				"${file}",
-				"-o",
-				"${fileDirname}\\${fileBasenameNoExtension}.exe",
-				"${fileDirname}\\Initialization_Parameters.cpp",
-				"${fileDirname}\\Public_Info_Board.cpp",
-				"${fileDirname}\\Household_Agent.cpp",
-
-				"${fileDirname}\\Job.cpp",
-				"${fileDirname}\\Job_Market.cpp",
-
-
-				
-				"${fileDirname}\\Firm_Agent.cpp",
-				"${fileDirname}\\Loan.cpp",
-				"${fileDirname}\\General_Good.cpp",
-
-				"${fileDirname}\\Consumer_Firm_Agent.cpp",
-				"${fileDirname}\\Consumer_Good.cpp",
-				"${fileDirname}\\Consumer_Goods_Market.cpp",
-				
-				"${fileDirname}\\Capital_Firm_Agent.cpp",
-				"${fileDirname}\\Capital_Good.cpp",
-				"${fileDirname}\\Capital_Goods_Market.cpp",
-
-				"${fileDirname}\\Initialization_Functions.cpp",
-				"${fileDirname}\\Random_Functions.cpp",
-				"${fileDirname}\\Data_Logging.cpp",
-
-				"${fileDirname}\\Bank_Agent.cpp",
-				
-				"${fileDirname}\\TimeLoop.cpp",
-
-
-
-
-				
-			],
-			"options": {
-				"cwd": "${fileDirname}"
-			},
-			"problemMatcher": [
-				"$gcc"
-			],
-			"group": "build",
-			"detail": "compiler: C:\\MinGW\\bin\\g++.exe"
-		}
-	]
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "type": "shell",
+        "label": "g++.exe build active file",
+        "command": "C:\\MinGW\\bin\\g++.exe",
+        "args": [
+          "-fdiagnostics-color=always",
+          "-g",
+          "${file}",
+          "-o",
+          "${fileDirname}\\${fileBasenameNoExtension}.exe",
+          "${fileDirname}\\Initialization_Parameters.cpp",
+          "${fileDirname}\\Public_Info_Board.cpp",
+          "${fileDirname}\\Household_Agent.cpp",
+          "${fileDirname}\\Job.cpp",
+          "${fileDirname}\\Job_Market.cpp",
+          "${fileDirname}\\Firm_Agent.cpp",
+          "${fileDirname}\\Loan.cpp",
+          "${fileDirname}\\General_Good.cpp",
+          "${fileDirname}\\Consumer_Firm_Agent.cpp",
+          "${fileDirname}\\Consumer_Good.cpp",
+          "${fileDirname}\\Consumer_Goods_Market.cpp",
+          "${fileDirname}\\Capital_Firm_Agent.cpp",
+          "${fileDirname}\\Capital_Good.cpp",
+          "${fileDirname}\\Capital_Goods_Market.cpp",
+          "${fileDirname}\\Initialization_Functions.cpp",
+          "${fileDirname}\\Random_Functions.cpp",
+          "${fileDirname}\\Data_Logging.cpp",
+          "${fileDirname}\\Bank_Agent.cpp",
+          "${fileDirname}\\TimeLoop.cpp"
+        ],
+        "options": {
+          "cwd": "${fileDirname}"
+        },
+        "problemMatcher": [
+          "$gcc"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "detail": "compiler: C:\\MinGW\\bin\\g++.exe"
+      },
+      {
+        "type": "shell",
+        "label": "g++ build & run active file",
+        "command": "C:\\MinGW64\\bin\\g++.exe",
+        "args": [
+          "${file}",
+          "-o",
+          "${fileDirname}\\${fileBasenameNoExtension}.exe"
+        ],
+        "options": {
+          "cwd": "C:\\MinGW64\\bin"
+        }
+      },
+      {
+        "type": "cppbuild",
+        "label": "C/C++: g++.exe build active file",
+        "command": "C:\\MinGW\\bin\\g++.exe",
+        "args": [
+          "-fdiagnostics-color=always",
+          "-g",
+          "${file}",
+          "-o",
+          "${fileDirname}\\${fileBasenameNoExtension}.exe"
+        ],
+        "options": {
+          "cwd": "${fileDirname}"
+        },
+        "problemMatcher": [
+          "$gcc"
+        ],
+        "group": "build",
+        "detail": "compiler: C:\\MinGW\\bin\\g++.exe"
+      }
+    ],
 }

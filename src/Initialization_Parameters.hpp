@@ -14,13 +14,17 @@ using namespace std;
 
 // Declare the initialization_parameters map as an extern variable,
 // so it can be accessed from other source files.
-extern std::map<string, std::variant<int, float>> initialization_parameters;
-extern std::map<string, std::variant<int, float>> main_loop_parameters;
-extern std::map<string, std::variant<int, float>> randomness_parameters;
+extern map<string, float> initialization_parameters;
+extern map<string, float> main_loop_parameters;
+extern map<string, float> randomness_parameters;
 
 
-// Declare the Read_Parameters function.
-void Read_Parameters(map<string, std::variant<int, float>>& parameter_map, const char* filename);
+// Declare functions for reading and assigning simulation parameters
+void Read_Parameters(map<string, float>& parameter_map, const char* filename);
+void Assign_All_Parameters(map<string, float>& initialization_parameters,
+map<string, float>& main_loop_parameters, map<string, float>& randomness_parameters);
+void Print_Parameter_Map(map<string, float>& parameter_map);
+vector<string> split(const std::string &s, char delimiter);
 
 
 //-------------------- Simulation Size Parameters ---------------

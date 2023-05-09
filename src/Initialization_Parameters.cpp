@@ -5,9 +5,9 @@
 int global_date = 0; // dont put this in a map
 
 // Define the initialization_parameters map.
-std::map<string, std::variant<int, float>> initialization_parameters;
-std::map<string, std::variant<int, float>> main_loop_parameters;
-std::map<string, std::variant<int, float>> randomness_parameters;
+map<string, float> initialization_parameters;
+map<string, float> main_loop_parameters;
+map<string, float> randomness_parameters;
 
 
 // Function to split a string by a delimiter and return a vector of tokens.
@@ -26,11 +26,12 @@ vector<string> split(const std::string &s, char delimiter) {
 
 // Function to read the values from the CSV file and populate the
 // initialization_parameters map.
-void Read_Parameters(map<string, std::variant<int, float>>& parameter_map, const char* filename) {
+void Read_Parameters(map<string, float>& parameter_map, const char* filename) {
     // Open the CSV file.
     std::ifstream file(filename);
     string line;
     int line_num = 0;
+    cout << "Started reading file: " << filename << endl;
 
     // Read lines from the file until the end of the file is reached.
     while (std::getline(file, line)) {
@@ -49,256 +50,251 @@ void Read_Parameters(map<string, std::variant<int, float>>& parameter_map, const
 
     // Close the CSV file.
     file.close();
+    cout << "Finished reading and closed file: " << filename << endl;
 }
 
-void Print_Parameter_Map(map<string, std::variant<int, float>>& parameter_map){
+void Print_Parameter_Map(map<string, float>& parameter_map){
         for (const auto& [key, value] : parameter_map) {
-        std::cout << key << ": ";
-        if (std::holds_alternative<int>(value)) {
-            std::cout << std::get<int>(value) << std::endl;
-        } else if (std::holds_alternative<float>(value)) {
-            std::cout << std::get<float>(value) << std::endl;
-        }
+        std::cout << key << " : " << parameter_map[key] << std::endl;
     }
 }
 
 
-/* Reassign values to all simulation parameters by reading off the values from the maps we created from the csv files
+/* Reassign values to all simulation parameters by reading off the values from the maps we created from reading the csv files
 */
-void Assign_All_Parameters(map<string, std::variant<int, float>>& initialization_parameters,
-map<string, std::variant<int, float>>& main_loop_parameters, map<string, std::variant<int, float>>& randomness_parameters){
+void Assign_All_Parameters(map<string, float>& initialization_parameters,
+map<string, float>& main_loop_parameters, map<string, float>& randomness_parameters){
 
     // Initialization Parameters
 
     // --- Household initialization parameters
     // General consumption propensity : c
-    household_init_c_mean = std::get<float>(initialization_parameters["household_init_c_mean"]);
-    household_init_c_std = std::get<float>(initialization_parameters["household_init_c_std"]);
-    household_init_c_min = std::get<float>(initialization_parameters["household_init_c_min"]);
-    household_init_c_max = std::get<float>(initialization_parameters["household_init_c_max"]);
+    household_init_c_mean = initialization_parameters["household_init_c_mean"];
+    household_init_c_std = initialization_parameters["household_init_c_std"];
+    household_init_c_min = initialization_parameters["household_init_c_min"];
+    household_init_c_max = initialization_parameters["household_init_c_max"];
     // Propensity to consume financial wealth, c_f
-    household_init_c_f_mean = std::get<float>(initialization_parameters["household_init_c_f_mean"]);
-    household_init_c_f_std = std::get<float>(initialization_parameters["household_init_c_f_std"]);
-    household_init_c_f_min = std::get<float>(initialization_parameters["household_init_c_f_min"]);
-    household_init_c_f_max = std::get<float>(initialization_parameters["household_init_c_f_max"]);
+    household_init_c_f_mean = initialization_parameters["household_init_c_f_mean"];
+    household_init_c_f_std = initialization_parameters["household_init_c_f_std"];
+    household_init_c_f_min = initialization_parameters["household_init_c_f_min"];
+    household_init_c_f_max = initialization_parameters["household_init_c_f_max"];
     // Propensity to consume human wealth, c_h
-    household_init_c_h_mean = std::get<float>(initialization_parameters["household_init_c_h_mean"]);
-    household_init_c_h_std = std::get<float>(initialization_parameters["household_init_c_h_std"]);
-    household_init_c_h_min = std::get<float>(initialization_parameters["household_init_c_h_min"]);
-    household_init_c_h_max = std::get<float>(initialization_parameters["household_init_c_h_max"]);
+    household_init_c_h_mean = initialization_parameters["household_init_c_h_mean"];
+    household_init_c_h_std = initialization_parameters["household_init_c_h_std"];
+    household_init_c_h_min = initialization_parameters["household_init_c_h_min"];
+    household_init_c_h_max = initialization_parameters["household_init_c_h_max"];
     // Propensity to consume excess money : c_excess_money
-    household_init_c_excess_mean = std::get<float>(initialization_parameters["household_init_c_excess_mean"]);
-    household_init_c_excess_std = std::get<float>(initialization_parameters["household_init_c_excess_std"]);
-    household_init_c_excess_min = std::get<float>(initialization_parameters["household_init_c_excess_min"]);
-    household_init_c_excess_max = std::get<float>(initialization_parameters["household_init_c_excess_max"]);
+    household_init_c_excess_mean = initialization_parameters["household_init_c_excess_mean"];
+    household_init_c_excess_std = initialization_parameters["household_init_c_excess_std"];
+    household_init_c_excess_min = initialization_parameters["household_init_c_excess_min"];
+    household_init_c_excess_max = initialization_parameters["household_init_c_excess_max"];
     // Propensity to adopt majority sentiment: p_majority_op_adoption
-    household_init_p_majority_mean = std::get<float>(initialization_parameters["household_init_p_majority_mean"]);
-    household_init_p_majority_std = std::get<float>(initialization_parameters["household_init_p_majority_std"]);
-    household_init_p_majority_min = std::get<float>(initialization_parameters["household_init_p_majority_min"]);
-    household_init_p_majority_max = std::get<float>(initialization_parameters["household_init_p_majority_max"]);
+    household_init_p_majority_mean = initialization_parameters["household_init_p_majority_mean"];
+    household_init_p_majority_std = initialization_parameters["household_init_p_majority_std"];
+    household_init_p_majority_min = initialization_parameters["household_init_p_majority_min"];
+    household_init_p_majority_max = initialization_parameters["household_init_p_majority_max"];
     // Savings propensity - optimist : saving_propensity_optimist 
-    household_init_s_optimist_mean = std::get<float>(initialization_parameters["household_init_s_optimist_mean"]);
-    household_init_s_optimist_std = std::get<float>(initialization_parameters["household_init_s_optimist_std"]);
-    household_init_s_optimist_min = std::get<float>(initialization_parameters["household_init_s_optimist_min"]);
-    household_init_s_optimist_max = std::get<float>(initialization_parameters["household_init_s_optimist_max"]);
+    household_init_s_optimist_mean = initialization_parameters["household_init_s_optimist_mean"];
+    household_init_s_optimist_std = initialization_parameters["household_init_s_optimist_std"];
+    household_init_s_optimist_min = initialization_parameters["household_init_s_optimist_min"];
+    household_init_s_optimist_max = initialization_parameters["household_init_s_optimist_max"];
 
     // Savings propensity - pessimist : // saving_propensity_pessimist
-    household_init_s_pessimist_mean = std::get<float>(initialization_parameters["household_init_s_pessimist_mean"]);
-    household_init_s_pessimist_std = std::get<float>(initialization_parameters["household_init_s_pessimist_std"]);
-    household_init_s_pessimist_min = std::get<float>(initialization_parameters["household_init_s_pessimist_min"]);
-    household_init_s_pessimist_max = std::get<float>(initialization_parameters["household_init_s_pessimist_max"]);
+    household_init_s_pessimist_mean = initialization_parameters["household_init_s_pessimist_mean"];
+    household_init_s_pessimist_std = initialization_parameters["household_init_s_pessimist_std"];
+    household_init_s_pessimist_min = initialization_parameters["household_init_s_pessimist_min"];
+    household_init_s_pessimist_max = initialization_parameters["household_init_s_pessimist_max"];
     // Starting wealth : wealth
-    household_init_wealth_mean = std::get<float>(initialization_parameters["household_init_wealth_mean"]);
-    household_init_wealth_std = std::get<float>(initialization_parameters["household_init_wealth_std"]);
-    household_init_wealth_min = std::get<float>(initialization_parameters["household_init_wealth_min"]);
-    household_init_wealth_max = std::get<float>(initialization_parameters["household_init_wealth_max"]);
+    household_init_wealth_mean = initialization_parameters["household_init_wealth_mean"];
+    household_init_wealth_std = initialization_parameters["household_init_wealth_std"];
+    household_init_wealth_min = initialization_parameters["household_init_wealth_min"];
+    household_init_wealth_max = initialization_parameters["household_init_wealth_max"];
     // Maximum tolerable unemployment duration
-    household_init_unemp_tolerance_mean = std::get<float>(initialization_parameters["household_init_unemp_tolerance_mean"]);
-    household_init_unemp_tolerance_std = std::get<float>(initialization_parameters["household_init_unemp_tolerance_std"]);
-    household_init_unemp_tolerance_min = std::get<float>(initialization_parameters["household_init_unemp_tolerance_min"]);
-    household_init_unemp_tolerance_max = std::get<float>(initialization_parameters["household_init_unemp_tolerance_max"]);
+    household_init_unemp_tolerance_mean = initialization_parameters["household_init_unemp_tolerance_mean"];
+    household_init_unemp_tolerance_std = initialization_parameters["household_init_unemp_tolerance_std"];
+    household_init_unemp_tolerance_min = initialization_parameters["household_init_unemp_tolerance_min"];
+    household_init_unemp_tolerance_max = initialization_parameters["household_init_unemp_tolerance_max"];
     // Reservation Wage
-    household_init_res_wage_mean = std::get<float>(initialization_parameters["household_init_res_wage_mean"]);
-    household_init_res_wage_std = std::get<float>(initialization_parameters["household_init_res_wage_std"]);
-    household_init_res_wage_min = std::get<float>(initialization_parameters["household_init_res_wage_min"]);
-    household_init_res_wage_max = std::get<float>(initialization_parameters["household_init_res_wage_max"]);
+    household_init_res_wage_mean = initialization_parameters["household_init_res_wage_mean"];
+    household_init_res_wage_std = initialization_parameters["household_init_res_wage_std"];
+    household_init_res_wage_min = initialization_parameters["household_init_res_wage_min"];
+    household_init_res_wage_max = initialization_parameters["household_init_res_wage_max"];
 
     // - Public Wage parameters
-    household_init_unemployment_benefit = std::get<int>(initialization_parameters["household_init_unemployment_benefit"]);
-    household_init_minimum_wage = std::get<int>(initialization_parameters["household_init_minimum_wage"]);
+    household_init_unemployment_benefit = initialization_parameters["household_init_unemployment_benefit"];
+    household_init_minimum_wage = initialization_parameters["household_init_minimum_wage"];
 
     // --- Consumer Firm initialization parameters
     // Starting total asset
-    firm_cons_init_total_assets_mean = std::get<float>(initialization_parameters["firm_cons_init_total_assets_mean"]);
-    firm_cons_init_total_assets_std = std::get<float>(initialization_parameters["firm_cons_init_total_assets_std"]);
-    firm_cons_init_total_assets_min = std::get<float>(initialization_parameters["firm_cons_init_total_assets_min"]);
-    firm_cons_init_total_assets_max = std::get<float>(initialization_parameters["firm_cons_init_total_assets_max"]);
+    firm_cons_init_total_assets_mean = initialization_parameters["firm_cons_init_total_assets_mean"];
+    firm_cons_init_total_assets_std = initialization_parameters["firm_cons_init_total_assets_std"];
+    firm_cons_init_total_assets_min = initialization_parameters["firm_cons_init_total_assets_min"];
+    firm_cons_init_total_assets_max = initialization_parameters["firm_cons_init_total_assets_max"];
 
     // Dividend ratio if firm is optimistic
-    firm_cons_init_dividend_ratio_optimist_mean = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_optimist_mean"]);
-    firm_cons_init_dividend_ratio_optimist_std = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_optimist_std"]);
-    firm_cons_init_dividend_ratio_optimist_min = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_optimist_min"]);
-    firm_cons_init_dividend_ratio_optimist_max = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_optimist_max"]);
+    firm_cons_init_dividend_ratio_optimist_mean = initialization_parameters["firm_cons_init_dividend_ratio_optimist_mean"];
+    firm_cons_init_dividend_ratio_optimist_std = initialization_parameters["firm_cons_init_dividend_ratio_optimist_std"];
+    firm_cons_init_dividend_ratio_optimist_min = initialization_parameters["firm_cons_init_dividend_ratio_optimist_min"];
+    firm_cons_init_dividend_ratio_optimist_max = initialization_parameters["firm_cons_init_dividend_ratio_optimist_max"];
 
     // Dividend ratio if firm is pessimistic
-    firm_cons_init_dividend_ratio_pessimist_mean = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_pessimist_mean"]);
-    firm_cons_init_dividend_ratio_pessimist_std = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_pessimist_std"]);
-    firm_cons_init_dividend_ratio_pessimist_min = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_pessimist_min"]);
-    firm_cons_init_dividend_ratio_pessimist_max = std::get<float>(initialization_parameters["firm_cons_init_dividend_ratio_pessimist_max"]);
+    firm_cons_init_dividend_ratio_pessimist_mean = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_mean"];
+    firm_cons_init_dividend_ratio_pessimist_std = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_std"];
+    firm_cons_init_dividend_ratio_pessimist_min = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_min"];
+    firm_cons_init_dividend_ratio_pessimist_max = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_max"];
     // Starting wage offers
-    firm_cons_init_wage_offer_mean = std::get<float>(initialization_parameters["firm_cons_init_wage_offer_mean"]);
-    firm_cons_init_wage_offer_std = std::get<float>(initialization_parameters["firm_cons_init_wage_offer_std"]);
-    firm_cons_init_wage_offer_min = std::get<float>(initialization_parameters["firm_cons_init_wage_offer_min"]);
-    firm_cons_init_wage_offer_max = std::get<float>(initialization_parameters["firm_cons_init_wage_offer_max"]);
+    firm_cons_init_wage_offer_mean = initialization_parameters["firm_cons_init_wage_offer_mean"];
+    firm_cons_init_wage_offer_std = initialization_parameters["firm_cons_init_wage_offer_std"];
+    firm_cons_init_wage_offer_min = initialization_parameters["firm_cons_init_wage_offer_min"];
+    firm_cons_init_wage_offer_max = initialization_parameters["firm_cons_init_wage_offer_max"];
     // Starting desired employees
-    firm_cons_init_employee_count_desired_mean = std::get<float>(initialization_parameters["firm_cons_init_employee_count_desired_mean"]);
-    firm_cons_init_employee_count_desired_std = std::get<float>(initialization_parameters["firm_cons_init_employee_count_desired_std"]);
-    firm_cons_init_employee_count_desired_min = std::get<float>(initialization_parameters["firm_cons_init_employee_count_desired_min"]);
-    firm_cons_init_employee_count_desired_max = std::get<float>(initialization_parameters["firm_cons_init_employee_count_desired_max"]);
+    firm_cons_init_employee_count_desired_mean = initialization_parameters["firm_cons_init_employee_count_desired_mean"];
+    firm_cons_init_employee_count_desired_std = initialization_parameters["firm_cons_init_employee_count_desired_std"];
+    firm_cons_init_employee_count_desired_min = initialization_parameters["firm_cons_init_employee_count_desired_min"];
+    firm_cons_init_employee_count_desired_max = initialization_parameters["firm_cons_init_employee_count_desired_max"];
     // Inital planned production
-    firm_cons_init_production_planned_mean = std::get<float>(initialization_parameters["firm_cons_init_production_planned_mean"]);
-    firm_cons_init_production_planned_std = std::get<float>(initialization_parameters["firm_cons_init_production_planned_std"]);
-    firm_cons_init_production_planned_min = std::get<float>(initialization_parameters["firm_cons_init_production_planned_min"]);
-    firm_cons_init_production_planned_max = std::get<float>(initialization_parameters["firm_cons_init_production_planned_max"]);
+    firm_cons_init_production_planned_mean = initialization_parameters["firm_cons_init_production_planned_mean"];
+    firm_cons_init_production_planned_std = initialization_parameters["firm_cons_init_production_planned_std"];
+    firm_cons_init_production_planned_min = initialization_parameters["firm_cons_init_production_planned_min"];
+    firm_cons_init_production_planned_max = initialization_parameters["firm_cons_init_production_planned_max"];
     // Initial good price
-    firm_cons_init_good_price_current_mean = std::get<float>(initialization_parameters["firm_cons_init_good_price_current_mean"]);
-    firm_cons_init_good_price_current_std = std::get<float>(initialization_parameters["firm_cons_init_good_price_current_std"]);
-    firm_cons_init_good_price_current_min = std::get<float>(initialization_parameters["firm_cons_init_good_price_current_min"]);
-    firm_cons_init_good_price_current_max = std::get<float>(initialization_parameters["firm_cons_init_good_price_current_max"]);
+    firm_cons_init_good_price_current_mean = initialization_parameters["firm_cons_init_good_price_current_mean"];
+    firm_cons_init_good_price_current_std = initialization_parameters["firm_cons_init_good_price_current_std"];
+    firm_cons_init_good_price_current_min = initialization_parameters["firm_cons_init_good_price_current_min"];
+    firm_cons_init_good_price_current_max = initialization_parameters["firm_cons_init_good_price_current_max"];
     // Good inventory
-    firm_cons_init_inventory_mean = std::get<float>(initialization_parameters["firm_cons_init_inventory_mean"]);
-    firm_cons_init_inventory_std = std::get<float>(initialization_parameters["firm_cons_init_inventory_std"]);
-    firm_cons_init_inventory_min = std::get<float>(initialization_parameters["firm_cons_init_inventory_min"]);
-    firm_cons_init_inventory_max = std::get<float>(initialization_parameters["firm_cons_init_inventory_max"]);
+    firm_cons_init_inventory_mean = initialization_parameters["firm_cons_init_inventory_mean"];
+    firm_cons_init_inventory_std = initialization_parameters["firm_cons_init_inventory_std"];
+    firm_cons_init_inventory_min = initialization_parameters["firm_cons_init_inventory_min"];
+    firm_cons_init_inventory_max = initialization_parameters["firm_cons_init_inventory_max"];
 
     // Working capital inventory
-    firm_cons_init_working_capital_inventory_mean = std::get<float>(initialization_parameters["firm_cons_init_working_capital_inventory_mean"]);
-    firm_cons_init_working_capital_inventory_std = std::get<float>(initialization_parameters["firm_cons_init_working_capital_inventory_std"]);
-    firm_cons_init_working_capital_inventory_min = std::get<float>(initialization_parameters["firm_cons_init_working_capital_inventory_min"]);
-    firm_cons_init_working_capital_inventory_max = std::get<float>(initialization_parameters["firm_cons_init_working_capital_inventory_max"]);
+    firm_cons_init_working_capital_inventory_mean = initialization_parameters["firm_cons_init_working_capital_inventory_mean"];
+    firm_cons_init_working_capital_inventory_std = initialization_parameters["firm_cons_init_working_capital_inventory_std"];
+    firm_cons_init_working_capital_inventory_min = initialization_parameters["firm_cons_init_working_capital_inventory_min"];
+    firm_cons_init_working_capital_inventory_max = initialization_parameters["firm_cons_init_working_capital_inventory_max"];
     // Desired inventory factor ( characteristic)
-    firm_cons_init_desired_inventory_factor_mean = std::get<float>(initialization_parameters["firm_cons_init_desired_inventory_factor_mean"]);
-    firm_cons_init_desired_inventory_factor_std = std::get<float>(initialization_parameters["firm_cons_init_desired_inventory_factor_std"]);
-    firm_cons_init_desired_inventory_factor_min = std::get<float>(initialization_parameters["firm_cons_init_desired_inventory_factor_min"]);
-    firm_cons_init_desired_inventory_factor_max = std::get<float>(initialization_parameters["firm_cons_init_desired_inventory_factor_max"]);
+    firm_cons_init_desired_inventory_factor_mean = initialization_parameters["firm_cons_init_desired_inventory_factor_mean"];
+    firm_cons_init_desired_inventory_factor_std = initialization_parameters["firm_cons_init_desired_inventory_factor_std"];
+    firm_cons_init_desired_inventory_factor_min = initialization_parameters["firm_cons_init_desired_inventory_factor_min"];
+    firm_cons_init_desired_inventory_factor_max = initialization_parameters["firm_cons_init_desired_inventory_factor_max"];
 
     // Other inits (not randomised)
-    firm_cons_init_production_current_ratio = std::get<float>(initialization_parameters["firm_cons_init_production_current_ratio"]);
-    firm_cons_init_quantity_sold_ratio = std::get<float>(initialization_parameters["firm_cons_init_quantity_sold_ratio"]);
-    firm_cons_init_good_price = std::get<float>(initialization_parameters["firm_cons_init_good_price"]);
+    firm_cons_init_production_current_ratio = initialization_parameters["firm_cons_init_production_current_ratio"];
+    firm_cons_init_quantity_sold_ratio = initialization_parameters["firm_cons_init_quantity_sold_ratio"];
+    firm_cons_init_good_price = initialization_parameters["firm_cons_init_good_price"];
 
     // --- Capital Firm initialization parameters
     // Starting total asset
-    firm_cap_init_total_assets_mean = std::get<float>(initialization_parameters["firm_cap_init_total_assets_mean"]);
-    firm_cap_init_total_assets_std = std::get<float>(initialization_parameters["firm_cap_init_total_assets_std"]);
-    firm_cap_init_total_assets_min = std::get<float>(initialization_parameters["firm_cap_init_total_assets_min"]);
-    firm_cap_init_total_assets_max = std::get<float>(initialization_parameters["firm_cap_init_total_assets_max"]);
+    firm_cap_init_total_assets_mean = initialization_parameters["firm_cap_init_total_assets_mean"];
+    firm_cap_init_total_assets_std = initialization_parameters["firm_cap_init_total_assets_std"];
+    firm_cap_init_total_assets_min = initialization_parameters["firm_cap_init_total_assets_min"];
+    firm_cap_init_total_assets_max = initialization_parameters["firm_cap_init_total_assets_max"];
     // Dividend ratio if firm is optimistic
-    firm_cap_init_dividend_ratio_optimist_mean = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_optimist_mean"]);
-    firm_cap_init_dividend_ratio_optimist_std = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_optimist_std"]);
-    firm_cap_init_dividend_ratio_optimist_min = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_optimist_min"]);
-    firm_cap_init_dividend_ratio_optimist_max = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_optimist_max"]);
+    firm_cap_init_dividend_ratio_optimist_mean = initialization_parameters["firm_cap_init_dividend_ratio_optimist_mean"];
+    firm_cap_init_dividend_ratio_optimist_std = initialization_parameters["firm_cap_init_dividend_ratio_optimist_std"];
+    firm_cap_init_dividend_ratio_optimist_min = initialization_parameters["firm_cap_init_dividend_ratio_optimist_min"];
+    firm_cap_init_dividend_ratio_optimist_max = initialization_parameters["firm_cap_init_dividend_ratio_optimist_max"];
 
     // Dividend ratio if firm is pessimistic
-    firm_cap_init_dividend_ratio_pessimist_mean = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_pessimist_mean"]);
-    firm_cap_init_dividend_ratio_pessimist_std = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_pessimist_std"]);
-    firm_cap_init_dividend_ratio_pessimist_min = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_pessimist_min"]);
-    firm_cap_init_dividend_ratio_pessimist_max = std::get<float>(initialization_parameters["firm_cap_init_dividend_ratio_pessimist_max"]);
+    firm_cap_init_dividend_ratio_pessimist_mean = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_mean"];
+    firm_cap_init_dividend_ratio_pessimist_std = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_std"];
+    firm_cap_init_dividend_ratio_pessimist_min = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_min"];
+    firm_cap_init_dividend_ratio_pessimist_max = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_max"];
     // Starting wage offers
-    firm_cap_init_wage_offer_mean = std::get<float>(initialization_parameters["firm_cap_init_wage_offer_mean"]);
-    firm_cap_init_wage_offer_std = std::get<float>(initialization_parameters["firm_cap_init_wage_offer_std"]);
-    firm_cap_init_wage_offer_min = std::get<float>(initialization_parameters["firm_cap_init_wage_offer_min"]);
-    firm_cap_init_wage_offer_max = std::get<float>(initialization_parameters["firm_cap_init_wage_offer_max"]);
+    firm_cap_init_wage_offer_mean = initialization_parameters["firm_cap_init_wage_offer_mean"];
+    firm_cap_init_wage_offer_std = initialization_parameters["firm_cap_init_wage_offer_std"];
+    firm_cap_init_wage_offer_min = initialization_parameters["firm_cap_init_wage_offer_min"];
+    firm_cap_init_wage_offer_max = initialization_parameters["firm_cap_init_wage_offer_max"];
     // Starting desired employees
-    firm_cap_init_employee_count_desired_mean = std::get<float>(initialization_parameters["firm_cap_init_employee_count_desired_mean"]);
-    firm_cap_init_employee_count_desired_std = std::get<float>(initialization_parameters["firm_cap_init_employee_count_desired_std"]);
-    firm_cap_init_employee_count_desired_min = std::get<float>(initialization_parameters["firm_cap_init_employee_count_desired_min"]);
-    firm_cap_init_employee_count_desired_max = std::get<float>(initialization_parameters["firm_cap_init_employee_count_desired_max"]);
+    firm_cap_init_employee_count_desired_mean = initialization_parameters["firm_cap_init_employee_count_desired_mean"];
+    firm_cap_init_employee_count_desired_std = initialization_parameters["firm_cap_init_employee_count_desired_std"];
+    firm_cap_init_employee_count_desired_min = initialization_parameters["firm_cap_init_employee_count_desired_min"];
+    firm_cap_init_employee_count_desired_max = initialization_parameters["firm_cap_init_employee_count_desired_max"];
 
     // Inital planned production
-    firm_cap_init_production_planned_mean = std::get<float>(initialization_parameters["firm_cap_init_production_planned_mean"]);
-    firm_cap_init_production_planned_std = std::get<float>(initialization_parameters["firm_cap_init_production_planned_std"]);
-    firm_cap_init_production_planned_min = std::get<float>(initialization_parameters["firm_cap_init_production_planned_min"]);
-    firm_cap_init_production_planned_max = std::get<float>(initialization_parameters["firm_cap_init_production_planned_max"]);
+    firm_cap_init_production_planned_mean = initialization_parameters["firm_cap_init_production_planned_mean"];
+    firm_cap_init_production_planned_std = initialization_parameters["firm_cap_init_production_planned_std"];
+    firm_cap_init_production_planned_min = initialization_parameters["firm_cap_init_production_planned_min"];
+    firm_cap_init_production_planned_max = initialization_parameters["firm_cap_init_production_planned_max"];
     // Initial good price
-    firm_cap_init_good_price_current_mean = std::get<float>(initialization_parameters["firm_cap_init_good_price_current_mean"]);
-    firm_cap_init_good_price_current_std = std::get<float>(initialization_parameters["firm_cap_init_good_price_current_std"]);
-    firm_cap_init_good_price_current_min = std::get<float>(initialization_parameters["firm_cap_init_good_price_current_min"]);
-    firm_cap_init_good_price_current_max = std::get<float>(initialization_parameters["firm_cap_init_good_price_current_max"]);
+    firm_cap_init_good_price_current_mean = initialization_parameters["firm_cap_init_good_price_current_mean"];
+    firm_cap_init_good_price_current_std = initialization_parameters["firm_cap_init_good_price_current_std"];
+    firm_cap_init_good_price_current_min = initialization_parameters["firm_cap_init_good_price_current_min"];
+    firm_cap_init_good_price_current_max = initialization_parameters["firm_cap_init_good_price_current_max"];
     // Good inventory
-    firm_cap_init_inventory_mean = std::get<float>(initialization_parameters["firm_cap_init_inventory_mean"]);
-    firm_cap_init_inventory_std = std::get<float>(initialization_parameters["firm_cap_init_inventory_std"]);
-    firm_cap_init_inventory_min = std::get<float>(initialization_parameters["firm_cap_init_inventory_min"]);
-    firm_cap_init_inventory_max = std::get<float>(initialization_parameters["firm_cap_init_inventory_max"]);
+    firm_cap_init_inventory_mean = initialization_parameters["firm_cap_init_inventory_mean"];
+    firm_cap_init_inventory_std = initialization_parameters["firm_cap_init_inventory_std"];
+    firm_cap_init_inventory_min = initialization_parameters["firm_cap_init_inventory_min"];
+    firm_cap_init_inventory_max = initialization_parameters["firm_cap_init_inventory_max"];
 
     // --- Capital Firm initialization parameters
     // Working capital
-    firm_cap_init_working_capital_inventory_mean = std::get<float>(initialization_parameters["firm_cap_init_working_capital_inventory_mean"]);
-    firm_cap_init_working_capital_inventory_std = std::get<float>(initialization_parameters["firm_cap_init_working_capital_inventory_std"]);
-    firm_cap_init_working_capital_inventory_min = std::get<float>(initialization_parameters["firm_cap_init_working_capital_inventory_min"]);
-    firm_cap_init_working_capital_inventory_max = std::get<float>(initialization_parameters["firm_cap_init_working_capital_inventory_max"]);
+    firm_cap_init_working_capital_inventory_mean = initialization_parameters["firm_cap_init_working_capital_inventory_mean"];
+    firm_cap_init_working_capital_inventory_std = initialization_parameters["firm_cap_init_working_capital_inventory_std"];
+    firm_cap_init_working_capital_inventory_min = initialization_parameters["firm_cap_init_working_capital_inventory_min"];
+    firm_cap_init_working_capital_inventory_max = initialization_parameters["firm_cap_init_working_capital_inventory_max"];
     // Desired inventory factor ( characteristics)
-    firm_cap_init_desired_inventory_factor_mean = std::get<float>(initialization_parameters["firm_cap_init_desired_inventory_factor_mean"]);
-    firm_cap_init_desired_inventory_factor_std = std::get<float>(initialization_parameters["firm_cap_init_desired_inventory_factor_std"]);
-    firm_cap_init_desired_inventory_factor_min = std::get<float>(initialization_parameters["firm_cap_init_desired_inventory_factor_min"]);
-    firm_cap_init_desired_inventory_factor_max = std::get<float>(initialization_parameters["firm_cap_init_desired_inventory_factor_max"]);
+    firm_cap_init_desired_inventory_factor_mean = initialization_parameters["firm_cap_init_desired_inventory_factor_mean"];
+    firm_cap_init_desired_inventory_factor_std = initialization_parameters["firm_cap_init_desired_inventory_factor_std"];
+    firm_cap_init_desired_inventory_factor_min = initialization_parameters["firm_cap_init_desired_inventory_factor_min"];
+    firm_cap_init_desired_inventory_factor_max = initialization_parameters["firm_cap_init_desired_inventory_factor_max"];
 
     // Other inits (not randomised)
-    firm_cap_init_production_current_ratio = std::get<float>(initialization_parameters["firm_cap_init_production_current_ratio"]);
-    firm_cap_init_quantity_sold_ratio = std::get<float>(initialization_parameters["firm_cap_init_quantity_sold_ratio"]);
-    firm_cap_init_good_price = std::get<float>(initialization_parameters["firm_cap_init_good_price"]);
+    firm_cap_init_production_current_ratio = initialization_parameters["firm_cap_init_production_current_ratio"];
+    firm_cap_init_quantity_sold_ratio = initialization_parameters["firm_cap_init_quantity_sold_ratio"];
+    firm_cap_init_good_price = initialization_parameters["firm_cap_init_good_price"];
 
     //--- Bank Initialization parameters
-    bank_init_interest_rate = std::get<float>(initialization_parameters["bank_init_interest_rate"]);
+    bank_init_interest_rate = initialization_parameters["bank_init_interest_rate"];
 
 
     //---------- Main Loop Parameters ------------
     // --- Simulation size 
-    n_loops = std::get<int>(main_loop_parameters["n_loops"]);
-    n_households = std::get<int>(main_loop_parameters["n_households"]);
-    n_consumer_firms = std::get<int>(main_loop_parameters["n_consumer_firms"]);
-    n_capital_firms = std::get<int>(main_loop_parameters["n_capital_firms"]);
-    n_firms = std::get<int>(main_loop_parameters["n_firms"]); 
-    n_max_employees = std::get<int>(main_loop_parameters["n_max_employees"]); 
-    time_period = std::get<int>(main_loop_parameters["time_period"]); 
+    n_loops = main_loop_parameters["n_loops"];
+    n_households = main_loop_parameters["n_households"];
+    n_consumer_firms = main_loop_parameters["n_consumer_firms"];
+    n_capital_firms = main_loop_parameters["n_capital_firms"];
+    n_firms = main_loop_parameters["n_firms"]; 
+    n_max_employees = main_loop_parameters["n_max_employees"]; 
+    time_period = main_loop_parameters["time_period"]; 
 
     // ---- Household dynamic parameters
-    household_n_res_wage_decrease = std::get<float>(main_loop_parameters["household_n_res_wage_decrease"]); 
-    household_targeted_savings_to_income_ratio = std::get<float>(main_loop_parameters["household_targeted_savings_to_income_ratio"]);
-    household_household_tax_rate = std::get<float>(main_loop_parameters["household_household_tax_rate"]);
-    household_p_seek_better_job = std::get<float>(main_loop_parameters["household_p_seek_better_job"]);
-    household_sector_spending_randomization = std::get<float>(main_loop_parameters["household_sector_spending_randomization"]);
+    household_n_res_wage_decrease = main_loop_parameters["household_n_res_wage_decrease"]; 
+    household_targeted_savings_to_income_ratio = main_loop_parameters["household_targeted_savings_to_income_ratio"];
+    household_household_tax_rate = main_loop_parameters["household_household_tax_rate"];
+    household_p_seek_better_job = main_loop_parameters["household_p_seek_better_job"];
+    household_sector_spending_randomization = main_loop_parameters["household_sector_spending_randomization"];
 
     // ---- General Firm dynamic parameters
-    standard_employment_contract_length = std::get<int>(main_loop_parameters["standard_employment_contract_length"]);
-    firm_tax_rate = std::get<float>(main_loop_parameters["firm_tax_rate"]);
-    forced_machine_purchases_min = std::get<int>(main_loop_parameters["forced_machine_purchases_min"]); 
-    forced_machine_purchases_max = std::get<int>(main_loop_parameters["forced_machine_purchases_max"]); 
+    standard_employment_contract_length = main_loop_parameters["standard_employment_contract_length"];
+    firm_tax_rate = main_loop_parameters["firm_tax_rate"];
+    forced_machine_purchases_min = main_loop_parameters["forced_machine_purchases_min"]; 
+    forced_machine_purchases_max = main_loop_parameters["forced_machine_purchases_max"]; 
 
     // --- Consumer Firm dynamic parameters
-    firm_cons_good_inv_depr_rate = std::get<float>(main_loop_parameters["firm_cons_good_inv_depr_rate"]);
-    firm_cons_productivity = std::get<float>(main_loop_parameters["firm_cons_productivity"]); // # units produced per worker machine pairing
-    firm_cons_workers_per_machine = std::get<int>(main_loop_parameters["firm_cons_workers_per_machine"]);
-    firm_cons_good_unit_cost = std::get<float>(main_loop_parameters["firm_cons_good_unit_cost"]);
-    firm_max_cons_production_climbdown = std::get<float>(main_loop_parameters["firm_max_cons_production_climbdown"]);
+    firm_cons_good_inv_depr_rate = main_loop_parameters["firm_cons_good_inv_depr_rate"];
+    firm_cons_productivity = main_loop_parameters["firm_cons_productivity"]; // # units produced per worker machine pairing
+    firm_cons_workers_per_machine = main_loop_parameters["firm_cons_workers_per_machine"];
+    firm_cons_good_unit_cost = main_loop_parameters["firm_cons_good_unit_cost"];
+    firm_max_cons_production_climbdown = main_loop_parameters["firm_max_cons_production_climbdown"];
 
     // --- Capital Firm dynamic parameters
-    firm_cap_inv_depr_rate = std::get<float>(main_loop_parameters["firm_cap_inv_depr_rate"]);
-    firm_cap_productivity = std::get<float>(main_loop_parameters["firm_cap_productivity"]); // # units produced per worker machine pairing
-    firm_cap_workers_per_machine = std::get<int>(main_loop_parameters["firm_cap_workers_per_machine"]);
-    firm_cap_good_unit_cost = std::get<float>(main_loop_parameters["firm_cap_good_unit_cost"]);
-    firm_cap_machine_lifespan = std::get<int>(main_loop_parameters["firm_cap_machine_lifespan"]);
+    firm_cap_inv_depr_rate = main_loop_parameters["firm_cap_inv_depr_rate"];
+    firm_cap_productivity = main_loop_parameters["firm_cap_productivity"]; // # units produced per worker machine pairing
+    firm_cap_workers_per_machine = main_loop_parameters["firm_cap_workers_per_machine"];
+    firm_cap_good_unit_cost = main_loop_parameters["firm_cap_good_unit_cost"];
+    firm_cap_machine_lifespan = main_loop_parameters["firm_cap_machine_lifespan"];
 
     // --- Bank dynamic Parameters
-    bank_inflation_reaction = std::get<float>(main_loop_parameters["bank_inflation_reaction"]);
-    bank_inflation_target = std::get<float>(main_loop_parameters["bank_inflation_target"]); 
-    bank_inflation_target_monthly=  std::get<float>(main_loop_parameters["bank_inflation_target_monthly"]);
-    bank_risk_premium = std::get<float>(main_loop_parameters["bank_risk_premium"]);
-    bank_target_capital_ratio = std::get<float>(main_loop_parameters["bank_target_capital_ratio"]);
-    bank_long_term_loan_length = std::get<int>(main_loop_parameters["bank_long_term_loan_length"]);
-    bank_leverage_ratio_lower_threshold = std::get<float>(main_loop_parameters["bank_leverage_ratio_lower_threshold"]);
-    bank_leverage_ratio_upper_threshold = std::get<float>(main_loop_parameters["bank_leverage_ratio_upper_threshold"]);
-
+    bank_inflation_reaction = main_loop_parameters["bank_inflation_reaction"];
+    bank_inflation_target = main_loop_parameters["bank_inflation_target"]; 
+    bank_inflation_target_monthly=  main_loop_parameters["bank_inflation_target_monthly"];
+    bank_risk_premium = main_loop_parameters["bank_risk_premium"];
+    bank_target_capital_ratio = main_loop_parameters["bank_target_capital_ratio"];
+    bank_long_term_loan_length = main_loop_parameters["bank_long_term_loan_length"];
+    bank_leverage_ratio_lower_threshold = main_loop_parameters["bank_leverage_ratio_lower_threshold"];
+    bank_leverage_ratio_upper_threshold = main_loop_parameters["bank_leverage_ratio_upper_threshold"];
 
     // Randomness Parameters
 }

@@ -25,6 +25,7 @@ using namespace std;
 int main()
 {
     cout << "************* Program has started ***************" <<endl;
+    auto start = std::chrono::high_resolution_clock::now(); // Time program
 
     // Output print lines to file
     std::ofstream output_file("../DataLogs/SimulationOutput.txt"); // create output file
@@ -33,27 +34,28 @@ int main()
 
     //std::cout.rdbuf(old_cout_buf); // uncomment this line if you want to output to console
 
-    // Testing the maps are accessible 
-    initialization_parameters["test_param_int"] = 10;
-    initialization_parameters["test_param_float"] = 3.14f;
-
 
 
 
     //  ------------------ STEP 0 INITIALIZATION --------------------- 
     cout << "***************** Initialization Phase begun *********" << endl;
 
-    // Read parameters
+    // Read and assign all simulation parameters
     Read_Parameters(initialization_parameters, "../InitializationData/Initialization_Parameters.csv");
     Read_Parameters(main_loop_parameters, "../InitializationData/Main_Loop_Parameters.csv");
     Read_Parameters(randomness_parameters, "../InitializationData/Randomness_Parameters.csv");
+    cout << "Finished reading all parameter files" << endl;
+    Print_Parameter_Map(initialization_parameters);
+    Print_Parameter_Map(main_loop_parameters);
+    Print_Parameter_Map(randomness_parameters);
+    cout << "Finished printing parameter maps" << endl;
+    Assign_All_Parameters(initialization_parameters, main_loop_parameters, randomness_parameters);
 
 
 
     cout << "This simulation is with the following parameters: n_households: " << n_households << "n_consumer_firms: " << n_consumer_firms 
     << "n_capital_firms: " << n_capital_firms <<  "n_loops: " << n_loops  << endl;
 
-    auto start = std::chrono::high_resolution_clock::now(); // Time program
 
     // Allocate memory and initialize agents, markets, and sectors
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
