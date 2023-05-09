@@ -182,11 +182,22 @@ extern float firm_max_cons_production_climbdown;
 // Consumer Firm Sectors
 struct Consumer_Firm_Sector {
      std::string sector_name;
-     float consumption_weighing; // % of consumption that goes to this sector
      int sector_id; // unique id for this sector
+     float consumption_weighing; // % of consumption that goes to this sector
+     float firm_weighing;
+     float inv_depr_rate;
+     int output_per_machine;
+     int workers_per_machine;
+     float good_unit_cost;
+     float max_production_climbdown;
 
-    Consumer_Firm_Sector(std::string name, float weighing, int id)
-        : sector_name(name), consumption_weighing(weighing), sector_id(id) {}
+    Consumer_Firm_Sector(std::string p_name, int p_sector_id, float p_consumption_weighing,
+    float p_firm_weighing, float p_inv_depr_rate, int p_output_per_machine, int p_workers_per_machine,
+    float p_good_unit_cost, float p_max_production_climbdown)
+    : sector_name(p_name), sector_id(p_sector_id), consumption_weighing(p_consumption_weighing),
+    firm_weighing(p_firm_weighing), inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine),
+    workers_per_machine(p_workers_per_machine), good_unit_cost(p_good_unit_cost), max_production_climbdown(p_max_production_climbdown)
+    {}
 };
 
 //---------------------------------------------

@@ -4,7 +4,7 @@
 void Initialize_Households_Firms_Jobs( vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
  vector<Capital_Firm_Agent*> *pCapital_Firm_vector,  Public_Info_Board* pPublic_Board, Job_Market* pJob_Market,
 Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank,
-vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, vector<pair<int, float>>* pFirm_Weighing_vector){
+vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
         
     // STEP 0.10: Initalize Public Board, Job Market, Bank, Markets
     cout << " Step 0.10: Initalize Public Board, Job Market, Bank, Markets" << endl;
@@ -33,7 +33,7 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, vector<pair<int, fl
 
     //----------- STEP 0.14: Initialize consumer firm sectors
     int n_sectors =  Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector,
-    pFirm_Weighing_vector,  pPublic_Board, pConsumer_Goods_Market, pHousehold_vector);
+     pPublic_Board, pConsumer_Goods_Market, pHousehold_vector);
 
     //----------- STEP 0.16: Send initial goods to markets and initialize price level
     cout << "Step 0.16: Send initial goods to markets and initialize price level" << endl;
@@ -334,12 +334,12 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
 
 // ----------------------- Consumer Sectors ------------------------------//
 int Initialize_Consumer_Firm_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,
-vector<pair<int, float>>* pFirm_Weighing_vector, Public_Info_Board* pPublic_Info_Board, Consumer_Goods_Market* pConsumer_Goods_Market,
+Public_Info_Board* pPublic_Info_Board, Consumer_Goods_Market* pConsumer_Goods_Market,
 vector<Household_Agent*> *pHousehold_vector){
     // Create the sectors
-    int n_sectors = Create_Sectors(pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
+    int n_sectors = Create_Sectors(pConsumer_Firm_Sector_vector);
     // Assign firms to sectors
-    Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector, pFirm_Weighing_vector);
+    Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector);
     // Set up sectors in the public board
     pPublic_Info_Board->Set_Consumer_Sectors(pConsumer_Firm_Sector_vector, n_sectors);
     
@@ -352,7 +352,7 @@ vector<Household_Agent*> *pHousehold_vector){
 
 }
 
-int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,std::vector<std::pair<int, float>>* pFirm_Weighing_vector) {
+int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) {
     std::ifstream file("../InitializationData/Consumer_Firm_Sectors.csv"); // Open the file
 
     if (!file.is_open()) { // Check if file is open
@@ -360,32 +360,43 @@ int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vec
         return 0;
     }
 
-    std::string line;
+    string line;
     std::getline(file, line); // Get the first line (headers)
 
     int temp = 0; // keep track of sector counts
 
     while (std::getline(file, line)) { // Loop through the rest of the lines
-        std::stringstream ss(line); // Create a stringstream from the line
-        std::string sector_name;
-        std::string consumption_weighing_str;
-        std::string sector_id_str;
-        std::string firm_weighing_str;
+        stringstream ss(line); // Create a stringstream from the line
+        string sector_name;
+        string sector_id_str;
+        string consumption_weighing_str;
+        string firm_weighing_str;
+        string inv_depr_rate_str;
+        string output_per_machine_str;
+        string workers_per_machine_str;
+        string good_unit_cost_str;
+        string max_production_climbdown_str;
 
         if (std::getline(ss, sector_name, ',') // Parse the comma separated values into separate variables
-            && std::getline(ss, consumption_weighing_str, ',')
-            && std::getline(ss, sector_id_str, ',')
-            && std::getline(ss, firm_weighing_str, ',')) {
-            float consumption_weighing = std::stof(consumption_weighing_str); // Convert strings to float and int
+            && std::getline(ss, sector_id_str, ',') && std::getline(ss, consumption_weighing_str, ',')
+            && std::getline(ss, firm_weighing_str, ',') && std::getline(ss, inv_depr_rate_str, ',')
+            && std::getline(ss, output_per_machine_str, ',') && std::getline(ss, workers_per_machine_str, ',')
+            && std::getline(ss, good_unit_cost_str, ',') && std::getline(ss, max_production_climbdown_str, ',')) {
+            // Convert strings to float and int
+            float consumption_weighing = std::stof(consumption_weighing_str); 
             int sector_id = std::stoi(sector_id_str);
             float firm_weighing = std::stof(firm_weighing_str);
+            float inv_depr_rate = std::stof(inv_depr_rate_str);
+            int output_per_machine = std::stoi(output_per_machine_str);
+            int workers_per_machine = std::stoi(workers_per_machine_str);
+            float good_unit_cost = std::stof(good_unit_cost_str);
+            float max_production_climbdown = std::stof(max_production_climbdown_str);
 
-            Consumer_Firm_Sector *pSector = new Consumer_Firm_Sector(sector_name, consumption_weighing, sector_id); // Create new instance of Consumer_Firm_Sector struct
+            // Create new instance of Consumer_Firm_Sector struct
+            Consumer_Firm_Sector *pSector = new Consumer_Firm_Sector(sector_name, sector_id, consumption_weighing, firm_weighing,
+                inv_depr_rate, output_per_machine, workers_per_machine, good_unit_cost, max_production_climbdown); 
             pConsumer_Firm_Sector_vector->push_back(pSector); // Add it to the vector
             temp ++;
-            // Push the pair of sector_id and firm_weighing to the vector
-            std::pair<int, float> pair(sector_id, firm_weighing);
-            pFirm_Weighing_vector->push_back(pair);
         }
     }
 
@@ -396,11 +407,11 @@ int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vec
 }
 
 
-/* Function to allocate consumer firms to a sector based on sector weighings, which are given in the pFirm_Weighing_vector
+/* Function to allocate consumer firms to a sector based on sector weighings
 
 */
 void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
- vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,vector<pair<int, float>>* pFirm_Weighing_vector){
+ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
 
         
     std::srand(std::time(0)); // used for random generation
@@ -409,11 +420,16 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
 
     // Shuffle the consumer firm vector to ensure randomness
     std::shuffle(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::default_random_engine(std::time(0)));
-
+    
+    // Create a vector of pairs of sector_id and sector_weighing ****************
+    vector<pair<int, float>> Firm_Weighing_vector;
+    for (Consumer_Firm_Sector* sector : *pConsumer_Firm_Sector_vector) {
+        Firm_Weighing_vector.push_back(make_pair(sector->sector_id, sector->firm_weighing));
+    }
 
     // Assign sectors sequentially to the shuffled firms
     int start_index = 0;
-    for (auto& weighing_pair : *pFirm_Weighing_vector) // Loop through the vector weighing
+    for (auto& weighing_pair : Firm_Weighing_vector) // Loop through the vector weighing
     { 
         // Calculate the number of firms to allocate to this sector - round the value up to ensure we allocate all firms
         int sector_id = weighing_pair.first;
