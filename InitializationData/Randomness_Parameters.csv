@@ -1,2 +1,4 @@
-test_random_int_var, 3
-test_random_float_var, 3.3
+bank_randomness,1.0
+household_randomness,2.0
+consumer_firm_randomness,3.0
+capital_firm_randomness,0.0

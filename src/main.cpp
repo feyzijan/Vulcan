@@ -44,13 +44,7 @@ int main()
     Read_Parameters(initialization_parameters, "../InitializationData/Initialization_Parameters.csv");
     Read_Parameters(main_loop_parameters, "../InitializationData/Main_Loop_Parameters.csv");
     Read_Parameters(randomness_parameters, "../InitializationData/Randomness_Parameters.csv");
-    cout << "Finished reading all parameter files" << endl;
-    Print_Parameter_Map(initialization_parameters);
-    Print_Parameter_Map(main_loop_parameters);
-    Print_Parameter_Map(randomness_parameters);
-    cout << "Finished printing parameter maps" << endl;
     Assign_All_Parameters(initialization_parameters, main_loop_parameters, randomness_parameters);
-
 
 
     cout << "This simulation is with the following parameters: n_households: " << n_households << "n_consumer_firms: " << n_consumer_firms 
