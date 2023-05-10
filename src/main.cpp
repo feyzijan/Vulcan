@@ -44,6 +44,7 @@ int main()
     Read_Parameters(initialization_parameters, "../InitializationData/Initialization_Parameters.csv");
     Read_Parameters(main_loop_parameters, "../InitializationData/Main_Loop_Parameters.csv");
     Read_Parameters(randomness_parameters, "../InitializationData/Randomness_Parameters.csv");
+    cout << "All parameters read successfully" << endl;
     Assign_All_Parameters(initialization_parameters, main_loop_parameters, randomness_parameters);
 
 

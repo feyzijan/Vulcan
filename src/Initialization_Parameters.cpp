@@ -273,11 +273,11 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     forced_machine_purchases_max = main_loop_parameters["forced_machine_purchases_max"]; 
 
     // --- Consumer Firm dynamic parameters
-    firm_cons_good_inv_depr_rate = main_loop_parameters["firm_cons_good_inv_depr_rate"];
+    firm_cons_inv_depr_rate = main_loop_parameters["firm_cons_inv_depr_rate"];
     firm_cons_productivity = main_loop_parameters["firm_cons_productivity"]; // # units produced per worker machine pairing
     firm_cons_workers_per_machine = main_loop_parameters["firm_cons_workers_per_machine"];
     firm_cons_good_unit_cost = main_loop_parameters["firm_cons_good_unit_cost"];
-    firm_max_cons_production_climbdown = main_loop_parameters["firm_max_cons_production_climbdown"];
+    firm_cons_max_production_climbdown = main_loop_parameters["firm_cons_max_production_climbdown"];
 
     // --- Capital Firm dynamic parameters
     firm_cap_inv_depr_rate = main_loop_parameters["firm_cap_inv_depr_rate"];
@@ -285,6 +285,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_workers_per_machine = main_loop_parameters["firm_cap_workers_per_machine"];
     firm_cap_good_unit_cost = main_loop_parameters["firm_cap_good_unit_cost"];
     firm_cap_machine_lifespan = main_loop_parameters["firm_cap_machine_lifespan"];
+    firm_cap_max_production_climbdown = main_loop_parameters["firm_cap_max_production_climbdown"];
 
     // --- Bank dynamic Parameters
     bank_inflation_reaction = main_loop_parameters["bank_inflation_reaction"];
@@ -444,11 +445,11 @@ float firm_cons_init_good_price = 9.5;
 
 
 // --- Consumer Firm dynamic parameters
-float firm_cons_good_inv_depr_rate = 0.01;
+float firm_cons_inv_depr_rate = 0.01;
 float firm_cons_productivity = 1000; // # units produced per worker machine pairing
 int firm_cons_workers_per_machine = 1;
 float firm_cons_good_unit_cost = 1.0;
-float firm_max_cons_production_climbdown = 0.25;
+float firm_cons_max_production_climbdown = 0.25;
 
 
 
@@ -521,6 +522,7 @@ float firm_cap_inv_depr_rate = 0.01;
 float firm_cap_productivity = 10; // # units produced per worker machine pairing
 int firm_cap_workers_per_machine = 1;
 int firm_cap_machine_lifespan = 100;
+float firm_cap_max_production_climbdown = 0.25;
 float firm_cap_good_unit_cost = 20.0;
 
 

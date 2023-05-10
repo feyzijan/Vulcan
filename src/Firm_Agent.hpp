@@ -155,17 +155,19 @@ class Firm_Agent{
     // Inventories
     int inventory;
     int working_capital_inventory;
-    float desired_inventory_factor; // a characteristic
+    float desired_inventory_factor; // Characteristic
     int desired_inventory; 
     float inventory_factor; 
     float inventory_reaction_factor;  
     float machine_utilization;  
+    float inventory_depreciation_rate; // NEWLY ADDDED
     int desired_machines; 
 
     // productivities and stuff 
     int workers_per_machine; // NEWLY ADDDED
     int output_per_machine; // NEWLY ADDDED
     float unit_good_cost; // NEWLY ADDDED
+    float max_production_climbdown; // NEWLY ADDDED
 
     // Others
     bool sentiment; // pessimistic, optimistic

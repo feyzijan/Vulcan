@@ -11,6 +11,11 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     workers_per_machine = firm_cap_workers_per_machine; // global param
     output_per_machine = firm_cap_productivity; // global param
     unit_good_cost = firm_cap_good_unit_cost; // global param
+    inventory_depreciation_rate = firm_cap_inv_depr_rate;
+    max_production_climbdown = firm_cap_max_production_climbdown;
+
+
+
     production_current = max(working_capital_inventory * firm_cap_workers_per_machine * firm_cap_productivity, employee_count_desired / firm_cap_workers_per_machine * firm_cap_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 

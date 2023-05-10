@@ -11,6 +11,8 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     workers_per_machine = firm_cons_workers_per_machine;
     output_per_machine = firm_cons_productivity;
     unit_good_cost = firm_cons_good_unit_cost;
+    inventory_depreciation_rate = firm_cons_inv_depr_rate;
+    max_production_climbdown = firm_cons_max_production_climbdown;
 
     production_current = max(working_capital_inventory * firm_cons_workers_per_machine * firm_cons_productivity,employee_count_desired / firm_cons_workers_per_machine * firm_cons_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
@@ -38,7 +40,7 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent(){}
 The depreciation rate is set exogenously in the initialization parameter for all firms
 */
 void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(float(inventory)*(1.0-firm_cons_good_inv_depr_rate));
+    inventory  = int(float(inventory)*(1.0-firm_cons_inv_depr_rate));
 }
 
 
@@ -88,7 +90,16 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     // Update the sector of the consumer goods the firm is producing
     cons_goods_on_market->Set_Sector_ID(pSector_Struct->sector_id);
 
-    // Update any other necessary variables
+    // Update certain firm characteristics to match that of the sector
+
+    output_per_machine = pSector_Struct->output_per_machine;
+    workers_per_machine = pSector_Struct->output_per_machine;
+    unit_good_cost = pSector_Struct->good_unit_cost;
+    max_production_climbdown = pSector_Struct->max_production_climbdown;
+    inventory_depreciation_rate = pSector_Struct->inv_depr_rate;
+
+
+     
 
 
 

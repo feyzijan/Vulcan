@@ -278,7 +278,7 @@ void Firm_Agent::Determine_New_Production()
     production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
 
     // Impose limit on how much they can tone down production - maybe just change bariables above?
-    production_planned = max(production_planned, static_cast<int>(production_past*(1-firm_max_cons_production_climbdown))); 
+    production_planned = max(production_planned, static_cast<int>(production_past*(1-firm_cons_max_production_climbdown))); 
     
 }
 

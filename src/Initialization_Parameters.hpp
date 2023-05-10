@@ -170,11 +170,11 @@ extern float firm_cons_init_quantity_sold_ratio;
 extern float firm_cons_init_good_price;
 
 // --- Consumer Firm dynamic parameters
-extern float firm_cons_good_inv_depr_rate;
+extern float firm_cons_inv_depr_rate;
 extern float firm_cons_productivity; // # units produced per worker machine pairing
 extern int firm_cons_workers_per_machine;
 extern float firm_cons_good_unit_cost;
-extern float firm_max_cons_production_climbdown;
+extern float firm_cons_max_production_climbdown;
 
 
 //---------------------------------------------
@@ -267,6 +267,7 @@ extern float firm_cap_inv_depr_rate;
 extern float firm_cap_productivity; // # units produced per worker machine pairing
 extern int firm_cap_workers_per_machine;
 extern int firm_cap_machine_lifespan;
+extern float firm_cap_max_production_climbdown;
 extern float firm_cap_good_unit_cost;
 
 

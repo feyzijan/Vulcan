@@ -377,14 +377,14 @@ int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vec
         string good_unit_cost_str;
         string max_production_climbdown_str;
 
-        if (std::getline(ss, sector_name, ',') // Parse the comma separated values into separate variables
-            && std::getline(ss, sector_id_str, ',') && std::getline(ss, consumption_weighing_str, ',')
+        // Parse the comma separated values into separate variables
+        if (std::getline(ss, sector_name, ',') && std::getline(ss, sector_id_str, ',') && std::getline(ss, consumption_weighing_str, ',')
             && std::getline(ss, firm_weighing_str, ',') && std::getline(ss, inv_depr_rate_str, ',')
             && std::getline(ss, output_per_machine_str, ',') && std::getline(ss, workers_per_machine_str, ',')
             && std::getline(ss, good_unit_cost_str, ',') && std::getline(ss, max_production_climbdown_str, ',')) {
             // Convert strings to float and int
-            float consumption_weighing = std::stof(consumption_weighing_str); 
             int sector_id = std::stoi(sector_id_str);
+            float consumption_weighing = std::stof(consumption_weighing_str); 
             float firm_weighing = std::stof(firm_weighing_str);
             float inv_depr_rate = std::stof(inv_depr_rate_str);
             int output_per_machine = std::stoi(output_per_machine_str);
@@ -422,14 +422,14 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
     std::shuffle(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::default_random_engine(std::time(0)));
     
     // Create a vector of pairs of sector_id and sector_weighing ****************
-    vector<pair<int, float>> Firm_Weighing_vector;
+    vector<pair<int, float>> vec_Sector_Weights;
     for (Consumer_Firm_Sector* sector : *pConsumer_Firm_Sector_vector) {
-        Firm_Weighing_vector.push_back(make_pair(sector->sector_id, sector->firm_weighing));
+        vec_Sector_Weights.push_back(make_pair(sector->sector_id, sector->firm_weighing));
     }
 
     // Assign sectors sequentially to the shuffled firms
     int start_index = 0;
-    for (auto& weighing_pair : Firm_Weighing_vector) // Loop through the vector weighing
+    for (auto& weighing_pair : vec_Sector_Weights) // Loop through the vector weighing
     { 
         // Calculate the number of firms to allocate to this sector - round the value up to ensure we allocate all firms
         int sector_id = weighing_pair.first;
