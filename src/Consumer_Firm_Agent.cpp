@@ -13,6 +13,7 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     unit_good_cost = firm_cons_good_unit_cost;
     inventory_depreciation_rate = firm_cons_inv_depr_rate;
     max_production_climbdown = firm_cons_max_production_climbdown;
+    emission_per_unit = firm_cons_init_emissions_per_unit;
 
     production_current = max(working_capital_inventory * firm_cons_workers_per_machine * firm_cons_productivity,employee_count_desired / firm_cons_workers_per_machine * firm_cons_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
@@ -97,10 +98,7 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     unit_good_cost = pSector_Struct->good_unit_cost;
     max_production_climbdown = pSector_Struct->max_production_climbdown;
     inventory_depreciation_rate = pSector_Struct->inv_depr_rate;
-
-
-     
-
+    emission_per_unit = pSector_Struct->emission_per_unit;
 
 
 }

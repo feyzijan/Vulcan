@@ -168,6 +168,7 @@ extern float firm_cons_init_desired_inventory_factor_max;
 extern float firm_cons_init_production_current_ratio;
 extern float firm_cons_init_quantity_sold_ratio;
 extern float firm_cons_init_good_price;
+extern float firm_cons_init_emissions_per_unit;
 
 // --- Consumer Firm dynamic parameters
 extern float firm_cons_inv_depr_rate;
@@ -181,22 +182,24 @@ extern float firm_cons_max_production_climbdown;
 
 // Consumer Firm Sectors
 struct Consumer_Firm_Sector {
-     std::string sector_name;
-     int sector_id; // unique id for this sector
-     float consumption_weighing; // % of consumption that goes to this sector
-     float firm_weighing;
-     float inv_depr_rate;
-     int output_per_machine;
-     int workers_per_machine;
-     float good_unit_cost;
-     float max_production_climbdown;
+    std::string sector_name;
+    int sector_id; // unique id for this sector
+    float consumption_weighing; // % of consumption that goes to this sector
+    float firm_weighing;
+    float inv_depr_rate;
+    int output_per_machine;
+    int workers_per_machine;
+    float good_unit_cost;
+    float max_production_climbdown;
+    float emission_per_unit; // NEWLY ADDED
 
     Consumer_Firm_Sector(std::string p_name, int p_sector_id, float p_consumption_weighing,
     float p_firm_weighing, float p_inv_depr_rate, int p_output_per_machine, int p_workers_per_machine,
-    float p_good_unit_cost, float p_max_production_climbdown)
+    float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit)
     : sector_name(p_name), sector_id(p_sector_id), consumption_weighing(p_consumption_weighing),
     firm_weighing(p_firm_weighing), inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine),
-    workers_per_machine(p_workers_per_machine), good_unit_cost(p_good_unit_cost), max_production_climbdown(p_max_production_climbdown)
+    workers_per_machine(p_workers_per_machine), good_unit_cost(p_good_unit_cost), 
+    max_production_climbdown(p_max_production_climbdown), emission_per_unit(p_emissions_per_unit)
     {}
 };
 
@@ -261,6 +264,7 @@ extern float firm_cap_init_desired_inventory_factor_max;
 extern float firm_cap_init_production_current_ratio;
 extern float firm_cap_init_quantity_sold_ratio;
 extern float firm_cap_init_good_price;
+extern float firm_cap_init_emissions_per_unit;
 
 // --- Capital Firm dynamic parameters
 extern float firm_cap_inv_depr_rate;

@@ -183,6 +183,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_init_production_current_ratio = initialization_parameters["firm_cons_init_production_current_ratio"];
     firm_cons_init_quantity_sold_ratio = initialization_parameters["firm_cons_init_quantity_sold_ratio"];
     firm_cons_init_good_price = initialization_parameters["firm_cons_init_good_price"];
+    firm_cons_init_emissions_per_unit = initialization_parameters["firm_cons_init_emissions_per_unit"];
 
     // --- Capital Firm initialization parameters
     // Starting total asset
@@ -244,6 +245,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_init_production_current_ratio = initialization_parameters["firm_cap_init_production_current_ratio"];
     firm_cap_init_quantity_sold_ratio = initialization_parameters["firm_cap_init_quantity_sold_ratio"];
     firm_cap_init_good_price = initialization_parameters["firm_cap_init_good_price"];
+    firm_cap_init_emissions_per_unit = initialization_parameters["firm_cap_init_emissions_per_unit"];
 
     //--- Bank Initialization parameters
     bank_init_interest_rate = initialization_parameters["bank_init_interest_rate"];
@@ -442,6 +444,7 @@ float firm_cons_init_desired_inventory_factor_max = 4.0;
 float firm_cons_init_production_current_ratio = 0.4;
 float firm_cons_init_quantity_sold_ratio = 0.25;
 float firm_cons_init_good_price = 9.5;
+float firm_cons_init_emissions_per_unit = 10.0;
 
 
 // --- Consumer Firm dynamic parameters
@@ -515,7 +518,7 @@ float firm_cap_init_desired_inventory_factor_max = 4.0;
 float firm_cap_init_production_current_ratio = 0.4;
 float firm_cap_init_quantity_sold_ratio = 0.25;
 float firm_cap_init_good_price = 100.0;
-
+float firm_cap_init_emissions_per_unit = 100.0;
 
 // --- Capital Firm dynamic parameters
 float firm_cap_inv_depr_rate = 0.01;

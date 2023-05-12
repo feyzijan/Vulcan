@@ -376,12 +376,14 @@ int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vec
         string workers_per_machine_str;
         string good_unit_cost_str;
         string max_production_climbdown_str;
+        string emission_per_unit_str;
 
         // Parse the comma separated values into separate variables
         if (std::getline(ss, sector_name, ',') && std::getline(ss, sector_id_str, ',') && std::getline(ss, consumption_weighing_str, ',')
             && std::getline(ss, firm_weighing_str, ',') && std::getline(ss, inv_depr_rate_str, ',')
             && std::getline(ss, output_per_machine_str, ',') && std::getline(ss, workers_per_machine_str, ',')
-            && std::getline(ss, good_unit_cost_str, ',') && std::getline(ss, max_production_climbdown_str, ',')) {
+            && std::getline(ss, good_unit_cost_str, ',') && std::getline(ss, max_production_climbdown_str, ',') 
+            && std::getline(ss, emission_per_unit_str, ',')) {
             // Convert strings to float and int
             int sector_id = std::stoi(sector_id_str);
             float consumption_weighing = std::stof(consumption_weighing_str); 
@@ -391,10 +393,11 @@ int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vec
             int workers_per_machine = std::stoi(workers_per_machine_str);
             float good_unit_cost = std::stof(good_unit_cost_str);
             float max_production_climbdown = std::stof(max_production_climbdown_str);
-
+            float emission_per_unit = std::stof(emission_per_unit_str);
+    
             // Create new instance of Consumer_Firm_Sector struct
             Consumer_Firm_Sector *pSector = new Consumer_Firm_Sector(sector_name, sector_id, consumption_weighing, firm_weighing,
-                inv_depr_rate, output_per_machine, workers_per_machine, good_unit_cost, max_production_climbdown); 
+                inv_depr_rate, output_per_machine, workers_per_machine, good_unit_cost, max_production_climbdown, emission_per_unit); 
             pConsumer_Firm_Sector_vector->push_back(pSector); // Add it to the vector
             temp ++;
         }

@@ -86,6 +86,10 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     capital_goods_list.push_back(initial_capital_goods);
     //cout << "Passed capital good into list" << endl;; 
 
+    // CO2 Emissions
+    emission_per_unit = 1; // TODO: Replace with variable
+    total_emissions = 0;
+
     current_date = 0;
 }
 
@@ -774,7 +778,7 @@ void Firm_Agent::Pay_Liabilities(){
 
         dividend_payments = excess_profits * dividend_ratio; // Decide dividends
         excess_profits -= dividend_payments; // Deduct dividends from excess profits
-        
+
         cash_on_hand -= dividend_payments + tax_payments; // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
     }
 

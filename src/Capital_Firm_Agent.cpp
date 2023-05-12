@@ -13,6 +13,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     unit_good_cost = firm_cap_good_unit_cost; // global param
     inventory_depreciation_rate = firm_cap_inv_depr_rate;
     max_production_climbdown = firm_cap_max_production_climbdown;
+    emission_per_unit = firm_cap_init_emissions_per_unit;
 
 
 

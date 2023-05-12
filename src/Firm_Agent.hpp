@@ -176,11 +176,16 @@ class Firm_Agent{
     float unit_good_cost; // NEWLY ADDDED
     float max_production_climbdown; // NEWLY ADDDED
 
+    // CO2 Emissions
+    float emission_per_unit; // NEWLY ADDDED
+    int total_emissions; // NEWLY ADDDED
+    
     // Others
     bool sentiment; // pessimistic, optimistic
     bool bankrupt;
     bool is_cons_firm; // type identifier, may be useful
     int current_date;
+
 
 };
 

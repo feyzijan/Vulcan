@@ -83,7 +83,8 @@ firm_cons_init_desired_inventory_factor_min,0.1
 firm_cons_init_desired_inventory_factor_max,4.0
 firm_cons_init_production_current_ratio,0.4
 firm_cons_init_quantity_sold_ratio,0.25
-firm_cons_init_good_price_,9.5
+firm_cons_init_good_price,9.5
+firm_cap_init_emissions_per_unit,10.0
 firm_cap_init_total_assets_mean,10000.0
 firm_cap_init_total_assets_std,2500.0
 firm_cap_init_total_assets_min,1.0
@@ -127,3 +128,4 @@ firm_cap_init_desired_inventory_factor_max,4.0
 firm_cap_init_production_current_ratio,0.4
 firm_cap_init_quantity_sold_ratio,0.25
 firm_cap_init_good_price,100.0
+firm_cap_init_emissions_per_unit,100.0
