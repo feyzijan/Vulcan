@@ -129,10 +129,14 @@ Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
     int short_term_funding_gap = pFirm->Get_Short_Term_Funding_Gap();
     
     if (short_term_funding_gap <= 0){
-        cout << "Error in Bank_Agent::Issue_Short_Term_Loan() - Firm has no short term funding gap" << endl;
+        cout << "ERROR: Bank_Agent::Issue_Short_Term_Loan() - Firm has no short term funding gap " << short_term_funding_gap << ", firm #" << pFirm << endl;
     }
 
     int loan_amount = short_term_funding_gap * extra_funding;
+    if (loan_amount < 0){
+        cout << "ERROR: Bank_Agent::Issue_Short_Term_Loan() - loan_amount < 0 - firm #" << pFirm << endl;
+        cout << "Firm has short term funding gap "  << short_term_funding_gap<< endl;
+    }
 
     // Issue the loan
     Loan* new_loan = new Loan(pFirm,r_rate, loan_amount, short_term_loan_length,1);
@@ -163,12 +167,12 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
     int long_term_funding_gap = pFirm->Get_Long_Term_Funding_Gap(); 
 
     if (long_term_funding_gap <= 0){
-        cout << "Error in Bank_Agent::Issue_Long_Term_Loan() - long_term_funding_gap <= 0" << endl;
+        cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - long_term_funding_gap <= 0,  firm #" << pFirm  << endl;
     }
 
     float leverage_ratio = pFirm->Get_Leverage_Ratio();
     if (leverage_ratio < 0){
-        cout << "Error in Bank_Agent::Issue_Long_Term_Loan() - leverage_ratio < 0" << endl;
+        cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - leverage_ratio < 0 , firm #" << pFirm  << endl;
     }
 
     if(leverage_ratio < leverage_ratio_upper_threshold){
@@ -176,6 +180,11 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
         float excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
         float loan_rate = r_rate + risk_premium*excess_leverage;
         int loan_amount = long_term_funding_gap * extra_funding;
+
+        if (loan_amount < 0){
+            cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_amount < 0 - firm #" << pFirm << endl;
+            cout << "Firm has long term funding gap "  << long_term_funding_gap<< endl;
+        }
         
         Loan* new_loan = new Loan(pFirm,loan_rate, loan_amount , long_term_loan_length,0);
         
@@ -188,7 +197,7 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
         outstanding_long_term_loans += loan_amount;
         long_term_loan_book.push_back(new_loan);
         return new_loan;
-    } else { return nullptr;} // Don't issue loan if firm is too leveraged
+        } else { return nullptr;} // Don't issue loan if firm is too leveraged
 
 }
 

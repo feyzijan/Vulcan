@@ -17,6 +17,19 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pBank->Update_Interest_Rate();
     pPublic_Info_Board->Update_Interest_Rate();
 
+    // Step 1.11: Delete agents that are bankrupt
+    // Delete bankrupt irm_Agent objects
+/*     for (auto it = pFirm_vector->begin(); it != pFirm_vector->end();){
+    if ((*it)->Get_Bankruptcy_Status()){
+        delete *it; // Calls destructor of the agent
+        it = pFirm_vector->erase(it);
+    } else{++it;} }
+ */
+
+
+    
+
+
 
 
     // Shuffle the firm and households vectors randomly using the random number generator

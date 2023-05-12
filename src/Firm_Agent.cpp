@@ -78,6 +78,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     machine_utilization = 0.0;
     desired_machines = 0;
     pPublic_Info_Board = nullptr;
+    capital_goods_current_value = firm_cap_init_good_price;
 
     // Initialize capital good inventory
     initial_capital_goods = new Capital_Good(nullptr,firm_cap_init_good_price,working_capital_inventory,firm_cap_machine_lifespan);
@@ -121,13 +122,16 @@ As it depreciates each capital object, check if it has fully depreciated, and if
 TODO: Check below loop works properly once I update i
 */
 void Firm_Agent::Depreciate_Capital(){
+    capital_goods_current_value = 0;
     auto it = capital_goods_list.begin();
+
     while(it !=  capital_goods_list.end()) {
         (*it)->Depreciate(); 
+        capital_goods_current_value += (*it)->Get_Value();
         if((*it)->Check_Depreciation() == true) { // Check if capital good has fully depreciated
             working_capital_inventory -= (*it)->Get_Quantity();
             if (working_capital_inventory < 0) {
-                cout << "Error in Firm_Agent::Depreciate_Capital() - working_capital_inventory < 0" << endl;
+                cout << "ERROR: Firm_Agent::Depreciate_Capital() - working_capital_inventory < 0 at firm # " << this << endl;
                 working_capital_inventory = 0;
             } 
             it = capital_goods_list.erase(it);
@@ -191,7 +195,7 @@ void Firm_Agent::Check_Sales(){
     revenue_sales = quantity_sold * good_price_current; 
 
     if (revenue_sales < 0 || revenue_sales <0){ // DEBUG Lines
-        cout << "Error - Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << endl;
+        cout << "ERROR: Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << "at firm # " << this <<  endl;
     }
 
     inventory_factor = float(inventory) / float(production_current);
@@ -395,16 +399,16 @@ void Firm_Agent::Layoff_Excess_Workers(){
 
     // check for errors
     if (active_job_list.size() == 0){
-        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() == 0" << endl;
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() == 0 at firm # " << this << endl;
         return;
     } else if ( active_job_list.size() != employee_count){
-        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() != employee_count" << endl;
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() != employee_count at firm # " << this << endl;
         return;
     } else if ( layoff_count > active_job_list.size() ){
-        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - layoff_count > active_job_list.size()" << endl;
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - layoff_count > active_job_list.size() at firm # " << this << endl;
         return;
     } else if ( layoff_count < 0 ){
-        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - layoff_count < 0" << endl;
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - layoff_count < 0 at firm # " << this << endl;
         return;
     }
 
@@ -492,10 +496,10 @@ void Firm_Agent::Produce_Goods(){
 
     // Check for erroneous values - debugging
     if ( labor_utilization < 0 || labor_utilization > 1){
-        cout << "Error in Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
+        cout << "ERROR: Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1 at firm # " << this<< endl;
         labor_utilization = 0;
     } else if ( machine_utilization < 0 || machine_utilization > 1){
-        cout << "Error in Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1" << endl;
+        cout << "ERROR: Firm_Agent::Produce_Goods(): Labor or machine utilization is negative or > 1 at firm # " << this << endl;
         machine_utilization = 0;
     }
 
@@ -506,10 +510,10 @@ void Firm_Agent::Produce_Goods(){
     production_current = min(int(production_max*labor_utilization), production_planned);
 
     if ( production_current < 0 ){
-        cout << "Error in Produce_Goods(): Production current is negative : p_current = " << production_current << endl;
+        cout << "ERROR: Produce_Goods(): Production current is negative : p_current = " << production_current << "at firm # " << this << endl;
     } else if( production_max < 0){
-        cout << "Error in Produce_Goods(): Production max is negative : p_max = " << production_max << " working_capital_inventory: " << 
-        working_capital_inventory << " output_per_machine" << output_per_machine <<  endl;
+        cout << "ERROR: Produce_Goods(): Production max is negative : p_max = " << production_max << " working_capital_inventory: " << 
+        working_capital_inventory << " output_per_machine" << output_per_machine <<  "at firm # " << this <<  endl;
         production_max = 0;
     }
 
@@ -544,11 +548,11 @@ void Firm_Agent::Buy_Capital_Goods(){
             working_capital_inventory += n_new_machines_bought;
             capital_costs = total_price_paid;
         } else if (n_new_machines_bought < 0) {
-            cout << "Error in Firm_Agent::Buy_Capital_Goods(): negative number of machines bought n = " << n_new_machines_bought <<  endl;
+            cout << "ERROR: Firm_Agent::Buy_Capital_Goods(): negative number of machines bought n = " << n_new_machines_bought << "at firm # " << this <<  endl;
             n_new_machines_bought = 0;
         }
         if (total_price_paid < 0){
-            cout << "Error in Firm_Agent::Buy_Capital_Goods(): negative price paid =  " << total_price_paid << endl;
+            cout << "ERROR: Firm_Agent::Buy_Capital_Goods(): negative price paid =  " << total_price_paid << "at firm # " << this << endl;
             total_price_paid = 0;
         }
     }
@@ -579,11 +583,11 @@ void Firm_Agent::Seek_Short_Term_Loan(){
         new_loan_issuance += principal;
         short_term_funding_gap = 0;
         if (principal <0){
-            cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0" << endl;
+            cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0 at firm # " << this << endl;
         }
     } else{
         // This is an error becuase firms should always get a short term loan ( for now)
-        cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - new_loan == nullptr" << endl;
+        cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - new_loan == nullptr,  at firm # " << this << endl;
     }
 }
 
@@ -604,7 +608,7 @@ void Firm_Agent::Seek_Long_Term_Loan(){
         new_loan_issuance += principal;
         long_term_funding_gap = 0;
         if(principal < 0){
-            cout << "Error in Firm_Agent::Seek_Long_Term_Loan(), negative principal amount" << endl;
+            cout << "ERROR: Firm_Agent::Seek_Long_Term_Loan() - principal < 0 at firm # "<< this << endl;
         }
     } else{
         cout << " Firm_Agent::Seek_Long_Term_Loan() - Loan rejected" << endl;
@@ -621,7 +625,7 @@ void Firm_Agent::Update_Leverage_Ratio(){
     for (int i = 0; i < loan_book.size(); i++){
         int temp = loan_book[i]->Get_Principal_Amount();
         if (temp < 0){
-            cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative loan principal amount found" << endl;
+            cout << "ERROR: Firm_Agent::Update_Leverage_Ratio(), negative loan principal at firm # " <<this << endl;
             temp = 0;
         }
         outstanding_debt_total += temp;
@@ -631,7 +635,8 @@ void Firm_Agent::Update_Leverage_Ratio(){
     leverage_ratio = float(outstanding_debt_total)/ float(average_profit*12);
     if (leverage_ratio < 0)
     {
-        cout << "Error in Firm_Agent::Update_Leverage_Ratio(), negative leverage ratio" << endl;
+        cout << "ERROR: Firm_Agent::Update_Leverage_Ratio(), negative leverage ratio at firm # " << this << endl;
+        cout << "Firm has outstanding debt: " << outstanding_debt_total << " and average profit*12: " << average_profit << endl;
         leverage_ratio = 0;
     }
         
@@ -652,6 +657,50 @@ void Firm_Agent::Update_Loan_List(){
 }
 
 
+
+/* Method for the firm to avoid bankruptcy by having a fire sale
+*/
+bool Firm_Agent::Avoid_Bankruptcy(){
+    if( capital_goods_current_value > long_term_funding_gap){
+        cout << " Firm has enough money to sell all assets to cover costs " << endl;
+        cash_on_hand += capital_goods_current_value;
+        long_term_funding_gap = max(total_liabilities - cash_on_hand,0);
+        
+        if (long_term_funding_gap <0){
+            cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - long_term_funding_gap < 0 despite avoiding bankruptcy at firm # " << this << endl;
+        }
+        
+        // Delete(sell) all capital goods, but leave with one just because
+        capital_goods_list.clear();
+        capital_goods_current_value = 0;
+        working_capital_inventory = 1;
+
+        // Layoff all workers but one ( they are still paid for the preceeding period)
+        int layoff_count = employee_count - 1;
+        for (int i=0; i<layoff_count; i++){
+            active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
+            active_job_list.pop_back();
+        }
+        employee_count = 1;
+        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
+        return 1;
+    } else {
+        // layoff all workers and go bankrupt
+        int layoff_count = employee_count;
+
+        for (int i=0; i<layoff_count; i++){
+            active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
+            active_job_list.pop_back();
+        }
+        employee_count = 0;
+        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
+
+        return 0;
+    }
+}
+
+
+
 /* Function to pay liabilities and seek loans or go bankrupt if necessary
 TODO: *** CHECK if any of the below bills has already been deducted from cash on hand
 */
@@ -667,60 +716,70 @@ void Firm_Agent::Pay_Liabilities(){
         int current_principal_payment = loan_ptr->Calculate_Principal_Repayment();
         loan_ptr->Deduct_Principal_Repayment(current_principal_payment);
         debt_principal_payments += current_principal_payment;
-        debt_interest_payments += loan_ptr->Calculate_Interest_Repayment();
+        debt_interest_payments += loan_ptr->Calculate_Interest_Repayment(); // No need to deduct this
     }
+    // Note: here I am assuming the firm has already made the payments for simplicity, in reality it hasn't but it will have to do avoid bankruptcy
     Update_Loan_List(); // Delete loans that have been paid off
-    Update_Leverage_Ratio();
-    // Note that newly issued loans' principals at time t have been added to cash on hand
-
-    //-------------------
+    Update_Leverage_Ratio(); 
+    // Note that newly issued loans' principals have already been added to cash on hand
 
     //------ Wages ------
     // Calculate wage bill 
     labor_wage_bill = 0;
     for (auto i = active_job_list.begin(); i != active_job_list.end(); ++i){ 
     labor_wage_bill += (*i)->Get_Wage();}
-    
-    // -------------------
 
     // ------ Other bills
+    /* The below costs have not been deducted from the cash on hand, but it is assumed the firm paid for them
     // capital_costs; // calculated in Buy_Capital_Goods()
-    // production_costs; // calculated in Produce_Goods() in subclass
+    // production_costs; // calculated in Produce_Goods() in subclass - this
+    */
 
     // Tally up liabilities
     total_liabilities = labor_wage_bill + debt_principal_payments + debt_interest_payments + capital_costs + production_costs;
 
     // Tally up income
     total_income = revenue_sales + subsidies;
-    cash_on_hand += total_income; // new_loan_issuance already added when loans were taken
+    cash_on_hand += total_income;
 
+    // check if the firm has a structural deficit
     long_term_funding_gap = max(total_liabilities - cash_on_hand,0);
+
     if (long_term_funding_gap > 0){
         // Need financing to avoid bankruptcy
         Seek_Long_Term_Loan();
-        if (long_term_funding_gap > 0){ // If loan was taken this will be 0
-            bankrupt = true;
-            // Avoid_Bankruptcy()
-            // Initiate_Bankruptcy()
-        } else{
+        if (long_term_funding_gap > 0){ // Bank did not give loan
+            cout << "Firm Agent at address: " << this << " is about to go bankrupt" << endl;
+            if(Avoid_Bankruptcy()){
+                cout << "Firm Agent at address: " << this << " avoided bankruptcy" << endl;
+                bankrupt = false;
+            } else{
+                cout << "Firm Agent at address: " << this << " went bankrupt" << endl;
+                bankrupt = true;
+            }
+        } else { // Successfully took a loan to cover shortfall
             bankrupt = false;
         }
 
     } else {
         // Pay bills
         cash_on_hand -= total_liabilities;
+        total_liabilities = 0;
+
         // Pay dividends and taxes
         int excess_profits = max(0,total_income - total_liabilities); // Calculate excess profits
+        
         tax_payments = excess_profits * firm_tax_rate; // Calculate taxes
         excess_profits -= tax_payments; // Deduct taxes from excess profits
+
         dividend_payments = excess_profits * dividend_ratio; // Decide dividends
         excess_profits -= dividend_payments; // Deduct dividends from excess profits
+        
         cash_on_hand -= dividend_payments + tax_payments; // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
     }
 
     // Reset parameters before next time step
     new_loan_issuance = 0;
-    total_liabilities = 0;
 
 }
 

@@ -60,6 +60,10 @@ class Firm_Agent{
     void Update_Leverage_Ratio();
     void Update_Loan_List(); // calledby Pay_Liabilities
     void Pay_Liabilities();
+
+    // Bankrupcty
+    bool Avoid_Bankruptcy();
+    void Initiate_Bankruptcy();
     
  
     // Getters
@@ -67,6 +71,7 @@ class Firm_Agent{
     int Get_Long_Term_Funding_Gap() {return long_term_funding_gap;}
     float Get_Leverage_Ratio() {return leverage_ratio;}
     int Get_Sector_ID() {return sector_id;}
+    bool Get_Bankruptcy_Status() {return bankrupt;}
     
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -162,6 +167,8 @@ class Firm_Agent{
     float machine_utilization;  
     float inventory_depreciation_rate; // NEWLY ADDDED
     int desired_machines; 
+
+    int capital_goods_current_value; // NEWLY ADDED
 
     // productivities and stuff 
     int workers_per_machine; // NEWLY ADDDED
