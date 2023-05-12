@@ -72,7 +72,7 @@ int* Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
         return arr;
     } else{
 
-        for (std::vector<Capital_Good*>::iterator it = cap_goods_list.begin(); it != cap_goods_list.end(); ++it) 
+        for (vector<Capital_Good*>::iterator it = cap_goods_list.begin(); it != cap_goods_list.end(); ++it) 
         { // Loop through the capital goods list
             Capital_Good* cap_good = *it; // select current good
             int q_on_market = cap_good->Get_Quantity();

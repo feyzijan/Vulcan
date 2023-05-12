@@ -20,8 +20,11 @@ class Consumer_Good: public General_Good{
     //Printing and Debugging
     void Print();
     // Getters
-    Consumer_Firm_Agent* GetSeller() {return pSeller;}
+    Consumer_Firm_Agent* Get_Seller() {return pSeller;}
     float Get_Unit_Emissions() {return unit_emissions;}
+
+    // Setters
+    void Set_Seller_Pointer(Consumer_Firm_Agent* new_seller) {pSeller = new_seller;}
 
 
     protected:

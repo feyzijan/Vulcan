@@ -11,7 +11,7 @@ map<string, float> randomness_parameters;
 
 
 // Function to split a string by a delimiter and return a vector of tokens.
-vector<string> split(const std::string &s, char delimiter) {
+vector<string> split(const string &s, char delimiter) {
     vector<string> result;
     std::istringstream iss(s);
     string token;

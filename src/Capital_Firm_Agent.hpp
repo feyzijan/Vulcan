@@ -16,7 +16,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     // Constructors and Destructor
     Capital_Firm_Agent(float float_vals[4], int int_vals[6]);
     Capital_Firm_Agent(Capital_Firm_Agent&); 
-    ~Capital_Firm_Agent(); 
+    ~Capital_Firm_Agent() override;
 
     // Main Loop methods
     virtual void Depreciate_Good_Inventory() override;

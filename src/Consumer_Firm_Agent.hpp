@@ -17,7 +17,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     //Constructors and Destructor
     Consumer_Firm_Agent(float float_vals[4], int int_vals[6]);
     Consumer_Firm_Agent(Consumer_Firm_Agent&); 
-    ~Consumer_Firm_Agent(); 
+    ~Consumer_Firm_Agent() override;
 
     // Main Loop methods
     /* void Depreciate_Capital(); */

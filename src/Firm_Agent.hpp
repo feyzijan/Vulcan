@@ -26,6 +26,8 @@ class Firm_Agent{
     // Constructors and Destructor
     Firm_Agent() {}; 
     Firm_Agent(float float_vals[4], int int_vals[6]);
+    virtual ~Firm_Agent();
+
 
     // Initialization methods t = 1
     void Update_Average_Profits_T1();
@@ -83,7 +85,7 @@ class Firm_Agent{
     void Print_Active_Jobs();
     void Print_Capital_Goods();
     friend std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj);
-    std::vector<std::pair<std::string, float>>*  Log_Data();
+    vector<std::pair<string, float>>*  Log_Data();
 
     
     protected:
@@ -92,7 +94,7 @@ class Firm_Agent{
     Capital_Good* initial_capital_goods;
     vector<Capital_Good*> capital_goods_list;
 
-    std::vector<Loan*> loan_book;
+    vector<Loan*> loan_book;
 
     queue<int> past_profits;
     queue<int> past_sale_quantities;
@@ -100,8 +102,8 @@ class Firm_Agent{
     int sector_id; //0 for capital firms, 1-n for consumer goods firms
 
     // Employees
-    std::vector<Job*> active_job_list;
-    std::vector<Job*> posted_job_list;
+    vector<Job*> active_job_list;
+    vector<Job*> posted_job_list;
 
 
     // Production and sales figures

@@ -36,6 +36,9 @@ class Loan {
     int Get_End_Date() const {return end_date;}
     Firm_Agent* Get_Borrowing_Firm() const {return pBorrowing_Firm; }
 
+    // Setters
+    void Set_Borrowing_Firm_To_Null() {pBorrowing_Firm = nullptr;}
+
 
     protected:
     Firm_Agent* pBorrowing_Firm;

@@ -94,6 +94,42 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 }
 
 //------------------------------------------
+/* Destructor For firm agents -
+  Make sure all workers are laid off, all posted jobs are cancelled
+*/
+Firm_Agent::~Firm_Agent() {
+    // Loop through the active jobs list, update status to -1, and remove from list
+    for (auto it = active_job_list.begin(); it != active_job_list.end(); ++it){
+        (*it)->Update_Status(-1);
+    }
+    active_job_list.clear();
+
+    // Posted jobs
+    // Approach 1: Loop through the posted jobs list, update status to -3, and remove from list
+ /* for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
+        (*it)->Update_Status(-3); // Job market will remove these on next update
+    } */
+
+    // Approach 2: Delete all objects in the posted_job_list
+    for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
+        delete *it;
+    }
+
+    // Loans
+    /* // Loop through all loans in the loan book and set the pointers to zero
+    for (auto it = loan_book.begin(); it != loan_book.end(); ++it){
+        (*it)->Set_Borrowing_Firm_To_Null();
+    } */
+
+    // Delete all the objects in the loan_book
+    for (auto it = loan_book.begin(); it != loan_book.end(); ++it){
+        delete *it;
+    }
+
+    posted_job_list.clear();
+}
+
+
 
 // ----------- Initialization methods t = 1
 
@@ -496,7 +532,7 @@ void Firm_Agent::Make_Investment_Decision(){
 void Firm_Agent::Produce_Goods(){
     
     labor_utilization = min(float(working_capital_inventory*workers_per_machine) / (float)employee_count , float(1.0));
-    machine_utilization = min( float(employee_count/workers_per_machine)/ (float)working_capital_inventory , float(1.0));
+    machine_utilization = min(float(employee_count/workers_per_machine)/ (float)working_capital_inventory , float(1.0));
 
     // Check for erroneous values - debugging
     if ( labor_utilization < 0 || labor_utilization > 1){
@@ -943,16 +979,16 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
 
 */
 
-std::vector<std::pair<std::string, float>>*  Firm_Agent::Log_Data() {
+vector<std::pair<string, float>>*  Firm_Agent::Log_Data() {
     current_date = global_date;
 
-    auto result = new std::vector<std::pair<std::string, float>>();
+    auto result = new vector<std::pair<string, float>>();
         // Get the names and values of all member variables
         std::stringstream ss;
         ss << *this;
-        std::string line;
+        string line;
         while (std::getline(ss, line)) {
-            std::string name;
+            string name;
             float value;
             std::stringstream(line) >> name >> value;
             result->emplace_back(name, value);

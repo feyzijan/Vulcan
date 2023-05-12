@@ -34,7 +34,7 @@ class Capital_Goods_Market{
 
 
     private:
-    std::vector<Capital_Good*> cap_goods_list;
+    vector<Capital_Good*> cap_goods_list;
     int n_total_goods;
     int total_weighed_price;
     float price_level;

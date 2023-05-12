@@ -309,7 +309,7 @@ std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
 /* Log data function */
 vector<pair<string, float>>* Bank_Agent::Log_Data() {
         current_date = global_date;
-        auto result = new std::vector<std::pair<std::string, float>>();
+        auto result = new vector<std::pair<string, float>>();
 
         // Get the names and values of all member variables
         std::stringstream ss;

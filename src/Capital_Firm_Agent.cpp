@@ -34,7 +34,18 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
 Capital_Firm_Agent::Capital_Firm_Agent(Capital_Firm_Agent&){}
 
 // Destructor
-Capital_Firm_Agent::~Capital_Firm_Agent(){} 
+Capital_Firm_Agent::~Capital_Firm_Agent(){
+    
+    // Capital goods
+    // Approach 1: Remove capital goods from the market by updating quantity to zero, and setting seller pointer to zero
+    /* cap_goods_on_market->Set_Quantity(0);
+    cap_goods_on_market->Set_Seller_Pointer(nullptr); */
+    
+    // Approach 2: Now delete cap_goods_on_market just to be safe
+    delete cap_goods_on_market;
+    
+    Firm_Agent::~Firm_Agent();
+} 
 
 
 // ------- Main Loop Methods-----------------

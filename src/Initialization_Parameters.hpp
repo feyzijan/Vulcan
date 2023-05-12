@@ -24,7 +24,7 @@ void Read_Parameters(map<string, float>& parameter_map, const char* filename);
 void Assign_All_Parameters(map<string, float>& initialization_parameters,
 map<string, float>& main_loop_parameters, map<string, float>& randomness_parameters);
 void Print_Parameter_Map(map<string, float>& parameter_map);
-vector<string> split(const std::string &s, char delimiter);
+vector<string> split(const string &s, char delimiter);
 
 
 //-------------------- Simulation Size Parameters ---------------
@@ -182,7 +182,7 @@ extern float firm_cons_max_production_climbdown;
 
 // Consumer Firm Sectors
 struct Consumer_Firm_Sector {
-    std::string sector_name;
+    string sector_name;
     int sector_id; // unique id for this sector
     float consumption_weighing; // % of consumption that goes to this sector
     float firm_weighing;
@@ -193,7 +193,7 @@ struct Consumer_Firm_Sector {
     float max_production_climbdown;
     float emission_per_unit; // NEWLY ADDED
 
-    Consumer_Firm_Sector(std::string p_name, int p_sector_id, float p_consumption_weighing,
+    Consumer_Firm_Sector(string p_name, int p_sector_id, float p_consumption_weighing,
     float p_firm_weighing, float p_inv_depr_rate, int p_output_per_machine, int p_workers_per_machine,
     float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit)
     : sector_name(p_name), sector_id(p_sector_id), consumption_weighing(p_consumption_weighing),

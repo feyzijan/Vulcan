@@ -6,7 +6,7 @@ using namespace std;
 void write_csv(string filename, vector<pair<string, vector<float>>> dataset){
     // Make a CSV file with one or more columns of integer
     // Each column of data is represented by the pair <column name, column data>
-    // as std::pair<std::string, std::vector<int>>
+    // as std::pair<string, vector<int>>
     // The dataset is represented as a vector of these columns
     // Note that all columns should be the same size
     
@@ -56,7 +56,7 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
     if (!header_written && log_file.tellp() == 0) {
         // Get the header row
         vector<pair<string, float>>* header_data = pPublic_Info_Board->Log_Data();
-        std::string header;
+        string header;
         for (auto it = header_data->begin(); it != header_data->end(); ++it) {
             header += it->first + ",";
         }

@@ -60,7 +60,7 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price()
         // Iterate through each element in cons_good_list_by_sector
         for (auto& sector_and_goods : cons_good_list_by_sector) {
             // The second element of the pair is the vector of Consumer_Good pointers
-            std::vector<Consumer_Good*>& goods = sector_and_goods.second;
+            vector<Consumer_Good*>& goods = sector_and_goods.second;
 
             // Sort the goods vector by price
             std::sort(goods.begin(), goods.end(),
@@ -93,7 +93,7 @@ pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Se
     // loop through each sector
     for (int i = 0; i < spending_array.size(); ++i) {
         // find the goods for this sector - which should be sorted
-        std::vector<Consumer_Good*>& goods_for_sector = cons_good_list_by_sector[i].second;
+        vector<Consumer_Good*>& goods_for_sector = cons_good_list_by_sector[i].second;
 
         // calculate the amount to spend in this sector
         int sector_budget = spending_array[i];

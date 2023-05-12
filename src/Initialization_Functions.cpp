@@ -352,7 +352,7 @@ vector<Household_Agent*> *pHousehold_vector){
 
 }
 
-int Create_Sectors(std::vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) {
+int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) {
     std::ifstream file("../InitializationData/Consumer_Firm_Sectors.csv"); // Open the file
 
     if (!file.is_open()) { // Check if file is open

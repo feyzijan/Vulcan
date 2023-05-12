@@ -60,14 +60,13 @@ class Household_Agent{
     float Get_C_f() {return c_f;}
     float Get_C_h() {return c_h;}
     Public_Info_Board* Get_Public_Board() {return pPublic_Info_Board;};
-    std::vector<float>* Get_All_Params();
+    vector<float>* Get_All_Params();
     
     // Printing and Logging
     void Print();
     void Print_Characteristics();
     friend std::ostream& operator<<(std::ostream& os, const Household_Agent& obj);
-    std::vector<std::pair<std::string, float>>* Log_Data();
-
+    vector<std::pair<string, float>>* Log_Data();
 
 
     protected:
@@ -104,6 +103,10 @@ class Household_Agent{
     int income_unemployment_benefit;
     int income_gov_transfers;
     int income_firm_owner_dividend;
+
+    // Emissions
+    int total_emissions; // NEWLY ADDED
+    float emission_sensitivity; // NEWLY ADDED
 
     // Unemployment status
     bool unemployed;

@@ -40,7 +40,7 @@ class Job_Market{
 
 
     private:
-    std::vector<Job*> job_list;
+    vector<Job*> job_list;
     float average_wage;
 };
 

@@ -30,9 +30,24 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
 //Copy constructor
 Consumer_Firm_Agent::Consumer_Firm_Agent(Consumer_Firm_Agent&){}
 
-// Destructor
-Consumer_Firm_Agent::~Consumer_Firm_Agent(){} 
 //------------------------------------------------------------
+
+/* Delete references to the consumer good object on the market produced by this firm 
+*/
+Consumer_Firm_Agent::~Consumer_Firm_Agent() {
+
+    // Consumer goods
+    // Approach 1: Set the good quantity to 0
+    /* cons_goods_on_market->Set_Quantity(0);
+    cons_goods_on_market->Set_Seller_Pointer(nullptr); */
+
+    // Approach 2: Directly delete goods
+    delete cons_goods_on_market;
+
+    // Call the base class destructor
+    Firm_Agent::~Firm_Agent();
+}
+
 
 // ------- Main Loop Methods-----------------
 

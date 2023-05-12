@@ -473,16 +473,16 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     return os;
 }
 
-std::vector<std::pair<std::string, float>>* Household_Agent::Log_Data() {
+vector<std::pair<string, float>>* Household_Agent::Log_Data() {
         current_date = global_date;
-        auto result = new std::vector<std::pair<std::string, float>>();
+        auto result = new vector<std::pair<std::string, float>>();
 
         // Get the names and values of all member variables
         std::stringstream ss;
         ss << *this;
-        std::string line;
+        string line;
         while (std::getline(ss, line)) {
-            std::string name;
+            string name;
             float value;
             std::stringstream(line) >> name >> value;
             result->emplace_back(name, value);

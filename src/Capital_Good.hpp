@@ -23,13 +23,14 @@ class Capital_Good: public General_Good{
     void Depreciate();
     
     // Getters
-    Capital_Firm_Agent * GetSeller() {return pSeller;}
+    Capital_Firm_Agent * Get_Seller() {return pSeller;}
     float Get_Value() const {return value;}
     int Get_Depreciation_Period() const {return depreciation_period;}
     bool Check_Depreciation() const {return depreciated;}
 
     // Setters
     void Update_Value(float new_value) {value = new_value;}
+    void Set_Seller_Pointer(Capital_Firm_Agent * new_seller) {pSeller = new_seller;}
 
     protected:
     Capital_Firm_Agent *  pSeller;

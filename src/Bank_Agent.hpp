@@ -36,7 +36,7 @@ class Bank_Agent{
     void Print_Inflation_History();
     void Print_Interest_Rate_History(); // To Implement
     friend std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj);
-    std::vector<std::pair<std::string, float>>*  Log_Data();
+    vector<std::pair<std::string, float>>*  Log_Data();
 
     protected:
     Public_Info_Board* pPublic_Board;
