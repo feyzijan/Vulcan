@@ -61,6 +61,10 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     // Unemployment status
     unemp_duration = 0;
 
+    // Emission stuff
+    total_emissions = 0;
+    emission_sensitivity = Normal_Dist_Generator(0.2, 0.1, 0.0, 1.0)(); // Check this works Newly added
+
     current_date = 0;
 }
 
@@ -89,6 +93,11 @@ void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *p
             cout << "Error Sector weight is negative" << endl;
         }
     }
+}
+
+/* Loop through each sector and initialize sector based emission sensitivities*/
+void Initialize_Sector_Emission_Sensitivities(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
+    
 }
 
 
@@ -343,6 +352,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
 
 }
+
 
 
 

@@ -29,6 +29,7 @@ class Household_Agent{
     // Initialization methods
     void Set_Firm_Owner(Firm_Agent* firm_ptr);
     void Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
+    void Initialize_Sector_Emission_Sensitivities(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
 
     // Main Loop methods
     void Check_Employment_Status();
@@ -75,6 +76,7 @@ class Household_Agent{
     queue<int> past_incomes;
     Firm_Agent * owned_firm;
     vector<float> spending_weight_by_sector;
+    vector<float> emission_sensitivity_by_sector; // Newly added
 
     // Wealth
     int wealth_financial; //W_f in equations 

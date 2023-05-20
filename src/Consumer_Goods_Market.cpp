@@ -71,6 +71,30 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price()
 }
 
 
+/* Check that the below works
+ */
+void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price_and_Emissions(){
+    // Loop through each element of the default_emission_sensitivites vector
+    for (int i = 0; i < default_emission_sensitivities.size(); ++i) {
+        float sensitivity = default_emission_sensitivities[i]; // Get the sensitivity
+        // Create a copy of the cons_good_list_by_sector vector. Sort this new copy by price + emissions * sensitivity
+        vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector_copy = cons_good_list_by_sector; // Create copy
+        // ****** Above copying may present errors double check it works
+
+        for (auto& sector_and_goods : cons_good_list_by_sector_copy) { 
+            vector<Consumer_Good*>& goods = sector_and_goods.second; // The second element of the pair is the vector of Consumer_Good pointers
+
+            // Sort the goods vector by price
+            std::sort(goods.begin(), goods.end(),
+                [sensitivity](Consumer_Good* a, Consumer_Good* b) {
+                    return a->Get_Price() + sensitivity*a->Get_Emission() < b->Get_Price() + sensitivity*b->Get_Emission();
+                });
+        }
+    }
+}
+
+
+
 
 
 /* Function to buy goods from each consumer sector

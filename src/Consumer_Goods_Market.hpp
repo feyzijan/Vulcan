@@ -27,6 +27,8 @@ class Consumer_Goods_Market{
     void Divide_Goods_Into_Sectors(int n_sectors);
     void Sort_Consumer_Goods_By_Price();
     void Sort_Cons_Goods_By_Sector_By_Price();
+    void Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
+    
     pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& spending_array);
     
     // Price level operations
@@ -43,8 +45,13 @@ class Consumer_Goods_Market{
     private:
     vector<Consumer_Good*> cons_goods_list;
     vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector;
+    // Create a map that maps an int to the cons_good_list_by_sector vector
+    
+    map<float, vector<pair<int, vector<Consumer_Good*>>>> cons_goods_by_emission_adj_price;
     vector<float> price_level_by_sector;
     vector<int> n_goods_by_sector;
+    vector<float> default_emission_sensitivities;
+
 
     int n_total_goods;
     float total_weighed_price;
