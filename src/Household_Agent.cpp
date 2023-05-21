@@ -95,6 +95,23 @@ void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *p
     }
 }
 
+
+/* Loop through each sector and initialize sector based emission sensitivities
+*/
+void Household_Agent::Initialize_Sector_Emission_Sensitivities(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
+    for (int i = 0; i < pConsumer_Firm_Sector_vector->size(); i++){
+        float mean_sensitivity = pConsumer_Firm_Sector_vector->at(i)->emission_sensitivity_mean;
+        // Do a random number generation 
+        float temp = Normal_Dist_Generator(mean_sensitivity, emission_sensitivity_std, emission_sensitivity_min, emission_sensitivity_max)(); 
+        temp = std::round(temp * 1000) / 1000.0; // round to the nearest three decimals
+        emission_sensitivity_by_sector.push_back(temp);
+        if (temp < 0){
+            cout << "Error Sector weight is negative" << endl;
+        }
+    }
+}
+
+
 /* Loop through each sector and initialize sector based emission sensitivities*/
 void Initialize_Sector_Emission_Sensitivities(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     
@@ -350,9 +367,55 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
     pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
     pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
-
 }
 
+
+
+
+/* /*  Interact with the market through the public board to buy goods
+- Pass in the consumption budget along with the vector with the sector weights
+- Receive back a pair of two vectors, leftover budget and goods bought for each sector
+
+*/
+void Household_Agent::Buy_Consumer_Goods_By_Sector_With_Emissions(){
+
+    // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
+    vector<float> planned_expenditure_by_sector;
+
+    // Fill this with the planned spending numbers
+    for (int i = 0; i < spending_weight_by_sector.size(); ++i) {
+        if (spending_weight_by_sector[i] < 0){
+            cout << "Error: Spending weight by sector is negative" << endl;
+            spending_weight_by_sector[i] = max(spending_weight_by_sector[i], 0.0f);
+        }
+        planned_expenditure_by_sector.push_back(spending_weight_by_sector[i] * expenditure_consumption);
+    }
+
+    // Buy consumer goods and receive leftover budget and quantity bought for each sector
+    pair<vector<float>, vector<int>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(expenditure_consumption, planned_expenditure_by_sector, emission_sensitivity_by_sector);
+
+
+    vector<float> remaining_consumption_budget =  purchases_by_sector.first;
+    vector<int> goods_bought =  purchases_by_sector.second;
+    vector<float> actual_spending_by_sector(planned_expenditure_by_sector);
+
+    int total_goods_bought = 0;
+
+    for (int i=0; i<remaining_consumption_budget.size(); i++){
+        // Deal with the leftover budget
+        expenditure_consumption -= remaining_consumption_budget[i];
+        new_savings += remaining_consumption_budget[i];
+        wealth_financial += remaining_consumption_budget[i]; 
+        actual_spending_by_sector[i] -= remaining_consumption_budget[i];
+
+        // Add up tally of goods bought
+        total_goods_bought += goods_bought[i];
+    }
+    pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
+    pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
+    pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
+    pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
+}
 
 
 

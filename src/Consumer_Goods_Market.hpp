@@ -3,6 +3,7 @@
 #define CONSUMER_GOODS_MARKET_HPP
 
 #include "Consumer_Good.hpp"
+#include "Initialization_Parameters.hpp"
 #include "vector"
 #include "algorithm"
 #include <cmath>
@@ -30,7 +31,9 @@ class Consumer_Goods_Market{
     void Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
     
     pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& spending_array);
+    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& spending_array, const vector<float>& emission_sensitives_array);
     
+
     // Price level operations
     void Update_Price_Level_by_Sector();
 

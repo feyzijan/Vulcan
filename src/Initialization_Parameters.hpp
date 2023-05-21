@@ -177,6 +177,14 @@ extern int firm_cons_workers_per_machine;
 extern float firm_cons_good_unit_cost;
 extern float firm_cons_max_production_climbdown;
 
+// --- CO2 Metrics parameters
+// CO2 Emission sensitivites initialization for households
+extern float emission_sensitivity_min;
+extern float emission_sensitivity_max;
+extern float emission_sensitivity_std;
+extern float emission_sensitivity_threshold; 
+
+
 
 //---------------------------------------------
 
@@ -192,14 +200,16 @@ struct Consumer_Firm_Sector {
     float good_unit_cost;
     float max_production_climbdown;
     float emission_per_unit; // NEWLY ADDED
+    float emission_sensitivity_mean; // NEWLY ADDED
 
     Consumer_Firm_Sector(string p_name, int p_sector_id, float p_consumption_weighing,
     float p_firm_weighing, float p_inv_depr_rate, int p_output_per_machine, int p_workers_per_machine,
-    float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit)
+    float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit, float p_emission_sensitivity_mean)
     : sector_name(p_name), sector_id(p_sector_id), consumption_weighing(p_consumption_weighing),
     firm_weighing(p_firm_weighing), inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine),
     workers_per_machine(p_workers_per_machine), good_unit_cost(p_good_unit_cost), 
-    max_production_climbdown(p_max_production_climbdown), emission_per_unit(p_emissions_per_unit)
+    max_production_climbdown(p_max_production_climbdown), emission_per_unit(p_emissions_per_unit), 
+    emission_sensitivity_mean(p_emission_sensitivity_mean)
     {}
 };
 
@@ -283,6 +293,7 @@ extern float firm_tax_rate;
 // that forces machine purchases on companies
 extern int forced_machine_purchases_min; 
 extern int forced_machine_purchases_max;
+
 
 
 //---------------------------------------------

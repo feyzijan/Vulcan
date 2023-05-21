@@ -47,6 +47,7 @@ class Household_Agent{
     void Determine_Consumption_Budget(); //(eq 18)
 
     void Buy_Consumer_Goods_By_Sector();
+    void Buy_Consumer_Goods_By_Sector_With_Emissions();
     void Seek_Jobs();
     void Seek_Better_Jobs();
 

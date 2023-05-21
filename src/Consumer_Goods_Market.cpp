@@ -6,6 +6,9 @@ Consumer_Goods_Market::Consumer_Goods_Market(){
     n_total_goods = 0;
     total_weighed_price = 0;
     price_level = 0.0;
+    for (int i = 0; i < emission_sensitivity_max + emission_sensitivity_threshold; i += emission_sensitivity_threshold){
+        default_emission_sensitivities.push_back(i);
+    };
 
 }
 
@@ -95,8 +98,6 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price_and_Emissions(){
 
 
 
-
-
 /* Function to buy goods from each consumer sector
  The function receives an array with float values corresponding to the spending share of each sector from 1 to n
  Demand from each sector is attempted to be satisfied - this is usually not completely met because we can't buy fractions of goods
@@ -152,6 +153,65 @@ pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Se
     pair<vector<float>, vector<int>> result = make_pair(remaining_budget_by_sector, quantity_bought_by_sector);
     return result;
 }
+
+
+/* Function to buy goods from each consumer sector based on emission sensitivities
+TO DO: Edit this to work
+*/
+pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& spending_array, 
+const vector<float>& emission_sensitives_array){
+    
+    
+    vector<float> remaining_budget_by_sector; // initialize remaining budget vector
+    vector<int> quantity_bought_by_sector; // initialize quantity bought vector
+
+    int total_spending = 0;
+
+    // loop through each sector
+    for (int i = 0; i < spending_array.size(); ++i) {
+        // find the goods for this sector - which should be sorted
+        // Select the correct sector and the correct emission
+        //vector<Consumer_Good*>& goods_for_sector = cons_good_list_by_sector[i].second;
+
+        // Round this value to the nearest threshold, i.e. nearest multiple of 0.05
+        float emission_sensitivity = roundf(emission_sensitives_array[i] * 20) / 20;
+
+        vector<Consumer_Good*>& goods_for_sector = cons_goods_by_emission_adj_price[emission_sensitives_array[i]][i].second;
+
+        // calculate the amount to spend in this sector
+        int sector_budget = spending_array[i];
+
+        // buy goods from this sector
+        float sector_budget_remaining = sector_budget;
+        int sector_quantity_bought = 0;
+        for(Consumer_Good* pgood : goods_for_sector){ // Loop through the goods list, from cheapest to most expensive
+            int q = pgood->Get_Quantity();
+            float p = pgood->Get_Price();
+            int n = sector_budget_remaining/p; // How much the household can afford to buy from this one listing
+
+            if (n>=q){ // Household can buy all the goods, likely not satisfied
+                n = q; // buy all the goods
+                pgood->Update_Quantity(-n); // update the quantity of the good
+                sector_quantity_bought += n; // update the quantity bought
+                sector_budget_remaining -= n*p; // update the remaining budget
+            } else if (n==0){ 
+                break; // Household can no longer afford to buy anything -  exit loop
+            } else { // Household can't buy q goods but rather only n , so will run out of budget after this purchase
+                pgood->Update_Quantity(-n);
+                sector_quantity_bought += n;
+                sector_budget_remaining -= n*p;
+                break; // exit loop
+            }
+        }
+        remaining_budget_by_sector.push_back(sector_budget_remaining);
+        quantity_bought_by_sector.push_back(sector_quantity_bought);
+        total_spending += sector_budget - sector_budget_remaining;
+    }   
+
+    pair<vector<float>, vector<int>> result = make_pair(remaining_budget_by_sector, quantity_bought_by_sector);
+    return result;
+}
+
 
 
 

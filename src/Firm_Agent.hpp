@@ -44,7 +44,7 @@ class Firm_Agent{
     void Update_Average_Sales();
     int Pay_Dividend() ;
     virtual void Depreciate_Good_Inventory() {};
-    void Determine_New_Production();
+    virtual void Determine_New_Production();
     void Adjust_Wage_Offers();
     void Determine_Labor_Need();
     void Remove_Job_Postings(); 
@@ -181,6 +181,7 @@ class Firm_Agent{
     // CO2 Emissions
     float emission_per_unit; // NEWLY ADDDED
     int total_emissions; // NEWLY ADDDED
+    int cumulative_emissions; // NEWLY ADDDED
     
     // Others
     bool sentiment; // pessimistic, optimistic

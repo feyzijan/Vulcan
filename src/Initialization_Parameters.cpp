@@ -250,6 +250,13 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     //--- Bank Initialization parameters
     bank_init_interest_rate = initialization_parameters["bank_init_interest_rate"];
 
+    //--- CO2 initialization Parameters
+    emission_sensitivity_min = initialization_parameters["emission_sensitivity_min"];
+    emission_sensitivity_max = initialization_parameters["emission_sensitivity_max"];
+    emission_sensitivity_std = initialization_parameters["emission_sensitivity_std"];
+    emission_sensitivity_threshold = initialization_parameters["emission_sensitivity_threshold"];
+
+
 
     //---------- Main Loop Parameters ------------
     // --- Simulation size 
@@ -320,7 +327,6 @@ int n_max_employees = 100;
 // Wage parameters
 int household_init_unemployment_benefit = 500;
 int household_init_minimum_wage = 600;
-
 
 
 //--------------- Household parameters ---------------
@@ -555,3 +561,10 @@ float bank_leverage_ratio_lower_threshold = 60;
 float bank_leverage_ratio_upper_threshold = 100;
 
 //---------------------------------------------
+
+// --- CO2 Metrics parameters
+// CO2 Emission sensitivites initialization for households
+float emission_sensitivity_min = 0.0;
+float emission_sensitivity_max = 0.5;
+float emission_sensitivity_std = 0.05;
+float emission_sensitivity_threshold = 0.05;

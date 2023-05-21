@@ -168,6 +168,13 @@ pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector
 }
 
 
+// Consumer Good Market 
+pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& planned_expenditure_by_sector, 
+const vector<float>& emission_sensitives_array) {
+    return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector_And_Emission(budget, planned_expenditure_by_sector, emission_sensitives_array);
+}
+
+
 
 
 

@@ -46,6 +46,7 @@ class Public_Info_Board{
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
     pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector);
+    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
 
 
     // Capital Good Market
