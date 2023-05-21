@@ -10,6 +10,15 @@ Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller
     sector_id = 0;
 }
 
+/* Constructor with just seller, price, quantity, and emission*/
+Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, float emissions_per_unit){
+    pSeller = seller_pointer;
+    price = seller_price;
+    quantity = seller_quantity;
+    sector_id = 0;
+    unit_emissions = emissions_per_unit;
+}
+
 /* Constructor with sector*/
 Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int seller_sector)
 {

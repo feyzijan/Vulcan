@@ -105,11 +105,24 @@ extern float household_init_res_wage_max;
 extern float household_n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
 extern float household_targeted_savings_to_income_ratio;
 extern float household_household_tax_rate;
-extern float household_p_seek_better_job;
-extern float household_sector_spending_randomization;
+
+// --- Household randomness parameters
+extern float household_rand_sentiment_adoption;
+extern float household_rand_sector_spending_weight_change;
+extern float household_rand_emission_weight_change;
+extern float household_rand_job_search;
 
 //---------------------------------------------
 
+// ---- Parameters for all Firms ------------
+extern int standard_employment_contract_length;
+extern float firm_tax_rate;
+// Below parameters define lower and upper bound of a uniform distribution 
+// that forces machine purchases on companies
+extern int forced_machine_purchases_min; 
+extern int forced_machine_purchases_max;
+
+//---------------------------------------------
 
 //---- Consumer Firm parameters----------------------
 // --- Consumer Firm initialization parameters
@@ -177,13 +190,10 @@ extern int firm_cons_workers_per_machine;
 extern float firm_cons_good_unit_cost;
 extern float firm_cons_max_production_climbdown;
 
-// --- CO2 Metrics parameters
-// CO2 Emission sensitivites initialization for households
-extern float emission_sensitivity_min;
-extern float emission_sensitivity_max;
-extern float emission_sensitivity_std;
-extern float emission_sensitivity_threshold; 
-
+// --- Consumer Firm randomness parameters
+extern float firm_cons_rand_dividend_change;
+extern float firm_cons_rand_sentiment_adoption;
+extern float firm_cons_rand_desired_inventory_factor_change;
 
 
 //---------------------------------------------
@@ -284,25 +294,19 @@ extern int firm_cap_machine_lifespan;
 extern float firm_cap_max_production_climbdown;
 extern float firm_cap_good_unit_cost;
 
-
-//---------------------------------------------
-// ---- Parameters for all Firms
-extern int standard_employment_contract_length;
-extern float firm_tax_rate;
-// Below parameters define lower and upper bound of a uniform distribution 
-// that forces machine purchases on companies
-extern int forced_machine_purchases_min; 
-extern int forced_machine_purchases_max;
-
+// --- Capital Firm randomness parameters
+extern float firm_cap_rand_dividend_change;
+extern float firm_cap_rand_sentiment_adoption;
+extern float firm_cap_rand_desired_inventory_factor_change;
 
 
 //---------------------------------------------
 
-//---- Bank parameters --------------
+//--------- Bank parameters --------------
 // Bank Initialization parameters
 extern float bank_init_interest_rate;
 
-// Dynamic parameters
+// Bank Dynamic parameters
 extern float bank_inflation_reaction;
 extern float bank_inflation_target; // yearly inflation target
 extern float bank_inflation_target_monthly; // monthly inflation target
@@ -312,6 +316,19 @@ extern int bank_short_term_loan_length;
 extern int bank_long_term_loan_length;
 extern float bank_leverage_ratio_lower_threshold;
 extern float bank_leverage_ratio_upper_threshold;
+
+//---------------------------------------------
+
+// --- CO2 Metrics parameters
+// CO2 Emission sensitivites initialization for households
+extern float emission_sensitivity_min;
+extern float emission_sensitivity_max;
+extern float emission_sensitivity_std;
+extern float emission_sensitivity_threshold; 
+
+//---------------------------------------------
+
+
 
 
 #endif

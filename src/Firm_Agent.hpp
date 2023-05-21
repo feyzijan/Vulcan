@@ -37,7 +37,7 @@ class Firm_Agent{
     void Depreciate_Capital();
     void Check_Employees_Quitting();
     void Cancel_Expired_Contracts();
-    void Random_Experimentation();
+    virtual void Random_Experimentation();
     void Check_Sales();
     virtual void Update_Sentiment();
     void Update_Average_Profit();

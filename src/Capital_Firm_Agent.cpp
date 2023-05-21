@@ -15,8 +15,6 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     max_production_climbdown = firm_cap_max_production_climbdown;
     emission_per_unit = firm_cap_init_emissions_per_unit;
 
-
-
     production_current = max(working_capital_inventory * firm_cap_workers_per_machine * firm_cap_productivity, employee_count_desired / firm_cap_workers_per_machine * firm_cap_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
@@ -87,9 +85,29 @@ void Capital_Firm_Agent::Update_Goods_On_Market(){
 }
 
 
+void Capital_Firm_Agent::Random_Experimentation(){
+    desired_inventory_factor *= Uniform_Dist_Float(1.0-firm_cap_rand_desired_inventory_factor_change
+    ,1.0 + firm_cap_rand_desired_inventory_factor_change);
+    dividend_ratio_optimist *= Uniform_Dist_Float(1.0-firm_cap_rand_dividend_change, 1.0 + firm_cap_rand_dividend_change);
+    dividend_ratio_pessimist *= Uniform_Dist_Float(1.0-firm_cap_rand_dividend_change, 1.0 + firm_cap_rand_dividend_change);
+}
+
+
 /* Update sentiment and post to public board*/
 void Capital_Firm_Agent::Update_Sentiment(){
     Firm_Agent::Update_Sentiment();
+
+    bool adopt_majority= Uniform_Dist_Float(0,1)  < firm_cap_rand_sentiment_adoption;
+    if(adopt_majority){
+        sentiment = (pPublic_Info_Board->Get_Cap_Firm_Sentiment() > 0.50); }
+
+    // Update dividend ratio based on sentiment
+    if (sentiment){dividend_ratio = dividend_ratio_optimist;
+    } else{dividend_ratio = dividend_ratio_pessimist;}
+
+    // Update the desired inventory?
+
+
     pPublic_Info_Board->Update_Cap_firm_sentiment_sum(sentiment);
 }
 

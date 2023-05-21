@@ -63,7 +63,7 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
 
     // Emission stuff
     total_emissions = 0;
-    emission_sensitivity = Normal_Dist_Generator(0.2, 0.1, 0.0, 1.0)(); // Check this works Newly added
+    emission_sensitivity_avg = 0;
 
     current_date = 0;
 }
@@ -202,7 +202,7 @@ void Household_Agent::Update_Reservation_Wage()
 void Household_Agent::Random_Experimentation(){
 
     // Randomly alter desired spending weights for each sector
-    float weighing_change = Uniform_Dist_Float(1.0-household_sector_spending_randomization , 1.0+household_sector_spending_randomization);
+    float weighing_change = Uniform_Dist_Float(1.0-household_rand_sector_spending_weight_change , 1.0+household_rand_sector_spending_weight_change);
 
     for (int i = 0; i < spending_weight_by_sector.size(); i++){
         spending_weight_by_sector[i] = spending_weight_by_sector[i] * (weighing_change);
@@ -215,6 +215,19 @@ void Household_Agent::Random_Experimentation(){
     for (int i = 0; i < spending_weight_by_sector.size(); i++){
         spending_weight_by_sector[i] = spending_weight_by_sector[i] / sum;
     }
+
+    // Random emission weight change
+    weighing_change = Uniform_Dist_Float(1.0-household_rand_emission_weight_change , 1.0+household_rand_emission_weight_change);
+
+    for (int i = 0; i < emission_sensitivity_by_sector.size(); i++){
+        emission_sensitivity_by_sector[i] = emission_sensitivity_by_sector[i] * (weighing_change);
+    }
+
+    /*Calculate the average weighed emission sensitivity of the household by summing the elementwise multiplication
+     of emission_sensitivity_by_sector and spending_weight_by_sector*/
+    emission_sensitivity_avg = std::inner_product(emission_sensitivity_by_sector.begin(), emission_sensitivity_by_sector.end(), spending_weight_by_sector.begin(), 0.0);
+
+    //pPublic_Info_Board->Update_Household_Average_Emission_Sensitivity(emission_sensitivity_avg);
 
 }
 
@@ -289,7 +302,7 @@ void Household_Agent::Determine_Consumer_Sentiment()
     else{
         sentiment = 1;}
 
-    bool adopt_majority= Uniform_Dist_Float(0,1)  < p_majority_op_adoption;
+    bool adopt_majority= Uniform_Dist_Float(0,1)  < household_rand_sentiment_adoption;
     if(adopt_majority){
         sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
 
@@ -411,6 +424,8 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_With_Emissions(){
         // Add up tally of goods bought
         total_goods_bought += goods_bought[i];
     }
+
+
     pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
     pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
     pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
@@ -452,7 +467,7 @@ p_seek_better_job
 void Household_Agent::Seek_Better_Jobs()
 {
     // execute code with probabilty equal to p_seek_better_job
-    bool seek_better_job = Uniform_Dist_Float(0,1)  < household_p_seek_better_job;
+    bool seek_better_job = Uniform_Dist_Float(0,1)  < household_rand_job_search;
     if ( !unemployed && seek_better_job && !firm_owner) {  
         Job* best_job = pPublic_Info_Board->Get_Top_Job();
         if (best_job != NULL){

@@ -15,6 +15,7 @@ class Consumer_Good: public General_Good{
     // Constructor
     Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, int seller_quantity, int seller_sector);
     Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity);
+    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, float emissions_per_unit);
     Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int seller_sector, float emissions_per_unit);
 
     //Printing and Debugging
@@ -22,6 +23,7 @@ class Consumer_Good: public General_Good{
     // Getters
     Consumer_Firm_Agent* Get_Seller() {return pSeller;}
     float Get_Emission() {return unit_emissions;}
+    float Get_Emission_Adjusted_Price(float sensitivity) {return price  + sensitivity * unit_emissions;}
 
     // Setters
     void Set_Seller_Pointer(Consumer_Firm_Agent* new_seller) {pSeller = new_seller;}

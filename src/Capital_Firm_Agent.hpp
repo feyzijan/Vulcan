@@ -23,6 +23,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     virtual void Produce_Goods() override;
     virtual void Send_Goods_To_Market() override;
     virtual void Update_Goods_On_Market() override;
+    virtual void Random_Experimentation() override;
     virtual void Update_Sentiment() override;
     virtual void Determine_New_Production() override;
 

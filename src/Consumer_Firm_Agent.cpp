@@ -20,7 +20,7 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
 
-    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold);
+    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold, emission_per_unit);
     goods_on_market = cons_goods_on_market;
     //Send_Goods_To_Market();
     sector_id = 1;
@@ -87,10 +87,28 @@ void Consumer_Firm_Agent::Update_Goods_On_Market(){
 }
 
 
+void Consumer_Firm_Agent::Random_Experimentation(){
+    desired_inventory_factor *= Uniform_Dist_Float(1.0-firm_cons_rand_desired_inventory_factor_change
+    ,1.0 + firm_cons_rand_desired_inventory_factor_change);
+    dividend_ratio_optimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
+    dividend_ratio_pessimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
+}
+
 
 /* Update sentiment and post to public board*/
 void Consumer_Firm_Agent::Update_Sentiment(){
     Firm_Agent::Update_Sentiment();
+
+    bool adopt_majority= Uniform_Dist_Float(0,1)  < firm_cons_rand_sentiment_adoption;
+    if(adopt_majority){
+        sentiment = (pPublic_Info_Board->Get_Cons_Firm_Sentiment() > 0.50); }
+
+    // Update dividend ratio based on sentiment
+    if (sentiment){dividend_ratio = dividend_ratio_optimist;
+    } else{dividend_ratio = dividend_ratio_pessimist;}
+
+    // Update the desired inventory?
+
     pPublic_Info_Board->Update_Cons_firm_sentiment_sum(sentiment);
 }
 
@@ -121,6 +139,8 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     max_production_climbdown = pSector_Struct->max_production_climbdown;
     inventory_depreciation_rate = pSector_Struct->inv_depr_rate;
     emission_per_unit = pSector_Struct->emission_per_unit;
+
+    
 
 
 }

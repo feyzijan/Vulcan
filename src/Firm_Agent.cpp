@@ -221,10 +221,10 @@ void Firm_Agent::Cancel_Expired_Contracts(){
     TODO: Read randomness parameters from Global Params
     Add more characteristics to change */
 void Firm_Agent::Random_Experimentation(){
-    desired_inventory_factor *= Uniform_Dist_Float(0.8,1.2);
-    dividend_ratio_optimist *= Uniform_Dist_Float(0.8,1.2);
-    dividend_ratio_pessimist *= Uniform_Dist_Float(0.8,1.2);
-
+    desired_inventory_factor *= Uniform_Dist_Float(1.0-firm_cons_rand_desired_inventory_factor_change
+    ,1.0 + firm_cons_rand_desired_inventory_factor_change);
+    dividend_ratio_optimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
+    dividend_ratio_pessimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
 }
 
 /* Function to calculate how many goods have been sold

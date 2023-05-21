@@ -272,8 +272,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     household_n_res_wage_decrease = main_loop_parameters["household_n_res_wage_decrease"]; 
     household_targeted_savings_to_income_ratio = main_loop_parameters["household_targeted_savings_to_income_ratio"];
     household_household_tax_rate = main_loop_parameters["household_household_tax_rate"];
-    household_p_seek_better_job = main_loop_parameters["household_p_seek_better_job"];
-    household_sector_spending_randomization = main_loop_parameters["household_sector_spending_randomization"];
 
     // ---- General Firm dynamic parameters
     standard_employment_contract_length = main_loop_parameters["standard_employment_contract_length"];
@@ -307,6 +305,25 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     bank_leverage_ratio_upper_threshold = main_loop_parameters["bank_leverage_ratio_upper_threshold"];
 
     // Randomness Parameters
+    // Household randomness parameters
+    household_rand_sentiment_adoption = randomness_parameters["household_rand_sentiment_adoption"];
+    household_rand_sector_spending_weight_change = randomness_parameters["household_rand_sector_spending_weight_change"];
+    household_rand_emission_weight_change = randomness_parameters["household_rand_emission_weight_change"];
+    household_rand_job_search = randomness_parameters["household_rand_job_search"];
+    // Cons firm randomness parameters
+    firm_cons_rand_dividend_change =  randomness_parameters["firm_cons_rand_dividend_change"];
+    firm_cons_rand_sentiment_adoption = randomness_parameters["firm_cons_rand_sentiment_adoption"];
+    firm_cons_rand_desired_inventory_factor_change = randomness_parameters["firm_cons_rand_desired_inventory_factor_change"];
+    
+    // Cap firm randomness parameters
+    firm_cap_rand_dividend_change = randomness_parameters["firm_cap_rand_dividend_change"];
+    firm_cap_rand_sentiment_adoption = randomness_parameters["firm_cap_rand_sentiment_adoption"];
+    firm_cap_rand_desired_inventory_factor_change = randomness_parameters["firm_cap_rand_desired_inventory_factor_change"];
+
+
+
+
+
 }
 
 
@@ -382,13 +399,16 @@ float household_init_res_wage_std = 300;
 float household_init_res_wage_min = 100;
 float household_init_res_wage_max = 999999;
 
-
 // ---- Household dynamic parameters
 float household_n_res_wage_decrease = 0.05; 
 float household_targeted_savings_to_income_ratio = 3.0;
 float household_household_tax_rate = 0.2;
-float household_p_seek_better_job = 0.1;
-float household_sector_spending_randomization = 0.1;
+
+// --- Household randomness parameters
+float household_rand_sentiment_adoption = 0.1;
+float household_rand_sector_spending_weight_change = 0.1;
+float household_rand_emission_weight_change = 0.1;
+float household_rand_job_search = 0.1;
 
 
 //---------------------------------------------
@@ -459,6 +479,11 @@ float firm_cons_productivity = 1000; // # units produced per worker machine pair
 int firm_cons_workers_per_machine = 1;
 float firm_cons_good_unit_cost = 1.0;
 float firm_cons_max_production_climbdown = 0.25;
+
+// --- Consumer Firm randomness parameters
+float firm_cons_rand_dividend_change = 0.1;
+float firm_cons_rand_sentiment_adoption = 0.1;
+float firm_cons_rand_desired_inventory_factor_change = 0.1;
 
 
 
@@ -533,6 +558,11 @@ int firm_cap_workers_per_machine = 1;
 int firm_cap_machine_lifespan = 100;
 float firm_cap_max_production_climbdown = 0.25;
 float firm_cap_good_unit_cost = 20.0;
+
+// --- Capital Firm randomness parameters
+float firm_cap_rand_dividend_change = 0.1;
+float firm_cap_rand_sentiment_adoption = 0.1;
+float firm_cap_rand_desired_inventory_factor_change = 0.1;
 
 
 //---------------------------------------------

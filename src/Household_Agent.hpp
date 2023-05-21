@@ -109,7 +109,7 @@ class Household_Agent{
 
     // Emissions
     int total_emissions; // NEWLY ADDED
-    float emission_sensitivity; // NEWLY ADDED
+    float emission_sensitivity_avg; // NEWLY ADDED
 
     // Unemployment status
     bool unemployed;
