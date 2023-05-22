@@ -68,9 +68,12 @@ class Public_Info_Board{
     // Distributing Emission allowances
     unsigned long int Distribute_Initial_Emission_Allowances(int employee_count, int sector_id);
     unsigned long int Distribute_Emission_Allowances(int sale_quantity, int sector_id);
+    int Buy_Emission_Offsets(int quantity, int sector_id) { 
+        offsets_sold_by_sectors[sector_id-1] += quantity;
+        return quantity * emission_offset_price;} // Returns cost, allowances always available
 
     // Update emission allowance price and amount
-    void Update_Emission_Allowance_Price() { emission_allowance_price *= (1.0 + emission_unit_price_change); }
+    void Update_Emission_Allowance_Price() { emission_offset_price *= (1.0 + emission_unit_price_change); }
     void Update_Emission_Allowance_Amount() { 
         std::transform(emission_allowances_by_sector.begin(), emission_allowances_by_sector.end(), emission_allowances_by_sector.begin(), [=](unsigned long int value) {
         float result = static_cast<float>(value) * (1.0f + emission_total_allowance_change);
@@ -123,6 +126,7 @@ class Public_Info_Board{
     int Get_Removed_Job_Postings() { return removed_job_postings;}
     int Get_Minimum_Wage() { return minimum_wage;}
     float Get_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emission_by_sector[sector_id-1];} 
+    float Get_Emission_Offset_Price() {return emission_offset_price;}
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
@@ -220,9 +224,10 @@ class Public_Info_Board{
     vector<unsigned long int> emission_allowances_by_sector; // NEWLY ADDED
     vector<unsigned long int> total_emissions_by_sector; // NEWLY ADDED
     unsigned long int total_emission_allowance; // newly added 
-    float emission_allowance_price; // newly added
+    float emission_offset_price; // newly added
 
     vector<float> average_unit_emission_by_sector;
+    vector<int> offsets_sold_by_sectors; // NEWLY ADDED
 
 
     // Income and wage figures
@@ -296,8 +301,10 @@ class Public_Info_Board{
     int new_job_postings;
     int removed_job_postings;
 
-    // Emission allowances
- 
+    // Bankruptcy figures
+    int n_bankrupt_cap_firms; // NEWLY ADDED
+    int n_bankrupt_cons_firms; // NEWLY ADDED
+
 
     // Unemployment benefits
     int public_unemployment_benefit;

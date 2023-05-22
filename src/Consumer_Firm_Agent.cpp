@@ -140,43 +140,88 @@ void Consumer_Firm_Agent::Update_Sentiment(){
 
 void Consumer_Firm_Agent::Determine_New_Production(){
     
-    bool price_high; // check if price is high relative to the market
-    price_high = good_price_current >= pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
+    // Check if price is high relative to the market
+    bool price_high = good_price_current >= pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
 
-    bool emission_high; // check if emissiosn are high relative to the market
-    emission_high = unit_emissions_adj >= pPublic_Info_Board->Get_Unit_Emissions_by_Sector(sector_id);
-    
+    // Check if emissiosn are high relative to the market
+    float emission_overshoot = unit_emissions_adj - pPublic_Info_Board->Get_Unit_Emissions_by_Sector(sector_id);
+    bool emission_high = emission_overshoot > 0; 
+
+    // Calculate how many offsets you need to buy to reach the average unit emissions
+    int emission_offsets_needed = 0;
+    // Add the amount we need to buy so that our inventory is at average emissions
+    emission_offsets_needed += static_cast<int>(emission_overshoot * inventory);
+
+
     good_price_past = good_price_current; // store current price incase we want to see the change
     production_past = production_current;
 
     bool inventory_high = inventory >= desired_inventory; 
-    float p = Uniform_Dist_Float(0.0,0.5); // Random production adjustment
-    float q =  Uniform_Dist_Float(0.0,0.5); // Random price adjustment
+    // Determine randomised price and production change factors
+    float price_change =  firm_cons_fixed_price_change + Uniform_Dist_Float(0.0,firm_cons_rand_price_change_upper_limit); 
+    float prod_change =  firm_cons_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cons_rand_prod_change_upper_limit); 
 
-    // Case a: Inventory low, Price high - > Maintain price, increase prod
-    if (!inventory_high && price_high){
-        production_planned*= (1.0+q);        
-    } // Case b: Inventory low, Price low - > Increase Price and production
-    else if( !inventory_high && !price_high){
-        good_price_current *= (1.0+p);
-        production_planned*= (1.0+q);
-    } // Case c: Inventory high, Price high - > Reduce price, maintain prod
-    else if (inventory_high && price_high){
-        good_price_current *= (1.0-p);
-    } // Case d:Inventory high, Price low -> Increase price, maintain prod
-    else{
-        good_price_current *= (1.0+p);}
+
+    /* Change price, production, and emission based on data
+    Cases 1-4: Inventory low == Sales high, so no need to worry about emission
+    */
+
+    // Cases 1 & 2 : Inventory low, price low, emissions low or high -> Increase production slightly +  increase price slightly 
+    if (!price_high && !inventory_high) {
+        production_planned*= (1.0+prod_change/2.0);
+        good_price_current *= (1.0+price_change/2.0);
+    
+    } // Cases 3 & 4: Inventory low, price high, emissions low or high -> Increase production
+    else if (price_high && !inventory_high) {
+        production_planned*= (1.0+prod_change);
+        
+    } // Case 5: Inventory high, price low, emissions low -> Reduce production
+    else if (!price_high && inventory_high && !emission_high) {
+        production_planned*= (1.0-prod_change);
+
+    } // Case 6: Inventory high, price low, emissions high -> Reduce emissions + reduce production slightly
+    else if (!price_high && inventory_high && emission_high) {
+        production_planned*= (1.0-prod_change/2.0);
+        // Add the amount we need to buy to offset the emissions of the goods we plan to produce
+        emission_offsets_needed += static_cast<int>(production_planned * unit_emissions_adj);
+        // Calculate total cost of emissions we wish to buy 
+        int emission_offset_needed_cost = emission_offsets_needed * pPublic_Info_Board->Get_Emission_Offset_Price();
+        long_term_funding_gap =  max(emission_offset_needed_cost - cash_on_hand,0); // Funding gap must be positive
+        if (long_term_funding_gap> 0){
+            Seek_Long_Term_Loan();
+        }
+        if (long_term_funding_gap == 0){
+            pPublic_Info_Board->Buy_Emission_Offsets(emission_offsets_needed, sector_id);
+        }
+                
+    } // Case 7: Inventory high, price high, emissions low -> Decrease production slightly + decrease price slightly
+     else if (price_high && inventory_high && !emission_high) {
+        production_planned*= (1.0-prod_change/2.0);
+        good_price_current *= (1.0-price_change/2.0);
+
+    } // Case 8: Inventory high, price high, emissions high -> Decrease production slightly + decrease price slightly
+    else if (price_high && inventory_high && emission_high) {
+        production_planned*= (1.0-prod_change/2.0);
+        good_price_current *= (1.0-price_change/2.0);
+        // ** TODO: Maybe buy offsets here as well?
+    }
 
     
     // set floor on prices at 0
     good_price_current = max(good_price_current, 0.0f);
 
-    // below eq is from jamel paper - overrides above quantity adjustments
-    production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
-
-    // Impose limit on how much they can tone down production - maybe just change bariables above?
-    production_planned = max(production_planned, static_cast<int>(production_past*(1-firm_cons_max_production_climbdown))); 
-
+    /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments 
+    Additionally impose limit on how much they can tone down production
+    TODO:*/
+    /*production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
+    int production_planned_min = static_cast<int>(production_past*(1-firm_cons_max_production_climbdown));
+    int production_planned_max = static_cast<int>(production_past*(1+firm_cons_max_production_climbdown));
+    if(production_planned < production_planned_min){
+        production_planned = production_planned_min;
+    } else if (production_planned > production_planned_max){
+        production_planned = production_planned_max;
+    }
+    */
 
 
 }

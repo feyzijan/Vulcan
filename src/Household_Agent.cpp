@@ -218,7 +218,7 @@ void Household_Agent::Random_Experimentation(){
     }
 
     // Random emission weight change
-    weighing_change = Uniform_Dist_Float(1.0-household_rand_emission_weight_change , 1.0+household_rand_emission_weight_change);
+    weighing_change = Uniform_Dist_Float(1.0-household_rand_emission_sensitivity_change , 1.0+household_rand_emission_sensitivity_change);
 
     for (int i = 0; i < emission_sensitivity_by_sector.size(); i++){
         emission_sensitivity_by_sector[i] = emission_sensitivity_by_sector[i] * (weighing_change);

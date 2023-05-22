@@ -70,7 +70,11 @@ Public_Info_Board::Public_Info_Board(){
 
     // Emission allowances
     total_emission_allowance = emission_init_total_allowance; 
-    emission_allowance_price = emission_init_unit_price;
+    emission_offset_price = emission_init_unit_price;
+
+    // Bankruptcy figures
+    n_bankrupt_cap_firms = 0;
+    n_bankrupt_cons_firms = 0;
 
     // timestep - not using these for now
     time_step = 0;
@@ -95,6 +99,7 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
     quantity_sold_by_sector = vector<int>(sector_count, 0);
     average_unit_emission_by_sector = vector<float>( sector_count, 0.0);
     inventory_by_sector = vector<int>(sector_count, 0);
+    offsets_sold_by_sectors = vector<int>(sector_count, 0);
 
     // Loop through each sector in the consumer_firm_sector vector and add the sector weighing to the consumer_sector_weighing_vector
     for (int i = 0; i < sector_count; i++){

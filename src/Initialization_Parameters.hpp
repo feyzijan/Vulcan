@@ -109,7 +109,7 @@ extern float household_household_tax_rate;
 // --- Household randomness parameters
 extern float household_rand_sentiment_adoption;
 extern float household_rand_sector_spending_weight_change;
-extern float household_rand_emission_weight_change;
+extern float household_rand_emission_sensitivity_change;
 extern float household_rand_job_search;
 
 //---------------------------------------------
@@ -194,6 +194,11 @@ extern float firm_cons_max_production_climbdown;
 extern float firm_cons_rand_dividend_change;
 extern float firm_cons_rand_sentiment_adoption;
 extern float firm_cons_rand_desired_inventory_factor_change;
+extern float firm_cons_fixed_price_change;
+extern float firm_cons_rand_price_change_upper_limit;
+extern float firm_cons_fixed_prod_change;
+extern float firm_cons_rand_prod_change_upper_limit;
+
 
 
 //---------------------------------------------
@@ -300,6 +305,10 @@ extern float firm_cap_good_unit_cost;
 extern float firm_cap_rand_dividend_change;
 extern float firm_cap_rand_sentiment_adoption;
 extern float firm_cap_rand_desired_inventory_factor_change;
+extern float firm_cap_fixed_price_change;
+extern float firm_cap_rand_price_change_upper_limit;
+extern float firm_cap_fixed_prod_change;
+extern float firm_cap_rand_prod_change_upper_limit;
 
 
 //---------------------------------------------

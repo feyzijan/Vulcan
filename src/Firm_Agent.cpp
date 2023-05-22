@@ -94,19 +94,23 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
   Make sure all workers are laid off, all posted jobs are cancelled
 */
 Firm_Agent::~Firm_Agent() {
-    // Loop through the active jobs list, update status to -1, and remove from list
+    /* Fire all employees
+    Loop through the active jobs list, update status to -1, and remove from list
+    Employees will see they are fired when they check the job status, hence job object must not be deleted
+    */
     for (auto it = active_job_list.begin(); it != active_job_list.end(); ++it){
         (*it)->Update_Status(-1);
     }
     active_job_list.clear();
 
-    // Posted jobs
+    /* Delete Posted jobs */
     // Approach 1: Loop through the posted jobs list, update status to -3, and remove from list
- /* for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
+    /* for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
         (*it)->Update_Status(-3); // Job market will remove these on next update
     } */
 
-    // Approach 2: Delete all objects in the posted_job_list
+    // Approach 2: Delete all objects in the posted_job_list 
+    // TODO: Check this does not cause errors in the job market
     for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
         delete *it;
     }
@@ -118,6 +122,7 @@ Firm_Agent::~Firm_Agent() {
     } */
 
     // Delete all the objects in the loan_book
+    // TODO: Check this does not cause errors in the bank agent
     for (auto it = loan_book.begin(); it != loan_book.end(); ++it){
         delete *it;
     }
@@ -280,47 +285,7 @@ I follow EQ 38 from the general paper for pricing and Jamel for quantity setting
 with some variation
 TODO: Update random variation in price and quantity (p,q) to use global params
 */
-void Firm_Agent::Determine_New_Production()
-{
-    bool price_high;
-    if (is_cons_firm){
-        price_high = good_price_current >= pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
-    } else {
-        price_high = good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
-    }
-    
-    good_price_past = good_price_current; // store current price incase we want to see the change
-    production_past = production_current;
 
-    bool inventory_high = inventory >= desired_inventory; 
-    float p = Uniform_Dist_Float(0.0,0.5); // Random production adjustment
-    float q =  Uniform_Dist_Float(0.0,0.5); // Random price adjustment
-
-    // Case a: Inventory low, Price high - > Maintain price, increase prod
-    if (!inventory_high && price_high){
-        production_planned*= (1.0+q);        
-    } // Case b: Inventory low, Price low - > Increase Price and production
-    else if( !inventory_high && !price_high){
-        good_price_current *= (1.0+p);
-        production_planned*= (1.0+q);
-    } // Case c: Inventory high, Price high - > Reduce price, maintain prod
-    else if (inventory_high && price_high){
-        good_price_current *= (1.0-p);
-    } // Case d:Inventory high, Price low -> Increase price, maintain prod
-    else{
-        good_price_current *= (1.0+p);}
-
-    
-    // set floor on prices at 0
-    good_price_current = max(good_price_current, 0.0f);
-
-    // below eq is from jamel paper - overrides above quantity adjustments
-    production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
-
-    // Impose limit on how much they can tone down production - maybe just change bariables above?
-    production_planned = max(production_planned, static_cast<int>(production_past*(1-firm_cons_max_production_climbdown))); 
-    
-}
 
 
 /* Adjust wage offers based on labor need and average wages in the market
