@@ -75,6 +75,7 @@ class Firm_Agent{
     int Get_Sector_ID() {return sector_id;}
     bool Get_Bankruptcy_Status() {return bankrupt;}
     int Get_Employee_Count() {return employee_count;}
+    int Get_Cons_Firm_Status() {return is_cons_firm;}
     
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}

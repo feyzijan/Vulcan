@@ -27,6 +27,7 @@ class Capital_Goods_Market{
 
     // Getters
     float Get_Price_Level(){return price_level;}
+    int Get_N_Total_Goods(){return n_total_goods;}
 
 
     private:

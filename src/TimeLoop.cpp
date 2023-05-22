@@ -71,8 +71,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     pJob_Market->Calculate_Average_Wage(); 
     pPublic_Info_Board->Update_Average_Wage_Job_Market();
-    cout << "Job market before any new operations" << std::endl; // debugging
-    pJob_Market->Print_Size(); //debugging
+    cout << "Job market before any new operations" << pJob_Market->Get_Size() <<std::endl; // debugging
 
     for( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Adjust_Wage_Offers();
@@ -80,13 +79,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 
     pJob_Market->Sort_Jobs_by_Wage();
-
-    cout << "Job market after the requested " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings" << std::endl;
-    pJob_Market->Print_Size();
-
+    cout << "Job market after the requested " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings : size " << pJob_Market->Get_Size() << std::endl;
     pJob_Market->Remove_Unwanted_Jobs();
-    cout << "Job market after the requested " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals" << std::endl;
-    pJob_Market->Print_Size();
+    cout << "Job market after the requested " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals: size " << pJob_Market->Get_Size() << std::endl;
 
 
     // Step 1.81: Households Check if they are fired
@@ -106,7 +101,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pPublic_Info_Board->Calculate_Unemployment_Rate();
     pJob_Market->Calculate_Average_Wage(); 
     pPublic_Info_Board->Update_Average_Wage_Job_Market();
-    pPublic_Info_Board->Print_Labor_Market();
+    cout << "N_employed workers" << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers" <<pPublic_Info_Board->Get_Unemployed_Workers()
+    << " N_employee demand" <<pPublic_Info_Board->Get_Employee_Demand() << " Average market wage" << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
+
 
     cout << "Commencing labor market matching with " << pJob_Market->Get_Size() << " job postings"  << endl;
 
@@ -124,7 +121,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     pPublic_Info_Board->Calculate_Unemployment_Rate();
     cout << "Labor market matching ended with " << pJob_Market->Get_Size() << " job postings remaining"  << endl;
-    pPublic_Info_Board->Print_Labor_Market();
+    cout << "N_employed workers" << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers" <<pPublic_Info_Board->Get_Unemployed_Workers()
+    << " N_employee demand" <<pPublic_Info_Board->Get_Employee_Demand() << " Average market wage" << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
+
 
 
     // Step 1.84: Sentiments Updating
@@ -144,12 +143,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << " \n ------------ Step 1.91: Firms produce their goods ----------------" <<endl;
     
     cout << "Consumer goods market before firms post goods ( what remains of the previous market): " << endl;
-    //pConsumer_Goods_Market->Update_Price_Level();
-    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
-    pConsumer_Goods_Market->Print();
+    pConsumer_Goods_Market->Update_Price_Level();
     cout << "Capital goods market before firms post goods ( what remains of the previous market): " << endl;
     pCapital_Goods_Market->Update_Price_Level();
-    pCapital_Goods_Market->Print();
 
 
     for (Firm_Agent * firm_ptr : *pFirm_vector){
@@ -157,17 +153,14 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Update_Goods_On_Market();}
 
     cout << "Consumer goods market after firms post goods ( after resetting market): " << endl;
-    //pConsumer_Goods_Market->Sort_Consumer_Goods_By_Price();
-    //pConsumer_Goods_Market->Update_Price_Level();
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
-    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
-    pConsumer_Goods_Market->Print();
+    pConsumer_Goods_Market->Update_Price_Level();
     cout << "Consumer Firms have produced " << pPublic_Info_Board->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Info_Board->Get_Consumer_Goods_Production_Planned() << endl;
     
     cout << "Capital goods market after firms post goods ( after resetting market): " << endl;
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
     pCapital_Goods_Market->Update_Price_Level();
-    pCapital_Goods_Market->Print();
+    cout << "Capital market total goods: " << pCapital_Goods_Market->Get_N_Total_Goods() << " Price level: "<<  pCapital_Goods_Market->Get_Price_Level() << endl;
     cout << "Capital Firms have produced " << pPublic_Info_Board->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Info_Board->Get_Capital_Goods_Production_Planned() << endl;
     
 
@@ -192,9 +185,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     cout << "Households have spent " << pPublic_Info_Board->Get_Consumer_Spending() << " on consumer goods to buy " << pPublic_Info_Board->Get_Consumer_Orders() << " consumer goods" << endl;
     cout <<  float(pPublic_Info_Board->Get_Consumer_Spending()) / float(pPublic_Info_Board->Get_Consumption_Budget())*100 << "% of household budgets have been spent " << endl;
-    //pConsumer_Goods_Market->Update_Price_Level();
-    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
-    pConsumer_Goods_Market->Print();
+    pConsumer_Goods_Market->Update_Price_Level();
 
     pPublic_Info_Board->Calculate_Consumer_Demand_Shortfall_by_Sector();
 
@@ -206,7 +197,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
     pCapital_Goods_Market->Update_Price_Level(); 
-    pCapital_Goods_Market->Print();
 
     for ( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Make_Investment_Decision(); 

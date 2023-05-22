@@ -184,16 +184,8 @@ void Consumer_Firm_Agent::Determine_New_Production(){
         production_planned*= (1.0-prod_change/2.0);
         // Add the amount we need to buy to offset the emissions of the goods we plan to produce
         emission_offsets_needed += static_cast<int>(production_planned * unit_emissions_adj);
-        // Calculate total cost of emissions we wish to buy 
-        int emission_offset_needed_cost = emission_offsets_needed * pPublic_Info_Board->Get_Emission_Offset_Price();
-        long_term_funding_gap =  max(emission_offset_needed_cost - cash_on_hand,0); // Funding gap must be positive
-        if (long_term_funding_gap> 0){
-            Seek_Long_Term_Loan();
-        }
-        if (long_term_funding_gap == 0){
-            pPublic_Info_Board->Buy_Emission_Offsets(emission_offsets_needed, sector_id);
-        }
-                
+        Buy_Emission_Offsets(emission_offsets_needed);
+        
     } // Case 7: Inventory high, price high, emissions low -> Decrease production slightly + decrease price slightly
      else if (price_high && inventory_high && !emission_high) {
         production_planned*= (1.0-prod_change/2.0);
@@ -224,6 +216,21 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     */
 
 
+}
+
+
+/* Function to buy the required amount of emission offsets, and seek a long term loan if necessary
+*/
+void Consumer_Firm_Agent::Buy_Emission_Offsets(int n_offsets) {
+        // Calculate total cost of emissions we wish to buy 
+        int emission_offset_needed_cost = n_offsets * pPublic_Info_Board->Get_Emission_Offset_Price();
+        long_term_funding_gap =  max(emission_offset_needed_cost - cash_on_hand,0); // Funding gap must be positive
+        if (long_term_funding_gap > 0){
+            Seek_Long_Term_Loan();
+        }
+        if (long_term_funding_gap == 0){
+            pPublic_Info_Board->Buy_Emission_Offsets(n_offsets, sector_id);
+        }
 }
 
 

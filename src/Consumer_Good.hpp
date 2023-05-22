@@ -20,7 +20,7 @@ class Consumer_Good: public General_Good{
 
     // Getters
     Consumer_Firm_Agent* Get_Seller() {return pSeller;}
-    float Get_Emission() {return unit_emissions;}
+    float Get_Unit_Emissions() {return unit_emissions;}
     float Get_Emission_Adjusted_Price(float sensitivity) {return price  + sensitivity * unit_emissions;}
 
     // Setters

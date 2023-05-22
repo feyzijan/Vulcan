@@ -338,7 +338,7 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
     // Sort each sector by price
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
     // Update the price levels in each sector
-    pConsumer_Goods_Market->Update_Price_Level_by_Sector();
+    pConsumer_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Update_Price_Level();
 
     // Initialize the price levels in public board with these sectors

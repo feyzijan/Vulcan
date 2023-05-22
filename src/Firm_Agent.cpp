@@ -295,7 +295,7 @@ TODO: Improve this as it is a bit too simplistic, maybe use JAMEL
 void Firm_Agent::Adjust_Wage_Offers()
 {
     float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
-    int average_wage_market = pPublic_Info_Board->Get_Average_Wage();
+    int average_wage_market = pPublic_Info_Board->Get_Average_Wage_Market();
     
     bool wage_high = wage_offer >= average_wage_market;
 

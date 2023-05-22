@@ -125,14 +125,14 @@ Updates own records to indicate the loan has been issued
 Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
 
     // Gather data to issue loan, give a little extra then is required to smooth things over
-    float extra_funding = 1.01;
+    float extra_funding = 0.01;
     int short_term_funding_gap = pFirm->Get_Short_Term_Funding_Gap();
     
     if (short_term_funding_gap <= 0){
         cout << "ERROR: Bank_Agent::Issue_Short_Term_Loan() - Firm has no short term funding gap " << short_term_funding_gap << ", firm #" << pFirm << endl;
     }
 
-    int loan_amount = short_term_funding_gap * extra_funding;
+    long loan_amount = short_term_funding_gap + short_term_funding_gap * extra_funding;
     if (loan_amount < 0){
         cout << "ERROR: Bank_Agent::Issue_Short_Term_Loan() - loan_amount < 0 - firm #" << pFirm << endl;
         cout << "Firm has short term funding gap "  << short_term_funding_gap<< endl;
@@ -155,33 +155,6 @@ Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
 }
 
 
-/*Function to calculate how much premium to charge in loand for a firm's emission*/
-
-float Bank_Agent::Calculate_Emission_Penalty(Firm_Agent *pFirm){
-    if(bank_unit_emission_penalty){
-        float firm_emission = pFirm->Get_Unit_Emissions();
-        // Linearly interpolate between firm_emission and bank_unit_emission_lower_thr, bank_unit_emission_upper_thr
-        if(firm_emission <= bank_unit_emission_lower_thr){
-            return 0;
-        } else if (firm_emission >= bank_unit_emission_upper_thr){
-            return bank_emission_penalty_max;
-        } else {
-            return bank_emission_penalty_max * (firm_emission - bank_unit_emission_lower_thr) / (bank_unit_emission_upper_thr - bank_unit_emission_lower_thr);
-        }
-    } else {
-        float firm_emission = pFirm->Get_Total_Emissions();
-        // Linearly interpolate between firm_emission and bank_unit_emission_lower_thr, bank_unit_emission_upper_thr
-        if(firm_emission <= bank_total_emission_lower_thr){
-            return 0;
-        } else if (firm_emission >= bank_total_emission_upper_thr){
-            return bank_emission_penalty_max;
-        } else {
-            return bank_emission_penalty_max * (firm_emission - bank_total_emission_lower_thr) / (bank_total_emission_upper_thr - bank_total_emission_lower_thr);
-        }
-    }
-}
-
-
 /* Issue long term loans at the risk free rate + risk premium
 Function receives firm pointer, accesses the funding gap data wand risk data,
 and issues a loan, or not, and returns a null pointer
@@ -191,10 +164,10 @@ Updates own records to indicate the loan has been issued
 Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
 
     // Gather data to issue loan, give a little extra to smooth things over
-    float extra_funding = 1.01;
+    float extra_funding = 0.01;
     int long_term_funding_gap = pFirm->Get_Long_Term_Funding_Gap(); 
 
-    if (long_term_funding_gap <= 0){
+    if (long_term_funding_gap == 0){
         cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - long_term_funding_gap <= 0,  firm #" << pFirm  << endl;
     }
 
@@ -206,11 +179,18 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
     if(leverage_ratio < leverage_ratio_upper_threshold){
         // Create Loan with new risky rate
         float excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
-        float emission_penalty = Calculate_Emission_Penalty(pFirm);
+        float emission_penalty;
+        if (pFirm->Get_Cons_Firm_Status()){
+            Consumer_Firm_Agent* pConsumerFirm = dynamic_cast<Consumer_Firm_Agent*>(pFirm); // dynamic cast to consumer firm pointer
+            emission_penalty = Calculate_Emission_Penalty(pConsumerFirm);
+        } else {
+            emission_penalty = 0;
+        }
+        
         float loan_rate = r_rate + risk_premium*excess_leverage + emission_penalty;
-        int loan_amount = long_term_funding_gap * extra_funding;
+        int loan_amount = long_term_funding_gap + long_term_funding_gap * extra_funding;
 
-        if (loan_amount < 0){
+        if (loan_amount == 0){
             cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_amount < 0 - firm #" << pFirm << endl;
             cout << "Firm has long term funding gap "  << long_term_funding_gap<< endl;
         }
@@ -231,6 +211,35 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
 }
 
 
+/* Function to calculate how much premium to charge in loand for a firm's emission
+Either look at the firm's total emissions, or the firm's emissions per unit of output based on user selection
+Linearly interpolate between the firms emissions and the bank's lower and upper thresholds
+and impose the necessary penalty
+*/
+
+float Bank_Agent::Calculate_Emission_Penalty(Consumer_Firm_Agent *pConsFirm){
+    if(bank_unit_emission_penalty){
+        float firm_emission = pConsFirm->Get_Unit_Emissions();
+        if(firm_emission <= bank_unit_emission_lower_thr){
+            return 0;
+        } else if (firm_emission >= bank_unit_emission_upper_thr){
+            return bank_emission_penalty_max;
+        } else {
+            return bank_emission_penalty_max * (firm_emission - bank_unit_emission_lower_thr) / (bank_unit_emission_upper_thr - bank_unit_emission_lower_thr);
+        }
+    } else {
+        float firm_emission = pConsFirm->Get_Total_Emissions();
+        if(firm_emission <= bank_total_emission_lower_thr){
+            return 0;
+        } else if (firm_emission >= bank_total_emission_upper_thr){
+            return bank_emission_penalty_max;
+        } else {
+            return bank_emission_penalty_max * (firm_emission - bank_total_emission_lower_thr) / (bank_total_emission_upper_thr - bank_total_emission_lower_thr);
+        }
+    }
+}
+
+
 // ------- Printing and Logging Methods
 
 /* String stream operator overload*/
@@ -238,9 +247,9 @@ std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
     os << "r_rate: " << obj.r_rate << std::endl;
     os << "r_reaction: " << obj.r_reaction << std::endl;
     os << "risk_premium: " << obj.risk_premium << std::endl;
+    os << "cons_inflation_target: " << obj.cons_inflation_target << std::endl;
     os << "cons_inflation_current: " << obj.cons_inflation_current << std::endl;
     os << "cons_inflation_previous: " << obj.cons_inflation_previous << std::endl;
-    os << "cons_inflation_target: " << obj.cons_inflation_target << std::endl;
     os << "cons_inflation_past_month: " << obj.cons_inflation_past_month << std::endl;
     os << "cap_inflation_current: " << obj.cap_inflation_current << std::endl;
     os << "cap_inflation_previous: " << obj.cap_inflation_previous << std::endl;

@@ -104,7 +104,8 @@ class Public_Info_Board{
     float Get_Capital_Good_Price_Level(){return cap_price_level_current;}
     float Get_Consumer_Good_Price_Level() {return cons_price_level_current;}
 
-    float Get_Average_Wage() { return average_wage_market;}
+    float Get_Average_Wage_Market() { return average_wage_market;}
+    float Get_Average_Wage_Employed() {return average_wage_employed;}
     Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
     int Get_Current_Date() { return current_date;}
     int Get_Machine_Orders() { return machine_orders;}

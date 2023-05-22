@@ -9,6 +9,8 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+typedef unsigned long ulong;
+typedef unsigned int uint;
 
 using namespace std;
 

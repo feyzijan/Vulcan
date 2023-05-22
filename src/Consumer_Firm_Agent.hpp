@@ -29,6 +29,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     virtual void Random_Experimentation() override;
     virtual void Update_Sentiment() override;
     virtual void Determine_New_Production() override;
+    void Buy_Emission_Offsets(int offsets_neeeded);
 
     void Assign_Sector(Consumer_Firm_Sector* pSector_Struct);
     void Update_Emission_Allowances();

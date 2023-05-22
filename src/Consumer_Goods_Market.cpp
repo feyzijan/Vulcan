@@ -46,16 +46,6 @@ void Consumer_Goods_Market::Divide_Goods_Into_Sectors(int n_sectors){
 }
 
 
-/* Sort the market by price
-*/
-void Consumer_Goods_Market::Sort_Consumer_Goods_By_Price()
-{
-    std::sort(cons_goods_list.begin(), cons_goods_list.end(), 
-    [](Consumer_Good* a, Consumer_Good* b) { 
-    return a->Get_Price() < b->Get_Price(); });
-}
-
-
 /* Sort the market in each sector by price
 */
 void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price() 
@@ -77,22 +67,32 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price()
 /* Check that the below works
  */
 void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price_and_Emissions(){
-    // Loop through each element of the default_emission_sensitivites vector
+    // Loop through each element of the default_emission_sensitivites vector, create an entry in the cons_goods_by_emission_adj_price
+    // where the key is the sensitivity and the value is a copy of the cons_good_list_by_sector vector sorted based on emission adjusted price
     for (int i = 0; i < default_emission_sensitivities.size(); ++i) {
         float sensitivity = default_emission_sensitivities[i]; // Get the sensitivity
-        // Create a copy of the cons_good_list_by_sector vector. Sort this new copy by price + emissions * sensitivity
-        vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector_copy = cons_good_list_by_sector; // Create copy
-        // ****** Above copying may present errors double check it works
+        vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector_copy;
+        
+        for (const auto& sector_and_goods : cons_good_list_by_sector) { // loop through each sector
+            const vector<Consumer_Good*>& goods = sector_and_goods.second; // select given set of goods
+            vector<Consumer_Good*> goods_copy;  
 
-        for (auto& sector_and_goods : cons_good_list_by_sector_copy) { 
-            vector<Consumer_Good*>& goods = sector_and_goods.second; // The second element of the pair is the vector of Consumer_Good pointers
+            // Copy the goods vector
+            std::transform(goods.begin(), goods.end(), std::back_inserter(goods_copy),
+            [](Consumer_Good* good) {
+                return new Consumer_Good(*good); // Deep copy of Consumer_Good object
+            });
 
-            // Sort the goods vector by price
+            // Sort the goods vector by emisison adj price
             std::sort(goods.begin(), goods.end(),
                 [sensitivity](Consumer_Good* a, Consumer_Good* b) {
-                    return a->Get_Price() + sensitivity*a->Get_Emission() < b->Get_Price() + sensitivity*b->Get_Emission();
+                    return a->Get_Emission_Adjusted_Price(sensitivity) < b->Get_Emission_Adjusted_Price(sensitivity);
                 });
+
+            // Add the sorted vector to the copy of the cons_good_list_by_sector vector
+            cons_good_list_by_sector_copy.emplace_back(sector_and_goods.first, goods_copy);
         }
+        cons_goods_by_emission_adj_price[sensitivity] = cons_good_list_by_sector_copy; // Add the sorted vector to the map
     }
 }
 
@@ -158,12 +158,13 @@ pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Se
 /* Function to buy goods from each consumer sector based on emission sensitivities
 TO DO: Edit this to work
 */
-pair<vector<float>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& spending_array, 
+tuple<vector<float>, vector<int>, vector<int>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& spending_array, 
 const vector<float>& emission_sensitives_array){
     
     
-    vector<float> remaining_budget_by_sector; // initialize remaining budget vector
-    vector<int> quantity_bought_by_sector; // initialize quantity bought vector
+    vector<float> remaining_budget_by_sector; 
+    vector<int> quantity_bought_by_sector;
+    vector <int> emisison_by_sector;
 
     int total_spending = 0;
 
@@ -176,6 +177,7 @@ const vector<float>& emission_sensitives_array){
         // Round this value to the nearest threshold, i.e. nearest multiple of 0.05
         float emission_sensitivity = roundf(emission_sensitives_array[i] * 20) / 20;
 
+        // Select the appropriate goods list
         vector<Consumer_Good*>& goods_for_sector = cons_goods_by_emission_adj_price[emission_sensitives_array[i]][i].second;
 
         // calculate the amount to spend in this sector
@@ -184,6 +186,7 @@ const vector<float>& emission_sensitives_array){
         // buy goods from this sector
         float sector_budget_remaining = sector_budget;
         int sector_quantity_bought = 0;
+        float sector_emissions = 0;
         for(Consumer_Good* pgood : goods_for_sector){ // Loop through the goods list, from cheapest to most expensive
             int q = pgood->Get_Quantity();
             float p = pgood->Get_Price();
@@ -194,21 +197,24 @@ const vector<float>& emission_sensitives_array){
                 pgood->Update_Quantity(-n); // update the quantity of the good
                 sector_quantity_bought += n; // update the quantity bought
                 sector_budget_remaining -= n*p; // update the remaining budget
+                sector_emissions += n*pgood->Get_Unit_Emissions(); // update the emissions
             } else if (n==0){ 
                 break; // Household can no longer afford to buy anything -  exit loop
             } else { // Household can't buy q goods but rather only n , so will run out of budget after this purchase
                 pgood->Update_Quantity(-n);
                 sector_quantity_bought += n;
                 sector_budget_remaining -= n*p;
+                sector_emissions += n*pgood->Get_Unit_Emissions(); // update the emissions
                 break; // exit loop
             }
         }
         remaining_budget_by_sector.push_back(sector_budget_remaining);
         quantity_bought_by_sector.push_back(sector_quantity_bought);
+        emisison_by_sector.push_back(int(sector_emissions));
         total_spending += sector_budget - sector_budget_remaining;
     }   
 
-    pair<vector<float>, vector<int>> result = make_pair(remaining_budget_by_sector, quantity_bought_by_sector);
+    tuple<vector<float>, vector<int>, vector<int>> result = make_tuple(remaining_budget_by_sector, quantity_bought_by_sector, emisison_by_sector);
     return result;
 }
 
@@ -217,7 +223,7 @@ const vector<float>& emission_sensitives_array){
 
 /* Update the price level of the market by sector
 */
-void Consumer_Goods_Market::Update_Price_Level_by_Sector(){
+void Consumer_Goods_Market::Update_Price_Level(){
     // Loop through the cons_good_list_by_sector vector of pairs, calculating the weighted price for each sector
     // store these in order in the price_level_by_sector vector
 

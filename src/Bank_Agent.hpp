@@ -7,7 +7,7 @@ class Public_Info_Board;
 #include "Initialization_Parameters.hpp"
 #include "Loan.hpp"
 #include "Firm_Agent.hpp"
-
+#include "Consumer_Firm_Agent.hpp"
 
 #include <queue>
 #include <iostream>
@@ -28,7 +28,7 @@ class Bank_Agent{
     Loan* Issue_Short_Term_Loan(Firm_Agent* pFirm);
     Loan* Issue_Long_Term_Loan(Firm_Agent* pFirm);
 
-    float Calculate_Emission_Penalty(Firm_Agent* pFirm);
+    float Calculate_Emission_Penalty(Consumer_Firm_Agent* pFirm);
 
     // Getters
     float Get_Interest_Rate() {return r_rate;};
