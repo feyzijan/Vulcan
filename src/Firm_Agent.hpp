@@ -74,6 +74,9 @@ class Firm_Agent{
     float Get_Leverage_Ratio() {return leverage_ratio;}
     int Get_Sector_ID() {return sector_id;}
     bool Get_Bankruptcy_Status() {return bankrupt;}
+    float Get_Unit_Emissions() {return emission_per_unit;}
+    int Get_Total_Emissions() {return total_emissions;}
+    int Get_Cumulative_Emissions() {return cumulative_emissions;}
     
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}

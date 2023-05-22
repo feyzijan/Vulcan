@@ -257,7 +257,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     emission_sensitivity_threshold = initialization_parameters["emission_sensitivity_threshold"];
 
 
-
     //---------- Main Loop Parameters ------------
     // --- Simulation size 
     n_loops = main_loop_parameters["n_loops"];
@@ -303,6 +302,15 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     bank_long_term_loan_length = main_loop_parameters["bank_long_term_loan_length"];
     bank_leverage_ratio_lower_threshold = main_loop_parameters["bank_leverage_ratio_lower_threshold"];
     bank_leverage_ratio_upper_threshold = main_loop_parameters["bank_leverage_ratio_upper_threshold"];
+
+    //---- Bank Emission Penalty Parameters
+    bank_total_emission_penalty = main_loop_parameters["bank_total_emission_penalty"];
+    bank_unit_emission_penalty = main_loop_parameters["bank_unit_emission_penalty"];
+    bank_unit_emission_lower_thr = main_loop_parameters["bank_unit_emission_lower_thr"];
+    bank_unit_emission_upper_thr = main_loop_parameters["bank_unit_emission_upper_thr"];
+    bank_total_emission_lower_thr = main_loop_parameters["bank_total_emission_lower_thr"];
+    bank_total_emission_upper_thr = main_loop_parameters["bank_total_emission_upper_thr"];
+
 
     // Randomness Parameters
     // Household randomness parameters
@@ -579,7 +587,7 @@ int forced_machine_purchases_max = 5;
 // Bank Initialization parameters
 float bank_init_interest_rate = 0.02;
 
-// Exogenous Parameters for Bank
+// Dynamic Bank Parameters 
 float bank_inflation_reaction = 1.5;
 float bank_inflation_target = 1.05; 
 float bank_inflation_target_monthly=  1.004;
@@ -598,3 +606,13 @@ float emission_sensitivity_min = 0.0;
 float emission_sensitivity_max = 0.5;
 float emission_sensitivity_std = 0.05;
 float emission_sensitivity_threshold = 0.05;
+
+// Bank Emission Lending Penalty Parameters
+float bank_emission_penalty_max = 0.02;
+bool bank_total_emission_penalty = 0;
+bool bank_unit_emission_penalty  = 1;
+float bank_unit_emission_lower_thr = 1;
+float bank_unit_emission_upper_thr = 10;
+float bank_total_emission_lower_thr = 10000;
+float bank_total_emission_upper_thr = 100000;
+

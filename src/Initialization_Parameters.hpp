@@ -317,6 +317,8 @@ extern int bank_long_term_loan_length;
 extern float bank_leverage_ratio_lower_threshold;
 extern float bank_leverage_ratio_upper_threshold;
 
+
+
 //---------------------------------------------
 
 // --- CO2 Metrics parameters
@@ -325,6 +327,16 @@ extern float emission_sensitivity_min;
 extern float emission_sensitivity_max;
 extern float emission_sensitivity_std;
 extern float emission_sensitivity_threshold; 
+
+// Bank Emission Lending Penalty Parameters
+extern float bank_emission_penalty_max;
+extern bool bank_total_emission_penalty;
+extern bool bank_unit_emission_penalty;
+extern float bank_unit_emission_lower_thr;
+extern float bank_unit_emission_upper_thr;
+extern float bank_total_emission_lower_thr;
+extern float bank_total_emission_upper_thr;
+
 
 //---------------------------------------------
 

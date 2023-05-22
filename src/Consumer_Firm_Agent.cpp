@@ -114,8 +114,9 @@ void Consumer_Firm_Agent::Update_Sentiment(){
 
 
 void Consumer_Firm_Agent::Determine_New_Production(){
-    Firm_Agent::Determine_New_Production();
-    pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
+
+
+
 }
 
 

@@ -28,6 +28,8 @@ class Bank_Agent{
     Loan* Issue_Short_Term_Loan(Firm_Agent* pFirm);
     Loan* Issue_Long_Term_Loan(Firm_Agent* pFirm);
 
+    float Calculate_Emission_Penalty(Firm_Agent* pFirm);
+
     // Getters
     float Get_Interest_Rate() {return r_rate;};
 
@@ -36,7 +38,7 @@ class Bank_Agent{
     void Print_Inflation_History();
     void Print_Interest_Rate_History(); // To Implement
     friend std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj);
-    vector<std::pair<std::string, float>>*  Log_Data();
+    vector<std::pair<string, float>>*  Log_Data();
 
     protected:
     Public_Info_Board* pPublic_Board;

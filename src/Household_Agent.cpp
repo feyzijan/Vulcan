@@ -104,10 +104,11 @@ void Household_Agent::Initialize_Sector_Emission_Sensitivities(vector<Consumer_F
         // Do a random number generation 
         float temp = Normal_Dist_Generator(mean_sensitivity, emission_sensitivity_std, emission_sensitivity_min, emission_sensitivity_max)(); 
         temp = std::round(temp * 1000) / 1000.0; // round to the nearest three decimals
-        emission_sensitivity_by_sector.push_back(temp);
         if (temp < 0){
-            cout << "Error Sector weight is negative" << endl;
+            cout << "Error in Household_Agent::Initialize_Sector_Emission_Sensitivities(): Sector weight is negative" << endl;
+            temp = 0;
         }
+        emission_sensitivity_by_sector.push_back(temp);
     }
 }
 

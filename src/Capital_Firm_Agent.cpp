@@ -112,8 +112,10 @@ void Capital_Firm_Agent::Update_Sentiment(){
 }
 
 
-/* Determine new production - call the base class method but update public
-board accordingly*/
+/* Determine new production - call the base class method and don't do anything about sensing emissions*/
+void Capital_Firm_Agent::Determine_New_Production(){
+    Firm_Agent::Determine_New_Production();
+}
 
 
 

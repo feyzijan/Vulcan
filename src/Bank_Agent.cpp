@@ -154,6 +154,34 @@ Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
     return new_loan;
 }
 
+
+/*Function to calculate how much premium to charge in loand for a firm's emission*/
+
+float Bank_Agent::Calculate_Emission_Penalty(Firm_Agent *pFirm){
+    if(bank_unit_emission_penalty){
+        float firm_emission = pFirm->Get_Unit_Emissions();
+        // Linearly interpolate between firm_emission and bank_unit_emission_lower_thr, bank_unit_emission_upper_thr
+        if(firm_emission <= bank_unit_emission_lower_thr){
+            return 0;
+        } else if (firm_emission >= bank_unit_emission_upper_thr){
+            return bank_emission_penalty_max;
+        } else {
+            return bank_emission_penalty_max * (firm_emission - bank_unit_emission_lower_thr) / (bank_unit_emission_upper_thr - bank_unit_emission_lower_thr);
+        }
+    } else {
+        float firm_emission = pFirm->Get_Total_Emissions();
+        // Linearly interpolate between firm_emission and bank_unit_emission_lower_thr, bank_unit_emission_upper_thr
+        if(firm_emission <= bank_total_emission_lower_thr){
+            return 0;
+        } else if (firm_emission >= bank_total_emission_upper_thr){
+            return bank_emission_penalty_max;
+        } else {
+            return bank_emission_penalty_max * (firm_emission - bank_total_emission_lower_thr) / (bank_total_emission_upper_thr - bank_total_emission_lower_thr);
+        }
+    }
+}
+
+
 /* Issue long term loans at the risk free rate + risk premium
 Function receives firm pointer, accesses the funding gap data wand risk data,
 and issues a loan, or not, and returns a null pointer
@@ -178,7 +206,8 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
     if(leverage_ratio < leverage_ratio_upper_threshold){
         // Create Loan with new risky rate
         float excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
-        float loan_rate = r_rate + risk_premium*excess_leverage;
+        float emission_penalty = Calculate_Emission_Penalty(pFirm);
+        float loan_rate = r_rate + risk_premium*excess_leverage + emission_penalty;
         int loan_amount = long_term_funding_gap * extra_funding;
 
         if (loan_amount < 0){
