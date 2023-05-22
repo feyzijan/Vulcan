@@ -35,9 +35,9 @@ class Consumer_Firm_Agent: public Firm_Agent{
     void Update_Emission_Allowances();
 
     // Getters
-    float Get_Unit_Emissions() {return unit_emissions;}
+    virtual float Get_Unit_Emissions() override {return unit_emissions;}
     float Get_Adj_Unit_Emissions() {return unit_emissions_adj;}
-    int Get_Total_Emissions() {return total_emissions;}
+    virtual int Get_Total_Emissions() override {return total_emissions;}
     int Get_Cumulative_Emissions() {return cumulative_emissions;}
 
 

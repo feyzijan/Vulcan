@@ -28,8 +28,7 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     //----------- STEP 0.13: Initialize job market
     cout << " Step 0.13: Initialize job market" << endl;
     Initialize_Job_Market(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector,pPublic_Board);
-    pJob_Market->Print_Size();
-    pPublic_Board->Print_Labor_Market();
+    cout << "Job market size: " << pJob_Market->Get_Size() << endl; 
 
     //----------- STEP 0.14: Initialize consumer firm sectors
     int n_sectors =  Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector,

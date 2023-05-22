@@ -695,6 +695,7 @@ bool Firm_Agent::Avoid_Bankruptcy(){
         }
         employee_count = 0;
         pPublic_Info_Board->Update_Employee_Firings(layoff_count);
+        pPublic_Info_Board->Update_Bankruptcies(is_cons_firm);
 
         return 0;
     }
@@ -708,6 +709,7 @@ TODO: *** CHECK if any of the below bills has already been deducted from cash on
 void Firm_Agent::Pay_Liabilities(){
 
     total_liabilities = 0;
+    total_assets = cash_on_hand + capital_goods_current_value + inventory * unit_good_cost;
 
     // ----Loans -----
     // Make loan repayments and tally up payments
@@ -783,6 +785,7 @@ void Firm_Agent::Pay_Liabilities(){
     new_loan_issuance = 0;
 
 }
+
 
 
 

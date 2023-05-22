@@ -85,7 +85,7 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price_and_Emissions(){
 
             // Sort the goods vector by emisison adj price
             std::sort(goods.begin(), goods.end(),
-                [sensitivity](Consumer_Good* a, Consumer_Good* b) {
+                [sensitivity](const Consumer_Good* a, const Consumer_Good* b) {
                     return a->Get_Emission_Adjusted_Price(sensitivity) < b->Get_Emission_Adjusted_Price(sensitivity);
                 });
 

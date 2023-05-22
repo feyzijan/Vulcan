@@ -20,14 +20,10 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pBank->Update_Interest_Rate();
     pPublic_Info_Board->Update_Interest_Rate();
 
-    // Step 1.11: Delete agents that are bankrupt
-    // Delete bankrupt irm_Agent objects
-/*     for (auto it = pFirm_vector->begin(); it != pFirm_vector->end();){
-    if ((*it)->Get_Bankruptcy_Status()){
-        delete *it; // Calls destructor of the agent
-        it = pFirm_vector->erase(it);
-    } else{++it;} }
- */
+    // STEP 1.11: Remove bankrupt agents from the simulation
+    Delete_Bankrupt_Firms(pFirm_vector, pConsumer_Firm_vector, pCapital_Firm_vector);
+
+
 
 
 
@@ -217,6 +213,42 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pPublic_Info_Board->Calculate_Average_Dividend_Income();
     pPublic_Info_Board->Calculate_Average_Total_Income();
 
-        
+}
 
+
+
+
+
+/* Function to delete bankrupt firms
+*/void Delete_Bankrupt_Firms(vector<Consumer_Firm_Agent*>& pConsumer_Firm_vector, vector<Capital_Firm_Agent*>& pCapital_Firm_vector, vector<Firm_Agent*>& pFirm_vector) {
+    // Erase pointers to bankrupt firms from consumer firm vector
+    auto consumerIt = pConsumer_Firm_vector.begin();
+    while (consumerIt != pConsumer_Firm_vector.end()) {
+        if ((*consumerIt)->Get_Bankruptcy_Status()) {
+            consumerIt = pConsumer_Firm_vector.erase(consumerIt);
+        } else {
+            ++consumerIt;
+        }
+    }
+
+    // Erase pointers to bankrupt firms from capital firm vector
+    auto capitalIt = pCapital_Firm_vector.begin();
+    while (capitalIt != pCapital_Firm_vector.end()) {
+        if ((*capitalIt)->Get_Bankruptcy_Status()) {
+            capitalIt = pCapital_Firm_vector.erase(capitalIt);
+        } else {
+            ++capitalIt;
+        }
+    }
+
+    // Erase pointers and delete objects from combined firm vector
+    auto firmIt = pFirm_vector.begin();
+    while (firmIt != pFirm_vector.end()) {
+        if ((*firmIt)->Get_Bankruptcy_Status()) {
+            delete *firmIt;
+            firmIt = pFirm_vector.erase(firmIt);
+        } else {
+            ++firmIt;
+        }
+    }
 }

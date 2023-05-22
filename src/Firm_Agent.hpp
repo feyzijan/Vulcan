@@ -62,6 +62,7 @@ class Firm_Agent{
     void Update_Leverage_Ratio();
     void Update_Loan_List(); // calledby Pay_Liabilities
     void Pay_Liabilities();
+    void Calculate_Total_Assets();
 
     // Bankrupcty
     bool Avoid_Bankruptcy();
@@ -76,7 +77,9 @@ class Firm_Agent{
     bool Get_Bankruptcy_Status() {return bankrupt;}
     int Get_Employee_Count() {return employee_count;}
     int Get_Cons_Firm_Status() {return is_cons_firm;}
-    
+    virtual float Get_Unit_Emissions() {return 0;}
+    virtual int Get_Total_Emissions() {return 0;}
+        
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
     void Set_Wage_Offer(int wage) { this->wage_offer = wage;} // used in testing

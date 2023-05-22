@@ -391,7 +391,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
 - Receive back a pair of two vectors, leftover budget and goods bought for each sector
 
 */
-void Household_Agent::Buy_Consumer_Goods_By_Sector_With_Emissions(){
+void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
 
     // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
     vector<float> planned_expenditure_by_sector;
@@ -406,11 +406,11 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_With_Emissions(){
     }
 
     // Buy consumer goods and receive leftover budget and quantity bought for each sector
-    pair<vector<float>, vector<int>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(expenditure_consumption, planned_expenditure_by_sector, emission_sensitivity_by_sector);
+    tuple<vector<float>, vector<int>, vector<int>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(expenditure_consumption, planned_expenditure_by_sector, emission_sensitivity_by_sector);
 
-
-    vector<float> remaining_consumption_budget =  purchases_by_sector.first;
-    vector<int> goods_bought =  purchases_by_sector.second;
+    vector<float> remaining_consumption_budget =  std::get<0>(purchases_by_sector);
+    vector<int> goods_bought =  std::get<1>(purchases_by_sector);
+    vector<int> emissions_generated =  std::get<2>(purchases_by_sector);
     vector<float> actual_spending_by_sector(planned_expenditure_by_sector);
 
     int total_goods_bought = 0;

@@ -28,6 +28,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 
 
-
+void Delete_Bankrupt_Firms(vector<Firm_Agent*>* pFirm_vector, vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector, vector<Capital_Firm_Agent*>* pCapital_Firm_vector);
 
 #endif

@@ -47,7 +47,7 @@ class Household_Agent{
     void Determine_Consumption_Budget(); //(eq 18)
 
     void Buy_Consumer_Goods_By_Sector();
-    void Buy_Consumer_Goods_By_Sector_With_Emissions();
+    void Buy_Consumer_Goods_By_Sector_And_Emissions();
     void Seek_Jobs();
     void Seek_Better_Jobs();
 
@@ -72,10 +72,6 @@ class Household_Agent{
     protected:
     Public_Info_Board* pPublic_Info_Board;
     Job * current_job;
-    queue<int> past_incomes;
-    Firm_Agent * owned_firm;
-    vector<float> spending_weight_by_sector;
-    vector<float> emission_sensitivity_by_sector; // Newly added
 
     // Wealth
     int wealth_financial; //W_f in equations 
@@ -85,6 +81,7 @@ class Household_Agent{
     int expenditure_consumption;
     int expenditure_tax;
     float consumption_propensity; //c eq(17) - characteristic
+    vector<float> spending_weight_by_sector;
 
     // Savings
     int new_savings;
@@ -104,10 +101,13 @@ class Household_Agent{
     int income_unemployment_benefit;
     int income_gov_transfers;
     int income_firm_owner_dividend;
+    queue<int> past_incomes;
 
     // Emissions
     int total_emissions; // NEWLY ADDED
     float emission_sensitivity_avg; // NEWLY ADDED
+    vector<float> emission_sensitivity_by_sector; // Newly added
+    vector<int> total_emissions_by_sector; // Newly added
 
     // Unemployment status
     bool unemployed;
@@ -118,8 +118,12 @@ class Household_Agent{
     // Sentiment 
     bool sentiment; // pessimistic, optimistic
 
+
+    // Firm Ownership
+    bool firm_owner; 
+    Firm_Agent * owned_firm;
+    
     // Pre-set constants
-    bool firm_owner; // If True will receive dividend income
     float c_f; // propensity to consume financial wealth
     float c_h; // propensity to consume human wealth
     float c_excess_money; // propensity yo consume excess money balance 

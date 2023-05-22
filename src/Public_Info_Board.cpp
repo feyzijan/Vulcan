@@ -76,8 +76,6 @@ Public_Info_Board::Public_Info_Board(){
     n_bankrupt_cap_firms = 0;
     n_bankrupt_cons_firms = 0;
 
-    // timestep - not using these for now
-    time_step = 0;
     current_date = 0;
 }
 
@@ -97,9 +95,11 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
     actual_production_by_sector = vector<int>(sector_count, 0);
     planned_production_by_sector = vector<int>(sector_count, 0);
     quantity_sold_by_sector = vector<int>(sector_count, 0);
-    average_unit_emission_by_sector = vector<float>( sector_count, 0.0);
     inventory_by_sector = vector<int>(sector_count, 0);
-    offsets_sold_by_sectors = vector<int>(sector_count, 0);
+
+    average_unit_emission_by_sector = vector<float>( sector_count, 0.0);
+    total_emissions_by_sector = vector<int>(sector_count, 0);
+    offsets_sold_by_sector = vector<int>(sector_count, 0);
 
     // Loop through each sector in the consumer_firm_sector vector and add the sector weighing to the consumer_sector_weighing_vector
     for (int i = 0; i < sector_count; i++){
@@ -113,10 +113,6 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
         total_emission_allowance += pConsumer_Firm_Sector_vector->at(i)->emission_allowance;
     }
 
-    
-
-
-
 }
 
 // ----- Updating Member variables
@@ -127,8 +123,7 @@ Household agent that calls this method
 void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending){
     // loop through the planned_spending vector and add to the planned_cons_spending_by_sector vector
     for (int i = 0; i < sector_count; i++){
-        int temp = planned_spending[i];
-        planned_cons_spending_by_sector[i] += temp;
+        planned_cons_spending_by_sector[i] += planned_spending[i];
     }
 }
 
@@ -139,8 +134,7 @@ Household agent that calls this method
 void Public_Info_Board::Update_Actual_Consumer_Spending_by_Sector( const vector<float>& actual_spending ){
     // loop though the actual_spending vector and add to the actual_cons_spending_by_sector vector
     for (int i = 0; i < sector_count; i++){
-        int temp = actual_spending[i];
-        actual_cons_spending_by_sector[i] += temp;
+        actual_cons_spending_by_sector[i] += actual_spending[i];
     }
 }
 
@@ -164,6 +158,14 @@ void Public_Info_Board::Calculate_Average_Unit_Emissions_by_Sector(){
 /* Get latest interest rate from the bank*/
 void Public_Info_Board::Update_Interest_Rate() {r_rate = pBank->Get_Interest_Rate();} // Get latest interest rate from the bank
 
+//---- Updating emissions
+void Public_Info_Board::Update_Emissions_By_Sector(const vector<int>& emissions_by_sector) {   
+    for (int i = 0; i < sector_count; i++){
+        actual_cons_spending_by_sector[i] += emissions_by_sector[i];
+    }
+}
+
+
 
 //---------- Distributing Emission Allowances --------
 
@@ -178,6 +180,17 @@ unsigned long int Public_Info_Board::Distribute_Initial_Emission_Allowances(int 
 unsigned long int Public_Info_Board::Distribute_Emission_Allowances(int sale_quantity, int sector_id){
     float sale_ratio = float(sale_quantity)/float(quantity_sold_by_sector[sector_id-1]); // CHECK THE DIVISION IS ACCURATE
     return sale_ratio * emission_allowances_by_sector[sector_id-1]; 
+}
+
+// Updating emission allowance amounts
+void Public_Info_Board::Update_Emission_Allowance_Amount() { 
+
+    std::transform(emission_allowances_by_sector.begin(), emission_allowances_by_sector.end(), 
+    emission_allowances_by_sector.begin(), [=](unsigned long int value) {
+    float result = static_cast<float>(value) * (1.0f + emission_total_allowance_change);
+    return static_cast<unsigned long int>(std::round(result));});
+
+    total_emission_allowance = static_cast<unsigned long int>(total_emission_allowance * (1.0 + emission_total_allowance_change));
 }
 
 
@@ -218,7 +231,7 @@ pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector
 
 
 // Consumer Good Market 
-pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& planned_expenditure_by_sector, 
+tuple<vector<float>, vector<int>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& planned_expenditure_by_sector, 
 const vector<float>& emission_sensitives_array) {
     return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector_And_Emission(budget, planned_expenditure_by_sector, emission_sensitives_array);
 }
@@ -390,10 +403,12 @@ void Public_Info_Board::Reset_Global_Data(){
     new_job_postings = reset_value;
     removed_job_postings = reset_value;
     n_employees_quitting = reset_value;
+
+    //n_bankrupt_cap_firms
+    //n_bankrupt_cons_firms
     //public_unemployment_benefit = reset_value; // Do not reset tis
     // minimum_wage = reset_value // Do not reset this
 
-    time_step = reset_value;
     current_date = reset_value;
 }
 
@@ -402,6 +417,7 @@ void Public_Info_Board::Reset_Global_Data(){
 /* Function to make string stream operator << work
 */
 std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
+
     
     os << "r_rate " << obj.r_rate << std::endl;
     os << "cons_inflation_current " << obj.cons_inflation_current << std::endl;
@@ -409,6 +425,10 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "price_level_previous " << obj.cons_price_level_previous << std::endl;
     os << "cap_price_level_current " << obj.cap_price_level_current << std::endl;
     os << "cap_price_level_previous " << obj.cap_price_level_previous << std::endl;
+
+    // Emission stuff
+    os << "total_emission_allowance " << obj.total_emission_allowance << std::endl;
+    os << "emission_offset_price " << obj.emission_offset_price << std::endl;
 
     os << "average_wage_market " << obj.average_wage_market << std::endl;
     os << "average_wage_employed" << obj.average_wage_employed << std::endl;
@@ -435,18 +455,29 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "consumer_spending " << obj.consumer_spending << std::endl;
     os << "consumption_budgets " << obj.consumption_budgets << std::endl;
     
-    for (int i = 0; i < obj.planned_cons_spending_by_sector.size(); i++) {
-        os << "planned_spending_on_sector_" << i << " " << obj.planned_cons_spending_by_sector[i] << std::endl;
-        os << "actual_spending_on_sector_" << i << " " << obj.actual_cons_spending_by_sector[i] << std::endl;
-        os << "demand_shortfall_on_sector_" << i << " " << obj.cons_demand_shortfall_by_sector[i] << std::endl;
-        os << "planned_production_on_sector_" << i << " " << obj.planned_production_by_sector[i] << std::endl;
-        os << "actual_production_on_sector_" << i << " " << obj.actual_production_by_sector[i] << std::endl;
+    // Print the vectors
+    for (int i = 0; i < obj.sector_count; i++) {
+        os << "planned_spending_on_sector_" << i+1 << " " << obj.planned_cons_spending_by_sector[i] << std::endl;
+        os << "actual_spending_on_sector_" << i+1 << " " << obj.actual_cons_spending_by_sector[i] << std::endl;
+        os << "demand_shortfall_on_sector_" << i+1 << " " << obj.cons_demand_shortfall_by_sector[i] << std::endl;
+        os << "planned_production_on_sector_" << i+1 << " " << obj.planned_production_by_sector[i] << std::endl;
+        os << "actual_production_on_sector_" << i+1 << " " << obj.actual_production_by_sector[i] << std::endl;
+        os << "price_level_cons_sector_" << i+1 << obj.consumer_sectors_price_levels[i] << std::endl;
+        os << "offsets_sold_by_sector_" << i+1 << " " << obj.offsets_sold_by_sector[i] << std::endl;
+        os  << "emission_allowance_by_sector_" << i+1 << " " << obj.emission_allowances_by_sector[i] << std::endl;
+        os << "quantity_sold_by_sector_" << i+1 << " " << obj.quantity_sold_by_sector[i] << std::endl;
+        os << "inventory_by_sector_" << i+1 << " " << obj.inventory_by_sector[i] << std::endl;
+
     } 
     
     os << "cons_goods_production_total " << obj.cons_goods_production_total << std::endl;
     os << "cap_goods_production_total " << obj.cap_goods_production_total << std::endl;
     os << "cons_goods_planned_production_total " << obj.cons_goods_planned_production_total << std::endl;
     os << "cap_goods_production_planned_total " << obj.cap_goods_production_planned_total << std::endl;
+    
+    os << "n_bankrupt_cap_firms " << obj.n_bankrupt_cap_firms << std::endl;
+    os << "n_bankrupt_cons_firms " << obj.n_bankrupt_cons_firms << std::endl;
+
     os << "n_employed " << obj.n_employed_workers << std::endl;
     os << "n_unemployed " << obj.n_unemployed_workers << std::endl;
     os << "unemp_rate " << obj.unemployment_rate << std::endl;
@@ -456,8 +487,10 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "empl_contract_expiries " << obj.contract_expiries << std::endl;
     os << "n_new_job_postings " << obj.new_job_postings << std::endl;
     os << "n_removed_job_postings " << obj.removed_job_postings << std::endl;
+    
     os << "unempl_benefits " << obj.public_unemployment_benefit << std::endl;
     os << "minimum_wage " << obj.minimum_wage << std::endl;
+    
     os << "n_employees_quitting " << obj.n_employees_quitting << std::endl;
 
     os << "date " << obj.current_date << std::endl;

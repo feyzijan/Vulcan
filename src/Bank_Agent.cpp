@@ -181,8 +181,7 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
         float excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
         float emission_penalty;
         if (pFirm->Get_Cons_Firm_Status()){
-            Consumer_Firm_Agent* pConsumerFirm = dynamic_cast<Consumer_Firm_Agent*>(pFirm); // dynamic cast to consumer firm pointer
-            emission_penalty = Calculate_Emission_Penalty(pConsumerFirm);
+            emission_penalty = Calculate_Emission_Penalty(pFirm);
         } else {
             emission_penalty = 0;
         }
@@ -217,9 +216,9 @@ Linearly interpolate between the firms emissions and the bank's lower and upper 
 and impose the necessary penalty
 */
 
-float Bank_Agent::Calculate_Emission_Penalty(Consumer_Firm_Agent *pConsFirm){
+float Bank_Agent::Calculate_Emission_Penalty(Firm_Agent *pFirm){
     if(bank_unit_emission_penalty){
-        float firm_emission = pConsFirm->Get_Unit_Emissions();
+        float firm_emission = pFirm->Get_Unit_Emissions();
         if(firm_emission <= bank_unit_emission_lower_thr){
             return 0;
         } else if (firm_emission >= bank_unit_emission_upper_thr){
@@ -228,7 +227,7 @@ float Bank_Agent::Calculate_Emission_Penalty(Consumer_Firm_Agent *pConsFirm){
             return bank_emission_penalty_max * (firm_emission - bank_unit_emission_lower_thr) / (bank_unit_emission_upper_thr - bank_unit_emission_lower_thr);
         }
     } else {
-        float firm_emission = pConsFirm->Get_Total_Emissions();
+        float firm_emission = pFirm->Get_Total_Emissions();
         if(firm_emission <= bank_total_emission_lower_thr){
             return 0;
         } else if (firm_emission >= bank_total_emission_upper_thr){
