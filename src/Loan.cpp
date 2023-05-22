@@ -34,20 +34,3 @@ int Loan::Calculate_Principal_Repayment() const
 }
 
 
-
-//--- Printing and debugging
-
-/* Function to print all the information about a loan
-*/
-void Loan::Print() const
-{
-    cout << "Loan Information" << endl;
-    cout << "Interest Rate: " << interest_rate << endl;
-    cout << "Principal Amount: " << principal_amount << endl;
-    cout << "Start Date: " << start_date << endl;
-    cout << "End Date: " << end_date << endl;
-    cout << "Loan Type: " << loan_type << endl;
-    cout << "Expired: " << expired << endl;
-}
-
-

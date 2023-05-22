@@ -38,4 +38,5 @@ Datalogs/*.csv
 Datalogs/*.txt
 Datalogs/*/*.csv
 Datalogs/*/*.txt
+BackupDeletedCode/*
 

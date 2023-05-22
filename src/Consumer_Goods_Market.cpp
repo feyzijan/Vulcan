@@ -252,24 +252,3 @@ void Consumer_Goods_Market::Reset_Market(){
     total_weighed_price = 0;
     price_level = 0.0;
 }
-
-
-// Printing and debugging
-
-/* Print all the goods in the market
-*/
-void Consumer_Goods_Market::Print(){
-    std::cout << "Consumer Goods Market at " << this << std::endl;
-    std::cout << "Price level: " << price_level << std::endl;
-    std::cout << "Total number of goods: " << n_total_goods << std::endl;
-    std::cout << "Total weighted price: " << total_weighed_price << std::endl;
-    std::cout << "-------------------" << std::endl;
-    
-    /*std::cout << "Goods in the market: " << std::endl;
-     for (int i = 0; i < cons_goods_list.size(); i++)
-    {
-        std::cout << "Good " << i << std::endl;
-        cons_goods_list[i]->Print();
-    }
-    std::cout << "-------------------" << std::endl; */
-}

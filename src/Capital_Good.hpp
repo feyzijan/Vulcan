@@ -16,9 +16,6 @@ class Capital_Good: public General_Good{
     Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int life_span);
     Capital_Good(const Capital_Good& other);  // Copy constructor
 
-    // Printing
-    void Print() const;
-
     // Depreciation
     void Depreciate();
     

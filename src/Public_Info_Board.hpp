@@ -201,8 +201,6 @@ class Public_Info_Board{
     void Calculate_Average_Unit_Emissions_by_Sector();
 
     // Printing and Debugging
-    void Print() const;
-    void Print_Labor_Market() const;
     friend std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj); // String stream operator
     vector<pair<string, float>>*  Log_Data();     // Data Logging
 

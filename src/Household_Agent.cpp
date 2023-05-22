@@ -487,47 +487,7 @@ void Household_Agent::Seek_Better_Jobs()
 
 
 //-----------------------------------------------------------------
-
-// ----Printing and Debugging
-
-void Household_Agent::Print_Characteristics() {
-    //cout << "\n------ Household Agent at address : " << this << endl;
-    cout << "Consumption Propensity; " << consumption_propensity << " Savings propensities- optimist: " << saving_propensity_optimist << 
-     " pessimist: " << saving_propensity_pessimist << endl;
-    cout << "Propensity to consume - financial wealth: " << c_f << " human wealth: " << c_h << " excess money: " << c_excess_money << endl;
-    cout << "Majority conformity: " << p_majority_op_adoption << " Max unemployment tolerance: " << unemp_duration_upper_bound << endl;
-    cout << "--------------------------------------" << endl;
-}
-
-
-void Household_Agent::Print() {
-    cout << "\n------ Household Agent at address : " << this << endl;
-    //Public Board
-    cout << "Connected to public board at address: " << pPublic_Info_Board << endl;
-    // Wealth
-    cout << "Financial wealth: " << wealth_financial << " human wealth: " << wealth_human << endl;
-    // Consumption
-    cout << "Consumption - total: " << expenditure_consumption << " tax: " << expenditure_tax << endl;
-    // Savings
-    cout << "New savings: " << new_savings << " Savings propensity: " << saving_propensity <<  " Desired cash on hand - real: " << 
-    cash_on_hand_real_desired << " nominal: " << cash_on_hand_desired << " current: " << cash_on_hand_current << endl;
-    // Income
-    cout <<"Income - current total: " << income_current << " average: " << income_average << " wage: " << income_wage <<  " unemployment benefit " 
-    << income_unemployment_benefit <<  " Government transfer: " << income_gov_transfers << " dividends: " << income_firm_owner_dividend <<endl;
-    // Employment
-    cout << "Unemployed: " << unemployed << " Reservation wage: " << reservation_wage << " unemp duration: " << unemp_duration << endl;
-    // Sentiment
-    cout << "Positive Sentiment: " << sentiment << endl;
-    // Job 
-    if (current_job != nullptr){
-        cout << "Current job: " << endl;
-        current_job->Print();
-    } else {cout << "No current job" << endl;}
-    // Characteristics
-    Print_Characteristics(); 
-    cout << "--------------------------------------" << endl;
-}
-
+// String stream operator
 
 std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "wealth_financial " << obj.wealth_financial << std::endl;

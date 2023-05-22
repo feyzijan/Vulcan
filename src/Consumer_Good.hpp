@@ -18,8 +18,6 @@ class Consumer_Good: public General_Good{
     Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, float emissions_per_unit);
     Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int seller_sector, float emissions_per_unit);
 
-    //Printing and Debugging
-    void Print();
     // Getters
     Consumer_Firm_Agent* Get_Seller() {return pSeller;}
     float Get_Emission() {return unit_emissions;}

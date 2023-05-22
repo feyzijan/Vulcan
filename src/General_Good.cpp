@@ -15,12 +15,6 @@ General_Good::~General_Good() {};
 
 
 
-// Printing
-void General_Good::Print(){
-    cout << "General Good at address: " << this << endl;
-    cout << "Price: " << price  << " Quantity: " << quantity << endl;
-    cout << "Seller: " << pSeller << endl;
-}
 
 
 

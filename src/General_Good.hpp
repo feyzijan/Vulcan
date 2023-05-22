@@ -12,9 +12,6 @@ class General_Good{
     General_Good(General_Good&);
     ~General_Good();
 
-    //Print methods
-    void Print();
-
     // Overload Operators
     bool operator==(const General_Good& rhs);
     bool operator<=(const General_Good& rhs);

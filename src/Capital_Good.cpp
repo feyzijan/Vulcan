@@ -26,16 +26,6 @@ Capital_Good::Capital_Good(const Capital_Good& other){
     expiry_date = sold_date + depreciation_period;
 }
 
-/* Printing
-*/
-void Capital_Good::Print() const{
-    cout << "Capital Good at address: " << this << endl;
-    cout << "Seller: " << pSeller << endl;
-    cout << "Price: " << price  << " Quantity: " << quantity << endl;
-    cout << "Value: " << value << " Depreciation Period: " << depreciation_period << endl;
-    cout << "Sold Date: " << sold_date << " Expiry Date: " << expiry_date << endl;
-}
-
 /* Depreciate by selling_price/depreciation_period * quantity
 NOTE: Depreciation may be off by 1 timestep because the division may not be exact, but this is not a big deal
 */

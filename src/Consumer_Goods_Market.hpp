@@ -20,9 +20,6 @@ class Consumer_Goods_Market{
     Consumer_Goods_Market(Consumer_Goods_Market&);
     ~Consumer_Goods_Market();
 
-    // Printing and Debugging
-    void Print();
-
     // Market operations
     void Add_Consumer_Good_To_Market(Consumer_Good * cons_good);
     void Divide_Goods_Into_Sectors(int n_sectors);

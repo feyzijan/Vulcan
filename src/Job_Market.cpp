@@ -13,24 +13,6 @@ Job_Market::~Job_Market(){}
 Job_Market::Job_Market(Job_Market&){}
 
 
-// Printing and Debugging
-
-/* Function to print all job objects in the market
-*/
-void Job_Market::Print(bool print_jobs){
-    cout << "Printing Job Market with " << job_list.size()  << " jobs" << endl;
-    Print_Size();
-    if (print_jobs){
-        for (auto i = job_list.begin(); i != job_list.end(); ++i) 
-            cout << "Job with address: " << *i << " with wage: " << (*i)->Get_Wage() << "Status " << (*i)->Get_Status() << endl;
-    }
-     
-}
-
-void Job_Market::Print_Size(){
-    cout << "Job market has " << job_list.size() << " jobs" << endl;
-}
-
 
 // Job Market Implementation Functions
 

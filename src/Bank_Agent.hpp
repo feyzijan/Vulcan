@@ -34,9 +34,6 @@ class Bank_Agent{
     float Get_Interest_Rate() {return r_rate;};
 
     // Printing and debugging
-    void Print();
-    void Print_Inflation_History();
-    void Print_Interest_Rate_History(); // To Implement
     friend std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj);
     vector<std::pair<string, float>>*  Log_Data();
 

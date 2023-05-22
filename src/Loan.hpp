@@ -25,9 +25,6 @@ class Loan {
     // Deducting Payments
     void Deduct_Principal_Repayment(int principal_repayment) {principal_amount -= principal_repayment;}
 
-    // Printing and Debugging
-    void Print() const;
-
 
     // Getters
     float Get_Interest_Rate() const { return interest_rate;}

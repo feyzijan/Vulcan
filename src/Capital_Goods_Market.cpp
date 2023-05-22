@@ -141,24 +141,3 @@ void Capital_Goods_Market::Reset_Market(){
 
 
 
-//----------------------------------------------
-// Printing and debugging
-
-/* Print all the goods in the market
-*/
-void Capital_Goods_Market::Print() {
-    std::cout << "Capital Goods Market at " << this << std::endl;
-    std::cout << "Price level: " << price_level << std::endl;
-    std::cout << "Total number of goods: " << n_total_goods << std::endl;
-    std::cout << "Total weighted price: " << total_weighed_price << std::endl;
-    std::cout << "-------------------" << std::endl;
-
-/*     std::cout << "Goods in the market: " << std::endl;
-    for (int i = 0; i < cap_goods_list.size(); i++)
-    {
-        std::cout << "Good " << i << std::endl;
-        cap_goods_list[i]->Print();
-    }
-    std::cout << "-------------------" << std::endl; */
-
-}

@@ -81,10 +81,6 @@ class Firm_Agent{
     void Set_Wage_Offer(int wage) { this->wage_offer = wage;} // used in testing
 
     //Print and logging methods
-    void Print(); 
-    void Print_Posted_Jobs();
-    void Print_Active_Jobs();
-    void Print_Capital_Goods();
     friend std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj);
     vector<std::pair<string, float>>*  Log_Data();
 

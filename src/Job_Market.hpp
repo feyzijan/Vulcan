@@ -20,9 +20,6 @@ class Job_Market{
     Job_Market(Job_Market&);
     ~Job_Market();
 
-    // Printing and Debugging
-    void Print(bool print_jobs);
-    void Print_Size();
     
     // Job Market Implementation Functions
     Job* Get_Top_Job(); 

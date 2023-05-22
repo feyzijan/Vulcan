@@ -483,25 +483,3 @@ vector<pair<string, float>>* Public_Info_Board::Log_Data() {
     }
     return result;
 }
-
-
-
-
-// Printing and Debugging
-
-void Public_Info_Board::Print() const{
-    cout << " Public Infor Board at adress " << this << endl;
-    cout << " Price Level: " << cons_price_level_current << " Interest Rate: " << r_rate <<endl;
-    cout << " Current Inflation: " << cons_inflation_current <<  endl;
-    cout << " Household Optimism: " << household_sentiment_percentage << " COns Firm Optimism: " << cons_firm_sentiment_percentage << endl;
-}
-
-
-/* Function to print labor market related variables
-*/
-void Public_Info_Board::Print_Labor_Market() const{
-    cout << " # employed workers: " << n_employed_workers << " # unemployed workers: " << n_unemployed_workers << endl;
-    cout << " # new employee demand: " << new_employee_demand << " # employee firings: " << employee_firings << endl;
-    cout << " # new employee hires: " << employee_hires << " Unemployment Rate: " << unemployment_rate << endl;
-    cout << "average_wage_market: " << average_wage_market <<  " # contract expiries: " << contract_expiries << endl;
-}

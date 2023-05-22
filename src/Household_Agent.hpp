@@ -65,8 +65,6 @@ class Household_Agent{
     vector<float>* Get_All_Params();
     
     // Printing and Logging
-    void Print();
-    void Print_Characteristics();
     friend std::ostream& operator<<(std::ostream& os, const Household_Agent& obj);
     vector<std::pair<string, float>>* Log_Data();
 

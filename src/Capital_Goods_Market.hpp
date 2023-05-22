@@ -17,10 +17,6 @@ class Capital_Goods_Market{
     Capital_Goods_Market(Capital_Goods_Market&);
     ~Capital_Goods_Market();
 
-
-    // Printing and Debugging
-    void Print();
-
     // Market operations
     void Add_Capital_Good_To_Market(Capital_Good * cap_good);
     void Sort_Capital_Goods_By_Price();

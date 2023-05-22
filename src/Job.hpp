@@ -21,9 +21,6 @@ class Job{
     Job();
     ~Job();
 
-    // Printing and Debugging
-    void Print();
-
     // Overload Operators
     bool operator==(const Job& rhs);
     bool operator<=(const Job& rhs);
