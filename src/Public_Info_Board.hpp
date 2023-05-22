@@ -65,6 +65,18 @@ class Public_Info_Board{
     void Initialize_Price_Levels();
     void Update_Interest_Rate();
 
+    // Distributing Emission allowances
+    unsigned long int Distribute_Initial_Emission_Allowances(int employee_count, int sector_id);
+    unsigned long int Distribute_Emission_Allowances(int sale_quantity, int sector_id);
+
+    // Update emission allowance price and amount
+    void Update_Emission_Allowance_Price() { emission_allowance_price *= (1.0 + emission_unit_price_change); }
+    void Update_Emission_Allowance_Amount() { 
+        std::transform(emission_allowances_by_sector.begin(), emission_allowances_by_sector.end(), emission_allowances_by_sector.begin(), [=](unsigned long int value) {
+        float result = static_cast<float>(value) * (1.0f + emission_total_allowance_change);
+        return static_cast<unsigned long int>(std::round(result));
+    });}
+
     // Loan issuance
     Loan* Seek_Short_Term_Loan(Firm_Agent* pFirm);
     Loan* Seek_Long_Term_Loan(Firm_Agent* pFirm); 
@@ -97,10 +109,10 @@ class Public_Info_Board{
     int Get_Consumer_Orders() { return consumer_orders;}
     int Get_Consumer_Spending() { return consumer_spending;}
     int Get_Consumption_Budget() { return consumption_budgets;}
-    int Get_Consumer_Goods_Production() { return consumer_goods_production_total;}
-    int Get_Capital_Goods_Production() { return capital_goods_production;}
-    int Get_Consumer_Goods_Production_Planned() { return consumer_goods_production_total_planned;}
-    int Get_Capital_Goods_Production_Planned() { return capital_goods_production_planned;}
+    int Get_Consumer_Goods_Production() { return cons_goods_production_total;}
+    int Get_Capital_Goods_Production() { return cap_goods_production_total;}
+    int Get_Consumer_Goods_Production_Planned() { return cons_goods_planned_production_total;}
+    int Get_Capital_Goods_Production_Planned() { return cap_goods_production_planned_total;}
     int Get_Employed_Workers() { return n_employed_workers;}
     int Get_Unemployed_Workers() { return n_unemployed_workers;}
     int Get_Employee_Demand() { return new_employee_demand;}
@@ -110,13 +122,14 @@ class Public_Info_Board{
     int Get_New_Job_Postings() { return new_job_postings;}
     int Get_Removed_Job_Postings() { return removed_job_postings;}
     int Get_Minimum_Wage() { return minimum_wage;}
+    float Get_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emission_by_sector[sector_id-1];} 
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
     void Set_Consumer_Goods_Market(Consumer_Goods_Market* ptr) { pConsumer_Goods_Market = ptr;}
     void Set_Capital_Goods_Market(Capital_Goods_Market* ptr) { pCapital_Goods_Market = ptr;}
     void Set_Bank(Bank_Agent* ptr) { pBank = ptr;}
-    void Set_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors);
+    void Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors);
 
     //-----------Update global aggregate variables ----------------
     // Sentiment sums
@@ -131,18 +144,31 @@ class Public_Info_Board{
     void Update_Machine_Orders(int amount) { machine_orders += amount; }
     void Update_Machine_Orders_Planned(int amount) { machine_orders_planned += amount; }
     void Update_Machine_Spending(int amount) { machine_spending += amount; }
-    void Update_Capital_Goods_Production(int amount) { capital_goods_production += amount; }
-    void Update_Capital_Goods_Production_Planned(int amount) { capital_goods_production_planned += amount; }
-    // Consumer Goods and Consumption
+    void Update_Machine_Spending_Planned(int amount) { machine_spending_planned += amount; }
+    void Update_Capital_Goods_Production(int amount) { cap_goods_production_total += amount;}
+    void Update_Capital_Goods_Production_Planned(int amount) { cap_goods_production_planned_total += amount; }
+    void Update_Capital_Goods_Sale_Quantities(int amount) { cap_good_sale_quantity_total += amount;}
+
+    //-- Consumer Goods and Consumption
+    // Updates by Consumer Firms
     void Update_Consumer_Orders(int amount) { consumer_orders += amount; }
     void Update_Consumer_Spending(int amount) { consumer_spending += amount; }
     void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
-    void Update_Consumer_Goods_Production(int sector_id, int amount) { actual_production_by_sector[sector_id-1] += amount;
-    consumer_goods_production_total += amount; }
-    void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { planned_production_by_sector[sector_id-1] += amount;
-    consumer_goods_production_total_planned += amount; }
+    void Update_Consumer_Goods_Production(int sector_id, int amount) { 
+        actual_production_by_sector[sector_id-1] += amount;
+        cons_goods_production_total += amount; }
+    void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { 
+        planned_production_by_sector[sector_id-1] += amount; 
+        cons_goods_planned_production_total += amount; }
+    void Update_Consumer_Goods_Sale_Quantities(int sector_id, int amount){ 
+        quantity_sold_by_sector[sector_id-1] += amount; 
+        cons_goods_sale_quantity_total += amount ;}
+    void Update_Consumer_Goods_Inventory(int sector_id, int amount){
+        inventory_by_sector[sector_id-1] += amount;}
+    // Updates by Households
     void Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending);
-    void Update_Consumer_Spending_by_Sector(  const vector<float>& actual_spending );
+    void Update_Actual_Consumer_Spending_by_Sector(  const vector<float>& actual_spending );
+
     // Labor Figures
     void Update_Employed_Worker_Count(int amount) { n_employed_workers += amount; }
     void Update_Unemployed_Worker_Count(int amount) { n_unemployed_workers += amount; }
@@ -167,7 +193,8 @@ class Public_Info_Board{
     void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
     // Consumer Market
     void Calculate_Consumer_Demand_Shortfall_by_Sector();
-
+    // Unit emisisons
+    void Calculate_Average_Unit_Emissions_by_Sector();
 
     // Printing and Debugging
     void Print() const;
@@ -188,6 +215,14 @@ class Public_Info_Board{
     float cap_price_level_previous;
     vector<float> consumer_sector_weights;
     vector<float> consumer_sectors_price_levels;
+
+    // Emission Allowances
+    vector<unsigned long int> emission_allowances_by_sector; // NEWLY ADDED
+    vector<unsigned long int> total_emissions_by_sector; // NEWLY ADDED
+    unsigned long int total_emission_allowance; // newly added 
+    float emission_allowance_price; // newly added
+
+    vector<float> average_unit_emission_by_sector;
 
 
     // Income and wage figures
@@ -220,26 +255,31 @@ class Public_Info_Board{
     int machine_orders;
     int machine_orders_planned;
     int machine_spending;
+    int machine_spending_planned; // NEWLY ADDED
 
     // Consumer expenditure
     int consumer_orders;
     int consumer_spending;
     int consumption_budgets;
 
-    vector<float> planned_spending_by_sector;
-    vector<float> actual_spending_by_sector;
-    vector<float> demand_shortfall_by_sector; 
+    vector<float> planned_cons_spending_by_sector;
+    vector<float> actual_cons_spending_by_sector;
+    vector<float> cons_demand_shortfall_by_sector; 
 
     int sector_count;
     
     // Production
-    int consumer_goods_production_total;
-    int capital_goods_production;
-    int consumer_goods_production_total_planned;
-    int capital_goods_production_planned;
+    int cons_goods_production_total;
+    int cap_goods_production_total;
+    int cons_goods_planned_production_total;
+    int cap_goods_production_planned_total;
+    int cap_good_sale_quantity_total; // NEWLY ADDED
+    int cons_goods_sale_quantity_total; // NEWLY ADDED
 
     vector<int> planned_production_by_sector;
     vector<int> actual_production_by_sector;
+    vector<int> inventory_by_sector;
+    vector<int> quantity_sold_by_sector; // NEWLY ADDED
 
     // Employment
     int n_employed_workers;
@@ -256,6 +296,8 @@ class Public_Info_Board{
     int new_job_postings;
     int removed_job_postings;
 
+    // Emission allowances
+ 
 
     // Unemployment benefits
     int public_unemployment_benefit;

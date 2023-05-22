@@ -86,11 +86,6 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     capital_goods_list.push_back(initial_capital_goods);
     //cout << "Passed capital good into list" << endl;; 
 
-    // CO2 Emissions
-    emission_per_unit = 1; // TODO: Replace with variable
-    total_emissions = 0;
-    cumulative_emissions = 0;
-
     current_date = 0;
 }
 

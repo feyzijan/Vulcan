@@ -38,7 +38,7 @@ class Firm_Agent{
     void Check_Employees_Quitting();
     void Cancel_Expired_Contracts();
     virtual void Random_Experimentation();
-    void Check_Sales();
+    virtual void Check_Sales();
     virtual void Update_Sentiment();
     void Update_Average_Profit();
     void Update_Average_Sales();
@@ -74,9 +74,7 @@ class Firm_Agent{
     float Get_Leverage_Ratio() {return leverage_ratio;}
     int Get_Sector_ID() {return sector_id;}
     bool Get_Bankruptcy_Status() {return bankrupt;}
-    float Get_Unit_Emissions() {return emission_per_unit;}
-    int Get_Total_Emissions() {return total_emissions;}
-    int Get_Cumulative_Emissions() {return cumulative_emissions;}
+    int Get_Employee_Count() {return employee_count;}
     
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -180,11 +178,6 @@ class Firm_Agent{
     int output_per_machine; // NEWLY ADDDED
     float unit_good_cost; // NEWLY ADDDED
     float max_production_climbdown; // NEWLY ADDDED
-
-    // CO2 Emissions
-    float emission_per_unit; // NEWLY ADDDED
-    int total_emissions; // NEWLY ADDDED
-    int cumulative_emissions; // NEWLY ADDDED
     
     // Others
     bool sentiment; // pessimistic, optimistic

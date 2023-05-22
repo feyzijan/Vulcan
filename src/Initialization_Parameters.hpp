@@ -211,15 +211,17 @@ struct Consumer_Firm_Sector {
     float max_production_climbdown;
     float emission_per_unit; // NEWLY ADDED
     float emission_sensitivity_mean; // NEWLY ADDED
+    unsigned long int emission_allowance;
 
     Consumer_Firm_Sector(string p_name, int p_sector_id, float p_consumption_weighing,
     float p_firm_weighing, float p_inv_depr_rate, int p_output_per_machine, int p_workers_per_machine,
-    float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit, float p_emission_sensitivity_mean)
+    float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit, float p_emission_sensitivity_mean
+    , unsigned long int p_emission_allowance)
     : sector_name(p_name), sector_id(p_sector_id), consumption_weighing(p_consumption_weighing),
     firm_weighing(p_firm_weighing), inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine),
     workers_per_machine(p_workers_per_machine), good_unit_cost(p_good_unit_cost), 
     max_production_climbdown(p_max_production_climbdown), emission_per_unit(p_emissions_per_unit), 
-    emission_sensitivity_mean(p_emission_sensitivity_mean)
+    emission_sensitivity_mean(p_emission_sensitivity_mean), emission_allowance(p_emission_allowance)
     {}
 };
 
@@ -336,6 +338,15 @@ extern float bank_unit_emission_lower_thr;
 extern float bank_unit_emission_upper_thr;
 extern float bank_total_emission_lower_thr;
 extern float bank_total_emission_upper_thr;
+
+// Emission allowance parameters
+// Initial allowances and unit price
+extern long emission_init_total_allowance;
+extern float emission_init_unit_price;
+// Constant changes in allowance and unit price
+extern float emission_total_allowance_change;
+extern float emission_unit_price_change;
+
 
 
 //---------------------------------------------

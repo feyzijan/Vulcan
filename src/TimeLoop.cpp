@@ -9,6 +9,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << "\n___________________TIMESTEP #______________ " << global_date << endl;
 
     pPublic_Info_Board->Reset_Global_Data();
+    // Update emission allowance prices and amounts
+    pPublic_Info_Board->Update_Emission_Allowance_Amount();
+    pPublic_Info_Board->Update_Emission_Allowance_Price();
 
     // STEP 1.1: Update Inflation Rate and Interest rate  -
     cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
@@ -25,9 +28,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         it = pFirm_vector->erase(it);
     } else{++it;} }
  */
-
-
-    
 
 
 

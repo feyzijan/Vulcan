@@ -21,6 +21,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     // Main Loop methods
     virtual void Depreciate_Good_Inventory() override;
     virtual void Produce_Goods() override;
+    virtual void Check_Sales() override;
     virtual void Send_Goods_To_Market() override;
     virtual void Update_Goods_On_Market() override;
     virtual void Random_Experimentation() override;

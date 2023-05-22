@@ -13,14 +13,19 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     unit_good_cost = firm_cons_good_unit_cost;
     inventory_depreciation_rate = firm_cons_inv_depr_rate;
     max_production_climbdown = firm_cons_max_production_climbdown;
-    emission_per_unit = firm_cons_init_emissions_per_unit;
+    unit_emissions = firm_cons_init_emissions_per_unit;
 
     production_current = max(working_capital_inventory * firm_cons_workers_per_machine * firm_cons_productivity,employee_count_desired / firm_cons_workers_per_machine * firm_cons_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
 
-    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold, emission_per_unit);
+    // Emissions - Set default values for now
+    unit_emissions = 1; // TODO: Replace with variable
+    total_emissions = 0;
+    cumulative_emissions = 0;
+
+    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold, unit_emissions);
     goods_on_market = cons_goods_on_market;
     //Send_Goods_To_Market();
     sector_id = 1;
@@ -65,10 +70,30 @@ void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
 void Consumer_Firm_Agent::Produce_Goods(){
 
    Firm_Agent::Produce_Goods();
-    // Update the public info board
 
+    // Update the unit_emission_of the newly produced goods
+    //*** CHECK DIVISIONS ARE OKAY
+    float current_unit_emissions = emission_total_allowance / production_current;
+    float past_unit_emissions = unit_emissions_adj;
+    int past_production = inventory - production_current;
+    unit_emissions_adj = (past_production * past_unit_emissions + production_current * current_unit_emissions) / inventory;
+
+
+    // Update consumer good object to use this new adjusted emission
+    cons_goods_on_market->Set_Unit_Emission(unit_emissions_adj);
+
+    // Update the public info board
     pPublic_Info_Board->Update_Consumer_Goods_Production(sector_id, production_current);
     pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
+    pPublic_Info_Board->Update_Consumer_Goods_Inventory(sector_id, production_planned);
+}
+
+
+
+/* Check sales and update public board*/
+void Consumer_Firm_Agent::Check_Sales(){
+    Firm_Agent::Check_Sales();
+    pPublic_Info_Board->Update_Consumer_Goods_Sale_Quantities(sector_id, quantity_sold);
 }
 
 
@@ -114,6 +139,43 @@ void Consumer_Firm_Agent::Update_Sentiment(){
 
 
 void Consumer_Firm_Agent::Determine_New_Production(){
+    
+    bool price_high; // check if price is high relative to the market
+    price_high = good_price_current >= pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
+
+    bool emission_high; // check if emissiosn are high relative to the market
+    emission_high = unit_emissions_adj >= pPublic_Info_Board->Get_Unit_Emissions_by_Sector(sector_id);
+    
+    good_price_past = good_price_current; // store current price incase we want to see the change
+    production_past = production_current;
+
+    bool inventory_high = inventory >= desired_inventory; 
+    float p = Uniform_Dist_Float(0.0,0.5); // Random production adjustment
+    float q =  Uniform_Dist_Float(0.0,0.5); // Random price adjustment
+
+    // Case a: Inventory low, Price high - > Maintain price, increase prod
+    if (!inventory_high && price_high){
+        production_planned*= (1.0+q);        
+    } // Case b: Inventory low, Price low - > Increase Price and production
+    else if( !inventory_high && !price_high){
+        good_price_current *= (1.0+p);
+        production_planned*= (1.0+q);
+    } // Case c: Inventory high, Price high - > Reduce price, maintain prod
+    else if (inventory_high && price_high){
+        good_price_current *= (1.0-p);
+    } // Case d:Inventory high, Price low -> Increase price, maintain prod
+    else{
+        good_price_current *= (1.0+p);}
+
+    
+    // set floor on prices at 0
+    good_price_current = max(good_price_current, 0.0f);
+
+    // below eq is from jamel paper - overrides above quantity adjustments
+    production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
+
+    // Impose limit on how much they can tone down production - maybe just change bariables above?
+    production_planned = max(production_planned, static_cast<int>(production_past*(1-firm_cons_max_production_climbdown))); 
 
 
 
@@ -139,13 +201,16 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     unit_good_cost = pSector_Struct->good_unit_cost;
     max_production_climbdown = pSector_Struct->max_production_climbdown;
     inventory_depreciation_rate = pSector_Struct->inv_depr_rate;
-    emission_per_unit = pSector_Struct->emission_per_unit;
-
-    
-
+    unit_emissions = pSector_Struct->emission_per_unit;
 
 }
 
+
+/* Call the public board to update emission allowances for the next time period
+*/
+void Consumer_Firm_Agent::Update_Emission_Allowances(){
+    emission_total_allowance = pPublic_Info_Board->Distribute_Emission_Allowances(quantity_sold, unit_emissions);
+}
 
 //--------------------------------------------------------------   
 //----- NonClass Functions  

@@ -13,7 +13,6 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     unit_good_cost = firm_cap_good_unit_cost; // global param
     inventory_depreciation_rate = firm_cap_inv_depr_rate;
     max_production_climbdown = firm_cap_max_production_climbdown;
-    emission_per_unit = firm_cap_init_emissions_per_unit;
 
     production_current = max(working_capital_inventory * firm_cap_workers_per_machine * firm_cap_productivity, employee_count_desired / firm_cap_workers_per_machine * firm_cap_productivity);
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
@@ -67,6 +66,14 @@ void Capital_Firm_Agent::Produce_Goods(){
     pPublic_Info_Board->Update_Capital_Goods_Production(production_current);
     pPublic_Info_Board->Update_Capital_Goods_Production_Planned(production_planned);
 }
+
+/* Check sales and update public board
+*/
+void Capital_Firm_Agent::Check_Sales(){
+    Firm_Agent::Check_Sales();
+    pPublic_Info_Board->Update_Capital_Goods_Sale_Quantities(quantity_sold);
+}
+
 
 /* Post Produced goods to market - only do this once at the beinning
 */

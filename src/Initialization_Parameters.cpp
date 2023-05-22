@@ -255,6 +255,12 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     emission_sensitivity_max = initialization_parameters["emission_sensitivity_max"];
     emission_sensitivity_std = initialization_parameters["emission_sensitivity_std"];
     emission_sensitivity_threshold = initialization_parameters["emission_sensitivity_threshold"];
+    
+    //--- Emission allowance parameters
+    emission_init_total_allowance = initialization_parameters["emission_init_total_allowance"];
+    emission_init_unit_price = initialization_parameters["emission_init_unit_price"];
+
+
 
 
     //---------- Main Loop Parameters ------------
@@ -310,6 +316,11 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     bank_unit_emission_upper_thr = main_loop_parameters["bank_unit_emission_upper_thr"];
     bank_total_emission_lower_thr = main_loop_parameters["bank_total_emission_lower_thr"];
     bank_total_emission_upper_thr = main_loop_parameters["bank_total_emission_upper_thr"];
+
+    // Emission allowance change parameters
+    emission_total_allowance_change = main_loop_parameters["emission_total_allowance_change"];
+    emission_unit_price_change = main_loop_parameters["emission_unit_price_change"];
+
 
 
     // Randomness Parameters
@@ -616,3 +627,10 @@ float bank_unit_emission_upper_thr = 10;
 float bank_total_emission_lower_thr = 10000;
 float bank_total_emission_upper_thr = 100000;
 
+// Emission allowance parameters
+// Initial allowances and unit price
+long emission_init_total_allowance = 1000000;
+float emission_init_unit_price = 0.500;
+// Constant changes in allowance and unit price
+float emission_total_allowance_change = -0.001;
+float emission_unit_price_change = 0.001;

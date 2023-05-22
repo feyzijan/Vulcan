@@ -68,5 +68,7 @@ int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
 void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,
  vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
 
+// Initialize emission allowances
+void Initialize_Emission_Allowances(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,Public_Info_Board* pPublic_Board);
 
 #endif

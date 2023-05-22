@@ -35,6 +35,10 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     int n_sectors =  Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector,
      pPublic_Board, pConsumer_Goods_Market, pHousehold_vector);
 
+    
+    //----------- STEP 0.15: Initialize emissions
+    // Distribute initial emission allowances
+
     //----------- STEP 0.16: Send initial goods to markets and initialize price level
     cout << "Step 0.16: Send initial goods to markets and initialize price level" << endl;
 
@@ -109,6 +113,17 @@ void Check_Initial_Job_Offers_Cons(vector<Consumer_Firm_Agent*> *pConsumer_Firm_
     // loop through all the firms in vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector and call Check_For_new_Employees()
     for (Consumer_Firm_Agent* cons_firm_ptr : *pConsumer_Firm_vector) {
         cons_firm_ptr->Check_For_New_Employees();
+    }
+}
+
+
+// Initialize emission allowances
+void Initialize_Emission_Allowances(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, Public_Info_Board* pPublic_Board){
+    // loop through all the consumer firms and call the public board's function to set the allowances
+    for (Consumer_Firm_Agent* cons_firm_ptr : *pConsumer_Firm_vector) {
+        int n_employees = cons_firm_ptr->Get_Employee_Count();
+        int sector_id = cons_firm_ptr->Get_Sector_ID();
+        pPublic_Board->Distribute_Initial_Emission_Allowances(n_employees, sector_id);
     }
 }
 
@@ -341,7 +356,7 @@ vector<Household_Agent*> *pHousehold_vector){
     // Assign firms to sectors
     Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector);
     // Set up sectors in the public board
-    pPublic_Info_Board->Set_Consumer_Sectors(pConsumer_Firm_Sector_vector, n_sectors);
+    pPublic_Info_Board->Initialize_Consumer_Sectors(pConsumer_Firm_Sector_vector, n_sectors);
     
     // Notify Households
     for (Household_Agent* pHousehold : *pHousehold_vector){
@@ -378,13 +393,15 @@ int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) 
         string max_production_climbdown_str;
         string emission_per_unit_str;
         string emission_sensitivity_mean_str;
+        string emission_allowance_str;
 
         // Parse the comma separated values into separate variables
         if (std::getline(ss, sector_name, ',') && std::getline(ss, sector_id_str, ',') && std::getline(ss, consumption_weighing_str, ',')
             && std::getline(ss, firm_weighing_str, ',') && std::getline(ss, inv_depr_rate_str, ',')
             && std::getline(ss, output_per_machine_str, ',') && std::getline(ss, workers_per_machine_str, ',')
             && std::getline(ss, good_unit_cost_str, ',') && std::getline(ss, max_production_climbdown_str, ',') 
-            && std::getline(ss, emission_per_unit_str, ',') && std::getline(ss, emission_sensitivity_mean_str, ',')) {
+            && std::getline(ss, emission_per_unit_str, ',') && std::getline(ss, emission_sensitivity_mean_str, ',')
+            && std::getline(ss, emission_allowance_str, ',')) {
             // Convert strings to float and int
             int sector_id = std::stoi(sector_id_str);
             float consumption_weighing = std::stof(consumption_weighing_str); 
@@ -396,10 +413,12 @@ int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) 
             float max_production_climbdown = std::stof(max_production_climbdown_str);
             float emission_per_unit = std::stof(emission_per_unit_str);
             float emission_sensitivity_mean = std::stof(emission_sensitivity_mean_str);
+            unsigned long int emission_allowance = std::stoul(emission_allowance_str);
     
             // Create new instance of Consumer_Firm_Sector struct
             Consumer_Firm_Sector *pSector = new Consumer_Firm_Sector(sector_name, sector_id, consumption_weighing, firm_weighing,
-            inv_depr_rate, output_per_machine, workers_per_machine, good_unit_cost, max_production_climbdown, emission_per_unit, emission_sensitivity_mean); 
+            inv_depr_rate, output_per_machine, workers_per_machine, good_unit_cost, max_production_climbdown, emission_per_unit, emission_sensitivity_mean,
+            emission_allowance); 
             pConsumer_Firm_Sector_vector->push_back(pSector); // Add it to the vector
             temp ++;
         }
@@ -487,6 +506,5 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
         }
         cout << "Now allocated a total of " << total_allocation << " firms out of  " << n_consumer_firms << " to a sector" <<  endl;
     }
-
 
  }

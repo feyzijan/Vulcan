@@ -379,7 +379,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
     }
     pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
     pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
-    pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
+    pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
 }
 
@@ -429,7 +429,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_With_Emissions(){
 
     pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
     pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
-    pPublic_Info_Board->Update_Consumer_Spending_by_Sector(actual_spending_by_sector);
+    pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
 }
 
