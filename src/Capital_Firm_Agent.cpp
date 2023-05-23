@@ -18,6 +18,8 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
+
+    good_price_past = firm_cap_init_good_price_mean;
     
     cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, firm_cap_machine_lifespan);
     goods_on_market = cap_goods_on_market;

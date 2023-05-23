@@ -248,17 +248,18 @@ void Household_Agent::Update_Income()
     // Check if the person is employed, if so get Wage
     if (!unemployed && !firm_owner){
         income_wage = current_job->Get_Wage();
-        pPublic_Info_Board->Update_Household_Wage(income_wage);
+        pPublic_Info_Board->Update_Household_Wage_Income(income_wage);
         income_current += income_wage;
 
     } else if (firm_owner){
         income_firm_owner_dividend = owned_firm->Pay_Dividend();
-        pPublic_Info_Board->Update_Household_Dividends(income_firm_owner_dividend);
+        pPublic_Info_Board->Update_Household_Dividend_Income(income_firm_owner_dividend);
         income_current += income_firm_owner_dividend;
     } else {
         income_wage = 0;
         income_unemployment_benefit = pPublic_Info_Board->Get_Unemployment_Benefit();
         income_current += income_unemployment_benefit;
+        pPublic_Info_Board->Update_Household_Unemployment_Income(income_unemployment_benefit);
     }
     income_current += income_gov_transfers; // Add any additional transfers
     
@@ -335,7 +336,7 @@ void Household_Agent::Determine_Consumption_Budget()
     }
 
     // Let the public board know how much the household has set aside to consume
-    pPublic_Info_Board->Update_Consumption_Budgets(expenditure_consumption);
+    pPublic_Info_Board->Update_Consumption_Budget(expenditure_consumption);
 }
 
 
@@ -378,9 +379,8 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector(){
         total_goods_bought += goods_bought[i];
     }
     pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
-    pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
-    pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
+    pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
 }
 
 
@@ -428,7 +428,6 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
 
 
     pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
-    pPublic_Info_Board->Update_Consumer_Orders(total_goods_bought);
     pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
 }

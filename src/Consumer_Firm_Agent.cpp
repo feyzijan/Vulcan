@@ -20,6 +20,8 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
 
+    good_price_past = firm_cons_init_good_price_mean;
+
     // Emissions - Set default values for now
     unit_emissions = 1; // TODO: Replace with variable
     total_emissions = 0;
@@ -73,11 +75,12 @@ void Consumer_Firm_Agent::Produce_Goods(){
 
     // Update the unit_emission_of the newly produced goods
     //*** CHECK DIVISIONS ARE OKAY
-    float current_unit_emissions = emission_total_allowance / production_current;
-    float past_unit_emissions = unit_emissions_adj;
+    int new_total_emissions = production_current * unit_emissions - emission_total_allowance;
     int past_production = inventory - production_current;
-    unit_emissions_adj = (past_production * past_unit_emissions + production_current * current_unit_emissions) / inventory;
+    int past_total_emissions = past_production * unit_emissions_adj;
+    unit_emissions_adj = (past_total_emissions + new_total_emissions) / inventory;
 
+    
 
     // Update consumer good object to use this new adjusted emission
     cons_goods_on_market->Set_Unit_Emission(unit_emissions_adj);
@@ -86,6 +89,8 @@ void Consumer_Firm_Agent::Produce_Goods(){
     pPublic_Info_Board->Update_Consumer_Goods_Production(sector_id, production_current);
     pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
     pPublic_Info_Board->Update_Consumer_Goods_Inventory(sector_id, production_planned);
+    pPublic_Info_Board->Update_Total_Emissions(sector_id, new_total_emissions);
+
 }
 
 
@@ -144,7 +149,7 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     bool price_high = good_price_current >= pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
 
     // Check if emissiosn are high relative to the market
-    float emission_overshoot = unit_emissions_adj - pPublic_Info_Board->Get_Unit_Emissions_by_Sector(sector_id);
+    float emission_overshoot = unit_emissions_adj - pPublic_Info_Board->Get_Average_Unit_Emissions_by_Sector(sector_id);
     bool emission_high = emission_overshoot > 0; 
 
     // Calculate how many offsets you need to buy to reach the average unit emissions

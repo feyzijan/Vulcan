@@ -158,10 +158,10 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_init_production_planned_min = initialization_parameters["firm_cons_init_production_planned_min"];
     firm_cons_init_production_planned_max = initialization_parameters["firm_cons_init_production_planned_max"];
     // Initial good price
-    firm_cons_init_good_price_current_mean = initialization_parameters["firm_cons_init_good_price_current_mean"];
-    firm_cons_init_good_price_current_std = initialization_parameters["firm_cons_init_good_price_current_std"];
-    firm_cons_init_good_price_current_min = initialization_parameters["firm_cons_init_good_price_current_min"];
-    firm_cons_init_good_price_current_max = initialization_parameters["firm_cons_init_good_price_current_max"];
+    firm_cons_init_good_price_mean = initialization_parameters["firm_cons_init_good_price_mean"];
+    firm_cons_init_good_price_std = initialization_parameters["firm_cons_init_good_price_std"];
+    firm_cons_init_good_price_min = initialization_parameters["firm_cons_init_good_price_min"];
+    firm_cons_init_good_price_max = initialization_parameters["firm_cons_init_good_price_max"];
     // Good inventory
     firm_cons_init_inventory_mean = initialization_parameters["firm_cons_init_inventory_mean"];
     firm_cons_init_inventory_std = initialization_parameters["firm_cons_init_inventory_std"];
@@ -182,7 +182,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     // Other inits (not randomised)
     firm_cons_init_production_current_ratio = initialization_parameters["firm_cons_init_production_current_ratio"];
     firm_cons_init_quantity_sold_ratio = initialization_parameters["firm_cons_init_quantity_sold_ratio"];
-    firm_cons_init_good_price = initialization_parameters["firm_cons_init_good_price"];
     firm_cons_init_emissions_per_unit = initialization_parameters["firm_cons_init_emissions_per_unit"];
 
     // --- Capital Firm initialization parameters
@@ -219,10 +218,10 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_init_production_planned_min = initialization_parameters["firm_cap_init_production_planned_min"];
     firm_cap_init_production_planned_max = initialization_parameters["firm_cap_init_production_planned_max"];
     // Initial good price
-    firm_cap_init_good_price_current_mean = initialization_parameters["firm_cap_init_good_price_current_mean"];
-    firm_cap_init_good_price_current_std = initialization_parameters["firm_cap_init_good_price_current_std"];
-    firm_cap_init_good_price_current_min = initialization_parameters["firm_cap_init_good_price_current_min"];
-    firm_cap_init_good_price_current_max = initialization_parameters["firm_cap_init_good_price_current_max"];
+    firm_cap_init_good_price_mean = initialization_parameters["firm_cap_init_good_price_mean"];
+    firm_cap_init_good_price_std = initialization_parameters["firm_cap_init_good_price_std"];
+    firm_cap_init_good_price_min = initialization_parameters["firm_cap_init_good_price_min"];
+    firm_cap_init_good_price_max = initialization_parameters["firm_cap_init_good_price_max"];
     // Good inventory
     firm_cap_init_inventory_mean = initialization_parameters["firm_cap_init_inventory_mean"];
     firm_cap_init_inventory_std = initialization_parameters["firm_cap_init_inventory_std"];
@@ -244,7 +243,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     // Other inits (not randomised)
     firm_cap_init_production_current_ratio = initialization_parameters["firm_cap_init_production_current_ratio"];
     firm_cap_init_quantity_sold_ratio = initialization_parameters["firm_cap_init_quantity_sold_ratio"];
-    firm_cap_init_good_price = initialization_parameters["firm_cap_init_good_price"];
     firm_cap_init_emissions_per_unit = initialization_parameters["firm_cap_init_emissions_per_unit"];
 
     //--- Bank Initialization parameters
@@ -477,10 +475,10 @@ float firm_cons_init_production_planned_std = 100;
 float firm_cons_init_production_planned_min = 100;
 float firm_cons_init_production_planned_max = 1999;
 // Initial good price
-float firm_cons_init_good_price_current_mean = 10;
-float firm_cons_init_good_price_current_std = 2;
-float firm_cons_init_good_price_current_min = 1;
-float firm_cons_init_good_price_current_max = 99;
+float firm_cons_init_good_price_mean = 10;
+float firm_cons_init_good_price_std = 2;
+float firm_cons_init_good_price_min = 1;
+float firm_cons_init_good_price_max = 99;
 // Good inventory
 float firm_cons_init_inventory_mean = 1000;
 float firm_cons_init_inventory_std = 100;
@@ -500,7 +498,6 @@ float firm_cons_init_desired_inventory_factor_max = 4.0;
 // Other inits (not randomised)
 float firm_cons_init_production_current_ratio = 0.4;
 float firm_cons_init_quantity_sold_ratio = 0.25;
-float firm_cons_init_good_price = 9.5;
 float firm_cons_init_emissions_per_unit = 10.0;
 
 
@@ -560,10 +557,10 @@ float firm_cap_init_production_planned_std = 100;
 float firm_cap_init_production_planned_min = 100;
 float firm_cap_init_production_planned_max = 1999;
 // Initial good price
-float firm_cap_init_good_price_current_mean = 10;
-float firm_cap_init_good_price_current_std = 2;
-float firm_cap_init_good_price_current_min = 1;
-float firm_cap_init_good_price_current_max = 99;
+float firm_cap_init_good_price_mean = 10;
+float firm_cap_init_good_price_std = 2;
+float firm_cap_init_good_price_min = 1;
+float firm_cap_init_good_price_max = 99;
 // Good inventory
 float firm_cap_init_inventory_mean = 1000;
 float firm_cap_init_inventory_std = 100;
@@ -584,7 +581,6 @@ float firm_cap_init_desired_inventory_factor_max = 4.0;
 // Other inits (not randomised)
 float firm_cap_init_production_current_ratio = 0.4;
 float firm_cap_init_quantity_sold_ratio = 0.25;
-float firm_cap_init_good_price = 100.0;
 float firm_cap_init_emissions_per_unit = 100.0;
 
 // --- Capital Firm dynamic parameters

@@ -16,11 +16,11 @@ Public_Info_Board::Public_Info_Board(){
     // Income figures
     average_wage_market = 0.0;
     average_wage_employed = 0.0;
-    average_dividend_income = 0.0;
-    average_total_income = 0.0,
-    household_wage_sum = 0;
-    household_dividends_sum = 0;
-    household_total_income_sum = 0;
+
+    household_wage_income = 0;
+    household_unemployment_income = 0;
+    household_dividend_income = 0;
+    household_total_income = 0;
 
 
     // Inflation and interest rates
@@ -41,17 +41,19 @@ Public_Info_Board::Public_Info_Board(){
     machine_orders = 0;
     machine_spending = 0;
     machine_orders_planned = 0;
+    machine_spending_planned = 0;
+
+
     // Consumer expenditure
-    consumer_orders = 0;
     consumer_spending = 0;
-    consumption_budgets = 0;
+    consumption_budget = 0;
     sector_count = 0;
 
     // Production
-    cons_goods_production_total = 0;
-    cap_goods_production_total = 0;
-    cons_goods_planned_production_total = 0;
-    cap_goods_production_planned_total = 0;
+    cap_goods_production = 0;
+    cap_goods_production_planned = 0;
+    cap_goods_quantity_sold = 0;
+
     // Employment
     n_employed_workers = 0;
     n_unemployed_workers = 0;
@@ -91,7 +93,6 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
     sector_count = num_sectors;
     actual_cons_spending_by_sector = vector<float>(sector_count, 0.0);
     planned_cons_spending_by_sector = vector<float>(sector_count, 0.0);
-    cons_demand_shortfall_by_sector = vector<float>(sector_count, 0.0);
     actual_production_by_sector = vector<int>(sector_count, 0);
     planned_production_by_sector = vector<int>(sector_count, 0);
     quantity_sold_by_sector = vector<int>(sector_count, 0);
@@ -138,20 +139,11 @@ void Public_Info_Board::Update_Actual_Consumer_Spending_by_Sector( const vector<
     }
 }
 
-/* Update the shortfall between planned and actual consumer spending on each sector by subtracting the two vectors
-This method should only be called once per time step in the main loop
-*/
-void Public_Info_Board::Calculate_Consumer_Demand_Shortfall_by_Sector() { 
-        for (int i = 0; i < sector_count; i++) {
-        cons_demand_shortfall_by_sector[i] += planned_cons_spending_by_sector[i] - actual_cons_spending_by_sector[i];
-        }
-};
-
 /*
 */
 void Public_Info_Board::Calculate_Average_Unit_Emissions_by_Sector(){
     for(int i=0; i<sector_count; i++){
-        average_unit_emission_by_sector[i] /= float(inventory_by_sector[i]); // Make sure the division is done correctly
+        average_unit_emission_by_sector[i] =  total_emissions_by_sector[i] / actual_production_by_sector[i]; // Make sure the division is done correctly
     }
 }
 
@@ -161,7 +153,7 @@ void Public_Info_Board::Update_Interest_Rate() {r_rate = pBank->Get_Interest_Rat
 //---- Updating emissions
 void Public_Info_Board::Update_Emissions_By_Sector(const vector<int>& emissions_by_sector) {   
     for (int i = 0; i < sector_count; i++){
-        actual_cons_spending_by_sector[i] += emissions_by_sector[i];
+        total_emissions_by_sector[i] += emissions_by_sector[i];
     }
 }
 
@@ -335,27 +327,19 @@ void Public_Info_Board::Initialize_Price_Levels(){
 void Public_Info_Board::Reset_Global_Data(){
     int reset_value = 0;
 
-    // General price level
-   /*  price_level_current = reset_value;
-    price_level_previous = reset_value;
-    cap_price_level_current = reset_value;
-    cap_price_level_previous = reset_value;
-    average_wage_market = reset_value; */
-
-    // Inflation and interest rate
-    r_rate = reset_value;
-    cons_inflation_current = reset_value;
-    cap_inflation_current = reset_value;
 
     // Income Figures
     average_wage_market = reset_value;
     average_wage_employed = reset_value;
-    average_dividend_income = reset_value;
-    average_total_income = reset_value;
 
-    household_wage_sum = reset_value;
-    household_dividends_sum = reset_value;
-    household_total_income_sum = reset_value;
+    household_wage_income = reset_value;
+    household_dividend_income = reset_value;
+    household_total_income = reset_value;
+    household_unemployment_income = reset_value;
+
+    // Emissions
+    total_emissions_by_sector = vector<int>(sector_count, 0);
+    offsets_sold_by_sector = vector<int>(sector_count, 0);
     
     // Global aggregate varaibles
 
@@ -371,30 +355,29 @@ void Public_Info_Board::Reset_Global_Data(){
     machine_orders = reset_value;
     machine_orders_planned = reset_value;
     machine_spending = reset_value;
+    machine_spending_planned = reset_value;
 
     // Consumer expenditure
-    consumer_orders = reset_value;
     consumer_spending = reset_value;
-    consumption_budgets = reset_value;
+    consumption_budget = reset_value;
 
     actual_cons_spending_by_sector = vector<float>(sector_count, 0);
     planned_cons_spending_by_sector = vector<float>(sector_count, 0);
-    cons_demand_shortfall_by_sector = vector<float>(sector_count, 0);
     
     // Production
-    cons_goods_production_total = reset_value;
-    cap_goods_production_total = reset_value;
-    cons_goods_planned_production_total = reset_value;
-    cap_goods_production_planned_total = reset_value;
+    cap_goods_production = reset_value;
+    cap_goods_production_planned = reset_value;
+    cap_goods_quantity_sold = reset_value;
 
     actual_production_by_sector = vector<int>(sector_count, 0);
     planned_production_by_sector = vector<int>(sector_count, 0);
+    inventory_by_sector = vector<int>(sector_count, 0);
     quantity_sold_by_sector = vector<int>(sector_count, 0);
     
     // Employment
     n_employed_workers = reset_value;
     n_unemployed_workers = reset_value;
-    unemployment_rate = reset_value;
+    unemployment_rate = -0.1; // So we can see if it isnt properly updated
 
     employee_hires = reset_value;
     new_employee_demand = reset_value;
@@ -403,13 +386,6 @@ void Public_Info_Board::Reset_Global_Data(){
     new_job_postings = reset_value;
     removed_job_postings = reset_value;
     n_employees_quitting = reset_value;
-
-    //n_bankrupt_cap_firms
-    //n_bankrupt_cons_firms
-    //public_unemployment_benefit = reset_value; // Do not reset tis
-    // minimum_wage = reset_value // Do not reset this
-
-    current_date = reset_value;
 }
 
 //-------------------------------------------------------------
@@ -432,13 +408,11 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
 
     os << "average_wage_market " << obj.average_wage_market << std::endl;
     os << "average_wage_employed" << obj.average_wage_employed << std::endl;
-    os << "average_dividend_income " << obj.average_dividend_income << std::endl;
-    os << "average_total_income " << obj.average_total_income << std::endl;
     
-    os << "household_wage_sum " << obj.household_wage_sum << std::endl;
-    os << "household_dividends_sum " << obj.household_dividends_sum << std::endl;
-    os << " household_total_income_sum " << obj.household_total_income_sum << std::endl;
-    
+    os << "household_wage_income " << obj.household_wage_income << std::endl;
+    os << "household_dividend_income " << obj.household_dividend_income << std::endl;
+    os << "household_unemployment_income " << obj.household_unemployment_income << std::endl;
+    os << "household_total_income " << obj.household_total_income << std::endl;
     
     os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;
     os << "household_sentiment_percentage " << obj.household_sentiment_percentage << std::endl;
@@ -450,16 +424,15 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "machine_orders " << obj.machine_orders << std::endl;
     os << "machine_orders_planned " << obj.machine_orders_planned << std::endl;
     os << "machine_spending " << obj.machine_spending << std::endl;
+    os << "machine_spending_planned " << obj.machine_spending_planned << std::endl;
     
-    os << "consumer_orders " << obj.consumer_orders << std::endl;
     os << "consumer_spending " << obj.consumer_spending << std::endl;
-    os << "consumption_budgets " << obj.consumption_budgets << std::endl;
+    os << "consumption_budget " << obj.consumption_budget << std::endl;
     
     // Print the vectors
     for (int i = 0; i < obj.sector_count; i++) {
         os << "planned_spending_on_sector_" << i+1 << " " << obj.planned_cons_spending_by_sector[i] << std::endl;
         os << "actual_spending_on_sector_" << i+1 << " " << obj.actual_cons_spending_by_sector[i] << std::endl;
-        os << "demand_shortfall_on_sector_" << i+1 << " " << obj.cons_demand_shortfall_by_sector[i] << std::endl;
         os << "planned_production_on_sector_" << i+1 << " " << obj.planned_production_by_sector[i] << std::endl;
         os << "actual_production_on_sector_" << i+1 << " " << obj.actual_production_by_sector[i] << std::endl;
         os << "price_level_cons_sector_" << i+1 << obj.consumer_sectors_price_levels[i] << std::endl;
@@ -467,14 +440,13 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
         os  << "emission_allowance_by_sector_" << i+1 << " " << obj.emission_allowances_by_sector[i] << std::endl;
         os << "quantity_sold_by_sector_" << i+1 << " " << obj.quantity_sold_by_sector[i] << std::endl;
         os << "inventory_by_sector_" << i+1 << " " << obj.inventory_by_sector[i] << std::endl;
-
+        os << "total_emissions_by_sector_" << i+1 << " " << obj.total_emissions_by_sector[i] << std::endl;
     } 
     
-    os << "cons_goods_production_total " << obj.cons_goods_production_total << std::endl;
-    os << "cap_goods_production_total " << obj.cap_goods_production_total << std::endl;
-    os << "cons_goods_planned_production_total " << obj.cons_goods_planned_production_total << std::endl;
-    os << "cap_goods_production_planned_total " << obj.cap_goods_production_planned_total << std::endl;
-    
+    os << "cap_goods_production " << obj.cap_goods_production << std::endl;
+    os << "cap_goods_production_planned " << obj.cap_goods_production_planned << std::endl;
+    os << "cap_goods_quantity_sold " << obj.cap_goods_quantity_sold << std::endl;
+
     os << "n_bankrupt_cap_firms " << obj.n_bankrupt_cap_firms << std::endl;
     os << "n_bankrupt_cons_firms " << obj.n_bankrupt_cons_firms << std::endl;
 

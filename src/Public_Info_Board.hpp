@@ -36,7 +36,6 @@ class Public_Info_Board{
 
     // Job Market 
     Job* Get_Top_Job();
-    Job_Market* Get_Job_List(); // not implemented/needed yet
     void Remove_Top_Job_Offer();
     void Post_Job_To_Market(Job * pJob_Offer);
     void Take_Job(Job* pJob_Offer); // Notify employer and remove job from market
@@ -46,18 +45,15 @@ class Public_Info_Board{
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
     pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector);
-    tuple<vector<float>, vector<int>, vector<int>> Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
-
+    tuple<vector<float>, vector<int>, vector<int>> Buy_Consumer_Goods_By_Sector_And_Emission(
+        int budget, const vector<float>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
 
     // Capital Good Market
-    int*  Buy_Capital_Goods(int q_desired);
     void Send_Cap_Good_To_Market(Capital_Good* pGood);
+    int*  Buy_Capital_Goods(int q_desired);
     int Get_Cost_For_Desired_Cap_Goods(int q_desired);
     
-    // Update Member Variables
-
-    // Policy Rules
-    void Update_Unemployment_Benefits(); // To Implement later
+    // ------ Updating Member Variables
 
     // Inflation, price level, interest rate
     void Update_Consumer_Price_Level();
@@ -93,36 +89,25 @@ class Public_Info_Board{
     float Get_Consumer_Inflation() {return cons_inflation_current;}
     float Get_Capital_Inflation() {return cap_inflation_current;}
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
-    float Get_Cons_Price_Level() { return cons_price_level_current;}
+    
     float Get_Cons_Sector_Price_Level(int sector_id) { return consumer_sectors_price_levels[sector_id]; }
-    float Get_Cap_Price_Level() { return cap_price_level_current;}
-
     float Get_Capital_Good_Price_Level(){return cap_price_level_current;}
-    float Get_Consumer_Good_Price_Level() {return cons_price_level_current;}
 
     float Get_Average_Wage_Market() { return average_wage_market;}
-    float Get_Average_Wage_Employed() {return average_wage_employed;}
-    Job_Market* Get_Job_Market_Ptr() { return pJob_Market;}
-    int Get_Current_Date() { return current_date;}
+
     int Get_Machine_Orders() { return machine_orders;}
     int Get_Machine_Spending() { return machine_spending;}
-    int Get_Consumer_Orders() { return consumer_orders;}
     int Get_Consumer_Spending() { return consumer_spending;}
-    int Get_Consumption_Budget() { return consumption_budgets;}
-    int Get_Consumer_Goods_Production() { return cons_goods_production_total;}
-    int Get_Capital_Goods_Production() { return cap_goods_production_total;}
-    int Get_Consumer_Goods_Production_Planned() { return cons_goods_planned_production_total;}
-    int Get_Capital_Goods_Production_Planned() { return cap_goods_production_planned_total;}
+    int Get_Consumption_Budget() { return consumption_budget;}
+    int Get_Capital_Goods_Production() { return cap_goods_production;}
+    int Get_Capital_Goods_Production_Planned() { return cap_goods_production_planned;}
     int Get_Employed_Workers() { return n_employed_workers;}
     int Get_Unemployed_Workers() { return n_unemployed_workers;}
     int Get_Employee_Demand() { return new_employee_demand;}
-    int Get_Employee_Firings() { return employee_firings;}
-    int Get_Employee_Hires() { return employee_hires;}
-    int Get_Contract_Expiries() { return contract_expiries;}
     int Get_New_Job_Postings() { return new_job_postings;}
     int Get_Removed_Job_Postings() { return removed_job_postings;}
     int Get_Minimum_Wage() { return minimum_wage;}
-    float Get_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emission_by_sector[sector_id-1];} 
+    float Get_Average_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emission_by_sector[sector_id-1];} 
     float Get_Emission_Offset_Price() {return emission_offset_price;}
 
     // Setters
@@ -134,38 +119,38 @@ class Public_Info_Board{
 
     //-----------Update global aggregate variables ----------------
     // Sentiment sums
-    void Update_Household_sentiment_sum(bool amount) { household_sentiment_sum += amount; }
-    void Update_Cons_firm_sentiment_sum(bool amount) { cons_firm_sentiment_sum += amount; }
-    void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount; }
+    void Update_Household_sentiment_sum(bool amount) { household_sentiment_sum += amount;}
+    void Update_Cons_firm_sentiment_sum(bool amount) { cons_firm_sentiment_sum += amount;}
+    void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount;}
     // Wages and Income
-    void Update_Household_Wage(int amount) { household_wage_sum += amount; }
-    void Update_Household_Dividends(int amount) {household_dividends_sum += amount; }
-    void Update_Household_Total_Income(int amount) { household_total_income_sum += amount; }
+    void Update_Household_Wage_Income(int amount) { household_wage_income += amount; }
+    void Update_Household_Dividend_Income(int amount) {household_dividend_income += amount; }
+    void Update_Household_Unemployment_Income(int amount) {household_unemployment_income += amount; }
+    void Update_Household_Total_Income(int amount) { household_total_income += amount; }
     // Capital Goods
     void Update_Machine_Orders(int amount) { machine_orders += amount; }
     void Update_Machine_Orders_Planned(int amount) { machine_orders_planned += amount; }
     void Update_Machine_Spending(int amount) { machine_spending += amount; }
     void Update_Machine_Spending_Planned(int amount) { machine_spending_planned += amount; }
-    void Update_Capital_Goods_Production(int amount) { cap_goods_production_total += amount;}
-    void Update_Capital_Goods_Production_Planned(int amount) { cap_goods_production_planned_total += amount; }
-    void Update_Capital_Goods_Sale_Quantities(int amount) { cap_good_sale_quantity_total += amount;}
+    void Update_Capital_Goods_Production(int amount) { cap_goods_production += amount;}
+    void Update_Capital_Goods_Production_Planned(int amount) { cap_goods_production_planned += amount; }
+    void Update_Capital_Goods_Sale_Quantities(int amount) { cap_goods_quantity_sold += amount;}
 
     //-- Consumer Goods and Consumption
     // Updates by Consumer Firms
-    void Update_Consumer_Orders(int amount) { consumer_orders += amount; }
     void Update_Consumer_Spending(int amount) { consumer_spending += amount; }
-    void Update_Consumption_Budgets(int amount) { consumption_budgets += amount; }
+    void Update_Consumption_Budget(int amount) { consumption_budget += amount; }
     void Update_Consumer_Goods_Production(int sector_id, int amount) { 
-        actual_production_by_sector[sector_id-1] += amount;
-        cons_goods_production_total += amount; }
+        actual_production_by_sector[sector_id-1] += amount;}
     void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { 
-        planned_production_by_sector[sector_id-1] += amount; 
-        cons_goods_planned_production_total += amount; }
+        planned_production_by_sector[sector_id-1] += amount; }
     void Update_Consumer_Goods_Sale_Quantities(int sector_id, int amount){ 
-        quantity_sold_by_sector[sector_id-1] += amount; 
-        cons_goods_sale_quantity_total += amount ;}
+        quantity_sold_by_sector[sector_id-1] += amount;}
     void Update_Consumer_Goods_Inventory(int sector_id, int amount){
         inventory_by_sector[sector_id-1] += amount;}
+    void Update_Total_Emissions(int sector_id, int amount) {
+        total_emissions_by_sector[sector_id-1] += amount; }
+
     // Updates by Households
     void Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending);
     void Update_Actual_Consumer_Spending_by_Sector(  const vector<float>& actual_spending );
@@ -191,15 +176,11 @@ class Public_Info_Board{
     // ---- Calculate Global Aggregate Variables ----
     // Labor Figures
     void Calculate_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
-    void Calculate_Average_Wage_Employed() { average_wage_employed = float(household_wage_sum)/float(n_employed_workers-n_firms); }
-    void Calculate_Average_Dividend_Income() { average_dividend_income = float(household_dividends_sum)/float(n_firms); }
-    void Calculate_Average_Total_Income() { average_total_income = float(household_total_income_sum)/float(n_households); }
+    void Calculate_Average_Wage_Employed() { average_wage_employed = float(household_wage_income)/float(n_employed_workers-n_firms); }
     // Sentiments
     void Calculate_Household_Sentiment_Percentage() { household_sentiment_percentage = float(household_sentiment_sum)/ float(n_households); }
     void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
     void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
-    // Consumer Market
-    void Calculate_Consumer_Demand_Shortfall_by_Sector();
     // Unit emisisons
     void Calculate_Average_Unit_Emissions_by_Sector();
 
@@ -209,22 +190,22 @@ class Public_Info_Board{
 
 
     protected:
-    Job_Market* pJob_Market; // no need for logging
-    Bank_Agent* pBank; // no need for logging 
-    Consumer_Goods_Market* pConsumer_Goods_Market; // no need for logging 
-    Capital_Goods_Market* pCapital_Goods_Market; // no need for logging 
+    Job_Market* pJob_Market; 
+    Bank_Agent* pBank; 
+    Consumer_Goods_Market* pConsumer_Goods_Market; 
+    Capital_Goods_Market* pCapital_Goods_Market; 
 
     // General price level
-    float cons_price_level_current; // Initialized, updated, logged
-    float cons_price_level_previous; // Initialized, updated, logged
-    float cap_price_level_current; // Initialized, updated, logged
-    float cap_price_level_previous; // Initialized, updated, logged
-    vector<float> consumer_sector_weights; // Initialized, no need for updating or logging
-    vector<float> consumer_sectors_price_levels; // Initialized, updated, logged
+    float cons_price_level_current; // Initialized, updated, not reset, logged
+    float cons_price_level_previous; // Initialized, updated, not reset, logged
+    float cap_price_level_current; // Initialized, updated, not reset, logged
+    float cap_price_level_previous; // Initialized, updated, not reset, logged
+    vector<float> consumer_sector_weights; // Initialized only
+    vector<float> consumer_sectors_price_levels; // Initialized, updated, not reset, logged
 
     // Emissions
-    vector<int> total_emissions_by_sector; // Initialized, NEWLY ADDED
-    vector<float> average_unit_emission_by_sector; // Initialized, NEWLY ADDED
+    vector<int> total_emissions_by_sector; // Initialized, updated, reset, logged
+    vector<float> average_unit_emission_by_sector; // Initialized, updated, no need for reset or logging
 
 
     // Emission Allowances
@@ -232,89 +213,79 @@ class Public_Info_Board{
     unsigned long int total_emission_allowance; // Initialized, updated, logged
     float emission_offset_price; // Initialized, updated, logged
 
-    vector<int> offsets_sold_by_sector; // Initialized, updated, logged
-
+    vector<int> offsets_sold_by_sector; // Initialized, updated, reset, logged
 
     // Income and wage figures
     float average_wage_market; // Average wage in the job market
     float average_wage_employed; // Average active employee wage
-    float average_dividend_income; // Average dividend in the market
-    float average_total_income; // Average income of all households (wage/unemp benefit/dividend)
 
-    int household_wage_sum;  // Sum of wages of households
-    int household_dividends_sum; // Sum of dividends of households
-    int household_total_income_sum;
+    int household_unemployment_income; // Initialized, updated, reset, logged
+    int household_wage_income;  // Initialized, updated, reset, logged
+    int household_dividend_income; // Initialized, updated, reset, logged
+    int household_total_income; // Initialized, updated, reset, logged
 
-    int minimum_wage;
+    int minimum_wage; // Initialized, updated, not reset, logged
 
     // Inflation and interest rate
-    float r_rate; // Initialized, updated, logged
-    float cons_inflation_current;  // Initialized, updated, logged
-    float cap_inflation_current; // Initialized, updated, logged
+    float r_rate; // Initialized, updated, not reset, logged
+    float cons_inflation_current;  // Initialized, updated, not reset, logged
+    float cap_inflation_current; // Initialized, updated, not reset, logged
  
 
     // Global aggregate variables
 
     // Sentiments
-    int household_sentiment_sum; // Sum of household sentiment: +1 for each positive
-    float household_sentiment_percentage; // Percentage of households who are optimist
-    int cons_firm_sentiment_sum; // Sum of firm sentiment: +1 for each positive
-    float cons_firm_sentiment_percentage; // Percentage of firms who are optimist
-    int cap_firm_sentiment_sum; // Sum of firm sentiment: +1 for each positive
-    float cap_firm_sentiment_percentage; // Percentage of firms who are optimist
+    int household_sentiment_sum; // Initialized, updated, reset, logged
+    float household_sentiment_percentage; // Initialized, updated, reset, logged
+    int cons_firm_sentiment_sum; // Initialized, updated, reset, logged
+    float cons_firm_sentiment_percentage; // Initialized, updated, reset, logged
+    int cap_firm_sentiment_sum; // Initialized, updated, reset, logged
+    float cap_firm_sentiment_percentage; // Initialized, updated, reset, logged
 
     // Capital expenditure
-    int machine_orders;
-    int machine_orders_planned;
-    int machine_spending;
-    int machine_spending_planned; // NEWLY ADDED
+    int machine_orders; // Initialized, updated, reset, logged
+    int machine_orders_planned; // Initialized, updated, reset, logged
+    int machine_spending; // Initialized, updated, reset, logged
+    int machine_spending_planned; // Initialized, updated, reset, logged
 
     // Consumer expenditure
-    int consumer_orders;
-    int consumer_spending;
-    int consumption_budgets;
+    int consumer_spending; // Initialized, updated, reset, logged
+    int consumption_budget; // Initialized, updated, reset, logged
 
-    vector<float> planned_cons_spending_by_sector;
-    vector<float> actual_cons_spending_by_sector;
-    vector<float> cons_demand_shortfall_by_sector; 
+    vector<float> planned_cons_spending_by_sector; // Initialized, updated, reset, logged
+    vector<float> actual_cons_spending_by_sector; // Initialized, updated, reset, logged
 
-    int sector_count;
+    int sector_count; // Initialized, no need for updating, reset, or logging
     
     // Production
-    int cons_goods_production_total;
-    int cap_goods_production_total;
-    int cons_goods_planned_production_total;
-    int cap_goods_production_planned_total;
-    int cap_good_sale_quantity_total; // NEWLY ADDED
-    int cons_goods_sale_quantity_total; // NEWLY ADDED
+    int cap_goods_production; // Initialized, updated, reset, logged
+    int cap_goods_production_planned; // Initialized, updated, reset, logged
+    int cap_goods_quantity_sold; // Initialized, updated, reset, logged
 
-    vector<int> planned_production_by_sector; // Initialized, updated, logged
+    vector<int> planned_production_by_sector; // Initialized, updated, reset, logged
     vector<int> actual_production_by_sector; // Initialized, updated, logged
-    vector<int> inventory_by_sector; // Initialized, updated, logged
-
-    vector<int> quantity_sold_by_sector; // Initialized, updated, logged
+    vector<int> inventory_by_sector; // Initialized, updated, reset, logged
+    vector<int> quantity_sold_by_sector; // Initialized, updated, reset, logged
 
     // Employment
-    int n_employed_workers;  
-    int n_unemployed_workers;
-    float unemployment_rate;
-    int employee_hires;
-    int new_employee_demand;
-    int employee_firings;
-    int contract_expiries;
-    int n_employees_quitting;
-    int new_job_postings;
-    int removed_job_postings;
-    int public_unemployment_benefit;
+    int n_employed_workers;  // Initialized, updated, reset, logged
+    int n_unemployed_workers; // Initialized, updated, reset, logged
+    float unemployment_rate; // Initialized, updated, reset, logged
+    int employee_hires;  // Initialized, updated, reset, logged
+    int new_employee_demand; // Initialized, updated, reset, logged
+    int employee_firings; // Initialized, updated, reset, logged
+    int contract_expiries; // Initialized, updated, reset, logged
+    int n_employees_quitting; // Initialized, updated, reset, logged
+    int new_job_postings; // Initialized, updated, reset, logged
+    int removed_job_postings; // Initialized, updated, reset, logged
+    int public_unemployment_benefit; // Initialized, not updated, not reset, logged
 
     // Bankruptcy figures
-    int n_bankrupt_cap_firms; 
-    int n_bankrupt_cons_firms; 
-
-
+    int n_bankrupt_cap_firms;  // Initialized, updated, not reset, logged
+    int n_bankrupt_cons_firms;   // Initialized, updated, not reset, logged
 
     // Current date
-    int current_date;
+    int current_date; // Initialized, updated while logging, not reset, logged
 
 };
 #endif

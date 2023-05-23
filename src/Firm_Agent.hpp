@@ -44,7 +44,7 @@ class Firm_Agent{
     void Update_Average_Sales();
     int Pay_Dividend() ;
     virtual void Depreciate_Good_Inventory() {};
-    virtual void Determine_New_Production();
+    virtual void Determine_New_Production() {};
     void Adjust_Wage_Offers();
     void Determine_Labor_Need();
     void Remove_Job_Postings(); 
@@ -79,7 +79,7 @@ class Firm_Agent{
     int Get_Cons_Firm_Status() {return is_cons_firm;}
     virtual float Get_Unit_Emissions() {return 0;}
     virtual int Get_Total_Emissions() {return 0;}
-        
+
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
     void Set_Wage_Offer(int wage) { this->wage_offer = wage;} // used in testing

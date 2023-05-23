@@ -67,7 +67,7 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
     Normal_Dist_Generator init_inventory(firm_cons_init_inventory_mean, firm_cons_init_inventory_std, firm_cons_init_inventory_min, firm_cons_init_inventory_max);
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
     Normal_Dist_Generator init_production_planned(firm_cons_init_production_planned_mean, firm_cons_init_production_planned_std, firm_cons_init_production_planned_min, firm_cons_init_production_planned_max);
-    Normal_Dist_Generator init_good_price_current(firm_cons_init_good_price_current_mean, firm_cons_init_good_price_current_std, firm_cons_init_good_price_current_min, firm_cons_init_good_price_current_max);
+    Normal_Dist_Generator init_cons_good_price(firm_cons_init_good_price_mean, firm_cons_init_good_price_std, firm_cons_init_good_price_min, firm_cons_init_good_price_max);
    
      for (int i=0; i<n_consumer_firms; i++) {
         //cout << " Cons firm initializing #" << i << endl;
@@ -75,7 +75,7 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
             init_dividend_ratio_optimist(),  
             init_dividend_ratio_pessimist(),
             init_desired_inventory_factor(), 
-            init_good_price_current()
+            init_cons_good_price()
         };
         int int_vals[]{
             int(init_total_assets()),
@@ -143,7 +143,7 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     Normal_Dist_Generator init_inventory(firm_cap_init_inventory_mean, firm_cap_init_inventory_std, firm_cap_init_inventory_min, firm_cap_init_inventory_max);
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
     Normal_Dist_Generator init_production_planned(firm_cap_init_production_planned_mean, firm_cap_init_production_planned_std, firm_cap_init_production_planned_min, firm_cap_init_production_planned_max);
-    Normal_Dist_Generator init_good_price_current(firm_cap_init_good_price_current_mean, firm_cap_init_good_price_current_std, firm_cap_init_good_price_current_min, firm_cap_init_good_price_current_max);
+    Normal_Dist_Generator init_cap_good_price(firm_cap_init_good_price_mean, firm_cap_init_good_price_std, firm_cap_init_good_price_min, firm_cap_init_good_price_max);
    
     for (int i=0; i<n_capital_firms; i++) {
         //cout << "cap firm initializing #: "<< i << endl;
@@ -151,7 +151,7 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
             init_dividend_ratio_optimist(),  
             init_dividend_ratio_pessimist(),
             init_desired_inventory_factor(), 
-            init_good_price_current()
+            init_cap_good_price()
         };
         int int_vals[]{
             int(init_total_assets()),
@@ -290,11 +290,7 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
     cout << "Posting Jobs: Capital Firms- End" << endl;
     
 
-    Job_Market* pJob_Market = pPublic_Info_Board->Get_Job_Market_Ptr();
-    //cout << "Sorting Job Market - begin" <<endl;
     pPublic_Info_Board->Sort_Job_Market();
-    //cout << "Sorting Job Market - end" <<endl;
-    //pJob_Market->Print_Size(); 
 
     cout << "Household job initialization - begin" << endl;
 
@@ -332,10 +328,14 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
         firm_ptr->Update_Average_Sales_T1();}
 
 
-    // Set up the consumer goods market's sector lists
+    // Set up the consumer goods market's sector lists and sort each sector by price
     pConsumer_Goods_Market->Divide_Goods_Into_Sectors(n_sectors);
-    // Sort each sector by price
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
+
+    // Set up the emission baskets in the consumer good market, and sort each by emission adjusted
+    pConsumer_Goods_Market->Divide_Goods_Into_Emission_Adjusted_Price_Levels(); 
+    pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
+    
     // Update the price levels in each sector
     pConsumer_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Update_Price_Level();

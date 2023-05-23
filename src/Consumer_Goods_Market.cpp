@@ -45,6 +45,35 @@ void Consumer_Goods_Market::Divide_Goods_Into_Sectors(int n_sectors){
     }
 }
 
+/* Divide the market into different brackets by their associated emission sensitivity
+and sort each one by emission adjusted prices
+*/
+void Consumer_Goods_Market::Divide_Goods_Into_Emission_Adjusted_Price_Levels(){
+    // Loop through each element of the default_emission_sensitivites vector, create an entry in the cons_goods_by_emission_adj_price
+    // where the key is the sensitivity and the value is a copy of the cons_good_list_by_sector vector 
+    // No need to sort it by price just yet
+    for (int i = 0; i < default_emission_sensitivities.size(); ++i) {
+        float sensitivity = default_emission_sensitivities[i]; // Get the sensitivity
+        vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector_copy; // Create empty copy vector of pairs
+        
+        for (const auto& sector_and_goods : cons_good_list_by_sector) { // loop through each sector
+            const vector<Consumer_Good*>& goods = sector_and_goods.second; // select given set of goods in a sector
+            vector<Consumer_Good*> goods_copy;  
+
+            // Copy the goods vector for that sector
+            std::transform(goods.begin(), goods.end(), std::back_inserter(goods_copy),
+            [](Consumer_Good* good) {
+                return new Consumer_Good(*good); // Deep copy of Consumer_Good object
+            });
+
+            // Add the sorted vector to the copy of the cons_good_list_by_sector vector of pairs, along with the sector name
+            cons_good_list_by_sector_copy.emplace_back(sector_and_goods.first, goods_copy);
+        }
+        cons_goods_by_emission_adj_price[sensitivity] = cons_good_list_by_sector_copy; // Add the complete sorted vector of all sectors to the map
+    }
+}
+
+
 
 /* Sort the market in each sector by price
 */
@@ -67,32 +96,22 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price()
 /* Check that the below works
  */
 void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price_and_Emissions(){
-    // Loop through each element of the default_emission_sensitivites vector, create an entry in the cons_goods_by_emission_adj_price
-    // where the key is the sensitivity and the value is a copy of the cons_good_list_by_sector vector sorted based on emission adjusted price
-    for (int i = 0; i < default_emission_sensitivities.size(); ++i) {
-        float sensitivity = default_emission_sensitivities[i]; // Get the sensitivity
-        vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector_copy;
-        
-        for (const auto& sector_and_goods : cons_good_list_by_sector) { // loop through each sector
-            const vector<Consumer_Good*>& goods = sector_and_goods.second; // select given set of goods
-            vector<Consumer_Good*> goods_copy;  
+    // Loop through each entry of the  cons_goods_by_emission_adj_price map, and sort the associated vector of pairs by emission adjsuted price
+    for (auto& sensitivity_and_sector : cons_goods_by_emission_adj_price) {
+        // The second element of the pair is the vector of pairs of sector and Consumer_Good pointers
+        vector<pair<int, vector<Consumer_Good*>>>& sector_and_goods = sensitivity_and_sector.second;
 
-            // Copy the goods vector
-            std::transform(goods.begin(), goods.end(), std::back_inserter(goods_copy),
-            [](Consumer_Good* good) {
-                return new Consumer_Good(*good); // Deep copy of Consumer_Good object
-            });
+        // Loop through each sector
+        for (auto& sector_and_goods : sector_and_goods) {
+            // The second element of the pair is the vector of Consumer_Good pointers
+            vector<Consumer_Good*>& goods = sector_and_goods.second;
 
-            // Sort the goods vector by emisison adj price
+            // Sort the goods vector by emission adjusted price
             std::sort(goods.begin(), goods.end(),
-                [sensitivity](const Consumer_Good* a, const Consumer_Good* b) {
-                    return a->Get_Emission_Adjusted_Price(sensitivity) < b->Get_Emission_Adjusted_Price(sensitivity);
+                [sensitivity_and_sector](Consumer_Good* a, Consumer_Good* b) {
+                    return a->Get_Emission_Adjusted_Price(sensitivity_and_sector.first) < b->Get_Emission_Adjusted_Price(sensitivity_and_sector.first);
                 });
-
-            // Add the sorted vector to the copy of the cons_good_list_by_sector vector
-            cons_good_list_by_sector_copy.emplace_back(sector_and_goods.first, goods_copy);
         }
-        cons_goods_by_emission_adj_price[sensitivity] = cons_good_list_by_sector_copy; // Add the sorted vector to the map
     }
 }
 

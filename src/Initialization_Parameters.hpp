@@ -159,10 +159,10 @@ extern float firm_cons_init_production_planned_std;
 extern float firm_cons_init_production_planned_min;
 extern float firm_cons_init_production_planned_max;
 // Initial good price
-extern float firm_cons_init_good_price_current_mean;
-extern float firm_cons_init_good_price_current_std;
-extern float firm_cons_init_good_price_current_min;
-extern float firm_cons_init_good_price_current_max;
+extern float firm_cons_init_good_price_mean;
+extern float firm_cons_init_good_price_std;
+extern float firm_cons_init_good_price_min;
+extern float firm_cons_init_good_price_max;
 // Good inventory
 extern float firm_cons_init_inventory_mean;
 extern float firm_cons_init_inventory_std;
@@ -182,7 +182,6 @@ extern float firm_cons_init_desired_inventory_factor_max;
 // Other inits (not randomised)
 extern float firm_cons_init_production_current_ratio;
 extern float firm_cons_init_quantity_sold_ratio;
-extern float firm_cons_init_good_price;
 extern float firm_cons_init_emissions_per_unit;
 
 // --- Consumer Firm dynamic parameters
@@ -269,10 +268,10 @@ extern float firm_cap_init_production_planned_std;
 extern float firm_cap_init_production_planned_min;
 extern float firm_cap_init_production_planned_max;
 // Initial good price
-extern float firm_cap_init_good_price_current_mean;
-extern float firm_cap_init_good_price_current_std;
-extern float firm_cap_init_good_price_current_min;
-extern float firm_cap_init_good_price_current_max;
+extern float firm_cap_init_good_price_mean;
+extern float firm_cap_init_good_price_std;
+extern float firm_cap_init_good_price_min;
+extern float firm_cap_init_good_price_max;
 // Good inventory
 extern float firm_cap_init_inventory_mean;
 extern float firm_cap_init_inventory_std;
@@ -292,7 +291,6 @@ extern float firm_cap_init_desired_inventory_factor_max;
 // Other inits (not randomised)
 extern float firm_cap_init_production_current_ratio;
 extern float firm_cap_init_quantity_sold_ratio;
-extern float firm_cap_init_good_price;
 extern float firm_cap_init_emissions_per_unit;
 
 // --- Capital Firm dynamic parameters

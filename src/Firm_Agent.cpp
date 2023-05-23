@@ -37,7 +37,6 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     total_income = revenue_sales;
     new_loan_issuance =0; 
     subsidies = 0;
-    good_price_past = firm_cons_init_good_price;
     average_profit = revenue_sales;
     average_sale_quantity = 0;
     
@@ -78,10 +77,10 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     machine_utilization = 0.0;
     desired_machines = 0;
     pPublic_Info_Board = nullptr;
-    capital_goods_current_value = firm_cap_init_good_price;
+    capital_goods_current_value = firm_cap_init_good_price_mean;
 
     // Initialize capital good inventory
-    initial_capital_goods = new Capital_Good(nullptr,firm_cap_init_good_price,working_capital_inventory,firm_cap_machine_lifespan);
+    initial_capital_goods = new Capital_Good(nullptr,firm_cap_init_good_price_mean,working_capital_inventory,firm_cap_machine_lifespan);
     //cout << " Created initial capital good " << endl;
     capital_goods_list.push_back(initial_capital_goods);
     //cout << "Passed capital good into list" << endl;; 
@@ -470,11 +469,12 @@ TODO:
 */
 void Firm_Agent::Make_Investment_Decision(){
     desired_machines = max(0,employee_count_desired/firm_cons_workers_per_machine - working_capital_inventory);
+    int estimated_cost;
 
     // Check if there is enough money to buy the goods, and if not take a loan
     if (desired_machines > 0){
         // Check how much it would cost to buy that many machines in the market right now
-        int estimated_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
+        estimated_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
         long_term_funding_gap =  max(estimated_cost - cash_on_hand,0); // Funding gap must be positive
         if (long_term_funding_gap> 0){
             Seek_Long_Term_Loan();
@@ -485,6 +485,7 @@ void Firm_Agent::Make_Investment_Decision(){
     //desired_machines = Uniform_Dist_Int(forced_machine_purchases_min,forced_machine_purchases_max);
     
     pPublic_Info_Board->Update_Machine_Orders_Planned(desired_machines);
+    pPublic_Info_Board->Update_Machine_Spending_Planned(estimated_cost);
 }
 
 

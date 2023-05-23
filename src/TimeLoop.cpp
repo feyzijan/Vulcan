@@ -12,6 +12,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // Update emission allowance prices and amounts
     pPublic_Info_Board->Update_Emission_Allowance_Amount();
     pPublic_Info_Board->Update_Emission_Allowance_Price();
+    pPublic_Info_Board->Calculate_Average_Unit_Emissions_by_Sector();
 
     // STEP 1.1: Update Inflation Rate and Interest rate  -
     cout << "|n------------ Step 1.1: Updating inflation and interest rates" <<endl;
@@ -22,10 +23,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     // STEP 1.11: Remove bankrupt agents from the simulation
     Delete_Bankrupt_Firms(pFirm_vector, pConsumer_Firm_vector, pCapital_Firm_vector);
-
-
-
-
 
 
     // Shuffle the firm and households vectors randomly using the random number generator
@@ -151,7 +148,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << "Consumer goods market after firms post goods ( after resetting market): " << endl;
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
     pConsumer_Goods_Market->Update_Price_Level();
-    cout << "Consumer Firms have produced " << pPublic_Info_Board->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Info_Board->Get_Consumer_Goods_Production_Planned() << endl;
+    //cout << "Consumer Firms have produced " << pPublic_Info_Board->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Info_Board->Get_Consumer_Goods_Production_Planned() << endl;
     
     cout << "Capital goods market after firms post goods ( after resetting market): " << endl;
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
@@ -177,13 +174,11 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     for(Household_Agent* household_ptr : *pHousehold_vector){
         //household_ptr->Buy_Consumer_Goods();
-        household_ptr->Buy_Consumer_Goods_By_Sector();}
+        household_ptr->Buy_Consumer_Goods_By_Sector_And_Emissions();}
 
-    cout << "Households have spent " << pPublic_Info_Board->Get_Consumer_Spending() << " on consumer goods to buy " << pPublic_Info_Board->Get_Consumer_Orders() << " consumer goods" << endl;
-    cout <<  float(pPublic_Info_Board->Get_Consumer_Spending()) / float(pPublic_Info_Board->Get_Consumption_Budget())*100 << "% of household budgets have been spent " << endl;
+    cout << "Households have spent " << pPublic_Info_Board->Get_Consumer_Spending() << " on consumer goods"  << endl;
+    //cout <<  float(pPublic_Info_Board->Get_Consumer_Spending()) / float(pPublic_Info_Board->Get_Consumption_Budget())*100 << "% of household budgets have been spent " << endl;
     pConsumer_Goods_Market->Update_Price_Level();
-
-    pPublic_Info_Board->Calculate_Consumer_Demand_Shortfall_by_Sector();
 
 
     // STEP 1.94: Capital good market commences
@@ -210,8 +205,6 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 
     // STEP 1.96: Update Public board before logging data
-    pPublic_Info_Board->Calculate_Average_Dividend_Income();
-    pPublic_Info_Board->Calculate_Average_Total_Income();
 
 }
 
@@ -220,33 +213,34 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 
 /* Function to delete bankrupt firms
-*/void Delete_Bankrupt_Firms(vector<Consumer_Firm_Agent*>& pConsumer_Firm_vector, vector<Capital_Firm_Agent*>& pCapital_Firm_vector, vector<Firm_Agent*>& pFirm_vector) {
+*/
+void Delete_Bankrupt_Firms(vector<Firm_Agent*>* pFirm_vector,vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector, vector<Capital_Firm_Agent*>* pCapital_Firm_vector) {
     // Erase pointers to bankrupt firms from consumer firm vector
-    auto consumerIt = pConsumer_Firm_vector.begin();
-    while (consumerIt != pConsumer_Firm_vector.end()) {
+    auto consumerIt = pConsumer_Firm_vector->begin();
+    while (consumerIt != pConsumer_Firm_vector->end()) {
         if ((*consumerIt)->Get_Bankruptcy_Status()) {
-            consumerIt = pConsumer_Firm_vector.erase(consumerIt);
+            consumerIt = pConsumer_Firm_vector->erase(consumerIt);
         } else {
             ++consumerIt;
         }
     }
 
     // Erase pointers to bankrupt firms from capital firm vector
-    auto capitalIt = pCapital_Firm_vector.begin();
-    while (capitalIt != pCapital_Firm_vector.end()) {
+    auto capitalIt = pCapital_Firm_vector->begin();
+    while (capitalIt != pCapital_Firm_vector->end()) {
         if ((*capitalIt)->Get_Bankruptcy_Status()) {
-            capitalIt = pCapital_Firm_vector.erase(capitalIt);
+            capitalIt = pCapital_Firm_vector->erase(capitalIt);
         } else {
             ++capitalIt;
         }
     }
 
     // Erase pointers and delete objects from combined firm vector
-    auto firmIt = pFirm_vector.begin();
-    while (firmIt != pFirm_vector.end()) {
+    auto firmIt = pFirm_vector->begin();
+    while (firmIt != pFirm_vector->end()) {
         if ((*firmIt)->Get_Bankruptcy_Status()) {
             delete *firmIt;
-            firmIt = pFirm_vector.erase(firmIt);
+            firmIt = pFirm_vector->erase(firmIt);
         } else {
             ++firmIt;
         }
