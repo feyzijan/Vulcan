@@ -66,7 +66,6 @@ void Capital_Firm_Agent::Produce_Goods(){
     Firm_Agent::Produce_Goods();
     // Update the public info board
     pPublic_Info_Board->Update_Capital_Goods_Production(production_current);
-    pPublic_Info_Board->Update_Capital_Goods_Production_Planned(production_planned);
 }
 
 /* Check sales and update public board
@@ -169,6 +168,8 @@ void Capital_Firm_Agent::Determine_New_Production(){
         production_planned = production_planned_max;
     } 
     */
+
+    pPublic_Info_Board->Update_Capital_Goods_Planned_Production(production_planned);
 }
 
 

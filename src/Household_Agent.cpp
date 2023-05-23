@@ -2,14 +2,11 @@
 #include <iostream>
 #include <numeric>
 
-
-
 //----------- Constructors
-
 // New Constructor to use
 Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info_Board* pPublic_Board )
 {
-
+    // -- Set Given starting parameters and propensities
     wealth_financial = vals[0];
     unemp_duration_upper_bound = vals[1];
     reservation_wage = vals[2];
@@ -20,36 +17,32 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     c_f = propensities[3];
     c_h = propensities[4];
     c_excess_money = propensities[5];
-    p_majority_op_adoption = propensities[6];
+    //p_majority_op_adoption = propensities[6]; // Override this
+    p_majority_op_adoption = household_rand_sentiment_adoption;
 
     // Set Pointers
-    //Public_Info_Board* pPublic_Info_Board = pPublic_Board;
+    // Public_Info_Board* pPublic_Info_Board = pPublic_Board;
     this->pPublic_Info_Board = pPublic_Board;
     current_job = nullptr;
     owned_firm = nullptr;
 
-    // Set default initialization values
-
+    //-- Set default non_zero initialization values
     unemployed = true;
-    sentiment = true;
     firm_owner = false;
+    sentiment = true;
     saving_propensity = saving_propensity_optimist;
-
-    // Set everything else to zero initiallly
-
+    
+    //-- Set everything else to zero initiallly
     // Wealth
     wealth_human = 0;
-
     // Consumption and Expenditure
     expenditure_consumption = 0;
     expenditure_tax = 0;
-
     // Savings
     new_savings = 0;
     cash_on_hand_real_desired = 0;
     cash_on_hand_desired = 0;  
     cash_on_hand_current = 0;
-
     // Income
     income_current = 0;
     income_average = 0;
@@ -57,23 +50,19 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     income_unemployment_benefit = 0;
     income_gov_transfers = 0;
     income_firm_owner_dividend = 0;
-
+    // Emisisons
+    total_emissions = 0;
+    emission_sensitivity_avg = 0.0;
     // Unemployment status
     unemp_duration = 0;
-
-    // Emission stuff
-    total_emissions = 0;
-    emission_sensitivity_avg = 0;
-
+    // Date
     current_date = 0;
 }
 
-Household_Agent::Household_Agent(Household_Agent&){}
-Household_Agent::~Household_Agent(){} 
+// ------------------- Initialization Functions ------------------------------
 
-// --- Initialization Functions
-
-/* Set the household as a firm owner
+/* Function to set the Household as a firm owner and assign the owned fimr
+This method is called at the initialization stage
 */
 void Household_Agent::Set_Firm_Owner(Firm_Agent* firm_ptr){
     firm_owner = true;
@@ -81,10 +70,12 @@ void Household_Agent::Set_Firm_Owner(Firm_Agent* firm_ptr){
     unemployed = false;
 }
 
-
-/* Loop thourgh each sector, and push back to the spending_weighibg_by_sector vector the weight of the sector
+/* Function to initialize the spending weights for each consumer sectors
+Loops throgh each sector, and push to the spending_weighing_by_sector vector the weight of the sector
+Called at the Initialization stage when initializing consumer sectors
 */
-void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
+void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector)
+{
     for (int i = 0; i < pConsumer_Firm_Sector_vector->size(); i++){
         float temp = pConsumer_Firm_Sector_vector->at(i)->consumption_weighing;
         temp = std::round(temp * 1000) / 1000.0; // round to the nearest three decimals
@@ -96,9 +87,13 @@ void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *p
 }
 
 
-/* Loop through each sector and initialize sector based emission sensitivities
+/* Function to initialize the emission sensitivities for each consumer sectors
+Loops throgh each sector, and push to the emission_sensitivity_by_sector vector
+The pushed value is randomly generated from a normal distribution specified in the initialization parameters
+Called at the Initialization stage when initializing consumer sectors
 */
-void Household_Agent::Initialize_Sector_Emission_Sensitivities(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
+void Household_Agent::Initialize_Sector_Emission_Sensitivities(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector)
+{
     for (int i = 0; i < pConsumer_Firm_Sector_vector->size(); i++){
         float mean_sensitivity = pConsumer_Firm_Sector_vector->at(i)->emission_sensitivity_mean;
         // Do a random number generation 
@@ -110,42 +105,12 @@ void Household_Agent::Initialize_Sector_Emission_Sensitivities(vector<Consumer_F
         }
         emission_sensitivity_by_sector.push_back(temp);
     }
+
+    emission_sensitivity_avg = std::inner_product(emission_sensitivity_by_sector.begin(), emission_sensitivity_by_sector.end(), spending_weight_by_sector.begin(), 0.0);
 }
 
 
-/* Loop through each sector and initialize sector based emission sensitivities*/
-void Initialize_Sector_Emission_Sensitivities(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
-    
-}
-
-
-
-
-
-//----- Main Loop
-
-
-/* Household r eceives wages, and updates the following
-Average income over past n windows
-Current financial wealth
-Effective saving : Cash_on_hand - average_income
-Targeted saving : factor * average_income
-Targeted Consumption Expenditures: - some formula
-*/
-void Household_Agent::Consumption_Savings_Decisions(){
-    Update_Reservation_Wage();
-    Update_Income();
-    if (global_date > 1) {
-        Update_Average_Income();
-    } else {
-        Update_Average_Income_T1();
-    }
-    Update_Savings();
-    Determine_Consumer_Sentiment();
-    Determine_Consumption_Budget();
-}
-
-
+//------------ Main Loop Methods ----------------------- //
 
 /* Function to check if current_job status is 0 or 1
 if 0 then mark as unemployed, and update the unemployment duration, and delete the job object, 
@@ -171,8 +136,10 @@ void Household_Agent::Check_Employment_Status()
     }
 }
 
-/* Function to update public board with employment status*/
-void Household_Agent::Update_Public_Board()
+/* Function to update public board with employment status
+This is a separate function because the employment status is checked mulitple times but the update 
+should be done once*/
+void Household_Agent::Update_Public_Board_On_Employment()
 {
     pPublic_Info_Board->Update_Employed_Worker_Count(!unemployed); // add 1 if employed, 0 if unemployed
     pPublic_Info_Board->Update_Unemployed_Worker_Count(unemployed); // add 1 if unemployed, 0 if employed
@@ -196,6 +163,7 @@ void Household_Agent::Update_Reservation_Wage()
     reservation_wage = max(reservation_wage, pPublic_Info_Board->Get_Minimum_Wage()); 
 } 
 
+
 /* Randomly alter some household properties
 - Loop through the spending_weight_by_sector vector and randomly alter the weights by x%, where x ranges between -0.05 and 0.05 
 - Make sure that the total of the weights is 1
@@ -206,32 +174,46 @@ void Household_Agent::Random_Experimentation(){
     float weighing_change = Uniform_Dist_Float(1.0-household_rand_sector_spending_weight_change , 1.0+household_rand_sector_spending_weight_change);
 
     for (int i = 0; i < spending_weight_by_sector.size(); i++){
-        spending_weight_by_sector[i] = spending_weight_by_sector[i] * (weighing_change);
-    }
-    // Make sure the total is 1
+        spending_weight_by_sector[i] = spending_weight_by_sector[i] * (weighing_change);}
+
+    // Ensure the total is 1
     float sum = 0;
     for (int i = 0; i < spending_weight_by_sector.size(); i++){
-        sum += spending_weight_by_sector[i];
-    }
-    for (int i = 0; i < spending_weight_by_sector.size(); i++){
-        spending_weight_by_sector[i] = spending_weight_by_sector[i] / sum;
-    }
+        sum += spending_weight_by_sector[i];}
 
-    // Random emission weight change
+    for (int i = 0; i < spending_weight_by_sector.size(); i++){
+        spending_weight_by_sector[i] = spending_weight_by_sector[i] / sum;}
+
+    // Randomly change emission weights
     weighing_change = Uniform_Dist_Float(1.0-household_rand_emission_sensitivity_change , 1.0+household_rand_emission_sensitivity_change);
 
     for (int i = 0; i < emission_sensitivity_by_sector.size(); i++){
-        emission_sensitivity_by_sector[i] = emission_sensitivity_by_sector[i] * (weighing_change);
-    }
+        emission_sensitivity_by_sector[i] = emission_sensitivity_by_sector[i] * (weighing_change);}
 
-    /*Calculate the average weighed emission sensitivity of the household by summing the elementwise multiplication
-     of emission_sensitivity_by_sector and spending_weight_by_sector*/
     emission_sensitivity_avg = std::inner_product(emission_sensitivity_by_sector.begin(), emission_sensitivity_by_sector.end(), spending_weight_by_sector.begin(), 0.0);
-
-    //pPublic_Info_Board->Update_Household_Average_Emission_Sensitivity(emission_sensitivity_avg);
-
 }
 
+/* Aggregate function to make consumption and savings decisions
+Household r eceives wages, and updates the following
+Average income over past n windows
+Current financial wealth
+Effective saving : Cash_on_hand - average_income
+Targeted saving : factor * average_income
+Targeted Consumption Expenditures: - some formula
+// TODO: Get rid of the if else check
+*/
+void Household_Agent::Consumption_Savings_Decisions(){
+    //Update_Reservation_Wage();
+    Update_Income();
+    if (global_date > 1) {
+        Update_Average_Income();
+    } else {
+        Update_Average_Income_T1();
+    }
+    Update_Savings();
+    Determine_Consumer_Sentiment();
+    Determine_Consumption_Budget();
+}
 
 
 /* Function to update the income_current variable to sum of all incomes received
@@ -242,7 +224,6 @@ TODO: Implement dividend income
 */
 void Household_Agent::Update_Income()
 {
-   
     income_current = 0; // Initialize to zero
 
     // Check if the person is employed, if so get Wage
@@ -250,7 +231,6 @@ void Household_Agent::Update_Income()
         income_wage = current_job->Get_Wage();
         pPublic_Info_Board->Update_Household_Wage_Income(income_wage);
         income_current += income_wage;
-
     } else if (firm_owner){
         income_firm_owner_dividend = owned_firm->Pay_Dividend();
         pPublic_Info_Board->Update_Household_Dividend_Income(income_firm_owner_dividend);
@@ -264,15 +244,14 @@ void Household_Agent::Update_Income()
     income_current += income_gov_transfers; // Add any additional transfers
     
     pPublic_Info_Board->Update_Household_Total_Income(income_current);
-
 }
 
 /* Function to calculate average income and fill in array at t=1
 */
 void Household_Agent::Update_Average_Income_T1()
 {
-for(int i=1;i<=12;i++){past_incomes.push(income_current);}
-income_average = income_current;
+    for(int i=1;i<=12;i++){past_incomes.push(income_current);}
+    income_average = income_current;
 }
 
 /* Function to update the average income of the past n periods
@@ -286,6 +265,7 @@ void Household_Agent::Update_Average_Income()
 
 
 /* Function to update financial wealth based on income andconsumption
+TODO : Check if this is necessary
 */
 void Household_Agent::Update_Savings()
 {
@@ -295,7 +275,6 @@ void Household_Agent::Update_Savings()
 
 /* Determine Household sentiment, and thereby savings propensity and desired cash on hand
 Households randomly adopt majority opinion, otherwise check employment status
-- TODO: Update the random probability here
 */
 void Household_Agent::Determine_Consumer_Sentiment()
 {
@@ -304,7 +283,7 @@ void Household_Agent::Determine_Consumer_Sentiment()
     else{
         sentiment = 1;}
 
-    bool adopt_majority= Uniform_Dist_Float(0,1)  < household_rand_sentiment_adoption;
+    bool adopt_majority = Uniform_Dist_Float(0,1)  < household_rand_sentiment_adoption;
     if(adopt_majority){
         sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
 
@@ -314,7 +293,6 @@ void Household_Agent::Determine_Consumer_Sentiment()
     cash_on_hand_desired = saving_propensity * income_average;// Set targets for cash on hand
 
     pPublic_Info_Board->Update_Household_sentiment_sum(sentiment);
-
 }
 
 
@@ -340,56 +318,9 @@ void Household_Agent::Determine_Consumption_Budget()
 }
 
 
-
-/*  Interact with the market through the public board to buy goods
-- Pass in the consumption budget along with the vector with the sector weights
-- Receive back a pair of two vectors, leftover budget and goods bought for each secto
-*/
-void Household_Agent::Buy_Consumer_Goods_By_Sector(){
-
-    // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
-    vector<float> planned_expenditure_by_sector;
-
-    // Fill this with the planned spending numbers
-    for (int i = 0; i < spending_weight_by_sector.size(); ++i) {
-        if (spending_weight_by_sector[i] < 0){
-            cout << "Error: Spending weight by sector is negative" << endl;
-            spending_weight_by_sector[i] = max(spending_weight_by_sector[i], 0.0f);
-        }
-        planned_expenditure_by_sector.push_back(spending_weight_by_sector[i] * expenditure_consumption);
-    }
-
-    // Buy consumer goods and receive leftover budget and quantity bought for each sector
-    pair<vector<float>, vector<int>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector(expenditure_consumption, planned_expenditure_by_sector);
-
-    vector<float> remaining_consumption_budget =  purchases_by_sector.first;
-    vector<int> goods_bought =  purchases_by_sector.second;
-    vector<float> actual_spending_by_sector(planned_expenditure_by_sector);
-
-    int total_goods_bought = 0;
-
-    for (int i=0; i<remaining_consumption_budget.size(); i++){
-        // Deal with the leftover budget
-        expenditure_consumption -= remaining_consumption_budget[i];
-        new_savings += remaining_consumption_budget[i];
-        wealth_financial += remaining_consumption_budget[i]; 
-        actual_spending_by_sector[i] -= remaining_consumption_budget[i];
-
-        // Add up tally of goods bought
-        total_goods_bought += goods_bought[i];
-    }
-    pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
-    pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
-    pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
-}
-
-
-
-
 /* /*  Interact with the market through the public board to buy goods
 - Pass in the consumption budget along with the vector with the sector weights
 - Receive back a pair of two vectors, leftover budget and goods bought for each sector
-
 */
 void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
 
@@ -425,15 +356,11 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
         // Add up tally of goods bought
         total_goods_bought += goods_bought[i];
     }
-
-
-    pPublic_Info_Board->Update_Consumer_Spending(expenditure_consumption);
+    // Update the public board with relevant stuff
     pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
+    pPublic_Info_Board->Update_Consumer_Emissions_By_Sector(emissions_generated);
 }
-
-
-
 
 
 /* Function to seek jobs and accept any above the reservation wage
@@ -484,7 +411,6 @@ void Household_Agent::Seek_Better_Jobs()
 }
 
 
-
 //-----------------------------------------------------------------
 // String stream operator
 
@@ -501,12 +427,17 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "saving_propensity " << obj.saving_propensity << std::endl;
     os << "saving_propensity_optimist " << obj.saving_propensity_optimist << std::endl;
     os << "saving_propensity_pessimist " << obj.saving_propensity_pessimist << std::endl;
+    
     os << "income_current " << obj.income_current << std::endl;
     os << "income_average " << obj.income_average << std::endl;
     os << "income_wage " << obj.income_wage << std::endl;
     os << "income_unemployment_benefit " << obj.income_unemployment_benefit << std::endl;
     os << "income_gov_transfers " << obj.income_gov_transfers << std::endl;
     os << "income_firm_owner_dividend " << obj.income_firm_owner_dividend << std::endl;
+
+    os << "total_emissions " << obj.total_emissions << std::endl;
+    os << "emission_sensitivity_avg " << obj.emission_sensitivity_avg << std::endl;
+
     os << "unemployed " << obj.unemployed << std::endl;
     os << "reservation_wage " << obj.reservation_wage << std::endl;
     os << "unemp_duration " << obj.unemp_duration << std::endl;
@@ -538,61 +469,5 @@ vector<std::pair<string, float>>* Household_Agent::Log_Data() {
 
         return result;
     }
-
-
-
-
-
-
-//-----------------------------------------------------------------///
-
-// ----- Initialization Functions
-
-
-
-/* Function to return ptr to a vector contianing all class variables
-    Used by the function to save the data to a log file
-*/
-vector<float>* Household_Agent::Get_All_Params(){
-
-    vector<float>* vec_pointer = new vector<float>();
-
-    //vector<float>* vec_pointer;
     
-    vec_pointer->push_back(wealth_financial);
-    vec_pointer->push_back(wealth_human);
-    vec_pointer->push_back(expenditure_consumption);
-    vec_pointer->push_back(expenditure_tax);
-    vec_pointer->push_back(consumption_propensity);
-    vec_pointer->push_back(new_savings);
-    vec_pointer->push_back(cash_on_hand_real_desired);
-    vec_pointer->push_back(cash_on_hand_desired);
-    vec_pointer->push_back(cash_on_hand_current);
-    vec_pointer->push_back(saving_propensity);
-    vec_pointer->push_back(saving_propensity_optimist);
-    vec_pointer->push_back(saving_propensity_pessimist);
-    vec_pointer->push_back(income_current);
-    vec_pointer->push_back(income_average);
-    vec_pointer->push_back(income_wage);
-    vec_pointer->push_back(income_unemployment_benefit);
-    vec_pointer->push_back(income_gov_transfers);
-    vec_pointer->push_back(income_firm_owner_dividend);
-    vec_pointer->push_back(unemployed);
-    vec_pointer->push_back(reservation_wage);
-    vec_pointer->push_back(unemp_duration);
-    vec_pointer->push_back(unemp_duration_upper_bound);
-    vec_pointer->push_back(sentiment);
-    vec_pointer->push_back(firm_owner);
-    vec_pointer->push_back(c_f);
-    vec_pointer->push_back(c_h);
-    vec_pointer->push_back(c_excess_money);
-    vec_pointer->push_back(p_majority_op_adoption);
-
-    return vec_pointer;
-}
-
-
-
-
-
-
+//-----------------------------------------------------------------///

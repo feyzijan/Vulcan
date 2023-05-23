@@ -42,10 +42,9 @@ Public_Info_Board::Public_Info_Board(){
     machine_spending = 0;
     machine_orders_planned = 0;
     machine_spending_planned = 0;
-
-
     // Consumer expenditure
     consumer_spending = 0;
+    consumer_spending_planned = 0;
     consumption_budget = 0;
     sector_count = 0;
 
@@ -91,15 +90,15 @@ Public_Info_Board::Public_Info_Board(Public_Info_Board&){}
 */
 void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors){
     sector_count = num_sectors;
-    actual_cons_spending_by_sector = vector<float>(sector_count, 0.0);
+    consumer_spending_by_sector = vector<float>(sector_count, 0.0);
     planned_cons_spending_by_sector = vector<float>(sector_count, 0.0);
     actual_production_by_sector = vector<int>(sector_count, 0);
     planned_production_by_sector = vector<int>(sector_count, 0);
     quantity_sold_by_sector = vector<int>(sector_count, 0);
     inventory_by_sector = vector<int>(sector_count, 0);
 
-    average_unit_emission_by_sector = vector<float>( sector_count, 0.0);
-    total_emissions_by_sector = vector<int>(sector_count, 0);
+    average_unit_emissions_by_sector = vector<float>( sector_count, 0.0);
+    total_consumer_emissions_by_sector = vector<int>(sector_count, 0);
     offsets_sold_by_sector = vector<int>(sector_count, 0);
 
     // Loop through each sector in the consumer_firm_sector vector and add the sector weighing to the consumer_sector_weighing_vector
@@ -125,6 +124,7 @@ void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector
     // loop through the planned_spending vector and add to the planned_cons_spending_by_sector vector
     for (int i = 0; i < sector_count; i++){
         planned_cons_spending_by_sector[i] += planned_spending[i];
+        consumer_spending_planned += planned_spending[i];
     }
 }
 
@@ -133,9 +133,10 @@ void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector
 Household agent that calls this method
 */
 void Public_Info_Board::Update_Actual_Consumer_Spending_by_Sector( const vector<float>& actual_spending ){
-    // loop though the actual_spending vector and add to the actual_cons_spending_by_sector vector
+    // loop though the actual_spending vector and add to the consumer_spending_by_sector vector
     for (int i = 0; i < sector_count; i++){
-        actual_cons_spending_by_sector[i] += actual_spending[i];
+        consumer_spending_by_sector[i] += actual_spending[i];
+        consumer_spending += actual_spending[i];
     }
 }
 
@@ -144,11 +145,11 @@ void Public_Info_Board::Update_Actual_Consumer_Spending_by_Sector( const vector<
 void Public_Info_Board::Calculate_Average_Unit_Emissions_by_Sector(){
     for(int i=0; i<sector_count; i++){
         if ( actual_production_by_sector[i] == 0) {
-            average_unit_emission_by_sector[i] = 0.0;
+            average_unit_emissions_by_sector[i] = 0.0;
             cout << "Unexpected behaviour: actual production in sector " << i << " is 0" << endl;
         } else {
             // TODO: Make sure the division is done correctly
-            average_unit_emission_by_sector[i] =  total_emissions_by_sector[i] / actual_production_by_sector[i]; 
+            average_unit_emissions_by_sector[i] =  total_consumer_emissions_by_sector[i] / actual_production_by_sector[i]; 
         }
         
     }
@@ -158,9 +159,9 @@ void Public_Info_Board::Calculate_Average_Unit_Emissions_by_Sector(){
 void Public_Info_Board::Update_Interest_Rate() {r_rate = pBank->Get_Interest_Rate();} // Get latest interest rate from the bank
 
 //---- Updating emissions
-void Public_Info_Board::Update_Emissions_By_Sector(const vector<int>& emissions_by_sector) {   
+void Public_Info_Board::Update_Consumer_Emissions_By_Sector(const vector<int>& emissions_by_sector) {   
     for (int i = 0; i < sector_count; i++){
-        total_emissions_by_sector[i] += emissions_by_sector[i];
+        total_consumer_emissions_by_sector[i] += emissions_by_sector[i];
     }
 }
 
@@ -253,7 +254,6 @@ void Public_Info_Board::Remove_Top_Job_Offer(){
 }
 
 
-
 /* Called by firm to place a job into the market*/
 void Public_Info_Board::Post_Job_To_Market(Job * pJob_Offer) {
     //cout << "Public board posting job with address: " <<  pJob_Offer << " and wage: "  << pJob_Offer->Get_Wage() << endl;
@@ -274,6 +274,15 @@ void Public_Info_Board::Take_Job(Job* pJob_Offer) {
 void Public_Info_Board::Sort_Job_Market(){
     pJob_Market->Sort_Jobs_by_Wage();
 }
+
+
+/* Update the average wage in the job market*/
+void Public_Info_Board::Update_Average_Wage_Job_Market(){
+    pJob_Market->Calculate_Average_Wage();
+    average_wage_market = pJob_Market->Get_Average_Wage();
+}
+
+
 
 //--------------------------------------------------
 
@@ -345,7 +354,8 @@ void Public_Info_Board::Reset_Global_Data(){
     household_unemployment_income = reset_value;
 
     // Emissions
-    total_emissions_by_sector = vector<int>(sector_count, 0);
+    total_consumer_emissions_by_sector = vector<int>(sector_count, 0);
+    total_firm_emissions_by_sector = vector<int>(sector_count, 0);
     offsets_sold_by_sector = vector<int>(sector_count, 0);
     
     // Global aggregate varaibles
@@ -366,9 +376,10 @@ void Public_Info_Board::Reset_Global_Data(){
 
     // Consumer expenditure
     consumer_spending = reset_value;
+    consumer_spending_planned = reset_value;
     consumption_budget = reset_value;
 
-    actual_cons_spending_by_sector = vector<float>(sector_count, 0);
+    consumer_spending_by_sector = vector<float>(sector_count, 0);
     planned_cons_spending_by_sector = vector<float>(sector_count, 0);
     
     // Production
@@ -434,12 +445,13 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "machine_spending_planned " << obj.machine_spending_planned << std::endl;
     
     os << "consumer_spending " << obj.consumer_spending << std::endl;
+    os << "consumer_spending_planned " << obj.consumer_spending_planned << std::endl;
     os << "consumption_budget " << obj.consumption_budget << std::endl;
     
     // Print the vectors
     for (int i = 0; i < obj.sector_count; i++) {
         os << "planned_spending_on_sector_" << i+1 << " " << obj.planned_cons_spending_by_sector[i] << std::endl;
-        os << "actual_spending_on_sector_" << i+1 << " " << obj.actual_cons_spending_by_sector[i] << std::endl;
+        os << "actual_spending_on_sector_" << i+1 << " " << obj.consumer_spending_by_sector[i] << std::endl;
         os << "planned_production_on_sector_" << i+1 << " " << obj.planned_production_by_sector[i] << std::endl;
         os << "actual_production_on_sector_" << i+1 << " " << obj.actual_production_by_sector[i] << std::endl;
         os << "price_level_cons_sector_" << i+1 << obj.consumer_sectors_price_levels[i] << std::endl;
@@ -447,7 +459,8 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
         os  << "emission_allowance_by_sector_" << i+1 << " " << obj.emission_allowances_by_sector[i] << std::endl;
         os << "quantity_sold_by_sector_" << i+1 << " " << obj.quantity_sold_by_sector[i] << std::endl;
         os << "inventory_by_sector_" << i+1 << " " << obj.inventory_by_sector[i] << std::endl;
-        os << "total_emissions_by_sector_" << i+1 << " " << obj.total_emissions_by_sector[i] << std::endl;
+        os << "total_cons_emissions_by_sector_" << i+1 << " " << obj.total_consumer_emissions_by_sector[i] << std::endl;
+        os << "total_firm_emissions_by_sector_" << i+1 << " " << obj.total_firm_emissions_by_sector[i] << std::endl;
     } 
     
     os << "cap_goods_production " << obj.cap_goods_production << std::endl;

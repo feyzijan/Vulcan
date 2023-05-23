@@ -1,31 +1,38 @@
 #ifndef INITIALIZATION_PARAMETERS_HPP
 #define INITIALIZATION_PARAMETERS_HPP
 
-
-#include <string>
-#include <map>
-#include <variant>
+#include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
+
+#include <map>
+#include <variant>
+#include <queue>
+#include <numeric>
 #include <vector>
-#include <iostream>
+
+#include <random>
+#include <algorithm>
+
 typedef unsigned long ulong;
 typedef unsigned int uint;
 
 using namespace std;
 
-// Declare the initialization_parameters map as an extern variable,
-// so it can be accessed from other source files.
+//Declare the initialization_parameter maps
 extern map<string, float> initialization_parameters;
 extern map<string, float> main_loop_parameters;
 extern map<string, float> randomness_parameters;
 
-
 // Declare functions for reading and assigning simulation parameters
 void Read_Parameters(map<string, float>& parameter_map, const char* filename);
+
 void Assign_All_Parameters(map<string, float>& initialization_parameters,
 map<string, float>& main_loop_parameters, map<string, float>& randomness_parameters);
+
 void Print_Parameter_Map(map<string, float>& parameter_map);
+
 vector<string> split(const string &s, char delimiter);
 
 
@@ -37,17 +44,8 @@ extern int n_consumer_firms;
 extern int n_capital_firms;
 extern int n_firms;
 
-extern int n_sectors; // not preset currently
-
 extern int time_period; // # timesteps that make a year - Unused right now
-extern int n_max_employees;//unused
-
-
-//---- Public parameters----------------------
-// Wage parameters
-extern int household_init_unemployment_benefit;
-extern int household_init_minimum_wage;
-
+extern int n_max_employees; //unused
 
 //--------------- Household parameters ---------------
 // --- Household initialization parameters
@@ -102,6 +100,10 @@ extern float household_init_res_wage_mean;
 extern float household_init_res_wage_std;
 extern float household_init_res_wage_min;
 extern float household_init_res_wage_max;
+
+// Wage parameters
+extern int household_init_unemployment_benefit;
+extern int household_init_minimum_wage;
 
 // ---- Household dynamic parameters
 extern float household_n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
@@ -328,8 +330,6 @@ extern int bank_long_term_loan_length;
 extern float bank_leverage_ratio_lower_threshold;
 extern float bank_leverage_ratio_upper_threshold;
 
-
-
 //---------------------------------------------
 
 // --- CO2 Metrics parameters
@@ -348,7 +348,7 @@ extern float bank_unit_emission_upper_thr;
 extern float bank_total_emission_lower_thr;
 extern float bank_total_emission_upper_thr;
 
-// Emission allowance parameters
+// -- Emission allowance parameters
 // Initial allowances and unit price
 extern long emission_init_total_allowance;
 extern float emission_init_unit_price;
@@ -356,11 +356,5 @@ extern float emission_init_unit_price;
 extern float emission_total_allowance_change;
 extern float emission_unit_price_change;
 
-
-
 //---------------------------------------------
-
-
-
-
 #endif

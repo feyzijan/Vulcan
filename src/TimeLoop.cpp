@@ -1,11 +1,12 @@
 #include "TimeLoop.hpp"
 
-using namespace std;
+
 
 void Time_Step_1(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, 
 vector<Capital_Firm_Agent*> *pCapital_Firm_vector, vector<Firm_Agent*> *pFirm_vector, Public_Info_Board* pPublic_Info_Board, Job_Market* pJob_Market,
 Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank){
     
+    using namespace std;
 
     cout << "\n___________________TIMESTEP #______________ " << global_date << endl;
 
@@ -46,14 +47,11 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     // STEP 1.2: Depreciate Firm's Capital Goods
     cout << "\n------------ Step 1.2: Depreciating capital goods ----------------" <<endl;
-    
     // STEP 1.3: Layoff workers with expired contracts
     cout << " \n ------------ Step 1.3: laying Off Workers Whose contracts expired ----------------" <<endl;
     cout << "Firms have layed off " << pPublic_Info_Board->Get_Contract_Expiries() << " workers due to contract expiries " << endl;
-    
     // STEP 1.4: Random experimentation - randomly tweak firm and household parameters
     cout << " \n ------------ Step 1.4: Random experimentation ----------------" <<endl;
-    
     // STEP 1.5: Firms assess past period's sales data
     cout << " \n ------------ Step 1.5: Firms assess past period's sales data ----------------" <<endl;
     cout << "Capital firms have sold " << pPublic_Info_Board->Get_Capital_Goods_Sales() << " goods  " <<  endl;
@@ -62,36 +60,42 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         int quantity = quantitySoldBySector[i];
         cout << "Consumer Sector " << i + 1<< ": Quantity sold = " << quantity << endl;
     }
-
     // STEP 1.6: Depreciate Firms' Good Inventories
     cout << "\n------------ Step 1.6: Depreciating Good inventories ----------------" <<endl;
-    
     // STEP 1.7: Firms set new price and production targets
     cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
-
+    cout << "Capital Firms planning to produce " << pPublic_Info_Board->Get_Capital_Goods_Planned_Production() << " capital goods" << endl;
+    const vector<int>& plannedProductionBySector =  pPublic_Info_Board->Get_Planned_Production_By_Sector();
+    for (int i = 0; i < plannedProductionBySector.size(); ++i) {
+        int quantity = plannedProductionBySector[i];
+        cout << "Consumer Sector " << i + 1<< ": Planned production = " << quantity << endl;
+    }
 
 
 
     // STEP 1.8: Firms set wage offers, labor target, and finance expected wage bill
     cout << " \n ------------ Step 1.8: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
 
-    pJob_Market->Calculate_Average_Wage(); 
     pPublic_Info_Board->Update_Average_Wage_Job_Market();
-    cout << "Job market size before any new operations: " << pJob_Market->Get_Size() <<std::endl; // debugging
+    cout << "Job market has " << pJob_Market->Get_Size() << " jobs with an average wage of " << pJob_Market->Get_Average_Wage() << endl; // debugging
 
-    for( Firm_Agent* firm_ptr : *pFirm_vector){
+    cout << "Firms now adjusting wage offers and posting jobs" << endl;
+    for(Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Adjust_Wage_Offers();
         firm_ptr->Determine_Labor_Need();}
 
 
     pJob_Market->Sort_Jobs_by_Wage();
-    cout << "Job market size after the requested " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings : size " << pJob_Market->Get_Size() << std::endl;
+    cout << "Job market after " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings has " << pJob_Market->Get_Size() 
+    << " jobs with an average wage of " << pJob_Market->Get_Average_Wage() << endl;
     pJob_Market->Remove_Unwanted_Jobs();
-    cout << "Job market size after the requested " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals: size " << pJob_Market->Get_Size() << std::endl;
-
+    cout << "Job market after " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals has" << pJob_Market->Get_Size() 
+    << " jobs with an average wage of " << pJob_Market->Get_Average_Wage() << endl;
+    pJob_Market->Sort_Jobs_by_Wage();
 
     // Step 1.81: Households Check if they are fired
-    cout << " \n ------------ Step 1.81: Households Check if they are fired ----------------" <<endl;
+    cout << " \n ------------ Step 1.81: Households Check if they are fired ----------------" << endl;
+    cout << "# Fired Employees: " << pPublic_Info_Board->Get_Employee_Firings() << endl;
     // Step 1.82: Households update reservation wages
     cout << " \n ------------ Step 1.82: Households update reservation wages ----------------" <<endl;
     
@@ -102,63 +106,55 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     // STEP 1.83: Labor market matching process
     cout << " \n ------------ Step 1.83: Labor market matching process ----------------" <<endl;
-    pJob_Market->Sort_Jobs_by_Wage();
-
     pPublic_Info_Board->Calculate_Unemployment_Rate();
-    pJob_Market->Calculate_Average_Wage(); 
     pPublic_Info_Board->Update_Average_Wage_Job_Market();
-    cout << "N_employed workers" << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers" <<pPublic_Info_Board->Get_Unemployed_Workers()
-    << " N_employee demand" <<pPublic_Info_Board->Get_Employee_Demand() << " Average market wage" << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
-
-
-    cout << "Commencing labor market matching with " << pJob_Market->Get_Size() << " job postings"  << endl;
-
+    cout << "Labor market info before the matching process: N_employed workers: " << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers: " 
+    << pPublic_Info_Board->Get_Unemployed_Workers() << " Unemployment rate: "<< pPublic_Info_Board->Get_Unemployment_Rate() << " N_job postings: " 
+    << pJob_Market->Get_Size()<< " Average market wage: " << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Seek_Better_Jobs(); 
         household_ptr->Seek_Jobs();
         household_ptr->Check_Employment_Status();
-        household_ptr->Update_Public_Board();}
+        household_ptr->Update_Public_Board_On_Employment();}
 
     for(Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Check_For_New_Employees();
-        firm_ptr->Check_Employees_Quitting();
-        }
+        firm_ptr->Check_Employees_Quitting();}
 
     pPublic_Info_Board->Calculate_Unemployment_Rate();
-    cout << "Labor market matching ended with " << pJob_Market->Get_Size() << " job postings remaining"  << endl;
-    cout << "N_employed workers" << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers" <<pPublic_Info_Board->Get_Unemployed_Workers()
-    << " N_employee demand" <<pPublic_Info_Board->Get_Employee_Demand() << " Average market wage" << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
+    cout << "Labor market info after the matching process: N_employed workers: " << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers: " 
+    << pPublic_Info_Board->Get_Unemployed_Workers() << " Unemployment rate: "<< pPublic_Info_Board->Get_Unemployment_Rate() << " N_job postings: " 
+    << pJob_Market->Get_Size()<< " Average market wage: " << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
 
 
 
-    // Step 1.84: Sentiments Updating
-    cout << " \n ------------ Step 1.84: Sentiments Updating ----------------" <<endl;
+    // Step 1.84: Update Sentiments
+    cout << " \n ------------ Step 1.84: Update Agent sentiments ----------------" <<endl;
     pPublic_Info_Board->Calculate_Household_Sentiment_Percentage();
     cout << "Household Sentiment Percentage: " << pPublic_Info_Board->Get_Household_Sentiment() << endl;
     pPublic_Info_Board->Calculate_Cons_Firm_Sentiment_Percentage();
     cout << "Consumer Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cons_Firm_Sentiment() << endl;
     pPublic_Info_Board->Calculate_Cap_Firm_Sentiment_Percentage();
     cout << "Capital Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cap_Firm_Sentiment() << endl;
-
-
     
     // STEP 1.90: Firms make investment decisions and finance these
     cout << " \n ------------ Step 1.90: Firms make investment decisions and finance these ----------------" <<endl;
     // STEP 1.91: Firms produce their goods
     cout << " \n ------------ Step 1.91: Firms produce their goods ----------------" <<endl;
     
-    cout << "Consumer goods market before firms post goods ( what remains of the previous market): " << endl;
     pConsumer_Goods_Market->Update_Price_Level();
-    cout << "Capital goods market before firms post goods ( what remains of the previous market): " << endl;
     pCapital_Goods_Market->Update_Price_Level();
-
-
+    cout << "Consumer goods market before firms post goods (what remains of the previous market): " << endl;
+    // print size and price levl of consumer goods market
+    cout << "Capital goods market before firms post goods ( what remains of the previous market): " << endl;
+    // print size and price lebel
+    
     for (Firm_Agent * firm_ptr : *pFirm_vector){
         firm_ptr->Produce_Goods();
         firm_ptr->Update_Goods_On_Market();}
 
-    cout << "Consumer goods market after firms post goods ( after resetting market): " << endl;
+    cout << "Consumer goods market after firms post goods (after resetting market): " << endl;
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
     pConsumer_Goods_Market->Update_Price_Level();
     //cout << "Consumer Firms have produced " << pPublic_Info_Board->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Info_Board->Get_Consumer_Goods_Production_Planned() << endl;
@@ -167,7 +163,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
     pCapital_Goods_Market->Update_Price_Level();
     cout << "Capital market total goods: " << pCapital_Goods_Market->Get_N_Total_Goods() << " Price level: "<<  pCapital_Goods_Market->Get_Price_Level() << endl;
-    cout << "Capital Firms have produced " << pPublic_Info_Board->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Info_Board->Get_Capital_Goods_Production_Planned() << endl;
+    cout << "Capital Firms have produced " << pPublic_Info_Board->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Info_Board->Get_Capital_Goods_Planned_Production() << endl;
     
 
     // STEP 1.92: Households receive wage and make saving/consumption plans
@@ -232,11 +228,12 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 /* Function to delete bankrupt firms
 */
 void Delete_Bankrupt_Firms(vector<Firm_Agent*>* pFirm_vector,vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector, vector<Capital_Firm_Agent*>* pCapital_Firm_vector) {
+    using namespace std;
     // Erase pointers to bankrupt firms from consumer firm vector
     auto consumerIt = pConsumer_Firm_vector->begin();
     while (consumerIt != pConsumer_Firm_vector->end()) {
         if ((*consumerIt)->Get_Bankruptcy_Status()) {
-            cout << "Deleting bankrupt consumer firm" << endl;
+            cout << "Deleting bankrupt consumer firm " <<  endl;
             consumerIt = pConsumer_Firm_vector->erase(consumerIt);
         } else {
             ++consumerIt;

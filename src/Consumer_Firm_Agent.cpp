@@ -80,17 +80,13 @@ void Consumer_Firm_Agent::Produce_Goods(){
     int past_total_emissions = past_production * unit_emissions_adj;
     unit_emissions_adj = (past_total_emissions + new_total_emissions) / inventory;
 
-    
-
     // Update consumer good object to use this new adjusted emission
     cons_goods_on_market->Set_Unit_Emission(unit_emissions_adj);
 
     // Update the public info board
     pPublic_Info_Board->Update_Consumer_Goods_Production(sector_id, production_current);
-    pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
     pPublic_Info_Board->Update_Consumer_Goods_Inventory(sector_id, production_planned);
-    pPublic_Info_Board->Update_Total_Emissions(sector_id, new_total_emissions);
-
+    pPublic_Info_Board->Update_Firm_Emissions_By_Sector(sector_id, new_total_emissions);
 }
 
 
@@ -219,7 +215,7 @@ void Consumer_Firm_Agent::Determine_New_Production(){
         production_planned = production_planned_max;
     }
     */
-
+    pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
 
 }
 

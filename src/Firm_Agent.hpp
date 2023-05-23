@@ -1,12 +1,6 @@
 #ifndef FIRM_AGENT_HPP
 #define FIRM_AGENT_HPP
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <queue>
-#include <sstream>
-#include <string>
 
 class Public_Info_Board;
 #include "Loan.hpp"

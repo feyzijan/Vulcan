@@ -1,12 +1,7 @@
 #ifndef HOUSEHOLD_AGENT_HPP
 #define HOUSEHOLD_AGENT_HPP
 
-#include <numeric>
-#include <random>
-#include <vector>
-#include <queue>
-#include <sstream>
-#include <string>
+
 
 
 class Public_Info_Board;
@@ -23,8 +18,6 @@ class Household_Agent{
     public:
     // Constructors and destructor
     Household_Agent(float propensities[7], int vals[3], Public_Info_Board* pPublic_Board );
-    Household_Agent(Household_Agent&);
-    ~Household_Agent();
 
     // Initialization methods
     void Set_Firm_Owner(Firm_Agent* firm_ptr);
@@ -33,24 +26,19 @@ class Household_Agent{
 
     // Main Loop methods
     void Check_Employment_Status();
-    void Update_Public_Board();
+    void Update_Public_Board_On_Employment();
     void Update_Reservation_Wage();
-
     void Random_Experimentation();
-
     void Consumption_Savings_Decisions();
     void Update_Income();
     void Update_Average_Income();
     void Update_Average_Income_T1(); // Use in t=1 only
-    void Update_Savings(); // TO Implement
+    void Update_Savings(); 
     void Determine_Consumer_Sentiment();
     void Determine_Consumption_Budget(); //(eq 18)
-
-    void Buy_Consumer_Goods_By_Sector();
     void Buy_Consumer_Goods_By_Sector_And_Emissions();
     void Seek_Jobs();
     void Seek_Better_Jobs();
-
 
     //Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -62,12 +50,10 @@ class Household_Agent{
     float Get_C_f() {return c_f;}
     float Get_C_h() {return c_h;}
     Public_Info_Board* Get_Public_Board() {return pPublic_Info_Board;};
-    vector<float>* Get_All_Params();
     
     // Printing and Logging
     friend std::ostream& operator<<(std::ostream& os, const Household_Agent& obj);
     vector<std::pair<string, float>>* Log_Data();
-
 
     protected:
     Public_Info_Board* pPublic_Info_Board;
@@ -104,10 +90,10 @@ class Household_Agent{
     queue<int> past_incomes;
 
     // Emissions
-    int total_emissions; // NEWLY ADDED
-    float emission_sensitivity_avg; // NEWLY ADDED
-    vector<float> emission_sensitivity_by_sector; // Newly added
-    vector<int> total_emissions_by_sector; // Newly added
+    int total_emissions; 
+    float emission_sensitivity_avg; 
+    vector<float> emission_sensitivity_by_sector; 
+    vector<int> total_emissions_by_sector; 
 
     // Unemployment status
     bool unemployed;
@@ -117,7 +103,6 @@ class Household_Agent{
 
     // Sentiment 
     bool sentiment; // pessimistic, optimistic
-
 
     // Firm Ownership
     bool firm_owner; 

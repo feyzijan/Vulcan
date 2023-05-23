@@ -40,7 +40,7 @@ class Public_Info_Board{
     void Post_Job_To_Market(Job * pJob_Offer);
     void Take_Job(Job* pJob_Offer); // Notify employer and remove job from market
     void Sort_Job_Market();
-    void Update_Average_Wage_Job_Market() {average_wage_market = pJob_Market->Get_Average_Wage();};
+    void Update_Average_Wage_Job_Market();
 
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
@@ -100,20 +100,23 @@ class Public_Info_Board{
     int Get_Consumer_Spending() { return consumer_spending;}
     int Get_Consumption_Budget() { return consumption_budget;}
     int Get_Capital_Goods_Production() { return cap_goods_production;}
-    int Get_Capital_Goods_Production_Planned() { return cap_goods_production_planned;}
+    int Get_Capital_Goods_Planned_Production() { return cap_goods_production_planned;}
     int Get_Capital_Goods_Sales() { return cap_goods_quantity_sold;}
     int Get_Employed_Workers() { return n_employed_workers;}
     int Get_Unemployed_Workers() { return n_unemployed_workers;}
     int Get_Employee_Demand() { return new_employee_demand;}
     int Get_New_Job_Postings() { return new_job_postings;}
+    int Get_Employee_Firings() { return employee_firings;}
     int Get_Contract_Expiries() { return contract_expiries;}
     int Get_Removed_Job_Postings() { return removed_job_postings;}
     int Get_Minimum_Wage() { return minimum_wage;}
-    float Get_Average_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emission_by_sector[sector_id-1];} 
+    float Get_Average_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emissions_by_sector[sector_id-1];} 
     float Get_Emission_Offset_Price() {return emission_offset_price;}
+
 
     // Add a getter for quantity_sold_by_sector that returns a const reference
     const vector<int>& Get_Quantity_Sold_By_Sector() {return quantity_sold_by_sector;}
+    const vector<int>& Get_Planned_Production_By_Sector() {return planned_production_by_sector;}
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
@@ -138,12 +141,11 @@ class Public_Info_Board{
     void Update_Machine_Spending(int amount) { machine_spending += amount; }
     void Update_Machine_Spending_Planned(int amount) { machine_spending_planned += amount; }
     void Update_Capital_Goods_Production(int amount) { cap_goods_production += amount;}
-    void Update_Capital_Goods_Production_Planned(int amount) { cap_goods_production_planned += amount; }
+    void Update_Capital_Goods_Planned_Production(int amount) { cap_goods_production_planned += amount; }
     void Update_Capital_Goods_Sale_Quantities(int amount) { cap_goods_quantity_sold += amount;}
 
     //-- Consumer Goods and Consumption
     // Updates by Consumer Firms
-    void Update_Consumer_Spending(int amount) { consumer_spending += amount; }
     void Update_Consumption_Budget(int amount) { consumption_budget += amount; }
     void Update_Consumer_Goods_Production(int sector_id, int amount) { 
         actual_production_by_sector[sector_id-1] += amount;}
@@ -153,8 +155,8 @@ class Public_Info_Board{
         quantity_sold_by_sector[sector_id-1] += amount;}
     void Update_Consumer_Goods_Inventory(int sector_id, int amount){
         inventory_by_sector[sector_id-1] += amount;}
-    void Update_Total_Emissions(int sector_id, int amount) {
-        total_emissions_by_sector[sector_id-1] += amount; }
+    void Update_Firm_Emissions_By_Sector(int sector_id, int amount) {
+        total_firm_emissions_by_sector[sector_id-1] += amount; }
 
     // Updates by Households
     void Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending);
@@ -175,7 +177,7 @@ class Public_Info_Board{
     void Update_Bankruptcies(bool is_cons_firm) { if (is_cons_firm) { n_bankrupt_cons_firms += 1;} else { n_bankrupt_cap_firms += 1;}}
 
     // Emissions
-    void Update_Emissions_By_Sector(const vector<int>& emissions_by_sector);
+    void Update_Consumer_Emissions_By_Sector(const vector<int>& emissions_by_sector);
 
 
     // ---- Calculate Global Aggregate Variables ----
@@ -209,9 +211,9 @@ class Public_Info_Board{
     vector<float> consumer_sectors_price_levels; // Initialized, updated, not reset, logged
 
     // Emissions
-    vector<int> total_emissions_by_sector; // Initialized, updated, reset, logged
-    vector<float> average_unit_emission_by_sector; // Initialized, updated, no need for reset or logging
-
+    vector<int> total_consumer_emissions_by_sector; // Initialized, updated, reset, logged
+    vector<int> total_firm_emissions_by_sector; // Initialized, updated, reset, logged
+    vector<float> average_unit_emissions_by_sector; // Initialized, updated, no need for reset or logging
 
     // Emission Allowances
     vector<unsigned long int> emission_allowances_by_sector; // Initialized, updated, logged
@@ -255,10 +257,11 @@ class Public_Info_Board{
 
     // Consumer expenditure
     int consumer_spending; // Initialized, updated, reset, logged
+    int consumer_spending_planned; // Initialized, updated, reset, logged
     int consumption_budget; // Initialized, updated, reset, logged
 
     vector<float> planned_cons_spending_by_sector; // Initialized, updated, reset, logged
-    vector<float> actual_cons_spending_by_sector; // Initialized, updated, reset, logged
+    vector<float> consumer_spending_by_sector; // Initialized, updated, reset, logged
 
     int sector_count; // Initialized, no need for updating, reset, or logging
     
