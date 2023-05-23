@@ -101,14 +101,19 @@ class Public_Info_Board{
     int Get_Consumption_Budget() { return consumption_budget;}
     int Get_Capital_Goods_Production() { return cap_goods_production;}
     int Get_Capital_Goods_Production_Planned() { return cap_goods_production_planned;}
+    int Get_Capital_Goods_Sales() { return cap_goods_quantity_sold;}
     int Get_Employed_Workers() { return n_employed_workers;}
     int Get_Unemployed_Workers() { return n_unemployed_workers;}
     int Get_Employee_Demand() { return new_employee_demand;}
     int Get_New_Job_Postings() { return new_job_postings;}
+    int Get_Contract_Expiries() { return contract_expiries;}
     int Get_Removed_Job_Postings() { return removed_job_postings;}
     int Get_Minimum_Wage() { return minimum_wage;}
     float Get_Average_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emission_by_sector[sector_id-1];} 
     float Get_Emission_Offset_Price() {return emission_offset_price;}
+
+    // Add a getter for quantity_sold_by_sector that returns a const reference
+    const vector<int>& Get_Quantity_Sold_By_Sector() {return quantity_sold_by_sector;}
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}

@@ -1,10 +1,11 @@
 #include "TimeLoop.hpp"
 
+using namespace std;
+
 void Time_Step_1(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, 
 vector<Capital_Firm_Agent*> *pCapital_Firm_vector, vector<Firm_Agent*> *pFirm_vector, Public_Info_Board* pPublic_Info_Board, Job_Market* pJob_Market,
 Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market, Bank_Agent* pBank){
     
-    using namespace std;
 
     cout << "\n___________________TIMESTEP #______________ " << global_date << endl;
 
@@ -18,8 +19,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pPublic_Info_Board->Update_Interest_Rate();
 
     // STEP 1.11: Remove bankrupt agents from the simulation
+    cout << "Step 1.11: Removing bankrupt agents from the simulation" << endl;
     Delete_Bankrupt_Firms(pFirm_vector, pConsumer_Firm_vector, pCapital_Firm_vector);
-
+    cout << "Number of firms remaining: " << pFirm_vector->size() << endl;
 
     // Shuffle the firm and households vectors randomly using the random number generator
     std::random_device rd;
@@ -28,21 +30,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     std::shuffle(pCapital_Firm_vector->begin(), pCapital_Firm_vector->end(), std::default_random_engine(rd()));
     std::shuffle(pFirm_vector->begin(), pFirm_vector->end(), std::default_random_engine(rd()));
     
-    // STEP 1.2: Depreciate Firm's Capital Goods
-    cout << "\n------------ Step 1.2: Depreciating capital goods ----------------" <<endl;
-    // STEP 1.3: Layoff workers with expired contracts
-    cout << " \n ------------ Step 1.3: laying Off Workers Whose contracts expired ----------------" <<endl;
-    // STEP 1.4: Random experimentation - randomly tweak firm and household parameters
-    cout << " \n ------------ Step 1.4: Random experimentation ----------------" <<endl;
-    // STEP 1.5: Firms assess past period's sales data
-    cout << " \n ------------ Step 1.5: Firms assess past period's sales data ----------------" <<endl;
-    // STEP 1.51: Firms pay dividends - not yet implemented
-    cout << " \n ------------ Step 1.51: Firms pay dividend ----------------" <<endl;
-    // STEP 1.6: Depreciate Firms' Good Inventories
-    cout << "\n------------ Step 1.6: Depreciating Good inventories ----------------" <<endl;
-    // STEP 1.7: Firms set new price and production targets
-    cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
-
+    // STEPS 1.2-1.7: Firms update various parameters
     for( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Depreciate_Capital();
         firm_ptr->Cancel_Expired_Contracts();
@@ -55,12 +43,41 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Determine_New_Production();
     }
 
+
+    // STEP 1.2: Depreciate Firm's Capital Goods
+    cout << "\n------------ Step 1.2: Depreciating capital goods ----------------" <<endl;
+    
+    // STEP 1.3: Layoff workers with expired contracts
+    cout << " \n ------------ Step 1.3: laying Off Workers Whose contracts expired ----------------" <<endl;
+    cout << "Firms have layed off " << pPublic_Info_Board->Get_Contract_Expiries() << " workers due to contract expiries " << endl;
+    
+    // STEP 1.4: Random experimentation - randomly tweak firm and household parameters
+    cout << " \n ------------ Step 1.4: Random experimentation ----------------" <<endl;
+    
+    // STEP 1.5: Firms assess past period's sales data
+    cout << " \n ------------ Step 1.5: Firms assess past period's sales data ----------------" <<endl;
+    cout << "Capital firms have sold " << pPublic_Info_Board->Get_Capital_Goods_Sales() << " goods  " <<  endl;
+    const vector<int>& quantitySoldBySector =  pPublic_Info_Board->Get_Quantity_Sold_By_Sector();
+    for (int i = 0; i < quantitySoldBySector.size(); ++i) {
+        int quantity = quantitySoldBySector[i];
+        cout << "Consumer Sector " << i + 1<< ": Quantity sold = " << quantity << endl;
+    }
+
+    // STEP 1.6: Depreciate Firms' Good Inventories
+    cout << "\n------------ Step 1.6: Depreciating Good inventories ----------------" <<endl;
+    
+    // STEP 1.7: Firms set new price and production targets
+    cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
+
+
+
+
     // STEP 1.8: Firms set wage offers, labor target, and finance expected wage bill
     cout << " \n ------------ Step 1.8: Firms set wage offers, labor target, and finance expected wage bill ----------------" <<endl;
 
     pJob_Market->Calculate_Average_Wage(); 
     pPublic_Info_Board->Update_Average_Wage_Job_Market();
-    cout << "Job market before any new operations" << pJob_Market->Get_Size() <<std::endl; // debugging
+    cout << "Job market size before any new operations: " << pJob_Market->Get_Size() <<std::endl; // debugging
 
     for( Firm_Agent* firm_ptr : *pFirm_vector){
         firm_ptr->Adjust_Wage_Offers();
@@ -68,9 +85,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 
     pJob_Market->Sort_Jobs_by_Wage();
-    cout << "Job market after the requested " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings : size " << pJob_Market->Get_Size() << std::endl;
+    cout << "Job market size after the requested " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings : size " << pJob_Market->Get_Size() << std::endl;
     pJob_Market->Remove_Unwanted_Jobs();
-    cout << "Job market after the requested " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals: size " << pJob_Market->Get_Size() << std::endl;
+    cout << "Job market size after the requested " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals: size " << pJob_Market->Get_Size() << std::endl;
 
 
     // Step 1.81: Households Check if they are fired
@@ -219,6 +236,7 @@ void Delete_Bankrupt_Firms(vector<Firm_Agent*>* pFirm_vector,vector<Consumer_Fir
     auto consumerIt = pConsumer_Firm_vector->begin();
     while (consumerIt != pConsumer_Firm_vector->end()) {
         if ((*consumerIt)->Get_Bankruptcy_Status()) {
+            cout << "Deleting bankrupt consumer firm" << endl;
             consumerIt = pConsumer_Firm_vector->erase(consumerIt);
         } else {
             ++consumerIt;
@@ -229,6 +247,7 @@ void Delete_Bankrupt_Firms(vector<Firm_Agent*>* pFirm_vector,vector<Consumer_Fir
     auto capitalIt = pCapital_Firm_vector->begin();
     while (capitalIt != pCapital_Firm_vector->end()) {
         if ((*capitalIt)->Get_Bankruptcy_Status()) {
+            cout << "Deleting bankrupt capital firm" << endl;
             capitalIt = pCapital_Firm_vector->erase(capitalIt);
         } else {
             ++capitalIt;

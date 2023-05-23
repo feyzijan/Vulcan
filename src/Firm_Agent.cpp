@@ -22,7 +22,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     need_worker = 1;
     sentiment = 1;
-    bankrupt = 0;
+    bankrupt = false;
     inventory_factor = 0;
     cash_on_hand = total_assets; // unsure how these two differed
 
