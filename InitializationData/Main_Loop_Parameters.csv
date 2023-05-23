@@ -8,8 +8,6 @@ time_period,12.0
 household_n_res_wage_decrease,0.05
 household_targeted_savings_to_income_ratio,3.0
 household_tax_rate,0.2
-household_p_seek_better_job,0.1
-household_sector_spending_randomization,0.1
 standard_employment_contract_length,6.0
 firm_tax_rate,0.2
 forced_machine_purchases_min,0.0
@@ -32,5 +30,14 @@ bank_risk_premium,1.0
 bank_target_capital_ratio,10.0
 bank_short_term_loan_length,12.0
 bank_long_term_loan_length,100.0
-bank_leverage_ratio_lower_threshold,60.0
-bank_leverage_ratio_upper_threshold,100.0
+bank_leverage_ratio_lower_threshold,5.0
+bank_leverage_ratio_upper_threshold,15.0
+bank_emission_penalty_max,0.02
+bank_total_emission_penalty,1.0
+bank_unit_emission_penalty,0.0
+bank_unit_emission_lower_thr,1.0
+bank_unit_emission_upper_thr,10.0
+bank_total_emission_lower_thr,1000.0
+bank_total_emission_upper_thr,100000.0
+emission_total_allowance_change,-0.001
+emission_unit_price_change,0.001

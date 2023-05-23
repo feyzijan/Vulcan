@@ -43,11 +43,11 @@ class Consumer_Goods_Market{
 
 
     private:
-    vector<Consumer_Good*> cons_goods_list;
-    vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector;
-    // Create a map that maps an int to the cons_good_list_by_sector vector
+    vector<Consumer_Good*> cons_goods_list; // goods for one sector
+    vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector; // goods for all sectors
+    // goods for all emission sensitivity levels, for all sectors
+    map<float, vector<pair<int, vector<Consumer_Good*>>>> cons_goods_by_emission_adj_price; 
     
-    map<float, vector<pair<int, vector<Consumer_Good*>>>> cons_goods_by_emission_adj_price;
     vector<float> price_level_by_sector;
     vector<int> n_goods_by_sector;
     vector<float> default_emission_sensitivities;

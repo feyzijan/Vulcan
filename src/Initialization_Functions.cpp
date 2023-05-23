@@ -15,18 +15,18 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
 
     
     //--------- STEP 0.11: Initialize Households and Firms
-    cout << " Step 0.11: Initialize Households and Firms" << endl;
+    cout << "STEP 0.11: Initialize Households and Firms" << endl;
     Initialize_Households(pHousehold_vector, pPublic_Board, n_households); 
     Initialize_Consumer_Firms( pConsumer_Firm_vector, pPublic_Board,  n_consumer_firms);
     Initialize_Capital_Firms(pCapital_Firm_vector, pPublic_Board,n_capital_firms);
 
 
     //----------- STEP 0.12 Initialize Firm Owners
-    cout << " Step 0.12: Initialize Firm Owners" << endl;
+    cout << "STEP 0.12: Initialize Firm Owners" << endl;
     Initialize_Household_Firm_Owners(pHousehold_vector,pConsumer_Firm_vector, pCapital_Firm_vector);
 
     //----------- STEP 0.13: Initialize job market
-    cout << " Step 0.13: Initialize job market" << endl;
+    cout << "STEP 0.13: Initialize job market" << endl;
     Initialize_Job_Market(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector,pPublic_Board);
     cout << "Job market size: " << pJob_Market->Get_Size() << endl; 
 
@@ -56,7 +56,7 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
 */
 void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, Public_Info_Board* pPublic_Board, int size)
 {
-    cout << "\n Initializing " << size << " consumer firms" << endl;
+    cout << "\nInitializing " << size << " consumer firms" << endl;
 
     Normal_Dist_Generator init_dividend_ratio_optimist(firm_cons_init_dividend_ratio_optimist_mean, firm_cons_init_dividend_ratio_optimist_std, firm_cons_init_dividend_ratio_optimist_min, firm_cons_init_dividend_ratio_optimist_max);
     Normal_Dist_Generator init_dividend_ratio_pessimist(firm_cons_init_dividend_ratio_pessimist_mean, firm_cons_init_dividend_ratio_pessimist_std, firm_cons_init_dividend_ratio_pessimist_min, firm_cons_init_dividend_ratio_pessimist_max);
@@ -131,7 +131,7 @@ void Initialize_Emission_Allowances(vector<Consumer_Firm_Agent*> *pConsumer_Firm
 
 void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Board, int size)
 {
-    cout << "\n Initializing " << size << " capital firms" << endl;
+    cout << "\nInitializing " << size << " capital firms" << endl;
     Normal_Dist_Generator init_dividend_ratio_optimist(firm_cons_init_dividend_ratio_optimist_mean, firm_cons_init_dividend_ratio_optimist_std, firm_cons_init_dividend_ratio_optimist_min, firm_cons_init_dividend_ratio_optimist_max);
     Normal_Dist_Generator init_dividend_ratio_pessimist(firm_cons_init_dividend_ratio_pessimist_mean, firm_cons_init_dividend_ratio_pessimist_std, firm_cons_init_dividend_ratio_pessimist_min, firm_cons_init_dividend_ratio_pessimist_max);
     Normal_Dist_Generator init_desired_inventory_factor(firm_cons_init_desired_inventory_factor_mean, firm_cons_init_desired_inventory_factor_std, firm_cons_init_desired_inventory_factor_min, firm_cons_init_desired_inventory_factor_max);
@@ -189,7 +189,7 @@ void Check_Initial_Job_Offers_Cap(vector<Capital_Firm_Agent*> *pCapital_Firm_vec
 // ----------------------- Households
 void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_Info_Board* pPublic_Board, int size)
 {   
-    cout << "\n Initializing " << size << " households" << endl;
+    cout << "\nInitializing " << size << " households" << endl;
     
     //Set up Random Generators
     Normal_Dist_Generator init_c(household_init_c_mean, household_init_c_std, household_init_c_min, household_init_c_max);
@@ -350,8 +350,10 @@ void Initialize_Cons_Cap_Goods_Markets(vector<Consumer_Firm_Agent*> *pConsumer_F
 int Initialize_Consumer_Firm_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,
 Public_Info_Board* pPublic_Info_Board, Consumer_Goods_Market* pConsumer_Goods_Market,
 vector<Household_Agent*> *pHousehold_vector){
+    cout << "Initializing Consumer Firm Sectors" << endl;
     // Create the sectors
     int n_sectors = Create_Sectors(pConsumer_Firm_Sector_vector);
+    cout << "Created " << n_sectors << " sectors" << endl;
     // Assign firms to sectors
     Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector);
     // Set up sectors in the public board
@@ -360,6 +362,7 @@ vector<Household_Agent*> *pHousehold_vector){
     // Notify Households
     for (Household_Agent* pHousehold : *pHousehold_vector){
         pHousehold->Initialize_Sector_Weights(pConsumer_Firm_Sector_vector);
+        pHousehold->Initialize_Sector_Emission_Sensitivities(pConsumer_Firm_Sector_vector);
     }
  
     return n_sectors;

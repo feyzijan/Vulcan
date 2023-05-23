@@ -48,16 +48,17 @@ int main()
     Assign_All_Parameters(initialization_parameters, main_loop_parameters, randomness_parameters);
 
 
-    cout << "This simulation is with the following parameters: n_households: " << n_households << "n_consumer_firms: " << n_consumer_firms 
-    << "n_capital_firms: " << n_capital_firms <<  "n_loops: " << n_loops  << endl;
-
+    cout << "This simulation is with the following parameters: n_households: " << n_households << " n_consumer_firms: " << n_consumer_firms 
+    << " n_capital_firms: " << n_capital_firms <<  " n_loops: " << n_loops  << endl;
 
     // Allocate memory and initialize agents, markets, and sectors
     Public_Info_Board* pPublic_Board_1 = new Public_Info_Board();
     Bank_Agent* pBank_1 = new Bank_Agent(pPublic_Board_1);
 
     Job_Market* pJob_Market_1 = new Job_Market();
+    cout << "Job Market created" << endl;
     Consumer_Goods_Market* pConsumer_Goods_Market_1 = new Consumer_Goods_Market();
+    cout << "Consumer Goods Market created" << endl;
     Capital_Goods_Market* pCapital_Goods_Market_1 = new Capital_Goods_Market();
 
     vector<Household_Agent*> *pHousehold_vector = new vector<Household_Agent*>();

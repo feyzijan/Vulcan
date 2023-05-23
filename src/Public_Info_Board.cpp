@@ -143,7 +143,14 @@ void Public_Info_Board::Update_Actual_Consumer_Spending_by_Sector( const vector<
 */
 void Public_Info_Board::Calculate_Average_Unit_Emissions_by_Sector(){
     for(int i=0; i<sector_count; i++){
-        average_unit_emission_by_sector[i] =  total_emissions_by_sector[i] / actual_production_by_sector[i]; // Make sure the division is done correctly
+        if ( actual_production_by_sector[i] == 0) {
+            average_unit_emission_by_sector[i] = 0.0;
+            cout << "Unexpected behaviour: actual production in sector " << i << "by is 0" << endl;
+        } else {
+            // TODO: Make sure the division is done correctly
+            average_unit_emission_by_sector[i] =  total_emissions_by_sector[i] / actual_production_by_sector[i]; 
+        }
+        
     }
 }
 

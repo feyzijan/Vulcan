@@ -35,8 +35,6 @@ void Read_Parameters(map<string, float>& parameter_map, const char* filename) {
 
     // Read lines from the file until the end of the file is reached.
     while (std::getline(file, line)) {
-
-        cout << "Reading line " << ++line_num << endl;
         // Split the line into columns using the split function.
         vector<string> columns = split(line, ',');
         // Get the variable name from the first column.

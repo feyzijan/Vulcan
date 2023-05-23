@@ -6,7 +6,7 @@ Consumer_Goods_Market::Consumer_Goods_Market(){
     n_total_goods = 0;
     total_weighed_price = 0;
     price_level = 0.0;
-    for (int i = 0; i < emission_sensitivity_max + emission_sensitivity_threshold; i += emission_sensitivity_threshold){
+    for (float i = 0; i < emission_sensitivity_max + emission_sensitivity_threshold; i += emission_sensitivity_threshold){
         default_emission_sensitivities.push_back(i);
     };
 
@@ -183,7 +183,7 @@ const vector<float>& emission_sensitives_array){
     
     vector<float> remaining_budget_by_sector; 
     vector<int> quantity_bought_by_sector;
-    vector <int> emisison_by_sector;
+    vector <int> emission_by_sector;
 
     int total_spending = 0;
 
@@ -194,7 +194,7 @@ const vector<float>& emission_sensitives_array){
         //vector<Consumer_Good*>& goods_for_sector = cons_good_list_by_sector[i].second;
 
         // Round this value to the nearest threshold, i.e. nearest multiple of 0.05
-        float emission_sensitivity = roundf(emission_sensitives_array[i] * 20) / 20;
+        float emission_sensitivity = roundf(emission_sensitives_array[i] * 20.0) / 20.0;
 
         // Select the appropriate goods list
         vector<Consumer_Good*>& goods_for_sector = cons_goods_by_emission_adj_price[emission_sensitives_array[i]][i].second;
@@ -229,11 +229,11 @@ const vector<float>& emission_sensitives_array){
         }
         remaining_budget_by_sector.push_back(sector_budget_remaining);
         quantity_bought_by_sector.push_back(sector_quantity_bought);
-        emisison_by_sector.push_back(int(sector_emissions));
+        emission_by_sector.push_back(int(sector_emissions));
         total_spending += sector_budget - sector_budget_remaining;
     }   
 
-    tuple<vector<float>, vector<int>, vector<int>> result = make_tuple(remaining_budget_by_sector, quantity_bought_by_sector, emisison_by_sector);
+    tuple<vector<float>, vector<int>, vector<int>> result = make_tuple(remaining_budget_by_sector, quantity_bought_by_sector, emission_by_sector);
     return result;
 }
 
