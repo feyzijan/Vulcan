@@ -17,8 +17,6 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     c_f = propensities[3];
     c_h = propensities[4];
     c_excess_money = propensities[5];
-    //p_majority_op_adoption = propensities[6]; // Override this
-    p_majority_op_adoption = household_rand_sentiment_adoption;
 
     // Set Pointers
     // Public_Info_Board* pPublic_Info_Board = pPublic_Board;
@@ -77,7 +75,7 @@ Called at the Initialization stage when initializing consumer sectors
 void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector)
 {
     for (int i = 0; i < pConsumer_Firm_Sector_vector->size(); i++){
-        float temp = pConsumer_Firm_Sector_vector->at(i)->consumption_weighing;
+        float temp = pConsumer_Firm_Sector_vector->at(i)->weighing;
         temp = std::round(temp * 1000) / 1000.0; // round to the nearest three decimals
         spending_weight_by_sector.push_back(temp);
         if (temp < 0){
@@ -447,7 +445,6 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "c_f " << obj.c_f << std::endl;
     os << "c_h " << obj.c_h << std::endl;
     os << "c_excess_money " << obj.c_excess_money << std::endl;
-    os << "p_majority_op_adoption " << obj.p_majority_op_adoption << std::endl;
     os << "date " << obj.current_date << std::endl;
     return os;
 }

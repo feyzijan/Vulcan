@@ -4,7 +4,7 @@
 
 
 
-Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : Firm_Agent::Firm_Agent(float_vals, int_vals)
+Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[2], int int_vals[5]) : Firm_Agent::Firm_Agent(float_vals, int_vals)
 {
     //identifier
     is_cons_firm = false;
@@ -12,15 +12,21 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     output_per_machine = firm_cap_productivity; // global param
     unit_good_cost = firm_cap_good_unit_cost; // global param
     inv_depreciation_rate = firm_cap_inv_depr_rate;
+    inv_reaction_factor = firm_cap_inv_reaction_factor;
     max_production_climbdown = firm_cap_max_production_climbdown;
+
+    dividend_ratio_optimist = firm_cap_init_dividend_ratio_optimist;
+    dividend_ratio_pessimist =  firm_cap_init_dividend_ratio_pessimist;
 
     production_current = max(working_capital_inventory * firm_cap_workers_per_machine * firm_cap_productivity, employee_count_desired / firm_cap_workers_per_machine * firm_cap_productivity);
     production_planned = production_current;
-    inventory = production_current * target_inv_factor * Uniform_Dist_Float(0.5,1.5);
+    inventory = production_current * target_inv_factor * int_vals[3];
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
+    revenue_sales = production_current * good_price_current;
+    total_income = revenue_sales;
+    average_profit = revenue_sales;
 
-    good_price_past = firm_cap_init_good_price_mean;
     
     cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, firm_cap_machine_lifespan);
     goods_on_market = cap_goods_on_market;

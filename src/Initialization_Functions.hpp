@@ -35,16 +35,10 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 // Functions to initialize Consumer and Capital Firms
 void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, Public_Info_Board* pPublic_Board, int size);
-void Post_Initial_Job_Offers_Cons(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, int size);
-void Check_Initial_Job_Offers_Cons(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, int size);
-
 void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Board, int size);
-void Post_Initial_Job_Offers_Cap(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, int size);
-void Check_Initial_Job_Offers_Cap(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, vector<Firm_Agent*> pFirm_vector);
 
 // Functions to initialize Households
 void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_Info_Board* pPublic_Board, int size);
-void Initialize_Household_Jobs(vector<Household_Agent*> *pHousehold_vector,  int size);
 void Initialize_Household_Firm_Owners(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector,
  vector<Capital_Firm_Agent*> *pCapital_Firm_vector);
 
@@ -54,7 +48,7 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
     Public_Info_Board* pPublic_Info_Board);
 
 // Function to set up Consumer Goods market at t=0
-void Initialize_Cons_Cap_Goods_Markets( vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
+void Initialize_Markets( vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board, int n_sectors);
 
 // Function to do all the sector set up at t=0

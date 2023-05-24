@@ -4,7 +4,7 @@
 
 /* Constructors and Destructor
 */
-Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): Firm_Agent::Firm_Agent(float_vals,int_vals)
+Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[2], int int_vals[5]): Firm_Agent::Firm_Agent(float_vals,int_vals)
 {
     is_cons_firm = true;
 
@@ -12,16 +12,22 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     output_per_machine = firm_cons_productivity;
     unit_good_cost = firm_cons_good_unit_cost;
     inv_depreciation_rate = firm_cons_inv_depr_rate;
+    inv_reaction_factor = firm_cons_inv_reaction_factor;
     max_production_climbdown = firm_cons_max_production_climbdown;
     unit_emissions = firm_cons_init_emissions_per_unit;
+    
+    dividend_ratio_optimist = firm_cons_init_dividend_ratio_optimist;
+    dividend_ratio_pessimist =  firm_cons_init_dividend_ratio_pessimist;
 
     production_current = max(working_capital_inventory * firm_cons_workers_per_machine * firm_cons_productivity,employee_count_desired / firm_cons_workers_per_machine * firm_cons_productivity);
     production_planned = production_current;
-    inventory = production_current * target_inv_factor * Uniform_Dist_Float(0.5,1.5); // TODO ADD this as a param
+    inventory = production_current * target_inv_factor * int_vals[3]; // TODO ADD this as a param
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
+    revenue_sales = production_current * good_price_current;
+    total_income = revenue_sales;
+    average_profit = revenue_sales;
 
-    good_price_past = firm_cons_init_good_price_mean;
 
     // Emissions - Set default values for now
     unit_emissions = 1; // TODO: Replace with variable

@@ -86,12 +86,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     household_init_c_excess_std = initialization_parameters["household_init_c_excess_std"];
     household_init_c_excess_min = initialization_parameters["household_init_c_excess_min"];
     household_init_c_excess_max = initialization_parameters["household_init_c_excess_max"];
-    // Propensity to adopt majority sentiment: p_majority_op_adoption
-    household_init_p_majority_mean = initialization_parameters["household_init_p_majority_mean"];
-    household_init_p_majority_std = initialization_parameters["household_init_p_majority_std"];
-    household_init_p_majority_min = initialization_parameters["household_init_p_majority_min"];
-    household_init_p_majority_max = initialization_parameters["household_init_p_majority_max"];
-    // Savings propensity - optimist : saving_propensity_optimist 
+   // Savings propensity - optimist : saving_propensity_optimist 
     household_init_s_optimist_mean = initialization_parameters["household_init_s_optimist_mean"];
     household_init_s_optimist_std = initialization_parameters["household_init_s_optimist_std"];
     household_init_s_optimist_min = initialization_parameters["household_init_s_optimist_min"];
@@ -124,10 +119,10 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
 
     // --- Consumer Firm initialization parameters
     // Starting total asset
-    firm_cons_init_total_assets_mean = initialization_parameters["firm_cons_init_total_assets_mean"];
-    firm_cons_init_total_assets_std = initialization_parameters["firm_cons_init_total_assets_std"];
-    firm_cons_init_total_assets_min = initialization_parameters["firm_cons_init_total_assets_min"];
-    firm_cons_init_total_assets_max = initialization_parameters["firm_cons_init_total_assets_max"];
+    firm_cons_init_cash_mean = initialization_parameters["firm_cons_init_cash_mean"];
+    firm_cons_init_cash_std = initialization_parameters["firm_cons_init_cash_std"];
+    firm_cons_init_cash_min = initialization_parameters["firm_cons_init_cash_min"];
+    firm_cons_init_cash_max = initialization_parameters["firm_cons_init_cash_max"];
     // Starting wage offers
     firm_cons_init_wage_offer_mean = initialization_parameters["firm_cons_init_wage_offer_mean"];
     firm_cons_init_wage_offer_std = initialization_parameters["firm_cons_init_wage_offer_std"];
@@ -170,10 +165,10 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
 
     // --- Capital Firm initialization parameters
     // Starting total asset
-    firm_cap_init_total_assets_mean = initialization_parameters["firm_cap_init_total_assets_mean"];
-    firm_cap_init_total_assets_std = initialization_parameters["firm_cap_init_total_assets_std"];
-    firm_cap_init_total_assets_min = initialization_parameters["firm_cap_init_total_assets_min"];
-    firm_cap_init_total_assets_max = initialization_parameters["firm_cap_init_total_assets_max"];
+    firm_cap_init_cash_mean = initialization_parameters["firm_cap_init_cash_mean"];
+    firm_cap_init_cash_std = initialization_parameters["firm_cap_init_cash_std"];
+    firm_cap_init_cash_min = initialization_parameters["firm_cap_init_cash_min"];
+    firm_cap_init_cash_max = initialization_parameters["firm_cap_init_cash_max"];
     // Starting wage offers
     firm_cap_init_wage_offer_mean = initialization_parameters["firm_cap_init_wage_offer_mean"];
     firm_cap_init_wage_offer_std = initialization_parameters["firm_cap_init_wage_offer_std"];
@@ -258,6 +253,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_workers_per_machine = main_loop_parameters["firm_cons_workers_per_machine"];
     firm_cons_good_unit_cost = main_loop_parameters["firm_cons_good_unit_cost"];
     firm_cons_max_production_climbdown = main_loop_parameters["firm_cons_max_production_climbdown"];
+    firm_cons_inv_reaction_factor = main_loop_parameters["firm_cons_inv_reaction_factor"];
 
     // --- Capital Firm dynamic parameters
     firm_cap_inv_depr_rate = main_loop_parameters["firm_cap_inv_depr_rate"];
@@ -266,6 +262,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_good_unit_cost = main_loop_parameters["firm_cap_good_unit_cost"];
     firm_cap_machine_lifespan = main_loop_parameters["firm_cap_machine_lifespan"];
     firm_cap_max_production_climbdown = main_loop_parameters["firm_cap_max_production_climbdown"];
+    firm_cap_inv_reaction_factor = main_loop_parameters["firm_cap_inv_reaction_factor"];
 
     // --- Bank dynamic Parameters
     bank_inflation_reaction = main_loop_parameters["bank_inflation_reaction"];
@@ -367,11 +364,6 @@ float household_init_c_excess_mean = 0.3;
 float household_init_c_excess_std = 0.05;
 float household_init_c_excess_min = 0.0;
 float household_init_c_excess_max = 0.7;
-// Propensity to adopt majority sentiment: p_majority_op_adoption
-float household_init_p_majority_mean = 0.25;
-float household_init_p_majority_std = 0.2;
-float household_init_p_majority_min = 0.01;
-float household_init_p_majority_max = 0.99;
 // Savings propensity - optimist : saving_propensity_optimist 
 float household_init_s_optimist_mean = 0.2;
 float household_init_s_optimist_std = 0.05;
@@ -415,10 +407,10 @@ float household_rand_job_search = 0.1;
 //---- Consumer Firm parameters----------------------
 // --- Consumer Firm initialization parameters
 // Starting total asset
-float firm_cons_init_total_assets_mean = 10000;
-float firm_cons_init_total_assets_std = 2500;
-float firm_cons_init_total_assets_min = 1;
-float firm_cons_init_total_assets_max = 999999999;
+float firm_cons_init_cash_mean = 10000;
+float firm_cons_init_cash_std = 2500;
+float firm_cons_init_cash_min = 1;
+float firm_cons_init_cash_max = 999999999;
 // Starting wage offers
 float firm_cons_init_wage_offer_mean = 1000;
 float firm_cons_init_wage_offer_std = 300;
@@ -461,8 +453,9 @@ float firm_cons_init_dividend_ratio_pessimist = 0.02;
 float firm_cons_inv_depr_rate = 0.01;
 float firm_cons_productivity = 1000; // # units produced per worker machine pairing
 int firm_cons_workers_per_machine = 1;
-float firm_cons_good_unit_cost = 1.0;
 float firm_cons_max_production_climbdown = 0.25;
+float firm_cons_good_unit_cost = 1.0;
+float firm_cons_inv_reaction_factor = 1.0;
 
 // --- Consumer Firm randomness parameters
 float firm_cons_rand_dividend_change = 0.1;
@@ -482,10 +475,10 @@ float firm_cons_rand_prod_change_upper_limit = 0.2;
 
 // --- Capital Firm initialization parameters
 // Starting total asset
-float firm_cap_init_total_assets_mean = 10000;
-float firm_cap_init_total_assets_std = 2500;
-float firm_cap_init_total_assets_min = 1;
-float firm_cap_init_total_assets_max = 999999999;
+float firm_cap_init_cash_mean = 10000;
+float firm_cap_init_cash_std = 2500;
+float firm_cap_init_cash_min = 1;
+float firm_cap_init_cash_max = 999999999;
 // Starting wage offers
 float firm_cap_init_wage_offer_mean = 1000;
 float firm_cap_init_wage_offer_std = 300;
@@ -531,6 +524,7 @@ int firm_cap_workers_per_machine = 1;
 int firm_cap_machine_lifespan = 100;
 float firm_cap_max_production_climbdown = 0.25;
 float firm_cap_good_unit_cost = 20.0;
+float firm_cap_inv_reaction_factor = 1.0;
 
 // --- Capital Firm randomness parameters
 float firm_cap_rand_dividend_change = 0.1;

@@ -112,7 +112,6 @@ class Household_Agent{
     float c_f; // propensity to consume financial wealth
     float c_h; // propensity to consume human wealth
     float c_excess_money; // propensity yo consume excess money balance 
-    float p_majority_op_adoption; // mu^m : probablility of adopting majority opinion
     
     int current_date;
 };

@@ -70,11 +70,6 @@ extern float household_init_c_excess_mean ;
 extern float household_init_c_excess_std ;
 extern float household_init_c_excess_min ;
 extern float household_init_c_excess_max ;
-// Propensity to adopt majority sentiment: p_majority_op_adoption
-extern float household_init_p_majority_mean ;
-extern float household_init_p_majority_std;
-extern float household_init_p_majority_min;
-extern float household_init_p_majority_max;
 // Savings propensity - optimist : saving_propensity_optimist 
 extern float household_init_s_optimist_mean;
 extern float household_init_s_optimist_std ;
@@ -131,10 +126,10 @@ extern int forced_machine_purchases_max;
 //---- Consumer Firm parameters----------------------
 // --- Consumer Firm initialization parameters
 // Starting total asset
-extern float firm_cons_init_total_assets_mean;
-extern float firm_cons_init_total_assets_std;
-extern float firm_cons_init_total_assets_min;
-extern float firm_cons_init_total_assets_max;
+extern float firm_cons_init_cash_mean;
+extern float firm_cons_init_cash_std;
+extern float firm_cons_init_cash_min;
+extern float firm_cons_init_cash_max;
 // Starting wage offers
 extern float firm_cons_init_wage_offer_mean;
 extern float firm_cons_init_wage_offer_std;
@@ -177,8 +172,10 @@ extern float firm_cons_init_dividend_ratio_pessimist;
 extern float firm_cons_inv_depr_rate;
 extern float firm_cons_productivity; // # units produced per worker machine pairing
 extern int firm_cons_workers_per_machine;
-extern float firm_cons_good_unit_cost;
 extern float firm_cons_max_production_climbdown;
+extern float firm_cons_good_unit_cost;
+extern float firm_cons_inv_reaction_factor;
+
 
 // --- Consumer Firm randomness parameters
 extern float firm_cons_rand_dividend_change;
@@ -197,8 +194,7 @@ extern float firm_cons_rand_prod_change_upper_limit;
 struct Consumer_Firm_Sector {
     string sector_name;
     int sector_id; // unique id for this sector
-    float consumption_weighing; // % of consumption that goes to this sector
-    float firm_weighing;
+    float weighing; // % of consumption that goes to this sector
     float inv_depr_rate;
     int output_per_machine;
     int workers_per_machine;
@@ -206,14 +202,13 @@ struct Consumer_Firm_Sector {
     float max_production_climbdown;
     float emission_per_unit; // NEWLY ADDED
     float emission_sensitivity_mean; // NEWLY ADDED
-    unsigned long int emission_allowance;
+    int emission_allowance;
 
-    Consumer_Firm_Sector(string p_name, int p_sector_id, float p_consumption_weighing,
-    float p_firm_weighing, float p_inv_depr_rate, int p_output_per_machine, int p_workers_per_machine,
-    float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit, float p_emission_sensitivity_mean
-    , unsigned long int p_emission_allowance)
-    : sector_name(p_name), sector_id(p_sector_id), consumption_weighing(p_consumption_weighing),
-    firm_weighing(p_firm_weighing), inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine),
+    Consumer_Firm_Sector(string p_name, int p_sector_id, float p_weighing, float p_inv_depr_rate, int p_output_per_machine, 
+    int p_workers_per_machine, float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit, 
+    float p_emission_sensitivity_mean, int p_emission_allowance)
+    : sector_name(p_name), sector_id(p_sector_id), weighing(p_weighing),
+    inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine),
     workers_per_machine(p_workers_per_machine), good_unit_cost(p_good_unit_cost), 
     max_production_climbdown(p_max_production_climbdown), emission_per_unit(p_emissions_per_unit), 
     emission_sensitivity_mean(p_emission_sensitivity_mean), emission_allowance(p_emission_allowance)
@@ -226,10 +221,10 @@ struct Consumer_Firm_Sector {
 
 // --- Capital Firm initialization parameters
 // Starting total asset
-extern float firm_cap_init_total_assets_mean;
-extern float firm_cap_init_total_assets_std;
-extern float firm_cap_init_total_assets_min;
-extern float firm_cap_init_total_assets_max;
+extern float firm_cap_init_cash_mean;
+extern float firm_cap_init_cash_std;
+extern float firm_cap_init_cash_min;
+extern float firm_cap_init_cash_max;
 // Starting wage offers
 extern float firm_cap_init_wage_offer_mean;
 extern float firm_cap_init_wage_offer_std;
@@ -255,7 +250,7 @@ extern float firm_cap_init_machine_inv_mean;
 extern float firm_cap_init_machine_inv_std;
 extern float firm_cap_init_machine_inv_min;
 extern float firm_cap_init_machine_inv_max;
-// Desired inventory factor ( characteristics)
+// Desired inventory factor ( characteristic)
 extern float firm_cap_init_target_inv_factor_mean;
 extern float firm_cap_init_target_inv_factor_std;
 extern float firm_cap_init_target_inv_factor_min;
@@ -275,6 +270,8 @@ extern int firm_cap_workers_per_machine;
 extern int firm_cap_machine_lifespan;
 extern float firm_cap_max_production_climbdown;
 extern float firm_cap_good_unit_cost;
+extern float firm_cap_inv_reaction_factor;
+
 
 // --- Capital Firm randomness parameters
 extern float firm_cap_rand_dividend_change;

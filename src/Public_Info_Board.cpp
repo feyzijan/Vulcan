@@ -103,7 +103,7 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
 
     // Loop through each sector in the consumer_firm_sector vector and add the sector weighing to the consumer_sector_weighing_vector
     for (int i = 0; i < sector_count; i++){
-        consumer_sector_weights.push_back(pConsumer_Firm_Sector_vector->at(i)->consumption_weighing);
+        consumer_sector_weights.push_back(pConsumer_Firm_Sector_vector->at(i)->weighing);
     }
 
     // Initialize emissions by looping through each sector and getting the emission_allowance

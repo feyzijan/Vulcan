@@ -4,22 +4,16 @@
 
 /* Create Firm agent with given characteristics and starting values
 */
-Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
+Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
 {
     // -- Set Given starting parameters and propensities
-    dividend_ratio_optimist = float_vals[0];
-    dividend_ratio_pessimist =  float_vals[1];
-    target_inv_factor = float_vals[2];
-    good_price_current = float_vals[3];
+    target_inv_factor = float_vals[0];
+    good_price_current = float_vals[1];
 
     total_assets = int_vals[0];
     employee_count_desired = int_vals[1];
     working_capital_inventory = int_vals[2];
-    //inventory = int_vals[3]; // set in subclass
-    inventory = 0;
     wage_offer = int_vals[4];
-    //production_current= int_vals[5]; // this may be useles
-    production_current =  0 ; // set in subclass constructor
 
     //-- Set default non_zero initialization values
     need_worker = 1;
@@ -31,11 +25,8 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     //-- Set everything else to zero initiallly
     // Inflows
-    revenue_sales = production_current * good_price_current;
-    total_income = revenue_sales;
-    new_loan_issuance =0; 
+    new_loan_issuance = 0; 
     subsidies = 0;
-    average_profit = revenue_sales;
     average_sale_quantity = 0;
 
     // Production and sales figures
@@ -48,9 +39,9 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     // Expenditures
     total_liabilities = 0;
-    labor_wage_bill =0;
+    labor_wage_bill = 0;
     capital_costs = 0;
-    tax_payments =0; 
+    tax_payments = 0; 
     debt_principal_payments = 0;
     debt_interest_payments = 0;
     dividend_payments = wage_offer; // initialize this to non-zero as this will be paid in t=1
@@ -60,6 +51,9 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     layoff_wage_savings = 0;
 
     outstanding_debt_total = 0;
+
+    // Good price
+    good_price_past = good_price_current;
 
     // Assets and fianncials 
     leverage_ratio = 0; // correctly set
@@ -75,7 +69,6 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     // Inventories
     desired_inventory = 0.0;
-    inv_reaction_factor = 1; // TODO Initialise this randomly
     machine_utilization = 0.0;
     desired_machines = 0;
     pPublic_Info_Board = nullptr;
@@ -89,6 +82,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     current_date = 0;
 }
+
 
 //------------------------------------------
 /* Destructor For firm agents -
