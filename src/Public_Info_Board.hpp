@@ -81,6 +81,7 @@ class Public_Info_Board{
     
     // Gathering and reading public sentiment 
     float Get_Household_Sentiment() {return household_sentiment_percentage;}
+    int Get_Household_Sentiment_Sum() { return household_sentiment_sum;}
     float Get_Cons_Firm_Sentiment() {return cons_firm_sentiment_percentage;}    
     float Get_Cap_Firm_Sentiment() {return cap_firm_sentiment_percentage;}
     float Get_Unemployment_Rate() { return unemployment_rate;}
@@ -114,9 +115,10 @@ class Public_Info_Board{
     float Get_Emission_Offset_Price() {return emission_offset_price;}
 
 
-    // Add a getter for quantity_sold_by_sector that returns a const reference
+    // Add a getter for figures by sector
     const vector<int>& Get_Quantity_Sold_By_Sector() {return quantity_sold_by_sector;}
     const vector<int>& Get_Planned_Production_By_Sector() {return planned_production_by_sector;}
+    const vector<int>& Get_Production_By_Sector() {return actual_production_by_sector;}
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
@@ -148,9 +150,11 @@ class Public_Info_Board{
     // Updates by Consumer Firms
     void Update_Consumption_Budget(int amount) { consumption_budget += amount; }
     void Update_Consumer_Goods_Production(int sector_id, int amount) { 
-        actual_production_by_sector[sector_id-1] += amount;}
+        actual_production_by_sector[sector_id-1] += amount;
+        cons_good_production += amount;}
     void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { 
-        planned_production_by_sector[sector_id-1] += amount; }
+        planned_production_by_sector[sector_id-1] += amount;
+        cons_good_production_planned += amount; }
     void Update_Consumer_Goods_Sale_Quantities(int sector_id, int amount){ 
         quantity_sold_by_sector[sector_id-1] += amount;}
     void Update_Consumer_Goods_Inventory(int sector_id, int amount){
@@ -274,6 +278,9 @@ class Public_Info_Board{
     vector<int> actual_production_by_sector; // Initialized, updated, logged
     vector<int> inventory_by_sector; // Initialized, updated, reset, logged
     vector<int> quantity_sold_by_sector; // Initialized, updated, reset, logged
+
+    int cons_good_production; // Initialized, updated, reset, not logged
+    int cons_good_production_planned; // Initialized, updated, reset, not logged
 
     // Employment
     int n_employed_workers;  // Initialized, updated, reset, logged

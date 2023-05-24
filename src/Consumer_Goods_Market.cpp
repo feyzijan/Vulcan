@@ -4,7 +4,6 @@
 */
 Consumer_Goods_Market::Consumer_Goods_Market(){
     n_total_goods = 0;
-    total_weighed_price = 0;
     price_level = 0.0;
     for (float i = 0; i < emission_sensitivity_max + emission_sensitivity_threshold; i += emission_sensitivity_threshold){
         default_emission_sensitivities.push_back(i);
@@ -248,7 +247,7 @@ void Consumer_Goods_Market::Update_Price_Level(){
 
     price_level_by_sector.clear();
     n_goods_by_sector.clear();
-
+    price_level = 0;
 
     for (int i = 0; i < cons_good_list_by_sector.size(); ++i) { // Loop through the sectors
         int n_total_goods = 0;
@@ -264,6 +263,9 @@ void Consumer_Goods_Market::Update_Price_Level(){
         price_level_by_sector.push_back((float)total_weighed_price/(float)n_total_goods);
         n_goods_by_sector.push_back(n_total_goods);
     }
+
+    // Calculate the price level for the whole market
+
 }
 
 
@@ -274,6 +276,5 @@ void Consumer_Goods_Market::Update_Price_Level(){
 void Consumer_Goods_Market::Reset_Market(){
     cons_goods_list.clear();
     n_total_goods = 0;
-    total_weighed_price = 0;
     price_level = 0.0;
 }

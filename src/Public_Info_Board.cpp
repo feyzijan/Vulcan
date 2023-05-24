@@ -52,6 +52,8 @@ Public_Info_Board::Public_Info_Board(){
     cap_goods_production = 0;
     cap_goods_production_planned = 0;
     cap_goods_quantity_sold = 0;
+    cons_good_production = 0;
+    cons_good_production_planned = 0;
 
     // Employment
     n_employed_workers = 0;
@@ -304,9 +306,9 @@ void Public_Info_Board::Update_Consumer_Price_Level(){
     }
     cons_price_level_current = sum/sum_weights; // incase the sums don't match due to rounding errors
 
+    pConsumer_Goods_Market->Set_Price_Level(cons_price_level_current);
     // Update inflation 
     cons_inflation_current = 1.0 + (cons_price_level_current - cons_price_level_previous)/cons_price_level_previous;
-
 }
 
 /* Function to update capital price level by simply getting the data from the market
@@ -315,6 +317,7 @@ void Public_Info_Board::Update_Consumer_Price_Level(){
 void Public_Info_Board::Update_Capital_Price_Level(){
     cap_price_level_previous = cap_price_level_current;
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
+    pCapital_Goods_Market->Set_Price_Level(cap_price_level_current);
     cap_inflation_current = 1.0 + (cap_price_level_current - cap_price_level_previous)/cap_price_level_previous;
 }
 
@@ -386,6 +389,8 @@ void Public_Info_Board::Reset_Global_Data(){
     cap_goods_production = reset_value;
     cap_goods_production_planned = reset_value;
     cap_goods_quantity_sold = reset_value;
+    cons_good_production = reset_value;
+    cons_good_production_planned = reset_value;
 
     actual_production_by_sector = vector<int>(sector_count, 0);
     planned_production_by_sector = vector<int>(sector_count, 0);

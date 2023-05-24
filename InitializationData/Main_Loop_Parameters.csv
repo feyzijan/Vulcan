@@ -2,6 +2,7 @@ n_loops,60.0
 n_households,10000.0
 n_consumer_firms,400.0
 n_capital_firms,50.0
+n_firms,450.0
 n_max_employees,100.0
 time_period,12.0
 household_n_res_wage_decrease,0.05
@@ -16,12 +17,14 @@ firm_cons_productivity,1000.0
 firm_cons_workers_per_machine,1.0
 firm_cons_good_unit_cost,1.0
 firm_cons_max_production_climbdown,0.25
+firm_cons_inv_reaction_factor,1.0
 firm_cap_inv_depr_rate,0.01
 firm_cap_productivity,10.0
 firm_cap_workers_per_machine,1.0
 firm_cap_good_unit_cost,20.0
 firm_cap_max_production_climbdown,0.25
 firm_cap_machine_lifespan,100.0
+firm_cap_inv_reaction_factor,1.0
 bank_inflation_reaction,1.5
 bank_inflation_target,1.05
 bank_inflation_target_monthly,1.004

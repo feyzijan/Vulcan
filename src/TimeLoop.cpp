@@ -22,7 +22,8 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // STEP 1.11: Remove bankrupt agents from the simulation
     cout << "Step 1.11: Removing bankrupt agents from the simulation" << endl;
     Delete_Bankrupt_Firms(pFirm_vector, pConsumer_Firm_vector, pCapital_Firm_vector);
-    cout << "Number of firms remaining: " << pFirm_vector->size() << endl;
+    cout << pConsumer_Firm_vector->size() << " consumer firms, " << pCapital_Firm_vector->size() << " capital firms, " 
+    << pFirm_vector->size() << " firms  in total remaining" << endl;
 
     // Shuffle the firm and households vectors randomly using the random number generator
     std::random_device rd;
@@ -89,7 +90,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << "Job market after " << pPublic_Info_Board->Get_New_Job_Postings()  << " new postings has " << pJob_Market->Get_Size() 
     << " jobs with an average wage of " << pJob_Market->Get_Average_Wage() << endl;
     pJob_Market->Remove_Unwanted_Jobs();
-    cout << "Job market after " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals has" << pJob_Market->Get_Size() 
+    cout << "Job market after " << pPublic_Info_Board->Get_Removed_Job_Postings() << " job posting removals has " << pJob_Market->Get_Size() 
     << " jobs with an average wage of " << pJob_Market->Get_Average_Wage() << endl;
     pJob_Market->Sort_Jobs_by_Wage();
 
@@ -109,7 +110,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pPublic_Info_Board->Calculate_Unemployment_Rate();
     pPublic_Info_Board->Update_Average_Wage_Job_Market();
     cout << "Labor market info before the matching process: N_employed workers: " << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers: " 
-    << pPublic_Info_Board->Get_Unemployed_Workers() << " Unemployment rate: "<< pPublic_Info_Board->Get_Unemployment_Rate() << " N_job postings: " 
+    << pPublic_Info_Board->Get_Unemployed_Workers() << " \nUnemployment rate: "<< pPublic_Info_Board->Get_Unemployment_Rate() << " N_job postings: " 
     << pJob_Market->Get_Size()<< " Average market wage: " << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
 
     for (Household_Agent* household_ptr : *pHousehold_vector){
@@ -124,7 +125,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     pPublic_Info_Board->Calculate_Unemployment_Rate();
     cout << "Labor market info after the matching process: N_employed workers: " << pPublic_Info_Board->Get_Employed_Workers() << " N_unemployed workers: " 
-    << pPublic_Info_Board->Get_Unemployed_Workers() << " Unemployment rate: "<< pPublic_Info_Board->Get_Unemployment_Rate() << " N_job postings: " 
+    << pPublic_Info_Board->Get_Unemployed_Workers() << " \nUnemployment rate: "<< pPublic_Info_Board->Get_Unemployment_Rate() << " N_job postings: " 
     << pJob_Market->Get_Size()<< " Average market wage: " << pPublic_Info_Board->Get_Average_Wage_Market() << endl;
 
 
@@ -133,6 +134,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << " \n ------------ Step 1.84: Update Agent sentiments ----------------" <<endl;
     pPublic_Info_Board->Calculate_Household_Sentiment_Percentage();
     cout << "Household Sentiment Percentage: " << pPublic_Info_Board->Get_Household_Sentiment() << endl;
+    cout << "Household Sentiment Sum: " << pPublic_Info_Board->Get_Household_Sentiment_Sum() << endl;
     pPublic_Info_Board->Calculate_Cons_Firm_Sentiment_Percentage();
     cout << "Consumer Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cons_Firm_Sentiment() << endl;
     pPublic_Info_Board->Calculate_Cap_Firm_Sentiment_Percentage();
@@ -145,25 +147,32 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     
     pConsumer_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Update_Price_Level();
-    cout << "Consumer goods market before firms post goods (what remains of the previous market): " << endl;
-    // print size and price levl of consumer goods market
-    cout << "Capital goods market before firms post goods ( what remains of the previous market): " << endl;
-    // print size and price lebel
+
+    cout << "Consumer goods market before firms post goods (what remains of the previous market): " << 
+    pConsumer_Goods_Market->Get_Size() << " goods with an average price of " <<  pConsumer_Goods_Market->Get_Price_Level() << endl;
+    cout << "Capital goods market before firms post goods ( what remains of the previous market): " <<
+    pCapital_Goods_Market->Get_Size() << " goods with an average price of " << pCapital_Goods_Market->Get_Price_Level() << endl;
     
     for (Firm_Agent * firm_ptr : *pFirm_vector){
         firm_ptr->Produce_Goods();
         firm_ptr->Update_Goods_On_Market();}
 
     cout << "Consumer goods market after firms post goods (after resetting market): " << endl;
-    pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
+    pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
     pConsumer_Goods_Market->Update_Price_Level();
-    //cout << "Consumer Firms have produced " << pPublic_Info_Board->Get_Consumer_Goods_Production() << " consumer goods, though they planned to produce " << pPublic_Info_Board->Get_Consumer_Goods_Production_Planned() << endl;
-    
+
+    const vector<int>& production_by_sector = pPublic_Info_Board->Get_Production_By_Sector();
+    for (int i = 0; i < production_by_sector.size(); ++i) {
+        int quantity = production_by_sector[i];
+        int quantity_p = plannedProductionBySector[i];
+        cout << "Consumer Sector " << i + 1<< ": Produced: " << quantity << " out of planned: " << quantity_p << endl;
+    }
+
     cout << "Capital goods market after firms post goods ( after resetting market): " << endl;
     pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
     pCapital_Goods_Market->Update_Price_Level();
-    cout << "Capital market total goods: " << pCapital_Goods_Market->Get_N_Total_Goods() << " Price level: "<<  pCapital_Goods_Market->Get_Price_Level() << endl;
-    cout << "Capital Firms have produced " << pPublic_Info_Board->Get_Capital_Goods_Production() << " capital goods, though they planned to produce " << pPublic_Info_Board->Get_Capital_Goods_Planned_Production() << endl;
+    cout << "Capital market total goods: " << pCapital_Goods_Market->Get_Size() << " Price level: "<<  pCapital_Goods_Market->Get_Price_Level() << endl;
+    cout << "Capital Firms have produced " << pPublic_Info_Board->Get_Capital_Goods_Production() << " out of planned: " << pPublic_Info_Board->Get_Capital_Goods_Planned_Production() << endl;
     
 
     // STEP 1.92: Households receive wage and make saving/consumption plans
@@ -228,37 +237,52 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 /* Function to delete bankrupt firms
 */
 void Delete_Bankrupt_Firms(vector<Firm_Agent*>* pFirm_vector,vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector, vector<Capital_Firm_Agent*>* pCapital_Firm_vector) {
+    
+    int temp = 0;
     using namespace std;
     // Erase pointers to bankrupt firms from consumer firm vector
     auto consumerIt = pConsumer_Firm_vector->begin();
     while (consumerIt != pConsumer_Firm_vector->end()) {
         if ((*consumerIt)->Get_Bankruptcy_Status()) {
-            cout << "Deleting bankrupt consumer firm " <<  endl;
+            //cout << "Deleting bankrupt consumer firm " << *consumerIt <<  endl;
             consumerIt = pConsumer_Firm_vector->erase(consumerIt);
+            temp ++;
+            //cout << "Erased bankrupt consumer firm " << *consumerIt << endl;
         } else {
             ++consumerIt;
         }
     }
+    cout << "Deleted " << temp << " consumer firms" << endl;
+    temp = 0;
 
     // Erase pointers to bankrupt firms from capital firm vector
     auto capitalIt = pCapital_Firm_vector->begin();
     while (capitalIt != pCapital_Firm_vector->end()) {
         if ((*capitalIt)->Get_Bankruptcy_Status()) {
-            cout << "Deleting bankrupt capital firm" << endl;
+            //cout << "Deleting bankrupt capital firm " << *capitalIt << endl;
             capitalIt = pCapital_Firm_vector->erase(capitalIt);
+            temp ++;
+            //cout << "Erased bankrupt capital firm " << *capitalIt << endl;
         } else {
             ++capitalIt;
         }
     }
+    cout << "Deleted " << temp << " capital firms" << endl;
+    temp = 0;
 
     // Erase pointers and delete objects from combined firm vector
     auto firmIt = pFirm_vector->begin();
     while (firmIt != pFirm_vector->end()) {
         if ((*firmIt)->Get_Bankruptcy_Status()) {
+            //cout << "Deleting bankrupt firm " << *firmIt << endl;
             delete *firmIt;
             firmIt = pFirm_vector->erase(firmIt);
+            temp ++;
+            //cout << "Deleted and erased bankrupt firm " << endl;
         } else {
             ++firmIt;
         }
     }
+    cout << "Deleted " << temp << " firms in total " << endl;
+
 }

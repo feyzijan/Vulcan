@@ -51,15 +51,10 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(Consumer_Firm_Agent&){}
 Consumer_Firm_Agent::~Consumer_Firm_Agent() {
 
     // Consumer goods
-    // Approach 1: Set the good quantity to 0
-    /* cons_goods_on_market->Set_Quantity(0);
-    cons_goods_on_market->Set_Seller_Pointer(nullptr); */
+    // Set quantity and seller pointer to 0
+    cons_goods_on_market->Set_Quantity(0);
+    cons_goods_on_market->Set_Seller_Pointer(nullptr);
 
-    // Approach 2: Directly delete goods
-    delete cons_goods_on_market;
-
-    // Call the base class destructor
-    Firm_Agent::~Firm_Agent();
 }
 
 
@@ -94,6 +89,7 @@ void Consumer_Firm_Agent::Produce_Goods(){
     pPublic_Info_Board->Update_Consumer_Goods_Production(sector_id, production_current);
     pPublic_Info_Board->Update_Consumer_Goods_Inventory(sector_id, production_planned);
     pPublic_Info_Board->Update_Firm_Emissions_By_Sector(sector_id, new_total_emissions);
+
 }
 
 

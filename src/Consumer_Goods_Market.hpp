@@ -38,9 +38,13 @@ class Consumer_Goods_Market{
     void Reset_Market(); 
 
 
-    // Price level gettter
+    // Getters 
     const vector<float>& Get_Price_Levels() {return price_level_by_sector;}
+    int Get_Size(){return n_total_goods;}
+    float Get_Price_Level(){return price_level;}
 
+    // Setters
+    void Set_Price_Level(float price_level) {this->price_level = price_level;}
 
     private:
     vector<Consumer_Good*> cons_goods_list; // goods for one sector
@@ -52,9 +56,7 @@ class Consumer_Goods_Market{
     vector<int> n_goods_by_sector;
     vector<float> default_emission_sensitivities;
 
-
     int n_total_goods;
-    float total_weighed_price;
     float price_level;
 
 };

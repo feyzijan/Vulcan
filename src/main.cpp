@@ -91,7 +91,7 @@ int main()
     for ( int i = 0; i < n_loops; i++){
         Time_Step_1(pHousehold_vector, pConsumer_Firm_vector, pCapital_Firm_vector, pAll_Firms_vector,
         pPublic_Board_1, pJob_Market_1, pConsumer_Goods_Market_1, pCapital_Goods_Market_1, pBank_1);
-        cout << "Time step " << i << " completed - Logging data now" << endl;
+        cout << "\nTime step " << i << " completed - Logging data now" << endl;
         //Log_Everything(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector, pPublic_Board_1,pBank_1);
         global_date++;
     }
@@ -105,10 +105,8 @@ int main()
     cout << "Program has finished. Execution time: " <<  elapsed_seconds << " s" << endl;
     cout << "Program ran for " << n_loops << " timesteps with " << n_households << " households, " << n_consumer_firms<< " consumer firms and " << n_capital_firms << " capital firms." << endl;
 
-
     std::cout.rdbuf(old_cout_buf);
     cout << "Program end :-)\n";
-
 
     // Log short description of Simulation
 /*     string file_name= "Simulation_H_" + to_string(n_households) + "_Cons_" + to_string(n_consumer_firms) +"_Cap_" + to_string(n_capital_firms) + ".txt";
@@ -118,7 +116,6 @@ int main()
     n_consumer_firms << "n_capital_firms = " << n_capital_firms << endl;
     file.close();
  */
-    
     return 0;
 }
 

@@ -27,7 +27,6 @@ class Consumer_Good: public General_Good{
     void Set_Seller_Pointer(Consumer_Firm_Agent* new_seller) {pSeller = new_seller;}
     void Set_Unit_Emission(float new_unit_emission) {unit_emissions = new_unit_emission;}
 
-
     protected:
     Consumer_Firm_Agent*  pSeller;
     float unit_emissions;
