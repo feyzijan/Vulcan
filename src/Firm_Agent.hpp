@@ -1,8 +1,8 @@
 #ifndef FIRM_AGENT_HPP
 #define FIRM_AGENT_HPP
 
+class Public_Info_Board; // Forward declaration
 
-class Public_Info_Board;
 #include "Loan.hpp"
 #include "General_Good.hpp"
 #include "Capital_Good.hpp"
@@ -12,22 +12,20 @@ class Public_Info_Board;
 #include "Random_Functions.hpp"
 #include "Initialization_Parameters.hpp"
 
-
 using namespace std;
 class Firm_Agent{
 
     public:
     // Constructors and Destructor
     Firm_Agent() {}; 
-    Firm_Agent(float float_vals[4], int int_vals[6]);
+    Firm_Agent(float float_vals[2], int int_vals[6]);
     virtual ~Firm_Agent();
-
 
     // Initialization methods t = 1
     void Update_Average_Profits_T1();
     void Update_Average_Sales_T1();
 
-    // Main Loop Methods - in order
+    // Main Loop Methods 
     void Depreciate_Capital();
     void Check_Employees_Quitting();
     void Cancel_Expired_Contracts();
@@ -47,21 +45,15 @@ class Firm_Agent{
     void Check_For_New_Employees();
     void Make_Investment_Decision(); // Complete
     virtual void Produce_Goods();
-    virtual void Send_Goods_To_Market() {};
+    virtual void Send_Goods_To_Market() {}; 
     virtual void Update_Goods_On_Market() {};
     void Seek_Short_Term_Loan();
     void Seek_Long_Term_Loan();
-    void Update_Supplier_Network() {}; // To Implement in subclasses
     void Buy_Capital_Goods();
     void Update_Leverage_Ratio();
-    void Update_Loan_List(); // calledby Pay_Liabilities
+    void Update_Loan_List();
     void Pay_Liabilities();
-    void Calculate_Total_Assets();
-
-    // Bankrupcty
     bool Avoid_Bankruptcy();
-    void Initiate_Bankruptcy();
-    
  
     // Getters
     int Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
@@ -71,7 +63,7 @@ class Firm_Agent{
     bool Get_Bankruptcy_Status() {return bankrupt;}
     int Get_Employee_Count() {return employee_count;}
     int Get_Cons_Firm_Status() {return is_cons_firm;}
-    virtual float Get_Unit_Emissions() {return 0;}
+    virtual float Get_Unit_Emissions() {return 0;} 
     virtual int Get_Total_Emissions() {return 0;}
 
     // Setters
@@ -157,12 +149,12 @@ class Firm_Agent{
     // Inventories
     int inventory;
     int working_capital_inventory;
-    float desired_inventory_factor; // Characteristic
+    float target_inv_factor; // Characteristic
     int desired_inventory; 
-    float inventory_factor; 
-    float inventory_reaction_factor;  
+    float inv_factor; 
+    float inv_reaction_factor;  
     float machine_utilization;  
-    float inventory_depreciation_rate; // NEWLY ADDDED
+    float inv_depreciation_rate; // NEWLY ADDDED
     int desired_machines; 
 
     int capital_goods_current_value; // NEWLY ADDED

@@ -135,56 +135,43 @@ extern float firm_cons_init_total_assets_mean;
 extern float firm_cons_init_total_assets_std;
 extern float firm_cons_init_total_assets_min;
 extern float firm_cons_init_total_assets_max;
-// Dividend ratio if firm is optimistic
-extern float firm_cons_init_dividend_ratio_optimist_mean;
-extern float firm_cons_init_dividend_ratio_optimist_std;
-extern float firm_cons_init_dividend_ratio_optimist_min;
-extern float firm_cons_init_dividend_ratio_optimist_max;
-// Dividend ratio if firm is pessimistic
-extern float firm_cons_init_dividend_ratio_pessimist_mean;
-extern float firm_cons_init_dividend_ratio_pessimist_std;
-extern float firm_cons_init_dividend_ratio_pessimist_min;
-extern float firm_cons_init_dividend_ratio_pessimist_max;
 // Starting wage offers
 extern float firm_cons_init_wage_offer_mean;
 extern float firm_cons_init_wage_offer_std;
 extern float firm_cons_init_wage_offer_min;
 extern float firm_cons_init_wage_offer_max;
 // Starting desired employees
-extern float firm_cons_init_employee_count_desired_mean;
-extern float firm_cons_init_employee_count_desired_std;
-extern float firm_cons_init_employee_count_desired_min;
-extern float firm_cons_init_employee_count_desired_max;
-// Inital planned production
-extern float firm_cons_init_production_planned_mean;
-extern float firm_cons_init_production_planned_std;
-extern float firm_cons_init_production_planned_min;
-extern float firm_cons_init_production_planned_max;
+extern float firm_cons_init_worker_demand_mean;
+extern float firm_cons_init_worker_demand_std;
+extern float firm_cons_init_worker_demand_min;
+extern float firm_cons_init_worker_demand_max;
 // Initial good price
 extern float firm_cons_init_good_price_mean;
 extern float firm_cons_init_good_price_std;
 extern float firm_cons_init_good_price_min;
 extern float firm_cons_init_good_price_max;
 // Good inventory
-extern float firm_cons_init_inventory_mean;
-extern float firm_cons_init_inventory_std;
-extern float firm_cons_init_inventory_min;
-extern float firm_cons_init_inventory_max;
+extern float firm_cons_init_inv_factor_mean;
+extern float firm_cons_init_inv_factor_std;
+extern float firm_cons_init_inv_factor_min;
+extern float firm_cons_init_inv_factor_max;
 // Working capital inventory
-extern float firm_cons_init_working_capital_inventory_mean;
-extern float firm_cons_init_working_capital_inventory_std;
-extern float firm_cons_init_working_capital_inventory_min;
-extern float firm_cons_init_working_capital_inventory_max;
+extern float firm_cons_init_machine_inv_mean;
+extern float firm_cons_init_machine_inv_std;
+extern float firm_cons_init_machine_inv_min;
+extern float firm_cons_init_machine_inv_max;
 // Desired inventory factor ( characteristic)
-extern float firm_cons_init_desired_inventory_factor_mean;
-extern float firm_cons_init_desired_inventory_factor_std;
-extern float firm_cons_init_desired_inventory_factor_min;
-extern float firm_cons_init_desired_inventory_factor_max;
+extern float firm_cons_init_target_inv_factor_mean;
+extern float firm_cons_init_target_inv_factor_std;
+extern float firm_cons_init_target_inv_factor_min;
+extern float firm_cons_init_target_inv_factor_max;
 
 // Other inits (not randomised)
 extern float firm_cons_init_production_current_ratio;
 extern float firm_cons_init_quantity_sold_ratio;
 extern float firm_cons_init_emissions_per_unit;
+extern float firm_cons_init_dividend_ratio_optimist;
+extern float firm_cons_init_dividend_ratio_pessimist;
 
 // --- Consumer Firm dynamic parameters
 extern float firm_cons_inv_depr_rate;
@@ -243,57 +230,43 @@ extern float firm_cap_init_total_assets_mean;
 extern float firm_cap_init_total_assets_std;
 extern float firm_cap_init_total_assets_min;
 extern float firm_cap_init_total_assets_max;
-// Dividend ratio if firm is optimistic
-extern float firm_cap_init_dividend_ratio_optimist_mean;
-extern float firm_cap_init_dividend_ratio_optimist_std;
-extern float firm_cap_init_dividend_ratio_optimist_min;
-extern float firm_cap_init_dividend_ratio_optimist_max;
-// Dividend ratio if firm is pessimistic
-extern float firm_cap_init_dividend_ratio_pessimist_mean;
-extern float firm_cap_init_dividend_ratio_pessimist_std;
-extern float firm_cap_init_dividend_ratio_pessimist_min;
-extern float firm_cap_init_dividend_ratio_pessimist_max;
 // Starting wage offers
 extern float firm_cap_init_wage_offer_mean;
 extern float firm_cap_init_wage_offer_std;
 extern float firm_cap_init_wage_offer_min;
 extern float firm_cap_init_wage_offer_max;
 // Starting desired employees
-extern float firm_cap_init_employee_count_desired_mean;
-extern float firm_cap_init_employee_count_desired_std;
-extern float firm_cap_init_employee_count_desired_min;
-extern float firm_cap_init_employee_count_desired_max;
-
-// Inital planned production
-extern float firm_cap_init_production_planned_mean;
-extern float firm_cap_init_production_planned_std;
-extern float firm_cap_init_production_planned_min;
-extern float firm_cap_init_production_planned_max;
+extern float firm_cap_init_worker_demand_mean;
+extern float firm_cap_init_worker_demand_std;
+extern float firm_cap_init_worker_demand_min;
+extern float firm_cap_init_worker_demand_max;
 // Initial good price
 extern float firm_cap_init_good_price_mean;
 extern float firm_cap_init_good_price_std;
 extern float firm_cap_init_good_price_min;
 extern float firm_cap_init_good_price_max;
 // Good inventory
-extern float firm_cap_init_inventory_mean;
-extern float firm_cap_init_inventory_std;
-extern float firm_cap_init_inventory_min;
-extern float firm_cap_init_inventory_max;
+extern float firm_cap_init_inv_factor_mean;
+extern float firm_cap_init_inv_factor_std;
+extern float firm_cap_init_inv_factor_min;
+extern float firm_cap_init_inv_factor_max;
 // Working capital
-extern float firm_cap_init_working_capital_inventory_mean;
-extern float firm_cap_init_working_capital_inventory_std;
-extern float firm_cap_init_working_capital_inventory_min;
-extern float firm_cap_init_working_capital_inventory_max;
+extern float firm_cap_init_machine_inv_mean;
+extern float firm_cap_init_machine_inv_std;
+extern float firm_cap_init_machine_inv_min;
+extern float firm_cap_init_machine_inv_max;
 // Desired inventory factor ( characteristics)
-extern float firm_cap_init_desired_inventory_factor_mean;
-extern float firm_cap_init_desired_inventory_factor_std;
-extern float firm_cap_init_desired_inventory_factor_min;
-extern float firm_cap_init_desired_inventory_factor_max;
+extern float firm_cap_init_target_inv_factor_mean;
+extern float firm_cap_init_target_inv_factor_std;
+extern float firm_cap_init_target_inv_factor_min;
+extern float firm_cap_init_target_inv_factor_max;
 
 // Other inits (not randomised)
 extern float firm_cap_init_production_current_ratio;
 extern float firm_cap_init_quantity_sold_ratio;
 extern float firm_cap_init_emissions_per_unit;
+extern float firm_cap_init_dividend_ratio_optimist;
+extern float firm_cap_init_dividend_ratio_pessimist;
 
 // --- Capital Firm dynamic parameters
 extern float firm_cap_inv_depr_rate;

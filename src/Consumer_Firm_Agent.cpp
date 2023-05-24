@@ -11,12 +11,13 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[4], int int_vals[6]): 
     workers_per_machine = firm_cons_workers_per_machine;
     output_per_machine = firm_cons_productivity;
     unit_good_cost = firm_cons_good_unit_cost;
-    inventory_depreciation_rate = firm_cons_inv_depr_rate;
+    inv_depreciation_rate = firm_cons_inv_depr_rate;
     max_production_climbdown = firm_cons_max_production_climbdown;
     unit_emissions = firm_cons_init_emissions_per_unit;
 
     production_current = max(working_capital_inventory * firm_cons_workers_per_machine * firm_cons_productivity,employee_count_desired / firm_cons_workers_per_machine * firm_cons_productivity);
-    inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
+    production_planned = production_current;
+    inventory = production_current * target_inv_factor * Uniform_Dist_Float(0.5,1.5); // TODO ADD this as a param
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
 
@@ -114,7 +115,7 @@ void Consumer_Firm_Agent::Update_Goods_On_Market(){
 
 
 void Consumer_Firm_Agent::Random_Experimentation(){
-    desired_inventory_factor *= Uniform_Dist_Float(1.0-firm_cons_rand_desired_inventory_factor_change
+    target_inv_factor *= Uniform_Dist_Float(1.0-firm_cons_rand_desired_inventory_factor_change
     ,1.0 + firm_cons_rand_desired_inventory_factor_change);
     dividend_ratio_optimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
     dividend_ratio_pessimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
@@ -206,7 +207,7 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments 
     Additionally impose limit on how much they can tone down production
     TODO:*/
-    /*production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
+    /*production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
     int production_planned_min = static_cast<int>(production_past*(1-firm_cons_max_production_climbdown));
     int production_planned_max = static_cast<int>(production_past*(1+firm_cons_max_production_climbdown));
     if(production_planned < production_planned_min){
@@ -253,7 +254,7 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     workers_per_machine = pSector_Struct->output_per_machine;
     unit_good_cost = pSector_Struct->good_unit_cost;
     max_production_climbdown = pSector_Struct->max_production_climbdown;
-    inventory_depreciation_rate = pSector_Struct->inv_depr_rate;
+    inv_depreciation_rate = pSector_Struct->inv_depr_rate;
     unit_emissions = pSector_Struct->emission_per_unit;
 
 }

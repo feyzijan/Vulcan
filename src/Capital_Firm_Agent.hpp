@@ -28,6 +28,10 @@ class Capital_Firm_Agent: public Firm_Agent{
     virtual void Update_Sentiment() override;
     virtual void Determine_New_Production() override;
 
+    // Getters
+    virtual float Get_Unit_Emissions() override {return 0;} 
+    virtual int Get_Total_Emissions() override {return 0;}
+
     protected:
     Capital_Good* cap_goods_on_market;
 

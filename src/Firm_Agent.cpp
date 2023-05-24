@@ -6,32 +6,30 @@
 */
 Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 {
+    // -- Set Given starting parameters and propensities
     dividend_ratio_optimist = float_vals[0];
     dividend_ratio_pessimist =  float_vals[1];
-    desired_inventory_factor = float_vals[2];
+    target_inv_factor = float_vals[2];
     good_price_current = float_vals[3];
 
     total_assets = int_vals[0];
     employee_count_desired = int_vals[1];
     working_capital_inventory = int_vals[2];
-    //inventory = int_vals[3]; // override this
+    //inventory = int_vals[3]; // set in subclass
     inventory = 0;
     wage_offer = int_vals[4];
     //production_current= int_vals[5]; // this may be useles
-    production_current=  0 ; // set in subclass constructor
+    production_current =  0 ; // set in subclass constructor
 
+    //-- Set default non_zero initialization values
     need_worker = 1;
     sentiment = 1;
     bankrupt = false;
-    inventory_factor = 0;
+    inv_factor = 0;
     cash_on_hand = total_assets; // unsure how these two differed
+    production_planned = 0; // assume they executed their plan perfectly
 
-    
-    // Production and sales figures
-    production_planned = production_current; // assume they executed their plan perfectly
-    production_past = 0; 
-    quantity_sold = 0;
-
+    //-- Set everything else to zero initiallly
     // Inflows
     revenue_sales = production_current * good_price_current;
     total_income = revenue_sales;
@@ -39,6 +37,10 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
     subsidies = 0;
     average_profit = revenue_sales;
     average_sale_quantity = 0;
+
+    // Production and sales figures
+    production_past = 0; 
+    quantity_sold = 0;
     
     // Loan Parameters
     short_term_funding_gap = 0;
@@ -73,7 +75,7 @@ Firm_Agent::Firm_Agent(float float_vals[4], int int_vals[6])
 
     // Inventories
     desired_inventory = 0.0;
-    inventory_reaction_factor = 1; // TODO Initialise this randomly
+    inv_reaction_factor = 1; // TODO Initialise this randomly
     machine_utilization = 0.0;
     desired_machines = 0;
     pPublic_Info_Board = nullptr;
@@ -130,8 +132,7 @@ Firm_Agent::~Firm_Agent() {
 }
 
 
-
-// ----------- Initialization methods t = 1
+// ----------- Initialization methods t = 1 -------------- 
 
 /* Function to fill past average profit queue with initial profits
 */
@@ -155,7 +156,7 @@ void Firm_Agent::Update_Average_Sales_T1(){
 //--------------------------------------------------------------
 
 
-// ------- Main Loop Methods in order --
+// ------- Main Loop Methods ----------------- 
 
 /* Function to depreciate the value of each capital in the inventory
 As it depreciates each capital object, check if it has fully depreciated, and if so remove the capital
@@ -220,7 +221,7 @@ void Firm_Agent::Cancel_Expired_Contracts(){
     TODO: Read randomness parameters from Global Params
     Add more characteristics to change */
 void Firm_Agent::Random_Experimentation(){
-    desired_inventory_factor *= Uniform_Dist_Float(1.0-firm_cons_rand_desired_inventory_factor_change
+    target_inv_factor *= Uniform_Dist_Float(1.0-firm_cons_rand_desired_inventory_factor_change
     ,1.0 + firm_cons_rand_desired_inventory_factor_change);
     dividend_ratio_optimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
     dividend_ratio_pessimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
@@ -238,8 +239,8 @@ void Firm_Agent::Check_Sales(){
         cout << "ERROR: Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << "at firm # " << this <<  endl;
     }
 
-    inventory_factor = float(inventory) / float(production_current);
-    desired_inventory = desired_inventory_factor * production_current;
+    inv_factor = float(inventory) / float(production_current);
+    desired_inventory = target_inv_factor * production_current;
 }
 
 
@@ -283,8 +284,8 @@ There are many different ways to do this
 I follow EQ 38 from the general paper for pricing and Jamel for quantity setting 
 with some variation
 TODO: Update random variation in price and quantity (p,q) to use global params
-*/
-
+*** Determine_New_Production method only implemented in subclasses
+*/ 
 
 
 /* Adjust wage offers based on labor need and average wages in the market
@@ -462,7 +463,6 @@ void Firm_Agent::Check_For_New_Employees(){
 }
 
 
-
 /* Buy enough machines to match full utilization with desired number of employees
 TODO: 
 - Jamel has a complicated method, for now I will use a simpler one
@@ -490,6 +490,7 @@ void Firm_Agent::Make_Investment_Decision(){
 
 
 /* Function to produce goods based on plans and capacity
+ Overriddedn by subclasses, which update the public board differently
 */
 void Firm_Agent::Produce_Goods(){
     
@@ -521,10 +522,79 @@ void Firm_Agent::Produce_Goods(){
 
     // Update the inventory
     inventory += production_current;
-    inventory_factor = float(inventory) / float(average_sale_quantity);
+    inv_factor = float(inventory) / float(average_sale_quantity);
     production_costs = production_current * unit_good_cost;
 }
 
+
+/* Function to seek short term unamortized loans from the bank to cover
+expected wage bill funding gap
+*/
+void Firm_Agent::Seek_Short_Term_Loan(){
+    Loan* new_loan = pPublic_Info_Board->Seek_Short_Term_Loan(this);
+
+    if (new_loan != nullptr){
+        // Update records if a loan has been issued
+        loan_book.push_back(new_loan);
+        int principal = new_loan->Get_Principal_Amount();
+        cash_on_hand += principal;
+        new_loan_issuance += principal;
+        short_term_funding_gap = 0;
+        if (principal <0){
+            cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0 at firm # " << this << endl;
+        }
+    } else{
+        // This is an error becuase firms should always get a short term loan ( for now)
+        cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - new_loan == nullptr,  at firm # " << this << endl;
+    }
+}
+
+
+/* Function to seek long term amortized loans from the bank to cover
+expected long term funding gap
+*/
+void Firm_Agent::Seek_Long_Term_Loan(){
+    Update_Leverage_Ratio();
+
+    Loan* new_loan = pPublic_Info_Board->Seek_Long_Term_Loan(this);
+    if (new_loan != nullptr){
+        int principal = new_loan->Get_Principal_Amount();
+        loan_book.push_back(new_loan); // Add the new loan to the loan book
+        cash_on_hand += principal;
+        new_loan_issuance += principal;
+        long_term_funding_gap = 0;
+        if(principal < 0){
+            cout << "ERROR: Firm_Agent::Seek_Long_Term_Loan() - principal < 0 at firm # "<< this << endl;
+        }
+    } else{
+        cout << " Firm_Agent::Seek_Long_Term_Loan() - Loan rejected" << endl;
+    }
+}
+
+
+/* Update leverage ratio
+*/
+void Firm_Agent::Update_Leverage_Ratio(){
+    outstanding_debt_total = 0;
+    // Loop through the loan book and add up the principal amounts
+    for (int i = 0; i < loan_book.size(); i++){
+        int temp = loan_book[i]->Get_Principal_Amount();
+        if (temp < 0){
+            cout << "ERROR: Firm_Agent::Update_Leverage_Ratio(), negative loan principal at firm # " <<this << endl;
+            temp = 0;
+        }
+        outstanding_debt_total += temp;
+    }
+
+    // Calculate leverage ratio : how many years of profits it would take to pay off all debt
+    leverage_ratio = float(outstanding_debt_total) / float(average_profit*12.0);
+    if (leverage_ratio < 0)
+    {
+        cout << "ERROR: Firm_Agent::Update_Leverage_Ratio(), negative leverage ratio at firm # " << this << endl;
+        cout << "Firm has outstanding debt: " << outstanding_debt_total << " and average profit*12: " << average_profit << endl;
+        leverage_ratio = 0;
+    }
+}
 
 
 /* Function to buy capital goods
@@ -571,82 +641,8 @@ void Firm_Agent::Buy_Capital_Goods(){
 
 
 
-/* Function to seek short term unamortized loans from the bank to cover
-expected wage bill funding gap
-*/
-void Firm_Agent::Seek_Short_Term_Loan(){
-    Loan* new_loan = pPublic_Info_Board->Seek_Short_Term_Loan(this);
-
-    if (new_loan != nullptr){
-        // Update records if a loan has been issued
-        loan_book.push_back(new_loan);
-        int principal = new_loan->Get_Principal_Amount();
-        cash_on_hand += principal;
-        new_loan_issuance += principal;
-        short_term_funding_gap = 0;
-        if (principal <0){
-            cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0 at firm # " << this << endl;
-        }
-    } else{
-        // This is an error becuase firms should always get a short term loan ( for now)
-        cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - new_loan == nullptr,  at firm # " << this << endl;
-    }
-}
-
-
-
-
-/* Function to seek long term amortized loans from the bank to cover
-expected long term funding gap
-*/
-void Firm_Agent::Seek_Long_Term_Loan(){
-    Update_Leverage_Ratio();
-
-    Loan* new_loan = pPublic_Info_Board->Seek_Long_Term_Loan(this);
-    if (new_loan != nullptr){
-        int principal = new_loan->Get_Principal_Amount();
-        loan_book.push_back(new_loan); // Add the new loan to the loan book
-        cash_on_hand += principal;
-        new_loan_issuance += principal;
-        long_term_funding_gap = 0;
-        if(principal < 0){
-            cout << "ERROR: Firm_Agent::Seek_Long_Term_Loan() - principal < 0 at firm # "<< this << endl;
-        }
-    } else{
-        cout << " Firm_Agent::Seek_Long_Term_Loan() - Loan rejected" << endl;
-    }
-}
-
-
-
-/* Update leverage ratio
-*/
-void Firm_Agent::Update_Leverage_Ratio(){
-    outstanding_debt_total = 0;
-    // Loop through the loan book and add up the principal amounts
-    for (int i = 0; i < loan_book.size(); i++){
-        int temp = loan_book[i]->Get_Principal_Amount();
-        if (temp < 0){
-            cout << "ERROR: Firm_Agent::Update_Leverage_Ratio(), negative loan principal at firm # " <<this << endl;
-            temp = 0;
-        }
-        outstanding_debt_total += temp;
-    }
-
-    // Calculate leverage ratio : how many years of profits it would take to pay off all debt
-    leverage_ratio = float(outstanding_debt_total)/ float(average_profit*12);
-    if (leverage_ratio < 0)
-    {
-        cout << "ERROR: Firm_Agent::Update_Leverage_Ratio(), negative leverage ratio at firm # " << this << endl;
-        cout << "Firm has outstanding debt: " << outstanding_debt_total << " and average profit*12: " << average_profit << endl;
-        leverage_ratio = 0;
-    }
-        
-
-}
-
-
 /* Function to go through loan list and delete loans that have been paid off
+ Called by Pay_Liabilities method
 */
 void Firm_Agent::Update_Loan_List(){
     auto it = loan_book.begin();
@@ -657,51 +653,6 @@ void Firm_Agent::Update_Loan_List(){
         } else {it++;}
     }
 }
-
-
-
-/* Method for the firm to avoid bankruptcy by having a fire sale
-*/
-bool Firm_Agent::Avoid_Bankruptcy(){
-    if( capital_goods_current_value > long_term_funding_gap){
-        cout << " Firm has enough money to sell all assets to cover costs " << endl;
-        cash_on_hand += capital_goods_current_value;
-        long_term_funding_gap = max(total_liabilities - cash_on_hand,0);
-        
-        if (long_term_funding_gap <0){
-            cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - long_term_funding_gap < 0 despite avoiding bankruptcy at firm # " << this << endl;
-        }
-        
-        // Delete(sell) all capital goods, but leave with one just because
-        capital_goods_list.clear();
-        capital_goods_current_value = 0;
-        working_capital_inventory = 1;
-
-        // Layoff all workers but one ( they are still paid for the preceeding period)
-        int layoff_count = employee_count - 1;
-        for (int i=0; i<layoff_count; i++){
-            active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
-            active_job_list.pop_back();
-        }
-        employee_count = 1;
-        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
-        return 1;
-    } else {
-        // layoff all workers and go bankrupt
-        int layoff_count = employee_count;
-
-        for (int i=0; i<layoff_count; i++){
-            active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
-            active_job_list.pop_back();
-        }
-        employee_count = 0;
-        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
-        pPublic_Info_Board->Update_Bankruptcies(is_cons_firm);
-
-        return 0;
-    }
-}
-
 
 
 /* Function to pay liabilities and seek loans or go bankrupt if necessary
@@ -788,6 +739,48 @@ void Firm_Agent::Pay_Liabilities(){
 }
 
 
+/* Method for the firm to avoid bankruptcy by having a fire sale
+*/
+bool Firm_Agent::Avoid_Bankruptcy(){
+    if( capital_goods_current_value > long_term_funding_gap){
+        cout << " Firm has enough money to sell all assets to cover costs " << endl;
+        cash_on_hand += capital_goods_current_value;
+        long_term_funding_gap = max(total_liabilities - cash_on_hand,0);
+        
+        if (long_term_funding_gap <0){
+            cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - long_term_funding_gap < 0 despite avoiding bankruptcy at firm # " << this << endl;
+        }
+        
+        // Delete(sell) all capital goods, but leave with one just because
+        capital_goods_list.clear();
+        capital_goods_current_value = 0;
+        working_capital_inventory = 1;
+
+        // Layoff all workers but one ( they are still paid for the preceeding period)
+        int layoff_count = employee_count - 1;
+        for (int i=0; i<layoff_count; i++){
+            active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
+            active_job_list.pop_back();
+        }
+        employee_count = 1;
+        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
+        return 1;
+    } else {
+        // layoff all workers and go bankrupt
+        int layoff_count = employee_count;
+
+        for (int i=0; i<layoff_count; i++){
+            active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
+            active_job_list.pop_back();
+        }
+        employee_count = 0;
+        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
+        pPublic_Info_Board->Update_Bankruptcies(is_cons_firm);
+
+        return 0;
+    }
+}
+
 
 
 //-------------------------------------
@@ -845,10 +838,10 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "labor_utilization " << obj.labor_utilization << std::endl;
     os << "inventory " << obj.inventory << std::endl;
     os << "working_capital_inventory " << obj.working_capital_inventory << std::endl;
-    os << "desired_inventory_factor " << obj.desired_inventory_factor << std::endl;
+    os << "target_inv_factor " << obj.target_inv_factor << std::endl;
     os << "desired_inventory " << obj.desired_inventory << std::endl;
-    os << "inventory_factor " << obj.inventory_factor << std::endl;
-    os << "inventory_reaction_factor " << obj.inventory_reaction_factor << std::endl;
+    os << "inv_factor " << obj.inv_factor << std::endl;
+    os << "inv_reaction_factor " << obj.inv_reaction_factor << std::endl;
     os << "machine_utilization " << obj.machine_utilization << std::endl;
     os << "desired_machines " << obj.desired_machines << std::endl;
     os << "sentiment " << obj.sentiment << std::endl;

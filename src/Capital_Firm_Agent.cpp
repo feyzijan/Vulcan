@@ -11,11 +11,12 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[4], int int_vals[6]) : F
     workers_per_machine = firm_cap_workers_per_machine; // global param
     output_per_machine = firm_cap_productivity; // global param
     unit_good_cost = firm_cap_good_unit_cost; // global param
-    inventory_depreciation_rate = firm_cap_inv_depr_rate;
+    inv_depreciation_rate = firm_cap_inv_depr_rate;
     max_production_climbdown = firm_cap_max_production_climbdown;
 
     production_current = max(working_capital_inventory * firm_cap_workers_per_machine * firm_cap_productivity, employee_count_desired / firm_cap_workers_per_machine * firm_cap_productivity);
-    inventory = production_current * desired_inventory_factor * Uniform_Dist_Float(0.5,1.5);
+    production_planned = production_current;
+    inventory = production_current * target_inv_factor * Uniform_Dist_Float(0.5,1.5);
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
 
@@ -94,7 +95,7 @@ void Capital_Firm_Agent::Update_Goods_On_Market(){
 
 
 void Capital_Firm_Agent::Random_Experimentation(){
-    desired_inventory_factor *= Uniform_Dist_Float(1.0-firm_cap_rand_desired_inventory_factor_change
+    target_inv_factor *= Uniform_Dist_Float(1.0-firm_cap_rand_desired_inventory_factor_change
     ,1.0 + firm_cap_rand_desired_inventory_factor_change);
     dividend_ratio_optimist *= Uniform_Dist_Float(1.0-firm_cap_rand_dividend_change, 1.0 + firm_cap_rand_dividend_change);
     dividend_ratio_pessimist *= Uniform_Dist_Float(1.0-firm_cap_rand_dividend_change, 1.0 + firm_cap_rand_dividend_change);
@@ -159,7 +160,7 @@ void Capital_Firm_Agent::Determine_New_Production(){
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments 
     Additionally impose limit on how much they can tone down production
     TODO:*/
-    /*production_planned = average_sale_quantity - (inventory - desired_inventory)/inventory_reaction_factor;
+    /*production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
     int production_planned_min = static_cast<int>(production_past*(1-firm_cap_max_production_climbdown));
     int production_planned_max = static_cast<int>(production_past*(1+firm_cap_max_production_climbdown));
     if(production_planned < production_planned_min){

@@ -12,8 +12,6 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     pPublic_Board->Set_Bank(pBank);
     pPublic_Board->Set_Consumer_Goods_Market(pConsumer_Goods_Market);
     pPublic_Board->Set_Capital_Goods_Market(pCapital_Goods_Market);
-
-    
     //--------- STEP 0.11: Initialize Households and Firms
     cout << "STEP 0.11: Initialize Households and Firms" << endl;
     Initialize_Households(pHousehold_vector, pPublic_Board, n_households); 
@@ -58,32 +56,28 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
 {
     cout << "\nInitializing " << size << " consumer firms" << endl;
 
-    Normal_Dist_Generator init_dividend_ratio_optimist(firm_cons_init_dividend_ratio_optimist_mean, firm_cons_init_dividend_ratio_optimist_std, firm_cons_init_dividend_ratio_optimist_min, firm_cons_init_dividend_ratio_optimist_max);
-    Normal_Dist_Generator init_dividend_ratio_pessimist(firm_cons_init_dividend_ratio_pessimist_mean, firm_cons_init_dividend_ratio_pessimist_std, firm_cons_init_dividend_ratio_pessimist_min, firm_cons_init_dividend_ratio_pessimist_max);
-    Normal_Dist_Generator init_desired_inventory_factor(firm_cons_init_desired_inventory_factor_mean, firm_cons_init_desired_inventory_factor_std, firm_cons_init_desired_inventory_factor_min, firm_cons_init_desired_inventory_factor_max);
+    Normal_Dist_Generator init_target_inv_factor(firm_cons_init_target_inv_factor_mean, firm_cons_init_target_inv_factor_std, firm_cons_init_target_inv_factor_min, firm_cons_init_target_inv_factor_max);
+    
     Normal_Dist_Generator init_total_assets(firm_cons_init_total_assets_mean, firm_cons_init_total_assets_std, firm_cons_init_total_assets_min, firm_cons_init_total_assets_max);
-    Normal_Dist_Generator init_employee_count_desired(firm_cons_init_employee_count_desired_mean, firm_cons_init_employee_count_desired_std, firm_cons_init_employee_count_desired_min, firm_cons_init_employee_count_desired_max);
-    Normal_Dist_Generator init_working_capital_inventory(firm_cons_init_working_capital_inventory_mean, firm_cons_init_working_capital_inventory_std, firm_cons_init_working_capital_inventory_min, firm_cons_init_working_capital_inventory_max);
-    Normal_Dist_Generator init_inventory(firm_cons_init_inventory_mean, firm_cons_init_inventory_std, firm_cons_init_inventory_min, firm_cons_init_inventory_max);
+    
+    Normal_Dist_Generator init_worker_demand(firm_cons_init_worker_demand_mean, firm_cons_init_worker_demand_std, firm_cons_init_worker_demand_min, firm_cons_init_worker_demand_max);
+    Normal_Dist_Generator init_machines(firm_cons_init_machine_inv_mean, firm_cons_init_machine_inv_std, firm_cons_init_machine_inv_min, firm_cons_init_machine_inv_max);
+    Normal_Dist_Generator init_inv_factor(firm_cons_init_inv_factor_mean, firm_cons_init_inv_factor_std, firm_cons_init_inv_factor_min, firm_cons_init_inv_factor_max);
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
-    Normal_Dist_Generator init_production_planned(firm_cons_init_production_planned_mean, firm_cons_init_production_planned_std, firm_cons_init_production_planned_min, firm_cons_init_production_planned_max);
     Normal_Dist_Generator init_cons_good_price(firm_cons_init_good_price_mean, firm_cons_init_good_price_std, firm_cons_init_good_price_min, firm_cons_init_good_price_max);
    
      for (int i=0; i<n_consumer_firms; i++) {
         //cout << " Cons firm initializing #" << i << endl;
         float float_vals[] = {
-            init_dividend_ratio_optimist(),  
-            init_dividend_ratio_pessimist(),
-            init_desired_inventory_factor(), 
+            init_target_inv_factor(), 
             init_cons_good_price()
         };
         int int_vals[]{
             int(init_total_assets()),
-            int(init_employee_count_desired()),
-            int(init_working_capital_inventory()),
-            int(init_inventory()),
+            int(init_worker_demand()),
+            int(init_machines()),
+            int(init_inv_factor()),
             int(init_wage_offer()),
-            int(init_production_planned()),
         };
 
         //cout << " set up arrays now passign them in " << endl;
@@ -132,34 +126,30 @@ void Initialize_Emission_Allowances(vector<Consumer_Firm_Agent*> *pConsumer_Firm
 void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector, Public_Info_Board* pPublic_Board, int size)
 {
     cout << "\nInitializing " << size << " capital firms" << endl;
-    Normal_Dist_Generator init_dividend_ratio_optimist(firm_cons_init_dividend_ratio_optimist_mean, firm_cons_init_dividend_ratio_optimist_std, firm_cons_init_dividend_ratio_optimist_min, firm_cons_init_dividend_ratio_optimist_max);
-    Normal_Dist_Generator init_dividend_ratio_pessimist(firm_cons_init_dividend_ratio_pessimist_mean, firm_cons_init_dividend_ratio_pessimist_std, firm_cons_init_dividend_ratio_pessimist_min, firm_cons_init_dividend_ratio_pessimist_max);
-    Normal_Dist_Generator init_desired_inventory_factor(firm_cons_init_desired_inventory_factor_mean, firm_cons_init_desired_inventory_factor_std, firm_cons_init_desired_inventory_factor_min, firm_cons_init_desired_inventory_factor_max);
+    
+    Normal_Dist_Generator init_target_inv_factor(firm_cons_init_target_inv_factor_mean, firm_cons_init_target_inv_factor_std, firm_cons_init_target_inv_factor_min, firm_cons_init_target_inv_factor_max);
     
     Normal_Dist_Generator init_total_assets(firm_cons_init_total_assets_mean, firm_cons_init_total_assets_std, firm_cons_init_total_assets_min, firm_cons_init_total_assets_max);
-    Normal_Dist_Generator init_employee_count_desired(firm_cons_init_employee_count_desired_mean, firm_cons_init_employee_count_desired_std, firm_cons_init_employee_count_desired_min, firm_cons_init_employee_count_desired_max);
-    Normal_Dist_Generator init_working_capital_inventory(firm_cons_init_working_capital_inventory_mean, firm_cons_init_working_capital_inventory_std, firm_cons_init_working_capital_inventory_min, firm_cons_init_working_capital_inventory_max);
+    Normal_Dist_Generator init_worker_demand(firm_cons_init_worker_demand_mean, firm_cons_init_worker_demand_std, firm_cons_init_worker_demand_min, firm_cons_init_worker_demand_max);
+    Normal_Dist_Generator init_machines(firm_cons_init_machine_inv_mean, firm_cons_init_machine_inv_std, firm_cons_init_machine_inv_min, firm_cons_init_machine_inv_max);
     
-    Normal_Dist_Generator init_inventory(firm_cap_init_inventory_mean, firm_cap_init_inventory_std, firm_cap_init_inventory_min, firm_cap_init_inventory_max);
+    Normal_Dist_Generator init_inv_factor(firm_cap_init_inv_factor_mean, firm_cap_init_inv_factor_std, firm_cap_init_inv_factor_min, firm_cap_init_inv_factor_max);
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
-    Normal_Dist_Generator init_production_planned(firm_cap_init_production_planned_mean, firm_cap_init_production_planned_std, firm_cap_init_production_planned_min, firm_cap_init_production_planned_max);
     Normal_Dist_Generator init_cap_good_price(firm_cap_init_good_price_mean, firm_cap_init_good_price_std, firm_cap_init_good_price_min, firm_cap_init_good_price_max);
    
     for (int i=0; i<n_capital_firms; i++) {
         //cout << "cap firm initializing #: "<< i << endl;
         float float_vals[] = {
-            init_dividend_ratio_optimist(),  
-            init_dividend_ratio_pessimist(),
-            init_desired_inventory_factor(), 
-            init_cap_good_price()
+            init_target_inv_factor(), 
+            init_cap_good_price(),
+            //init_inventory_factor()
         };
         int int_vals[]{
             int(init_total_assets()),
-            int(init_employee_count_desired()),
-            int(init_working_capital_inventory()),
-            int(init_inventory()),
+            int(init_worker_demand()),
+            int(init_machines()),
+            int(init_inv_factor()),
             int(init_wage_offer()),
-            int(init_production_planned()),
         };
 
         

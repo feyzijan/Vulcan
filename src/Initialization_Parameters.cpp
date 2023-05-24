@@ -128,59 +128,45 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_init_total_assets_std = initialization_parameters["firm_cons_init_total_assets_std"];
     firm_cons_init_total_assets_min = initialization_parameters["firm_cons_init_total_assets_min"];
     firm_cons_init_total_assets_max = initialization_parameters["firm_cons_init_total_assets_max"];
-
-    // Dividend ratio if firm is optimistic
-    firm_cons_init_dividend_ratio_optimist_mean = initialization_parameters["firm_cons_init_dividend_ratio_optimist_mean"];
-    firm_cons_init_dividend_ratio_optimist_std = initialization_parameters["firm_cons_init_dividend_ratio_optimist_std"];
-    firm_cons_init_dividend_ratio_optimist_min = initialization_parameters["firm_cons_init_dividend_ratio_optimist_min"];
-    firm_cons_init_dividend_ratio_optimist_max = initialization_parameters["firm_cons_init_dividend_ratio_optimist_max"];
-
-    // Dividend ratio if firm is pessimistic
-    firm_cons_init_dividend_ratio_pessimist_mean = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_mean"];
-    firm_cons_init_dividend_ratio_pessimist_std = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_std"];
-    firm_cons_init_dividend_ratio_pessimist_min = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_min"];
-    firm_cons_init_dividend_ratio_pessimist_max = initialization_parameters["firm_cons_init_dividend_ratio_pessimist_max"];
     // Starting wage offers
     firm_cons_init_wage_offer_mean = initialization_parameters["firm_cons_init_wage_offer_mean"];
     firm_cons_init_wage_offer_std = initialization_parameters["firm_cons_init_wage_offer_std"];
     firm_cons_init_wage_offer_min = initialization_parameters["firm_cons_init_wage_offer_min"];
     firm_cons_init_wage_offer_max = initialization_parameters["firm_cons_init_wage_offer_max"];
     // Starting desired employees
-    firm_cons_init_employee_count_desired_mean = initialization_parameters["firm_cons_init_employee_count_desired_mean"];
-    firm_cons_init_employee_count_desired_std = initialization_parameters["firm_cons_init_employee_count_desired_std"];
-    firm_cons_init_employee_count_desired_min = initialization_parameters["firm_cons_init_employee_count_desired_min"];
-    firm_cons_init_employee_count_desired_max = initialization_parameters["firm_cons_init_employee_count_desired_max"];
-    // Inital planned production
-    firm_cons_init_production_planned_mean = initialization_parameters["firm_cons_init_production_planned_mean"];
-    firm_cons_init_production_planned_std = initialization_parameters["firm_cons_init_production_planned_std"];
-    firm_cons_init_production_planned_min = initialization_parameters["firm_cons_init_production_planned_min"];
-    firm_cons_init_production_planned_max = initialization_parameters["firm_cons_init_production_planned_max"];
+    firm_cons_init_worker_demand_mean = initialization_parameters["firm_cons_init_worker_demand_mean"];
+    firm_cons_init_worker_demand_std = initialization_parameters["firm_cons_init_worker_demand_std"];
+    firm_cons_init_worker_demand_min = initialization_parameters["firm_cons_init_worker_demand_min"];
+    firm_cons_init_worker_demand_max = initialization_parameters["firm_cons_init_worker_demand_max"];
     // Initial good price
     firm_cons_init_good_price_mean = initialization_parameters["firm_cons_init_good_price_mean"];
     firm_cons_init_good_price_std = initialization_parameters["firm_cons_init_good_price_std"];
     firm_cons_init_good_price_min = initialization_parameters["firm_cons_init_good_price_min"];
     firm_cons_init_good_price_max = initialization_parameters["firm_cons_init_good_price_max"];
     // Good inventory
-    firm_cons_init_inventory_mean = initialization_parameters["firm_cons_init_inventory_mean"];
-    firm_cons_init_inventory_std = initialization_parameters["firm_cons_init_inventory_std"];
-    firm_cons_init_inventory_min = initialization_parameters["firm_cons_init_inventory_min"];
-    firm_cons_init_inventory_max = initialization_parameters["firm_cons_init_inventory_max"];
+    firm_cons_init_inv_factor_mean = initialization_parameters["firm_cons_init_inv_factor_mean"];
+    firm_cons_init_inv_factor_std = initialization_parameters["firm_cons_init_inv_factor_std"];
+    firm_cons_init_inv_factor_min = initialization_parameters["firm_cons_init_inv_factor_min"];
+    firm_cons_init_inv_factor_max = initialization_parameters["firm_cons_init_inv_factor_max"];
 
     // Working capital inventory
-    firm_cons_init_working_capital_inventory_mean = initialization_parameters["firm_cons_init_working_capital_inventory_mean"];
-    firm_cons_init_working_capital_inventory_std = initialization_parameters["firm_cons_init_working_capital_inventory_std"];
-    firm_cons_init_working_capital_inventory_min = initialization_parameters["firm_cons_init_working_capital_inventory_min"];
-    firm_cons_init_working_capital_inventory_max = initialization_parameters["firm_cons_init_working_capital_inventory_max"];
+    firm_cons_init_machine_inv_mean = initialization_parameters["firm_cons_init_machine_inv_mean"];
+    firm_cons_init_machine_inv_std = initialization_parameters["firm_cons_init_machine_inv_std"];
+    firm_cons_init_machine_inv_min = initialization_parameters["firm_cons_init_machine_inv_min"];
+    firm_cons_init_machine_inv_max = initialization_parameters["firm_cons_init_machine_inv_max"];
     // Desired inventory factor ( characteristic)
-    firm_cons_init_desired_inventory_factor_mean = initialization_parameters["firm_cons_init_desired_inventory_factor_mean"];
-    firm_cons_init_desired_inventory_factor_std = initialization_parameters["firm_cons_init_desired_inventory_factor_std"];
-    firm_cons_init_desired_inventory_factor_min = initialization_parameters["firm_cons_init_desired_inventory_factor_min"];
-    firm_cons_init_desired_inventory_factor_max = initialization_parameters["firm_cons_init_desired_inventory_factor_max"];
+    firm_cons_init_target_inv_factor_mean = initialization_parameters["firm_cons_init_target_inv_factor_mean"];
+    firm_cons_init_target_inv_factor_std = initialization_parameters["firm_cons_init_target_inv_factor_std"];
+    firm_cons_init_target_inv_factor_min = initialization_parameters["firm_cons_init_target_inv_factor_min"];
+    firm_cons_init_target_inv_factor_max = initialization_parameters["firm_cons_init_target_inv_factor_max"];
 
     // Other inits (not randomised)
     firm_cons_init_production_current_ratio = initialization_parameters["firm_cons_init_production_current_ratio"];
     firm_cons_init_quantity_sold_ratio = initialization_parameters["firm_cons_init_quantity_sold_ratio"];
     firm_cons_init_emissions_per_unit = initialization_parameters["firm_cons_init_emissions_per_unit"];
+    firm_cons_init_dividend_ratio_optimist = initialization_parameters["firm_cons_init_dividend_ratio_optimist"];
+    firm_cons_init_dividend_ratio_pessimist = initialization_parameters["firm_cons_init_dividend_ratio_pessimist"];
+
 
     // --- Capital Firm initialization parameters
     // Starting total asset
@@ -188,60 +174,46 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_init_total_assets_std = initialization_parameters["firm_cap_init_total_assets_std"];
     firm_cap_init_total_assets_min = initialization_parameters["firm_cap_init_total_assets_min"];
     firm_cap_init_total_assets_max = initialization_parameters["firm_cap_init_total_assets_max"];
-    // Dividend ratio if firm is optimistic
-    firm_cap_init_dividend_ratio_optimist_mean = initialization_parameters["firm_cap_init_dividend_ratio_optimist_mean"];
-    firm_cap_init_dividend_ratio_optimist_std = initialization_parameters["firm_cap_init_dividend_ratio_optimist_std"];
-    firm_cap_init_dividend_ratio_optimist_min = initialization_parameters["firm_cap_init_dividend_ratio_optimist_min"];
-    firm_cap_init_dividend_ratio_optimist_max = initialization_parameters["firm_cap_init_dividend_ratio_optimist_max"];
-
-    // Dividend ratio if firm is pessimistic
-    firm_cap_init_dividend_ratio_pessimist_mean = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_mean"];
-    firm_cap_init_dividend_ratio_pessimist_std = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_std"];
-    firm_cap_init_dividend_ratio_pessimist_min = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_min"];
-    firm_cap_init_dividend_ratio_pessimist_max = initialization_parameters["firm_cap_init_dividend_ratio_pessimist_max"];
     // Starting wage offers
     firm_cap_init_wage_offer_mean = initialization_parameters["firm_cap_init_wage_offer_mean"];
     firm_cap_init_wage_offer_std = initialization_parameters["firm_cap_init_wage_offer_std"];
     firm_cap_init_wage_offer_min = initialization_parameters["firm_cap_init_wage_offer_min"];
     firm_cap_init_wage_offer_max = initialization_parameters["firm_cap_init_wage_offer_max"];
     // Starting desired employees
-    firm_cap_init_employee_count_desired_mean = initialization_parameters["firm_cap_init_employee_count_desired_mean"];
-    firm_cap_init_employee_count_desired_std = initialization_parameters["firm_cap_init_employee_count_desired_std"];
-    firm_cap_init_employee_count_desired_min = initialization_parameters["firm_cap_init_employee_count_desired_min"];
-    firm_cap_init_employee_count_desired_max = initialization_parameters["firm_cap_init_employee_count_desired_max"];
-
-    // Inital planned production
-    firm_cap_init_production_planned_mean = initialization_parameters["firm_cap_init_production_planned_mean"];
-    firm_cap_init_production_planned_std = initialization_parameters["firm_cap_init_production_planned_std"];
-    firm_cap_init_production_planned_min = initialization_parameters["firm_cap_init_production_planned_min"];
-    firm_cap_init_production_planned_max = initialization_parameters["firm_cap_init_production_planned_max"];
+    firm_cap_init_worker_demand_mean = initialization_parameters["firm_cap_init_worker_demand_mean"];
+    firm_cap_init_worker_demand_std = initialization_parameters["firm_cap_init_worker_demand_std"];
+    firm_cap_init_worker_demand_min = initialization_parameters["firm_cap_init_worker_demand_min"];
+    firm_cap_init_worker_demand_max = initialization_parameters["firm_cap_init_worker_demand_max"];
     // Initial good price
     firm_cap_init_good_price_mean = initialization_parameters["firm_cap_init_good_price_mean"];
     firm_cap_init_good_price_std = initialization_parameters["firm_cap_init_good_price_std"];
     firm_cap_init_good_price_min = initialization_parameters["firm_cap_init_good_price_min"];
     firm_cap_init_good_price_max = initialization_parameters["firm_cap_init_good_price_max"];
     // Good inventory
-    firm_cap_init_inventory_mean = initialization_parameters["firm_cap_init_inventory_mean"];
-    firm_cap_init_inventory_std = initialization_parameters["firm_cap_init_inventory_std"];
-    firm_cap_init_inventory_min = initialization_parameters["firm_cap_init_inventory_min"];
-    firm_cap_init_inventory_max = initialization_parameters["firm_cap_init_inventory_max"];
+    firm_cap_init_inv_factor_mean = initialization_parameters["firm_cap_init_inv_factor_mean"];
+    firm_cap_init_inv_factor_std = initialization_parameters["firm_cap_init_inv_factor_std"];
+    firm_cap_init_inv_factor_min = initialization_parameters["firm_cap_init_inv_factor_min"];
+    firm_cap_init_inv_factor_max = initialization_parameters["firm_cap_init_inv_factor_max"];
 
     // --- Capital Firm initialization parameters
     // Working capital
-    firm_cap_init_working_capital_inventory_mean = initialization_parameters["firm_cap_init_working_capital_inventory_mean"];
-    firm_cap_init_working_capital_inventory_std = initialization_parameters["firm_cap_init_working_capital_inventory_std"];
-    firm_cap_init_working_capital_inventory_min = initialization_parameters["firm_cap_init_working_capital_inventory_min"];
-    firm_cap_init_working_capital_inventory_max = initialization_parameters["firm_cap_init_working_capital_inventory_max"];
+    firm_cap_init_machine_inv_mean = initialization_parameters["firm_cap_init_machine_inv_mean"];
+    firm_cap_init_machine_inv_std = initialization_parameters["firm_cap_init_machine_inv_std"];
+    firm_cap_init_machine_inv_min = initialization_parameters["firm_cap_init_machine_inv_min"];
+    firm_cap_init_machine_inv_max = initialization_parameters["firm_cap_init_machine_inv_max"];
     // Desired inventory factor ( characteristics)
-    firm_cap_init_desired_inventory_factor_mean = initialization_parameters["firm_cap_init_desired_inventory_factor_mean"];
-    firm_cap_init_desired_inventory_factor_std = initialization_parameters["firm_cap_init_desired_inventory_factor_std"];
-    firm_cap_init_desired_inventory_factor_min = initialization_parameters["firm_cap_init_desired_inventory_factor_min"];
-    firm_cap_init_desired_inventory_factor_max = initialization_parameters["firm_cap_init_desired_inventory_factor_max"];
+    firm_cap_init_target_inv_factor_mean = initialization_parameters["firm_cap_init_target_inv_factor_mean"];
+    firm_cap_init_target_inv_factor_std = initialization_parameters["firm_cap_init_target_inv_factor_std"];
+    firm_cap_init_target_inv_factor_min = initialization_parameters["firm_cap_init_target_inv_factor_min"];
+    firm_cap_init_target_inv_factor_max = initialization_parameters["firm_cap_init_target_inv_factor_max"];
 
     // Other inits (not randomised)
     firm_cap_init_production_current_ratio = initialization_parameters["firm_cap_init_production_current_ratio"];
     firm_cap_init_quantity_sold_ratio = initialization_parameters["firm_cap_init_quantity_sold_ratio"];
     firm_cap_init_emissions_per_unit = initialization_parameters["firm_cap_init_emissions_per_unit"];
+    firm_cap_init_dividend_ratio_optimist = initialization_parameters["firm_cap_init_dividend_ratio_optimist"];
+    firm_cap_init_dividend_ratio_pessimist = initialization_parameters["firm_cap_init_dividend_ratio_pessimist"];
+
 
     //--- Bank Initialization parameters
     bank_init_interest_rate = initialization_parameters["bank_init_interest_rate"];
@@ -447,57 +419,43 @@ float firm_cons_init_total_assets_mean = 10000;
 float firm_cons_init_total_assets_std = 2500;
 float firm_cons_init_total_assets_min = 1;
 float firm_cons_init_total_assets_max = 999999999;
-// Dividend ratio if firm is optimistic
-float firm_cons_init_dividend_ratio_optimist_mean = 0.05;
-float firm_cons_init_dividend_ratio_optimist_std = 0.02;
-float firm_cons_init_dividend_ratio_optimist_min = 0.005;
-float firm_cons_init_dividend_ratio_optimist_max = 0.2;
-// Dividend ratio if firm is pessimistic
-float firm_cons_init_dividend_ratio_pessimist_mean = 0.03;
-float firm_cons_init_dividend_ratio_pessimist_std = 0.02;
-float firm_cons_init_dividend_ratio_pessimist_min = 0.001;
-float firm_cons_init_dividend_ratio_pessimist_max = 0.15;
 // Starting wage offers
 float firm_cons_init_wage_offer_mean = 1000;
 float firm_cons_init_wage_offer_std = 300;
 float firm_cons_init_wage_offer_min = 100;
 float firm_cons_init_wage_offer_max = 999999;
 // Starting desired employees
-float firm_cons_init_employee_count_desired_mean = 20;
-float firm_cons_init_employee_count_desired_std = 5;
-float firm_cons_init_employee_count_desired_min = 1;
-float firm_cons_init_employee_count_desired_max = 100;
-// Inital planned production
-float firm_cons_init_production_planned_mean = 1000;
-float firm_cons_init_production_planned_std = 100;
-float firm_cons_init_production_planned_min = 100;
-float firm_cons_init_production_planned_max = 1999;
+float firm_cons_init_worker_demand_mean = 20;
+float firm_cons_init_worker_demand_std = 5;
+float firm_cons_init_worker_demand_min = 1;
+float firm_cons_init_worker_demand_max = 100;
 // Initial good price
 float firm_cons_init_good_price_mean = 10;
 float firm_cons_init_good_price_std = 2;
 float firm_cons_init_good_price_min = 1;
 float firm_cons_init_good_price_max = 99;
 // Good inventory
-float firm_cons_init_inventory_mean = 1000;
-float firm_cons_init_inventory_std = 100;
-float firm_cons_init_inventory_min = 1;
-float firm_cons_init_inventory_max = 999999;
+float firm_cons_init_inv_factor_mean = 1000;
+float firm_cons_init_inv_factor_std = 100;
+float firm_cons_init_inv_factor_min = 1;
+float firm_cons_init_inv_factor_max = 999999;
 // Working capital inventory
-float firm_cons_init_working_capital_inventory_mean = 60;
-float firm_cons_init_working_capital_inventory_std = 5;
-float firm_cons_init_working_capital_inventory_min = 1;
-float firm_cons_init_working_capital_inventory_max = 999999;
+float firm_cons_init_machine_inv_mean = 60;
+float firm_cons_init_machine_inv_std = 5;
+float firm_cons_init_machine_inv_min = 1;
+float firm_cons_init_machine_inv_max = 999999;
 // Desired inventory factor ( characteristic)
-float firm_cons_init_desired_inventory_factor_mean = 1.5;
-float firm_cons_init_desired_inventory_factor_std = 0.25;
-float firm_cons_init_desired_inventory_factor_min = 0.1;
-float firm_cons_init_desired_inventory_factor_max = 4.0;
+float firm_cons_init_target_inv_factor_mean = 1.5;
+float firm_cons_init_target_inv_factor_std = 0.25;
+float firm_cons_init_target_inv_factor_min = 0.1;
+float firm_cons_init_target_inv_factor_max = 4.0;
 
 // Other inits (not randomised)
 float firm_cons_init_production_current_ratio = 0.4;
 float firm_cons_init_quantity_sold_ratio = 0.25;
 float firm_cons_init_emissions_per_unit = 10.0;
-
+float firm_cons_init_dividend_ratio_optimist = 0.04;
+float firm_cons_init_dividend_ratio_pessimist = 0.02;
 
 // --- Consumer Firm dynamic parameters
 float firm_cons_inv_depr_rate = 0.01;
@@ -528,58 +486,43 @@ float firm_cap_init_total_assets_mean = 10000;
 float firm_cap_init_total_assets_std = 2500;
 float firm_cap_init_total_assets_min = 1;
 float firm_cap_init_total_assets_max = 999999999;
-// Dividend ratio if firm is optimistic
-float firm_cap_init_dividend_ratio_optimist_mean = 0.05;
-float firm_cap_init_dividend_ratio_optimist_std = 0.02;
-float firm_cap_init_dividend_ratio_optimist_min = 0.005;
-float firm_cap_init_dividend_ratio_optimist_max = 0.2;
-// Dividend ratio if firm is pessimistic
-float firm_cap_init_dividend_ratio_pessimist_mean = 0.03;
-float firm_cap_init_dividend_ratio_pessimist_std = 0.02;
-float firm_cap_init_dividend_ratio_pessimist_min = 0.001;
-float firm_cap_init_dividend_ratio_pessimist_max = 0.15;
 // Starting wage offers
 float firm_cap_init_wage_offer_mean = 1000;
 float firm_cap_init_wage_offer_std = 300;
 float firm_cap_init_wage_offer_min = 100;
 float firm_cap_init_wage_offer_max = 999999;
 // Starting desired employees
-float firm_cap_init_employee_count_desired_mean = 20;
-float firm_cap_init_employee_count_desired_std = 5;
-float firm_cap_init_employee_count_desired_min = 1;
-float firm_cap_init_employee_count_desired_max = 100;
-
-// Inital planned production
-float firm_cap_init_production_planned_mean = 1000;
-float firm_cap_init_production_planned_std = 100;
-float firm_cap_init_production_planned_min = 100;
-float firm_cap_init_production_planned_max = 1999;
+float firm_cap_init_worker_demand_mean = 20;
+float firm_cap_init_worker_demand_std = 5;
+float firm_cap_init_worker_demand_min = 1;
+float firm_cap_init_worker_demand_max = 100;
 // Initial good price
 float firm_cap_init_good_price_mean = 10;
 float firm_cap_init_good_price_std = 2;
 float firm_cap_init_good_price_min = 1;
 float firm_cap_init_good_price_max = 99;
 // Good inventory
-float firm_cap_init_inventory_mean = 1000;
-float firm_cap_init_inventory_std = 100;
-float firm_cap_init_inventory_min = 1;
-float firm_cap_init_inventory_max = 999999;
+float firm_cap_init_inv_factor_mean = 1000;
+float firm_cap_init_inv_factor_std = 100;
+float firm_cap_init_inv_factor_min = 1;
+float firm_cap_init_inv_factor_max = 999999;
 // Working capital
-float firm_cap_init_working_capital_inventory_mean = 60;
-float firm_cap_init_working_capital_inventory_std = 5;
-float firm_cap_init_working_capital_inventory_min = 1;
-float firm_cap_init_working_capital_inventory_max = 999999;
+float firm_cap_init_machine_inv_mean = 60;
+float firm_cap_init_machine_inv_std = 5;
+float firm_cap_init_machine_inv_min = 1;
+float firm_cap_init_machine_inv_max = 999999;
 // Desired inventory factor ( characteristics)
-float firm_cap_init_desired_inventory_factor_mean = 1.5;
-float firm_cap_init_desired_inventory_factor_std = 0.25;
-float firm_cap_init_desired_inventory_factor_min = 0.1;
-float firm_cap_init_desired_inventory_factor_max = 4.0;
-
+float firm_cap_init_target_inv_factor_mean = 1.5;
+float firm_cap_init_target_inv_factor_std = 0.25;
+float firm_cap_init_target_inv_factor_min = 0.1;
+float firm_cap_init_target_inv_factor_max = 4.0;
 
 // Other inits (not randomised)
 float firm_cap_init_production_current_ratio = 0.4;
 float firm_cap_init_quantity_sold_ratio = 0.25;
 float firm_cap_init_emissions_per_unit = 100.0;
+float firm_cap_init_dividend_ratio_optimist = 0.04;
+float firm_cap_init_dividend_ratio_pessimist = 0.02;
 
 // --- Capital Firm dynamic parameters
 float firm_cap_inv_depr_rate = 0.01;
