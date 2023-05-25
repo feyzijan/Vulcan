@@ -2,7 +2,7 @@
 
 
 /* Constructor with just seller, price, and quantity*/
-Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity)
+Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity)
 {
     pSeller = seller_pointer;
     price = seller_price;
@@ -11,7 +11,7 @@ Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller
 }
 
 /* Constructor with just seller, price, quantity, and emission*/
-Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, float emissions_per_unit){
+Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity, float emissions_per_unit){
     pSeller = seller_pointer;
     price = seller_price;
     quantity = seller_quantity;
@@ -20,7 +20,7 @@ Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller
 }
 
 /* Constructor with sector*/
-Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int seller_sector)
+Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity, int seller_sector)
 {
     pSeller = seller_pointer;
     price = seller_price;
@@ -29,7 +29,7 @@ Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller
 }
 
 /* Constructor with sector + emissions*/
-Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int seller_sector, float emissions_per_unit)
+Consumer_Good::Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity, int seller_sector, float emissions_per_unit)
 {
     pSeller = seller_pointer;
     price = seller_price;

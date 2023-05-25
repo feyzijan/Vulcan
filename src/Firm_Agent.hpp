@@ -34,7 +34,7 @@ class Firm_Agent{
     virtual void Update_Sentiment();
     void Update_Average_Profit();
     void Update_Average_Sales();
-    int Pay_Dividend() ;
+    long long Pay_Dividend() ;
     virtual void Depreciate_Good_Inventory() {};
     virtual void Determine_New_Production() {};
     void Adjust_Wage_Offers();
@@ -62,7 +62,7 @@ class Firm_Agent{
     int Get_Sector_ID() {return sector_id;}
     bool Get_Bankruptcy_Status() {return bankrupt;}
     int Get_Employee_Count() {return employee_count;}
-    int Get_Cons_Firm_Status() {return is_cons_firm;}
+    bool Get_Cons_Firm_Status() {return is_cons_firm;}
     virtual float Get_Unit_Emissions() {return 0;} 
     virtual long long Get_Total_Emissions() {return 0;}
 
@@ -143,19 +143,19 @@ class Firm_Agent{
     int employee_count_desired;
     int n_active_job_postings;
     bool need_worker;
-    int w_target; //Desired labor capacity utilization
+    int w_target; //Desired labor capacity utilization - unused
     float labor_utilization; 
     
     // Inventories
     long long inventory;
-    int working_capital_inventory;
+    long long working_capital_inventory;
     float target_inv_factor; // Characteristic
     long long desired_inventory; 
     float inv_factor; 
     float inv_reaction_factor;  
     float machine_utilization;  
     float inv_depreciation_rate; // NEWLY ADDDED
-    int desired_machines; 
+    long long desired_machines; 
 
     long long capital_goods_current_value; // NEWLY ADDED
 

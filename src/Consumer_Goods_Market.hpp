@@ -40,7 +40,7 @@ class Consumer_Goods_Market{
 
     // Getters 
     const vector<float>& Get_Price_Levels_By_Sector() {return price_level_by_sector;}
-    int Get_Size(){return n_total_goods;}
+    long long Get_Size(){return n_total_goods;}
     float Get_Price_Level(){return price_level;}
 
     // Setters
@@ -53,10 +53,10 @@ class Consumer_Goods_Market{
     map<float, vector<pair<int, vector<Consumer_Good*>>>> cons_goods_by_emission_adj_price; 
     
     vector<float> price_level_by_sector;
-    vector<int> n_goods_by_sector;
+    vector<long long> n_goods_by_sector;
     vector<float> default_emission_sensitivities;
 
-    int n_total_goods;
+    long long n_total_goods;
     float price_level;
 
 };

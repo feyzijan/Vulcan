@@ -63,21 +63,21 @@ class Bank_Agent{
     float cap_inflation_past_month; // Inflation MoM
 
     // Repayments
-    int new_principal_repayments;
-    int new_interest_repayments;
-    int total_principal_repayments;
-    int total_interest_repayments;
+    long long new_principal_repayments;
+    long long new_interest_repayments;
+    long long total_principal_repayments;
+    long long total_interest_repayments;
 
     // Loan issuance totals
-    int total_loan_issuance_to_date; 
-    int short_term_loan_issuance_to_date;
-    int long_term_loan_issuance_to_date;
-    int total_new_loan_issuance;
-    int new_short_term_loan_issuance;
-    int new_long_term_loan_issuance;
-    int total_outstanding_loans;
-    int outstanding_short_term_loans;
-    int outstanding_long_term_loans;
+    long long total_loan_issuance_to_date; 
+    long long short_term_loan_issuance_to_date;
+    long long long_term_loan_issuance_to_date;
+    long long total_new_loan_issuance;
+    long long new_short_term_loan_issuance;
+    long long new_long_term_loan_issuance;
+    long long total_outstanding_loans;
+    long long outstanding_short_term_loans;
+    long long outstanding_long_term_loans;
 
     // Loan parameters
     int short_term_loan_length;

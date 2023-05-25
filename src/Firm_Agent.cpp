@@ -266,7 +266,7 @@ void Firm_Agent::Update_Average_Sales(){
 
 
 /* Pay dividends to firm owner- formula taken from Jamel*/
-int Firm_Agent::Pay_Dividend(){ 
+long long Firm_Agent::Pay_Dividend(){ 
     return dividend_payments; 
 }
 
@@ -461,8 +461,8 @@ TODO:
 - Jamel has a complicated method, for now I will use a simpler one
 */
 void Firm_Agent::Make_Investment_Decision(){
-    desired_machines = max(0,employee_count_desired/firm_cons_workers_per_machine - working_capital_inventory);
-    int estimated_cost;
+    desired_machines = max(employee_count_desired/firm_cons_workers_per_machine - working_capital_inventory, static_cast<long long>(0));
+    long long estimated_cost;
 
     // Check if there is enough money to buy the goods, and if not take a loan
     if (desired_machines > 0){
@@ -501,7 +501,7 @@ void Firm_Agent::Produce_Goods(){
 
     // Calculate the production
 
-    int production_max = working_capital_inventory * output_per_machine;
+    long long production_max = working_capital_inventory * output_per_machine;
     
     production_current = min(static_cast<long long>(production_max*labor_utilization), production_planned);
 
@@ -529,7 +529,7 @@ void Firm_Agent::Seek_Short_Term_Loan(){
     if (new_loan != nullptr){
         // Update records if a loan has been issued
         loan_book.push_back(new_loan);
-        int principal = new_loan->Get_Principal_Amount();
+        long long principal = new_loan->Get_Principal_Amount();
         cash_on_hand += principal;
         new_loan_issuance += principal;
         short_term_funding_gap = 0;
@@ -594,13 +594,13 @@ void Firm_Agent::Update_Leverage_Ratio(){
 /* Function to buy capital goods
 */
 void Firm_Agent::Buy_Capital_Goods(){
-    int n_new_machines_bought = 0;
-    int total_price_paid = 0;
-    int average_price = 0;
+    long long n_new_machines_bought = 0;
+    long long total_price_paid = 0;
+    double average_price = 0;
     capital_costs = 0;
 
     if (desired_machines > 0){ // Buy machines from the market - returns array: [quantity, total_price]
-        int* arr = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
+        long long* arr = pPublic_Info_Board->Buy_Capital_Goods(desired_machines);
         n_new_machines_bought = arr[0];
         total_price_paid = arr[1];
         delete [] arr;
@@ -716,7 +716,7 @@ void Firm_Agent::Pay_Liabilities(){
         total_liabilities = 0;
 
         // Pay dividends and taxes
-        int excess_profits = max(static_cast<long long>(0),total_income - total_liabilities); // Calculate excess profits
+        long long excess_profits = max(static_cast<long long>(0),total_income - total_liabilities); // Calculate excess profits
         
         tax_payments = excess_profits * firm_tax_rate; // Calculate taxes
         excess_profits -= tax_payments; // Deduct taxes from excess profits

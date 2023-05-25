@@ -73,7 +73,7 @@ void Job_Market::Remove_Unwanted_Jobs(){
 /* Calculate average weight in the market
 */
 void Job_Market::Calculate_Average_Wage(){
-   float total_wage = 0.0;
+   double total_wage = 0.0;
     for (Job* job : job_list) {
         total_wage += job->Get_Wage();
     }

@@ -32,7 +32,7 @@ class Job_Market{
     void Calculate_Average_Wage();
 
     // Getters
-    int Get_Size(){ return job_list.size();}
+    long long Get_Size(){ return job_list.size();}
     float Get_Average_Wage(){ return average_wage;}
 
 

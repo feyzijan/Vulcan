@@ -267,7 +267,7 @@ TODO : Check if this is necessary
 */
 void Household_Agent::Update_Savings()
 {
-    int effective_savings = cash_on_hand_current - income_average; // maybe make this the same as current savings
+    long long effective_savings = cash_on_hand_current - income_average; // maybe make this the same as current savings
     cash_on_hand_desired = household_targeted_savings_to_income_ratio * income_average;
 }
 
@@ -299,7 +299,7 @@ void Household_Agent::Determine_Consumer_Sentiment()
 */
 void Household_Agent::Determine_Consumption_Budget()
 {
-    int excess_savings = cash_on_hand_current - cash_on_hand_desired;
+    long long excess_savings = cash_on_hand_current - cash_on_hand_desired;
     if (excess_savings < 0){
         expenditure_consumption = (1.0-saving_propensity) * income_current;
     } else {
@@ -342,7 +342,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
     vector<long long> emissions_generated =  std::get<2>(purchases_by_sector);
     vector<long long> actual_spending_by_sector(planned_expenditure_by_sector);
 
-    int total_goods_bought = 0;
+    long long total_goods_bought = 0;
 
     for (int i=0; i<remaining_consumption_budget.size(); i++){
         // Deal with the leftover budget

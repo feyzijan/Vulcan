@@ -12,8 +12,8 @@ class Loan {
 
     public:
     // Constructors and Destructors
-    Loan(Firm_Agent* pborrowing_firm, float interest_rate, int principal_amount,
-    int duration,bool short_term_loan);
+    Loan(Firm_Agent* pborrowing_firm, float interest_rate, long long principal_amount,
+    int duration, bool short_term_loan);
     Loan(Loan&);
     ~Loan();
 
@@ -23,14 +23,14 @@ class Loan {
     long long Calculate_Principal_Repayment() const;
     
     // Deducting Payments
-    void Deduct_Principal_Repayment(int principal_repayment) {principal_amount -= principal_repayment;}
+    void Deduct_Principal_Repayment(long long principal_repayment) {principal_amount -= principal_repayment;}
 
     // Cleaning Loan ( Bankrupt Firm)
     void Clean_Loan();
 
     // Getters
     float Get_Interest_Rate() const { return interest_rate;}
-    int Get_Principal_Amount() const {return principal_amount;}
+    long long Get_Principal_Amount() const {return principal_amount;}
     int Get_Start_Date() const {return start_date;}
     int Get_End_Date() const {return end_date;}
     Firm_Agent* Get_Borrowing_Firm() const {return pBorrowing_Firm; }

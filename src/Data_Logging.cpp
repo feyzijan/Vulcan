@@ -40,7 +40,6 @@ void write_csv(string filename, vector<pair<string, vector<float>>> dataset){
 
 
 
-
 /* Function to log public info board
 */
 
@@ -54,7 +53,7 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
 
     // If file is empty, write the header row
     if (!header_written && log_file.tellp() == 0) {
-        // Get the header row
+        // Get the header row TODO: May need to change thsi float to dobule
         vector<pair<string, float>>* header_data = pPublic_Info_Board->Log_Data();
         string header;
         for (auto it = header_data->begin(); it != header_data->end(); ++it) {

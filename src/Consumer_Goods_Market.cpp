@@ -153,14 +153,14 @@ long long budget, const vector<long long>& spending_array, const vector<float>& 
 
             if (n>=q){ // Household can buy all the goods, likely not satisfied
                 n = q; // buy all the goods
-                pgood->Update_Quantity(-n); // update the quantity of the good
+                pgood->Add_Quantity(-n); // update the quantity of the good
                 sector_quantity_bought += n; // update the quantity bought
                 sector_budget_remaining -= n*p; // update the remaining budget
                 sector_emissions += n*pgood->Get_Unit_Emissions(); // update the emissions
             } else if (n==0){ 
                 break; // Household can no longer afford to buy anything -  exit loop
             } else { // Household can't buy q goods but rather only n , so will run out of budget after this purchase
-                pgood->Update_Quantity(-n);
+                pgood->Add_Quantity(-n);
                 sector_quantity_bought += n;
                 sector_budget_remaining -= n*p;
                 sector_emissions += n*pgood->Get_Unit_Emissions(); // update the emissions
@@ -191,8 +191,8 @@ void Consumer_Goods_Market::Update_Price_Level(){
     price_level = 0;
 
     for (int i = 0; i < cons_good_list_by_sector.size(); ++i) { // Loop through the sectors
-        int n_total_goods = 0;
-        int total_weighed_price = 0;
+        long long n_total_goods = 0;
+        double total_weighed_price = 0;
         vector<Consumer_Good*>* pgoods_for_sector = &(cons_good_list_by_sector[i].second); // Get the goods for this sector
 
         for(Consumer_Good* pgood : *pgoods_for_sector){ // Loop through the goods list, from cheapest to most expensive
@@ -201,7 +201,7 @@ void Consumer_Goods_Market::Update_Price_Level(){
             n_total_goods += q;
             total_weighed_price += float(p*q);
         }
-        price_level_by_sector.push_back((float)total_weighed_price/(float)n_total_goods);
+        price_level_by_sector.push_back(total_weighed_price/(float)n_total_goods);
         n_goods_by_sector.push_back(n_total_goods);
     }
 

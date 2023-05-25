@@ -20,8 +20,8 @@ class Capital_Goods_Market{
     // Market operations
     void Add_Capital_Good_To_Market(Capital_Good * cap_good);
     void Sort_Capital_Goods_By_Price();
-    int Get_Cost_For_Given_Quantity(int q_desired);
-    int* Buy_Capital_Goods(int q_desired);
+    long long Get_Cost_For_Given_Quantity(int q_desired);
+    long long* Buy_Capital_Goods(int q_desired);
     void Update_Price_Level();
     void Reset_Market(); 
 
@@ -35,7 +35,7 @@ class Capital_Goods_Market{
     private:
     vector<Capital_Good*> cap_goods_list;
     int n_total_goods;
-    int total_weighed_price;
+    double total_weighed_price;
     float price_level;
 
 };

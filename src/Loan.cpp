@@ -2,7 +2,7 @@
 
 //---- Constructors
 
-Loan::Loan(Firm_Agent* pborrowing_firm, float interest_rate, int principal_amount, int duration, bool short_term_loan)
+Loan::Loan(Firm_Agent* pborrowing_firm, float interest_rate, long long principal_amount, int duration, bool short_term_loan)
 {
     pBorrowing_Firm = pborrowing_firm;
     this->interest_rate = interest_rate;

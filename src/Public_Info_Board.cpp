@@ -179,16 +179,16 @@ long long Public_Info_Board::Distribute_Initial_Emission_Allowances(int employee
 
 /* Distribute emission allowances base don sales
 */
-long long Public_Info_Board::Distribute_Emission_Allowances(int sale_quantity, int sector_id){
-    float sale_ratio = static_cast<float>(sale_quantity) / quantity_sold_by_sector[sector_id - 1];
-    return sale_ratio * emission_allowances_by_sector[sector_id-1]; 
+long long Public_Info_Board::Distribute_Emission_Allowances(long long sale_quantity, int sector_id){
+    double sale_ratio = static_cast<double>(sale_quantity) / static_cast<double>(quantity_sold_by_sector[sector_id - 1]);
+    return static_cast<long>(sale_ratio * emission_allowances_by_sector[sector_id-1]); 
 }
 
 // Updating emission allowance amounts
 void Public_Info_Board::Update_Emission_Allowance_Amount() { 
 
     std::transform(emission_allowances_by_sector.begin(), emission_allowances_by_sector.end(), 
-    emission_allowances_by_sector.begin(), [=](unsigned long int value) {
+    emission_allowances_by_sector.begin(), [=](long long value) {
     float result = static_cast<float>(value) * (1.0f + emission_total_allowance_change);
     return static_cast<unsigned long int>(std::round(result));});
 
@@ -210,7 +210,7 @@ Loan* Public_Info_Board::Seek_Long_Term_Loan(Firm_Agent* pFirm) {
 
 // Capital goods market
 
-int*  Public_Info_Board::Buy_Capital_Goods(int q_desired) {
+long long*  Public_Info_Board::Buy_Capital_Goods(long long q_desired) {
     return pCapital_Goods_Market->Buy_Capital_Goods(q_desired);
 }
 
@@ -218,7 +218,7 @@ void Public_Info_Board::Send_Cap_Good_To_Market(Capital_Good* pGood) {
     pCapital_Goods_Market->Add_Capital_Good_To_Market(pGood);
 }
 
-int Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(int q_desired){
+long long Public_Info_Board::Get_Cost_For_Desired_Cap_Goods(long long q_desired){
     return pCapital_Goods_Market->Get_Cost_For_Given_Quantity(q_desired);
 }
 

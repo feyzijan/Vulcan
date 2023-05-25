@@ -13,10 +13,10 @@ class Consumer_Good: public General_Good{
 
     public:
     // Constructor
-    Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, int seller_quantity, int seller_sector);
-    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity);
-    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, float emissions_per_unit);
-    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, int seller_quantity, int seller_sector, float emissions_per_unit);
+    Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, long long seller_quantity, int seller_sector);
+    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity);
+    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity, float emissions_per_unit);
+    Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity, int seller_sector, float emissions_per_unit);
 
     // Getters
     Consumer_Firm_Agent* Get_Seller() {return pSeller;}

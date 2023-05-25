@@ -186,7 +186,7 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
         }
         
         float loan_rate = r_rate + risk_premium*excess_leverage + emission_penalty;
-        int loan_amount = long_term_funding_gap + long_term_funding_gap * extra_funding;
+        long long loan_amount = long_term_funding_gap + long_term_funding_gap * extra_funding;
 
         if (loan_amount == 0){
             cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_amount < 0 - firm #" << pFirm << endl;
