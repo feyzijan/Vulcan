@@ -10,6 +10,7 @@ class Public_Info_Board; // Forward declaration
 #include "Job.hpp"
 #include "Public_Info_Board.hpp"
 #include "Random_Functions.hpp"
+#include "Household_Agent.hpp"
 #include "Initialization_Parameters.hpp"
 
 using namespace std;
@@ -26,7 +27,7 @@ class Firm_Agent{
     void Update_Average_Sales_T1();
 
     // Main Loop Methods 
-    void Depreciate_Capital();
+    void Depreciate_And_Revalue_Capital_Goods();
     void Check_Employees_Quitting();
     void Cancel_Expired_Contracts();
     virtual void Random_Experimentation();
@@ -54,6 +55,7 @@ class Firm_Agent{
     void Update_Loan_List();
     void Pay_Liabilities();
     bool Avoid_Bankruptcy();
+    void Notify_Owner_Of_Bankruptcy() { owner->Notify_Of_Bankruptcy();}
  
     // Getters
     long long Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
@@ -69,6 +71,7 @@ class Firm_Agent{
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
     void Set_Wage_Offer(int wage) { this->wage_offer = wage;} // used in testing
+    void Set_Owner(Household_Agent* ptr) {owner = ptr;}
 
     //Print and logging methods
     friend std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj);
@@ -91,6 +94,9 @@ class Firm_Agent{
     // Employees
     vector<Job*> active_job_list;
     vector<Job*> posted_job_list;
+
+    // Owner
+    Household_Agent* owner;
 
 
     // Production and sales figures
@@ -125,7 +131,6 @@ class Firm_Agent{
     long long expected_wage_bill; 
     long long layoff_wage_savings; 
     long long outstanding_debt_total;
-    //int max_allowable_debt_total;
     
     // Assets and fianncials 
     long long total_assets; // maybe this should be the same as cash in hand?
@@ -164,10 +169,12 @@ class Firm_Agent{
     int output_per_machine; // NEWLY ADDDED
     float unit_good_cost; // NEWLY ADDDED
     float max_production_climbdown; // NEWLY ADDDED
+
     
     // Others
     bool sentiment; // pessimistic, optimistic
     bool bankrupt;
+    bool recapitalised;
     bool is_cons_firm; // type identifier, may be useful
     int current_date;
 

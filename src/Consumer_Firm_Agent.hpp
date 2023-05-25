@@ -20,7 +20,6 @@ class Consumer_Firm_Agent: public Firm_Agent{
     ~Consumer_Firm_Agent() override;
 
     // Main Loop methods
-    /* void Depreciate_Capital(); */
     virtual void Depreciate_Good_Inventory() override;
     virtual void Produce_Goods() override;
     virtual void Check_Sales() override;

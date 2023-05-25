@@ -53,7 +53,8 @@ void Job_Market::Sort_Jobs_by_Wage(){
     return j1->Get_Wage() > j2->Get_Wage() ;});
 }
 
-/* Function to remove jobs from the market that have a status = -1
+/* Function to remove jobs from the market that have a status = -3
+I.e. firms have requested these jobs be removed
 */
 void Job_Market::Remove_Unwanted_Jobs(){
     //cout << "Removing jobs from the market" <<endl;

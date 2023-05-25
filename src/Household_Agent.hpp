@@ -40,6 +40,8 @@ class Household_Agent{
     void Seek_Jobs();
     void Seek_Better_Jobs();
 
+    void Notify_Of_Bankruptcy();
+
     //Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
     void Set_Job(Job* ptr) { current_job = ptr;}

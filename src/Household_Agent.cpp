@@ -66,6 +66,7 @@ void Household_Agent::Set_Firm_Owner(Firm_Agent* firm_ptr){
     firm_owner = true;
     owned_firm = firm_ptr;
     unemployed = false;
+    owned_firm->Set_Owner(this);
 }
 
 /* Function to initialize the spending weights for each consumer sectors
@@ -406,6 +407,16 @@ void Household_Agent::Seek_Better_Jobs()
             }
         }
     }
+}
+
+
+/* Convert firm owner to an employee 
+*/
+void Household_Agent::Notify_Of_Bankruptcy(){
+    firm_owner = false;
+    unemployed = true;
+    current_job = NULL;
+    owned_firm = NULL;
 }
 
 

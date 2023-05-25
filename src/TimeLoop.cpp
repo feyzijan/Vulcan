@@ -25,6 +25,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     cout << pConsumer_Firm_vector->size() << " consumer firms, " << pCapital_Firm_vector->size() << " capital firms, " 
     << pFirm_vector->size() << " firms  in total remaining" << endl;
 
+    // STEP 1.12: Remove unwanted jobs from the job market due to the bankruptcies
+    //pJob_Market->Remove_Unwanted_Jobs();
+
     // Shuffle the firm and households vectors randomly using the random number generator
     std::random_device rd;
     std::shuffle(pHousehold_vector->begin(), pHousehold_vector->end(), std::default_random_engine(rd()));
@@ -34,7 +37,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     
     // STEPS 1.2-1.7: Firms update various parameters
     for( Firm_Agent* firm_ptr : *pFirm_vector){
-        firm_ptr->Depreciate_Capital();
+        firm_ptr->Depreciate_And_Revalue_Capital_Goods();
         firm_ptr->Cancel_Expired_Contracts();
         firm_ptr->Random_Experimentation();
         firm_ptr->Check_Sales();

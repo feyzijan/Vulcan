@@ -45,7 +45,7 @@ class Job{
     void Set_Employee(Household_Agent* pemployee) {employee = pemployee;}
     void Update_Status(int status) { this->status = status;} 
     /* 1: Posted job has been taken by household,
-       0: Posted job still on the market, 
+       0: Posted job still on the market : default status when object is created
       -1: Firm notifies worker they have been fired
       -2: Worker notifies firm they quite
       -3: Firm requested the job be removed from market

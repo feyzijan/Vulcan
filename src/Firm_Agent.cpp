@@ -19,6 +19,7 @@ Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
     need_worker = 1;
     sentiment = 1;
     bankrupt = false;
+    recapitalised = false;
     inv_factor = 0;
     cash_on_hand = total_assets; // unsure how these two differed
     production_planned = 0; // assume they executed their plan perfectly
@@ -93,21 +94,17 @@ Firm_Agent::~Firm_Agent() {
     Loop through the active jobs list, update status to -1, and remove from list
     Employees will see they are fired when they check the job status, hence job object must not be deleted
     */
+   pPublic_Info_Board->Update_Employee_Firings(active_job_list.size());
     for (auto it = active_job_list.begin(); it != active_job_list.end(); ++it){
         (*it)->Update_Status(-1);
     }
 
     /* Delete Posted jobs */
     // Approach 1: Loop through the posted jobs list, update status to -3, and remove from list
-    /* for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
-        (*it)->Update_Status(-3); // Job market will remove these on next update
-    } */
-
-    // Approach 2: Delete all objects in the posted_job_list 
-    // TODO: Check this does not cause errors in the job market
+    pPublic_Info_Board->Update_Removed_Job_Postings(posted_job_list.size());
     for (auto it = posted_job_list.begin(); it != posted_job_list.end(); ++it){
-        delete *it;
-    }
+        (*it)->Update_Status(-3); // Job market will remove these on next update
+    } 
 
     // Loans
     // Loop through all loans in the loan book and set the pointers to zero
@@ -115,13 +112,10 @@ Firm_Agent::~Firm_Agent() {
         (*it)->Clean_Loan();
     } 
 
-    // Delete all the objects in the loan_book
-    // TODO: Check this does not cause errors in the bank agent
-    /* for (auto it = loan_book.begin(); it != loan_book.end(); ++it){
-        delete *it;
-    } */
+    // Notify firm owner
+    owner->Notify_Of_Bankruptcy();
 
-    posted_job_list.clear();
+    pPublic_Info_Board->Update_Bankruptcies(is_cons_firm);
 }
 
 
@@ -155,7 +149,7 @@ void Firm_Agent::Update_Average_Sales_T1(){
 As it depreciates each capital object, check if it has fully depreciated, and if so remove the capital
 TODO: Check below loop works properly once I update i
 */
-void Firm_Agent::Depreciate_Capital(){
+void Firm_Agent::Depreciate_And_Revalue_Capital_Goods(){
     capital_goods_current_value = 0;
     auto it = capital_goods_list.begin();
 
@@ -165,7 +159,7 @@ void Firm_Agent::Depreciate_Capital(){
         if((*it)->Check_Depreciation() == true) { // Check if capital good has fully depreciated
             working_capital_inventory -= (*it)->Get_Quantity();
             if (working_capital_inventory < 0) {
-                cout << "ERROR: Firm_Agent::Depreciate_Capital() - working_capital_inventory < 0 at firm # " << this << endl;
+                cout << "ERROR: Firm_Agent::Depreciate_And_Revalue_Capital_Goods() - working_capital_inventory < 0 at firm # " << this << endl;
                 working_capital_inventory = 0;
             } 
             it = capital_goods_list.erase(it);
@@ -654,10 +648,24 @@ TODO: *** CHECK if any of the below bills has already been deducted from cash on
 */
 void Firm_Agent::Pay_Liabilities(){
 
+    // ------------- Tally up assets -------------------------------------
+    // Calculate book value of inventory : use 50% market price
+    double average_good_price = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
+    long long inventory_book_value = inventory * average_good_price/2.0;
+    // Calculate book value of capital goods
+    double average_capital_price = pPublic_Info_Board->Get_Capital_Good_Price_Level();
+    long long machines_book_value =  working_capital_inventory * average_capital_price/2.0;
+    // Income
+    total_income = revenue_sales + subsidies;
+    cash_on_hand += total_income;
+    // Total assets
+    total_assets = cash_on_hand + machines_book_value + inventory_book_value;
+    // -------------------------------------------------------------------
+    
+    // ------------- Tally up liabilities -------------------------------------
     total_liabilities = 0;
-    total_assets = cash_on_hand + capital_goods_current_value + inventory * unit_good_cost;
 
-    // ----Loans -----
+    // Loans
     // Make loan repayments and tally up payments
     debt_principal_payments = 0;
     debt_interest_payments = 0;
@@ -665,9 +673,11 @@ void Firm_Agent::Pay_Liabilities(){
         long long current_principal_payment = loan_ptr->Calculate_Principal_Repayment();
         loan_ptr->Deduct_Principal_Repayment(current_principal_payment);
         debt_principal_payments += current_principal_payment;
-        debt_interest_payments += loan_ptr->Calculate_Interest_Repayment(); // No need to deduct this
+        debt_interest_payments += loan_ptr->Calculate_Interest_Repayment(); // No need to deduct this from the loan object
     }
-    // Note: here I am assuming the firm has already made the payments for simplicity, in reality it hasn't but it will have to do avoid bankruptcy
+    total_liabilities += debt_principal_payments + debt_interest_payments;
+    /* Note: here I am assuming the firm has already made these payments for simplicity, 
+    in reality it hasn't but it will have to do avoid bankruptcy */
     Update_Loan_List(); // Delete loans that have been paid off
     Update_Leverage_Ratio(); 
     // Note that newly issued loans' principals have already been added to cash on hand
@@ -677,30 +687,27 @@ void Firm_Agent::Pay_Liabilities(){
     labor_wage_bill = 0;
     for (auto i = active_job_list.begin(); i != active_job_list.end(); ++i){ 
     labor_wage_bill += (*i)->Get_Wage();}
+    total_liabilities += labor_wage_bill;
 
     // ------ Other bills
     /* The below costs have not been deducted from the cash on hand, but it is assumed the firm paid for them
-    // capital_costs; // calculated in Buy_Capital_Goods()
-    // production_costs; // calculated in Produce_Goods() in subclass - this
+    capital_costs; // calculated in Buy_Capital_Goods()
+    production_costs; // calculated in Produce_Goods() in subclass - this
     */
+    // Tally up total liabilities
+    total_liabilities += capital_costs + production_costs;
+    // -------------------------------------------------------------------
 
-    // Tally up liabilities
-    total_liabilities = labor_wage_bill + debt_principal_payments + debt_interest_payments + capital_costs + production_costs;
-
-    // Tally up income
-    total_income = revenue_sales + subsidies;
-    cash_on_hand += total_income;
-
-    // check if the firm has a structural deficit
+    // Check if the firm has a structural deficit : cash on hand is not enough
     long_term_funding_gap = max(total_liabilities - cash_on_hand,static_cast<long long>(0));
 
-    if (long_term_funding_gap > 0){
-        // Need financing to avoid bankruptcy
+    if (long_term_funding_gap > 0){ // Try to avoid bankruptcy
+        // Seek loans to pay for the bills
         Seek_Long_Term_Loan();
-        if (long_term_funding_gap > 0){ // Bank did not give loan
-            //cout << "Firm Agent at address: " << this << " is about to go bankrupt" << endl;
+        if (long_term_funding_gap > 0){ // Bank rejected loan
+            
             if(Avoid_Bankruptcy()){
-                cout << "Firm Agent at address: " << this << " avoided bankruptcy" << endl;
+                cout << "Firm Agent at address: " << this << " avoided bankruptcy by recapitalising" << endl;
                 bankrupt = false;
             } else{
                 //cout << "Firm Agent at address: " << this << " went bankrupt" << endl;
@@ -709,11 +716,12 @@ void Firm_Agent::Pay_Liabilities(){
         } else { // Successfully took a loan to cover shortfall
             bankrupt = false;
         }
+    }
 
-    } else {
+    if (bankrupt == false){
         // Pay bills
         cash_on_hand -= total_liabilities;
-        total_liabilities = 0;
+        total_assets -= cash_on_hand ;
 
         // Pay dividends and taxes
         long long excess_profits = max(static_cast<long long>(0),total_income - total_liabilities); // Calculate excess profits
@@ -724,54 +732,51 @@ void Firm_Agent::Pay_Liabilities(){
         dividend_payments = excess_profits * dividend_ratio; // Decide dividends
         excess_profits -= dividend_payments; // Deduct dividends from excess profits
 
-        cash_on_hand -= dividend_payments + tax_payments; // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
+        // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
+        cash_on_hand -= dividend_payments + tax_payments; 
+    }
+
+    // Check for errors in accounting
+    if (cash_on_hand < 0 || total_assets < 0 || total_liabilities < 0 || tax_payments || dividend_payments < 0){
+        cout << "ERROR in Pay_Liabilities: Firm at: " << this << " has negative values " << endl;
     }
 
     // Reset parameters before next time step
     new_loan_issuance = 0;
-
+    //
 }
 
 
 /* Method for the firm to avoid bankruptcy by having a fire sale
 */
 bool Firm_Agent::Avoid_Bankruptcy(){
-    if( capital_goods_current_value > long_term_funding_gap){
-        cout << " Firm has enough money to sell all assets to cover costs " << endl;
-        cash_on_hand += capital_goods_current_value;
-        long_term_funding_gap = max(total_liabilities - cash_on_hand,static_cast<long long>(0));
-        
-        if (long_term_funding_gap <0){
-            cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - long_term_funding_gap < 0 despite avoiding bankruptcy at firm # " << this << endl;
-        }
-        
-        // Delete(sell) all capital goods, but leave with one just because
+    if ( recapitalised == false && total_assets > total_liabilities){ // Sell everything, recapitalise
+        // Everything is converted to cash
+        cash_on_hand =  total_assets - total_liabilities; 
+        total_assets = cash_on_hand;
+        long_term_funding_gap = 0;
+        // Sell all inventory and capital goods
+        inventory = 0;
+        goods_on_market->Set_Quantity(0);
+        // Sell all but one capital good
         capital_goods_list.clear();
         capital_goods_current_value = 0;
         working_capital_inventory = 1;
-        
         // Layoff all workers but one ( they are still paid for the preceeding period)
         int layoff_count = employee_count - 1; 
-        for (auto it = active_job_list.begin(); it != active_job_list.end(); ++it){
-            (*it)->Update_Status(-1);
+        // Fire employees and calc how much you save on wage bills
+        for (int i=0; i<layoff_count; i++){
+            active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
+            active_job_list.pop_back();
         }
-
         employee_count = 1;
         pPublic_Info_Board->Update_Employee_Firings(layoff_count);
-        return 1;
+        
+        recapitalised = true;
+        return true;
     } else {
-        // layoff all workers and go bankrupt
-        int layoff_count = employee_count;
-
-        for (auto it = active_job_list.begin(); it != active_job_list.end(); ++it){
-            (*it)->Update_Status(-1);
-        }
-
-        employee_count = 0;
-        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
-        pPublic_Info_Board->Update_Bankruptcies(is_cons_firm);
-
-        return 0;
+        // Will go bankrupt - destructor will be called at the start of the next time step
+        return false;
     }
 }
 
@@ -784,15 +789,6 @@ bool Firm_Agent::Avoid_Bankruptcy(){
 */
 
 std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
-   /*  os << "pPublic_Info_Board: " << obj.pPublic_Info_Board << std::endl;
-    os << "goods_on_market " << obj.goods_on_market << std::endl;
-    os << "initial_capital_goods " << obj.initial_capital_goods << std::endl;
-    os << "capital_goods_list " << obj.capital_goods_list.size() << " items" << std::endl;
-    os << "loan_book " << obj.loan_book.size() << " loans" << std::endl;
-    os << "past_profits " << obj.past_profits.size() << " items" << std::endl;
-    os << "past_sale_quantities " << obj.past_sale_quantities.size() << " items" << std::endl;
-    os << "active_job_list " << obj.active_job_list.size() << " jobs" << std::endl;
-    os << "posted_job_list " << obj.posted_job_list.size() << " jobs" << std::endl; */
     os << "production_current " << obj.production_current << std::endl;
     os << "production_planned " << obj.production_planned << std::endl;
     os << "production_past " << obj.production_past << std::endl;
@@ -841,6 +837,7 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "desired_machines " << obj.desired_machines << std::endl;
     os << "sentiment " << obj.sentiment << std::endl;
     os << "bankrupt " << obj.bankrupt << std::endl;
+    os << "recapitalised " << obj.recapitalised << std::endl;
     os << "is_cons_firm " << obj.is_cons_firm << std::endl;
     os << "date " << obj.current_date << std::endl;
     return os;
