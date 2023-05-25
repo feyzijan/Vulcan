@@ -55,7 +55,7 @@ class Firm_Agent{
     void Update_Loan_List();
     void Pay_Liabilities();
     bool Avoid_Bankruptcy();
-    void Notify_Owner_Of_Bankruptcy() { owner->Notify_Of_Bankruptcy();}
+    void Notify_Owner_Of_Bankruptcy();
  
     // Getters
     long long Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
@@ -102,22 +102,18 @@ class Firm_Agent{
     // Production and sales figures
     long long production_current; // Actual production at t
     long long production_planned; // Production plan for t
-    long long production_past; // Production at t-1
     long long quantity_sold; // Sales at t-1
     
     // Inflows
-    long long total_income;
     long long revenue_sales;
-    long long new_loan_issuance;
-    long long subsidies;
     float good_price_current; // good price set for t
-    float good_price_past; // good price at t-1
     long long average_profit;  
     long long average_sale_quantity; 
     
     // Loan Parameters
     long long short_term_funding_gap; 
     long long long_term_funding_gap; 
+    long long loan_issuance_to_date;
     
     // Expenditures
     long long total_liabilities; //Comprises of evt below

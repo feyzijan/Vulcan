@@ -10,7 +10,7 @@ Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
     target_inv_factor = float_vals[0];
     good_price_current = float_vals[1];
 
-    total_assets = int_vals[0];
+    cash_on_hand = static_cast<long long>(int_vals[0]);
     employee_count_desired = int_vals[1];
     working_capital_inventory = int_vals[2];
     wage_offer = int_vals[4];
@@ -21,17 +21,15 @@ Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
     bankrupt = false;
     recapitalised = false;
     inv_factor = 0;
-    cash_on_hand = total_assets; // unsure how these two differed
+    total_assets = cash_on_hand; // unsure how these two differed
     production_planned = 0; // assume they executed their plan perfectly
 
     //-- Set everything else to zero initiallly
     // Inflows
-    new_loan_issuance = 0; 
-    subsidies = 0;
+    loan_issuance_to_date = 0; 
     average_sale_quantity = 0;
 
     // Production and sales figures
-    production_past = 0; 
     quantity_sold = 0;
     
     // Loan Parameters
@@ -52,9 +50,6 @@ Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
     layoff_wage_savings = 0;
 
     outstanding_debt_total = 0;
-
-    // Good price
-    good_price_past = good_price_current;
 
     // Assets and fianncials 
     leverage_ratio = 0; // correctly set
@@ -128,7 +123,6 @@ void Firm_Agent::Update_Average_Profits_T1(){
         past_profits.push(revenue_sales);
 }
     average_profit = revenue_sales;
-    cash_on_hand += revenue_sales;
 }
 
 /* Function to fill past average sale quantity queue with initial profits
@@ -223,7 +217,7 @@ void Firm_Agent::Check_Sales(){
     revenue_sales = quantity_sold * good_price_current; 
 
     if (revenue_sales < 0 || revenue_sales <0){ // DEBUG Lines
-        cout << "ERROR: Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << "at firm # " << this <<  endl;
+        cout << "ERROR: negative values at Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << "at firm # " << this <<  endl;
     }
 
     inv_factor = float(inventory) / float(production_current);
@@ -247,7 +241,6 @@ void Firm_Agent::Update_Average_Profit(){
     average_profit += (revenue_sales - past_profits.front())/12;
     past_profits.pop();
     past_profits.push(revenue_sales);
-    cash_on_hand += revenue_sales;
 }
 
 /* Function to update the firm's average quantity sold
@@ -525,7 +518,7 @@ void Firm_Agent::Seek_Short_Term_Loan(){
         loan_book.push_back(new_loan);
         long long principal = new_loan->Get_Principal_Amount();
         cash_on_hand += principal;
-        new_loan_issuance += principal;
+        loan_issuance_to_date += principal;
         short_term_funding_gap = 0;
         if (principal <0){
             cout << "ERROR: Firm_Agent::Seek_Short_Term_Loan() - principal < 0 at firm # " << this << endl;
@@ -548,7 +541,7 @@ void Firm_Agent::Seek_Long_Term_Loan(){
         long long principal = new_loan->Get_Principal_Amount();
         loan_book.push_back(new_loan); // Add the new loan to the loan book
         cash_on_hand += principal;
-        new_loan_issuance += principal;
+        loan_issuance_to_date += principal;
         long_term_funding_gap = 0;
         if(principal < 0){
             cout << "ERROR: Firm_Agent::Seek_Long_Term_Loan() - principal < 0 at firm # "<< this << endl;
@@ -652,12 +645,13 @@ void Firm_Agent::Pay_Liabilities(){
     // Calculate book value of inventory : use 50% market price
     double average_good_price = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
     long long inventory_book_value = inventory * average_good_price/2.0;
+    if(inventory_book_value<0){ cout << "ERROR: Firm_Agent::Pay_Liabilities() - negative inventory book value at firm # " << this << " of " << inventory_book_value << endl;}
     // Calculate book value of capital goods
     double average_capital_price = pPublic_Info_Board->Get_Capital_Good_Price_Level();
     long long machines_book_value =  working_capital_inventory * average_capital_price/2.0;
+    if(machines_book_value<0){ cout << "ERROR: Firm_Agent::Pay_Liabilities() - negative machines book value at firm # " << this << " of " << machines_book_value << endl;}
     // Income
-    total_income = revenue_sales + subsidies;
-    cash_on_hand += total_income;
+    cash_on_hand += revenue_sales;
     // Total assets
     total_assets = cash_on_hand + machines_book_value + inventory_book_value;
     // -------------------------------------------------------------------
@@ -721,10 +715,9 @@ void Firm_Agent::Pay_Liabilities(){
     if (bankrupt == false){
         // Pay bills
         cash_on_hand -= total_liabilities;
-        total_assets -= cash_on_hand ;
 
         // Pay dividends and taxes
-        long long excess_profits = max(static_cast<long long>(0),total_income - total_liabilities); // Calculate excess profits
+        long long excess_profits = max(static_cast<long long>(0),revenue_sales - total_liabilities); // Calculate excess profits
         
         tax_payments = excess_profits * firm_tax_rate; // Calculate taxes
         excess_profits -= tax_payments; // Deduct taxes from excess profits
@@ -734,16 +727,17 @@ void Firm_Agent::Pay_Liabilities(){
 
         // Deduct dividend and tax payments from cash on hand, which includes the original excess profits
         cash_on_hand -= dividend_payments + tax_payments; 
+        total_assets = cash_on_hand + machines_book_value + inventory_book_value;
     }
 
     // Check for errors in accounting
     if (cash_on_hand < 0 || total_assets < 0 || total_liabilities < 0 || tax_payments || dividend_payments < 0){
-        cout << "ERROR in Pay_Liabilities: Firm at: " << this << " has negative values " << endl;
+        cout << "ERROR in Pay_Liabilities: Firm at: " << this << " has negative values: " << endl;
+        cout << "\tcash_on_hand: " << cash_on_hand << " total_assets: " << total_assets << " total_liabilities: "
+         << total_liabilities << " tax_payments: " << tax_payments << " dividend_payments: " << dividend_payments << endl;
     }
 
-    // Reset parameters before next time step
-    new_loan_issuance = 0;
-    //
+    // Reset parameters before next time step if needed
 }
 
 
@@ -781,6 +775,9 @@ bool Firm_Agent::Avoid_Bankruptcy(){
 }
 
 
+void Firm_Agent::Notify_Owner_Of_Bankruptcy() { 
+    owner->Notify_Of_Bankruptcy();
+}
 
 
 //-------------------------------------
@@ -791,17 +788,13 @@ bool Firm_Agent::Avoid_Bankruptcy(){
 std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "production_current " << obj.production_current << std::endl;
     os << "production_planned " << obj.production_planned << std::endl;
-    os << "production_past " << obj.production_past << std::endl;
     os << "quantity_sold " << obj.quantity_sold << std::endl;
-    os << "total_income " << obj.total_income << std::endl;
     os << "revenue_sales " << obj.revenue_sales << std::endl;
-    os << "new_loan_issuance " << obj.new_loan_issuance << std::endl;
-    os << "subsidies " << obj.subsidies << std::endl;
+    os << "loan_issuance_to_date " << obj.loan_issuance_to_date << std::endl;
     os << "good_price_current " << obj.good_price_current << std::endl;
-    os << "good_price_past " << obj.good_price_past << std::endl;
     os << "average_profit " << obj.average_profit << std::endl;
     os << "average_sale_quantity " << obj.average_sale_quantity << std::endl;
-    os << "short_term_funding_gap " << obj.short_term_funding_gap << std::endl;
+    //os << "short_term_funding_gap " << obj.short_term_funding_gap << std::endl;
     os << "long_term_funding_gap " << obj.long_term_funding_gap << std::endl;
     os << "total_liabilities " << obj.total_liabilities << std::endl;
     os << "labor_wage_bill " << obj.labor_wage_bill << std::endl;
@@ -810,13 +803,13 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "debt_principal_payments " << obj.debt_principal_payments << std::endl;
     os << "debt_interest_payments " << obj.debt_interest_payments << std::endl;
     os << "dividend_payments " << obj.dividend_payments << std::endl;
-    os << "production_costs " << obj.production_costs << std::endl;
+    //os << "production_costs " << obj.production_costs << std::endl;
     os << "expected_wage_bill " << obj.expected_wage_bill << std::endl;
     os << "layoff_wage_savings " << obj.layoff_wage_savings << std::endl;
     os << "outstanding_debt_total " << obj.outstanding_debt_total << std::endl;
     os << "Total_assets " << obj.total_assets << std::endl;
     os << "Leverage_ratio " << obj.leverage_ratio << std::endl;
-    os << "dash_on_hand " << obj.cash_on_hand << std::endl;
+    os << "cash_on_hand " << obj.cash_on_hand << std::endl;
     os << "dividend_ratio " << obj.dividend_ratio << std::endl;
     os << "dividend_ratio_optimistic " << obj.dividend_ratio_optimist << std::endl;
     os << "dividend_ratio_pessimistic " << obj.dividend_ratio_pessimist << std::endl;

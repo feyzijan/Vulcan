@@ -2,12 +2,15 @@
 #include <iostream>
 #include <numeric>
 
+
+using namespace std;
+
 //----------- Constructors
 // New Constructor to use
 Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info_Board* pPublic_Board )
 {
     // -- Set Given starting parameters and propensities
-    wealth_financial = vals[0];
+    savings= vals[0];
     unemp_duration_upper_bound = vals[1];
     reservation_wage = vals[2];
 
@@ -31,22 +34,17 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     saving_propensity = saving_propensity_optimist;
     
     //-- Set everything else to zero initiallly
-    // Wealth
-    wealth_human = 0;
+
     // Consumption and Expenditure
     expenditure_consumption = 0;
     expenditure_tax = 0;
     // Savings
-    new_savings = 0;
-    cash_on_hand_real_desired = 0;
-    cash_on_hand_desired = 0;  
-    cash_on_hand_current = 0;
+    savings_desired = 0;  
     // Income
     income_current = 0;
     income_average = 0;
     income_wage = 0;
     income_unemployment_benefit = 0;
-    income_gov_transfers = 0;
     income_firm_owner_dividend = 0;
     // Emisisons
     total_emissions = 0;
@@ -209,7 +207,6 @@ void Household_Agent::Consumption_Savings_Decisions(){
     } else {
         Update_Average_Income_T1();
     }
-    Update_Savings();
     Determine_Consumer_Sentiment();
     Determine_Consumption_Budget();
 }
@@ -240,8 +237,8 @@ void Household_Agent::Update_Income()
         income_current += income_unemployment_benefit;
         pPublic_Info_Board->Update_Household_Unemployment_Income(income_unemployment_benefit);
     }
-    income_current += income_gov_transfers; // Add any additional transfers
-    
+
+    savings += income_current; // Increment cash_on_hand
     pPublic_Info_Board->Update_Household_Total_Income(income_current);
 }
 
@@ -263,14 +260,6 @@ void Household_Agent::Update_Average_Income()
 }
 
 
-/* Function to update financial wealth based on income andconsumption
-TODO : Check if this is necessary
-*/
-void Household_Agent::Update_Savings()
-{
-    long long effective_savings = cash_on_hand_current - income_average; // maybe make this the same as current savings
-    cash_on_hand_desired = household_targeted_savings_to_income_ratio * income_average;
-}
 
 /* Determine Household sentiment, and thereby savings propensity and desired cash on hand
 Households randomly adopt majority opinion, otherwise check employment status
@@ -289,7 +278,7 @@ void Household_Agent::Determine_Consumer_Sentiment()
     if (sentiment){saving_propensity = saving_propensity_optimist;
     } else{saving_propensity = saving_propensity_pessimist;}
 
-    cash_on_hand_desired = saving_propensity * income_average;// Set targets for cash on hand
+    savings_desired = saving_propensity * income_average;// Set targets for cash on hand
 
     pPublic_Info_Board->Update_Household_sentiment_sum(sentiment);
 }
@@ -300,7 +289,9 @@ void Household_Agent::Determine_Consumer_Sentiment()
 */
 void Household_Agent::Determine_Consumption_Budget()
 {
-    long long excess_savings = cash_on_hand_current - cash_on_hand_desired;
+    // Determine shortfall from target savings
+    savings_desired = household_targeted_savings_to_income_ratio * income_average;
+    long long excess_savings = savings - savings_desired;
     if (excess_savings < 0){
         expenditure_consumption = (1.0-saving_propensity) * income_current;
     } else {
@@ -343,18 +334,30 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
     vector<long long> emissions_generated =  std::get<2>(purchases_by_sector);
     vector<long long> actual_spending_by_sector(planned_expenditure_by_sector);
 
+
+    int sector_count = remaining_consumption_budget.size();
+
     long long total_goods_bought = 0;
+    savings = 0;
+    total_emissions = 0;
+    total_emissions_by_sector = vector<long long>(sector_count, static_cast<long long>(0));
 
-    for (int i=0; i<remaining_consumption_budget.size(); i++){
-        // Deal with the leftover budget
+
+    for (int i=0; i<sector_count; i++){
+        // Deal with the leftover budget in  remaining_consumption_budget 
         expenditure_consumption -= remaining_consumption_budget[i];
-        new_savings += remaining_consumption_budget[i];
-        wealth_financial += remaining_consumption_budget[i]; 
+        savings += remaining_consumption_budget[i];
         actual_spending_by_sector[i] -= remaining_consumption_budget[i];
-
         // Add up tally of goods bought
         total_goods_bought += goods_bought[i];
+        if(remaining_consumption_budget[i] < 0){
+            cout << "Error in Buy Consumer Goods: Remaining consumption budget negative: " << remaining_consumption_budget[i] << endl;
+        }
+        // Tally up emissions
+        total_emissions_by_sector[i] = emissions_generated[i]; // may directly copy this instead
+        total_emissions += emissions_generated[i];
     }
+
     // Update the public board with relevant stuff
     pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
@@ -424,15 +427,11 @@ void Household_Agent::Notify_Of_Bankruptcy(){
 // String stream operator
 
 std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
-    os << "wealth_financial " << obj.wealth_financial << std::endl;
-    os << "wealth_human " << obj.wealth_human << std::endl;
     os << "expenditure_consumption " << obj.expenditure_consumption << std::endl;
     os << "expenditure_tax " << obj.expenditure_tax << std::endl;
     os << "consumption_propensity " << obj.consumption_propensity << std::endl;
-    os << "new_savings " << obj.new_savings << std::endl;
-    os << "cash_on_hand_real_desired " << obj.cash_on_hand_real_desired << std::endl;
-    os << "cash_on_hand_desired " << obj.cash_on_hand_desired << std::endl;
-    os << "cash_on_hand_current " << obj.cash_on_hand_current << std::endl;
+    os << "savings " << obj.savings << std::endl;
+    os << "savings_desired " << obj.savings_desired << std::endl;
     os << "saving_propensity " << obj.saving_propensity << std::endl;
     os << "saving_propensity_optimist " << obj.saving_propensity_optimist << std::endl;
     os << "saving_propensity_pessimist " << obj.saving_propensity_pessimist << std::endl;
@@ -441,7 +440,6 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "income_average " << obj.income_average << std::endl;
     os << "income_wage " << obj.income_wage << std::endl;
     os << "income_unemployment_benefit " << obj.income_unemployment_benefit << std::endl;
-    os << "income_gov_transfers " << obj.income_gov_transfers << std::endl;
     os << "income_firm_owner_dividend " << obj.income_firm_owner_dividend << std::endl;
 
     os << "total_emissions " << obj.total_emissions << std::endl;

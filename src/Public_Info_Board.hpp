@@ -215,8 +215,8 @@ class Public_Info_Board{
     vector<float> consumer_sectors_price_levels; // Initialized, updated, not reset, logged
 
     // Emissions
-    vector<int> total_consumer_emissions_by_sector; // Initialized, updated, reset, logged
-    vector<int> total_firm_emissions_by_sector; // Initialized, updated, reset, logged
+    vector<long long> total_consumer_emissions_by_sector; // Initialized, updated, reset, logged
+    vector<long long> total_firm_emissions_by_sector; // Initialized, updated, reset, logged
     vector<float> average_unit_emissions_by_sector; // Initialized, updated, no need for reset or logging
 
     // Emission Allowances
@@ -224,7 +224,7 @@ class Public_Info_Board{
     long long total_emission_allowance; // Initialized, updated, logged
     float emission_offset_price; // Initialized, updated, logged
 
-    vector<int> offsets_sold_by_sector; // Initialized, updated, reset, logged
+    vector<long long> offsets_sold_by_sector; // Initialized, updated, reset, logged
 
     // Income and wage figures
     float average_wage_market; // Average wage in the job market

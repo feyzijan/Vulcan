@@ -13,7 +13,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[2], int int_vals[5]) : F
     unit_good_cost = firm_cap_good_unit_cost; // global param
     inv_depreciation_rate = firm_cap_inv_depr_rate;
     inv_reaction_factor = firm_cap_inv_reaction_factor;
-    max_production_climbdown = firm_cap_max_production_climbdown;
+    max_production_climbdown = firm_cap_max_production_climbdown; // seems to be unused
 
     dividend_ratio_optimist = firm_cap_init_dividend_ratio_optimist;
     dividend_ratio_pessimist =  firm_cap_init_dividend_ratio_pessimist;
@@ -24,7 +24,6 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[2], int int_vals[5]) : F
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
     revenue_sales = production_current * good_price_current;
-    total_income = revenue_sales;
     average_profit = revenue_sales;
 
     
@@ -126,9 +125,6 @@ void Capital_Firm_Agent::Update_Sentiment(){
 void Capital_Firm_Agent::Determine_New_Production(){
     
     bool price_high = good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
-    
-    good_price_past = good_price_current; // store current price incase we want to see the change
-    production_past = production_current;
 
     bool inventory_high = inventory >= desired_inventory; 
     // Determine randomised price and production change factors

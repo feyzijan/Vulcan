@@ -25,7 +25,6 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[2], int int_vals[5]): 
     quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
     average_sale_quantity = quantity_sold;
     revenue_sales = production_current * good_price_current;
-    total_income = revenue_sales;
     average_profit = revenue_sales;
 
 
@@ -157,10 +156,6 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     long long emission_offsets_needed = 0;
     // Add the amount we need to buy so that our inventory is at average emissions
     emission_offsets_needed += static_cast<long long>(emission_overshoot * inventory);
-
-
-    good_price_past = good_price_current; // store current price incase we want to see the change
-    production_past = production_current;
 
     bool inventory_high = inventory >= desired_inventory; 
     // Determine randomised price and production change factors

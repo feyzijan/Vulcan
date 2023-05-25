@@ -33,7 +33,6 @@ class Household_Agent{
     void Update_Income();
     void Update_Average_Income();
     void Update_Average_Income_T1(); // Use in t=1 only
-    void Update_Savings(); 
     void Determine_Consumer_Sentiment();
     void Determine_Consumption_Budget(); //(eq 18)
     void Buy_Consumer_Goods_By_Sector_And_Emissions();
@@ -60,10 +59,6 @@ class Household_Agent{
     protected:
     Public_Info_Board* pPublic_Info_Board;
     Job * current_job;
-
-    // Wealth
-    long long wealth_financial; //W_f in equations 
-    long long wealth_human; //W_h in equations * Unsure if this is needed
     
     // Consumption and Expenditure
     long long expenditure_consumption;
@@ -72,10 +67,8 @@ class Household_Agent{
     vector<float> spending_weight_by_sector;
 
     // Savings
-    int new_savings;
-    int cash_on_hand_real_desired; // M_Total
-    int cash_on_hand_desired; //m_targeted
-    int cash_on_hand_current; //m_actual
+    long long savings;
+    long long savings_desired; //m_targeted
     
     // Savings constants
     float saving_propensity; //s
@@ -87,7 +80,6 @@ class Household_Agent{
     long long income_average;
     int income_wage; 
     int income_unemployment_benefit;
-    int income_gov_transfers;
     long long income_firm_owner_dividend;
     queue<long long> past_incomes;
 
@@ -118,6 +110,15 @@ class Household_Agent{
     int current_date;
 };
 
+
+/* Unused variables that have been removed
+// Wealth
+//long long wealth_financial; //W_f in equations 
+//long long wealth_human; //W_h in equations * Unsure if this is needed
+//int cash_on_hand_real_desired; // M_Total
+
+
+*/
 
 
 #endif
