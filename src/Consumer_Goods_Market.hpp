@@ -28,8 +28,8 @@ class Consumer_Goods_Market{
     void Sort_Cons_Goods_By_Sector_By_Price();
     void Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
     
-    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& spending_array);
-    tuple<vector<float>, vector<int>, vector<int>>  Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& spending_array, const vector<float>& emission_sensitives_array);
+    tuple<vector<long long>, vector<long long>, vector<long long>>  Buy_Consumer_Goods_By_Sector_And_Emission
+        (long long budget , const vector<long long>& spending_array, const vector<float>& emission_sensitives_array);
     
 
     // Price level operations
@@ -39,7 +39,7 @@ class Consumer_Goods_Market{
 
 
     // Getters 
-    const vector<float>& Get_Price_Levels() {return price_level_by_sector;}
+    const vector<float>& Get_Price_Levels_By_Sector() {return price_level_by_sector;}
     int Get_Size(){return n_total_goods;}
     float Get_Price_Level(){return price_level;}
 

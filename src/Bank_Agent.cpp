@@ -59,7 +59,6 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
 
     // Solvency
     capital_ratio = 1.0; // Unsure how to Initialize this
-    target_capital_ratio = bank_target_capital_ratio;
 
     // Risky loan evaluation
     leverage_ratio_lower_threshold = bank_leverage_ratio_lower_threshold;
@@ -126,13 +125,13 @@ Loan* Bank_Agent::Issue_Short_Term_Loan(Firm_Agent* pFirm){
 
     // Gather data to issue loan, give a little extra then is required to smooth things over
     float extra_funding = 0.01;
-    int short_term_funding_gap = pFirm->Get_Short_Term_Funding_Gap();
+    long long short_term_funding_gap = pFirm->Get_Short_Term_Funding_Gap();
     
     if (short_term_funding_gap <= 0){
         cout << "ERROR: Bank_Agent::Issue_Short_Term_Loan() - Firm has no short term funding gap " << short_term_funding_gap << ", firm #" << pFirm << endl;
     }
 
-    long loan_amount = short_term_funding_gap + short_term_funding_gap * extra_funding;
+    long long loan_amount = short_term_funding_gap + short_term_funding_gap * extra_funding;
     if (loan_amount < 0){
         cout << "ERROR: Bank_Agent::Issue_Short_Term_Loan() - loan_amount < 0 - firm #" << pFirm << endl;
         cout << "Firm has short term funding gap "  << short_term_funding_gap<< endl;
@@ -165,20 +164,20 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
 
     // Gather data to issue loan, give a little extra to smooth things over
     float extra_funding = 0.01;
-    int long_term_funding_gap = pFirm->Get_Long_Term_Funding_Gap(); 
+    long long long_term_funding_gap = pFirm->Get_Long_Term_Funding_Gap(); 
 
     if (long_term_funding_gap == 0){
         cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - long_term_funding_gap <= 0,  firm #" << pFirm  << endl;
     }
 
-    float leverage_ratio = pFirm->Get_Leverage_Ratio();
-    if (leverage_ratio < 0){
+    double leverage_ratio = pFirm->Get_Leverage_Ratio();
+    if (leverage_ratio < 0.0){
         cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - leverage_ratio < 0 , firm #" << pFirm  << endl;
     }
 
     if(leverage_ratio < leverage_ratio_upper_threshold){
         // Create Loan with new risky rate
-        float excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
+        double excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
         float emission_penalty;
         if (pFirm->Get_Cons_Firm_Status()){
             emission_penalty = Calculate_Emission_Penalty(pFirm);
@@ -227,7 +226,7 @@ float Bank_Agent::Calculate_Emission_Penalty(Firm_Agent *pFirm){
             return bank_emission_penalty_max * (firm_emission - bank_unit_emission_lower_thr) / (bank_unit_emission_upper_thr - bank_unit_emission_lower_thr);
         }
     } else {
-        float firm_emission = pFirm->Get_Total_Emissions();
+        long long firm_emission = pFirm->Get_Total_Emissions();
         if(firm_emission <= bank_total_emission_lower_thr){
             return 0;
         } else if (firm_emission >= bank_total_emission_upper_thr){
@@ -269,7 +268,6 @@ std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
     os << "short_term_loan_length: " << obj.short_term_loan_length << std::endl;
     os << "long_term_loan_length: " << obj.long_term_loan_length << std::endl;
     os << "capital_ratio: " << obj.capital_ratio << std::endl;
-    os << "target_capital_ratio: " << obj.target_capital_ratio << std::endl;
     os << "leverage_ratio_lower_threshold: " << obj.leverage_ratio_lower_threshold << std::endl;
     os << "leverage_ratio_upper_threshold: " << obj.leverage_ratio_upper_threshold << std::endl;
     os << "date: " << obj.current_date << std::endl;

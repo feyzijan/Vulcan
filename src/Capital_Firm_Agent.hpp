@@ -30,7 +30,7 @@ class Capital_Firm_Agent: public Firm_Agent{
 
     // Getters
     virtual float Get_Unit_Emissions() override {return 0;} 
-    virtual int Get_Total_Emissions() override {return 0;}
+    virtual long long Get_Total_Emissions() override {return 0;}
 
     protected:
     Capital_Good* cap_goods_on_market;

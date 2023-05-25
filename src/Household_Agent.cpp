@@ -308,7 +308,7 @@ void Household_Agent::Determine_Consumption_Budget()
 
     if (expenditure_consumption < 0) { // make sure expenditure isnt negative
         cout << "Error Expenditure consumption is negative" << endl;
-        expenditure_consumption = max(expenditure_consumption, 0); 
+        expenditure_consumption = max(expenditure_consumption, static_cast<long long>(0.0)); 
     }
 
     // Let the public board know how much the household has set aside to consume
@@ -323,7 +323,7 @@ void Household_Agent::Determine_Consumption_Budget()
 void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
 
     // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
-    vector<float> planned_expenditure_by_sector;
+    vector<long long> planned_expenditure_by_sector;
 
     // Fill this with the planned spending numbers
     for (int i = 0; i < spending_weight_by_sector.size(); ++i) {
@@ -335,12 +335,12 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
     }
 
     // Buy consumer goods and receive leftover budget and quantity bought for each sector
-    tuple<vector<float>, vector<int>, vector<int>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(expenditure_consumption, planned_expenditure_by_sector, emission_sensitivity_by_sector);
+    tuple<vector<long long>, vector<long long>, vector<long long>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(expenditure_consumption, planned_expenditure_by_sector, emission_sensitivity_by_sector);
 
-    vector<float> remaining_consumption_budget =  std::get<0>(purchases_by_sector);
-    vector<int> goods_bought =  std::get<1>(purchases_by_sector);
-    vector<int> emissions_generated =  std::get<2>(purchases_by_sector);
-    vector<float> actual_spending_by_sector(planned_expenditure_by_sector);
+    vector<long long> remaining_consumption_budget =  std::get<0>(purchases_by_sector);
+    vector<long long> goods_bought =  std::get<1>(purchases_by_sector);
+    vector<long long> emissions_generated =  std::get<2>(purchases_by_sector);
+    vector<long long> actual_spending_by_sector(planned_expenditure_by_sector);
 
     int total_goods_bought = 0;
 

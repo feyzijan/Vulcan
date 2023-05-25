@@ -56,15 +56,15 @@ class Firm_Agent{
     bool Avoid_Bankruptcy();
  
     // Getters
-    int Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
-    int Get_Long_Term_Funding_Gap() {return long_term_funding_gap;}
-    float Get_Leverage_Ratio() {return leverage_ratio;}
+    long long Get_Short_Term_Funding_Gap() {return short_term_funding_gap;} 
+    long long Get_Long_Term_Funding_Gap() {return long_term_funding_gap;}
+    double Get_Leverage_Ratio() {return leverage_ratio;}
     int Get_Sector_ID() {return sector_id;}
     bool Get_Bankruptcy_Status() {return bankrupt;}
     int Get_Employee_Count() {return employee_count;}
     int Get_Cons_Firm_Status() {return is_cons_firm;}
     virtual float Get_Unit_Emissions() {return 0;} 
-    virtual int Get_Total_Emissions() {return 0;}
+    virtual long long Get_Total_Emissions() {return 0;}
 
     // Setters
     void Set_Public_Info_Board(Public_Info_Board* ptr) {pPublic_Info_Board = ptr;}
@@ -94,43 +94,43 @@ class Firm_Agent{
 
 
     // Production and sales figures
-    int production_current; // Actual production at t
-    int production_planned; // Production plan for t
-    int production_past; // Production at t-1
-    int quantity_sold; // Sales at t-1
+    long long production_current; // Actual production at t
+    long long production_planned; // Production plan for t
+    long long production_past; // Production at t-1
+    long long quantity_sold; // Sales at t-1
     
     // Inflows
-    int total_income;
-    int revenue_sales;
-    int new_loan_issuance;
-    int subsidies;
+    long long total_income;
+    long long revenue_sales;
+    long long new_loan_issuance;
+    long long subsidies;
     float good_price_current; // good price set for t
     float good_price_past; // good price at t-1
-    int average_profit;  
-    int average_sale_quantity; 
+    long long average_profit;  
+    long long average_sale_quantity; 
     
     // Loan Parameters
-    int short_term_funding_gap; 
-    int long_term_funding_gap; 
+    long long short_term_funding_gap; 
+    long long long_term_funding_gap; 
     
     // Expenditures
-    int total_liabilities; //Comprises of evt below
-    int labor_wage_bill;
-    int capital_costs;
-    int tax_payments;
-    int debt_principal_payments;
-    int debt_interest_payments;
-    int dividend_payments;
-    int production_costs;
-    int expected_wage_bill; 
-    int layoff_wage_savings; 
-    int outstanding_debt_total;
+    long long total_liabilities; //Comprises of evt below
+    long long labor_wage_bill;
+    long long capital_costs;
+    long long tax_payments;
+    long long debt_principal_payments;
+    long long debt_interest_payments;
+    long long dividend_payments;
+    long long production_costs;
+    long long expected_wage_bill; 
+    long long layoff_wage_savings; 
+    long long outstanding_debt_total;
     //int max_allowable_debt_total;
     
     // Assets and fianncials 
-    int total_assets; // maybe this should be the same as cash in hand?
-    float leverage_ratio;
-    int cash_on_hand;
+    long long total_assets; // maybe this should be the same as cash in hand?
+    double leverage_ratio;
+    long long cash_on_hand;
     
     // Dividend characteristics
     float dividend_ratio;
@@ -147,17 +147,17 @@ class Firm_Agent{
     float labor_utilization; 
     
     // Inventories
-    int inventory;
+    long long inventory;
     int working_capital_inventory;
     float target_inv_factor; // Characteristic
-    int desired_inventory; 
+    long long desired_inventory; 
     float inv_factor; 
     float inv_reaction_factor;  
     float machine_utilization;  
     float inv_depreciation_rate; // NEWLY ADDDED
     int desired_machines; 
 
-    int capital_goods_current_value; // NEWLY ADDED
+    long long capital_goods_current_value; // NEWLY ADDED
 
     // productivities and stuff 
     int workers_per_machine; // NEWLY ADDDED
@@ -170,7 +170,6 @@ class Firm_Agent{
     bool bankrupt;
     bool is_cons_firm; // type identifier, may be useful
     int current_date;
-
 
 };
 

@@ -28,8 +28,7 @@ class Capital_Goods_Market{
     // Getters
     float Get_Price_Level(){return price_level;}
     int Get_Size(){return n_total_goods;}
-    float Get_Price_Level(){return price_level;}
-
+    
     // Setters
     void Set_Price_Level(float price_level) {this->price_level = price_level;}
 

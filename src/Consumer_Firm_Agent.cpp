@@ -32,7 +32,6 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[2], int int_vals[5]): 
     // Emissions - Set default values for now
     unit_emissions = 1; // TODO: Replace with variable
     total_emissions = 0;
-    cumulative_emissions = 0;
 
     cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold, unit_emissions);
     goods_on_market = cons_goods_on_market;
@@ -77,9 +76,12 @@ void Consumer_Firm_Agent::Produce_Goods(){
 
     // Update the unit_emission_of the newly produced goods
     //*** CHECK DIVISIONS ARE OKAY
-    int new_total_emissions = production_current * unit_emissions - emission_total_allowance;
-    int past_production = inventory - production_current;
-    int past_total_emissions = past_production * unit_emissions_adj;
+    total_emissions += 0;
+    total_emissions += production_current * unit_emissions;
+
+    long long new_total_emissions = production_current * unit_emissions - emission_total_allowance;
+    long long past_production = inventory - production_current;
+    long long past_total_emissions = past_production * unit_emissions_adj;
     unit_emissions_adj = (past_total_emissions + new_total_emissions) / inventory;
 
     // Update consumer good object to use this new adjusted emission
@@ -228,7 +230,7 @@ void Consumer_Firm_Agent::Determine_New_Production(){
 void Consumer_Firm_Agent::Buy_Emission_Offsets(int n_offsets) {
         // Calculate total cost of emissions we wish to buy 
         int emission_offset_needed_cost = n_offsets * pPublic_Info_Board->Get_Emission_Offset_Price();
-        long_term_funding_gap =  max(emission_offset_needed_cost - cash_on_hand,0); // Funding gap must be positive
+        long_term_funding_gap =  max(emission_offset_needed_cost - cash_on_hand,static_cast<long long>(0)); // Funding gap must be positive
         if (long_term_funding_gap > 0){
             Seek_Long_Term_Loan();
         }

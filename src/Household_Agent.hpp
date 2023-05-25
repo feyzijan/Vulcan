@@ -60,12 +60,12 @@ class Household_Agent{
     Job * current_job;
 
     // Wealth
-    int wealth_financial; //W_f in equations 
-    int wealth_human; //W_h in equations * Unsure if this is needed
+    long long wealth_financial; //W_f in equations 
+    long long wealth_human; //W_h in equations * Unsure if this is needed
     
     // Consumption and Expenditure
-    int expenditure_consumption;
-    int expenditure_tax;
+    long long expenditure_consumption;
+    long long expenditure_tax;
     float consumption_propensity; //c eq(17) - characteristic
     vector<float> spending_weight_by_sector;
 
@@ -81,19 +81,19 @@ class Household_Agent{
     float saving_propensity_pessimist; //s_h - characteristic
 
     // Income 
-    int income_current;
-    int income_average;
+    long long income_current;
+    long long income_average;
     int income_wage; 
     int income_unemployment_benefit;
     int income_gov_transfers;
-    int income_firm_owner_dividend;
-    queue<int> past_incomes;
+    long long income_firm_owner_dividend;
+    queue<long long> past_incomes;
 
     // Emissions
-    int total_emissions; 
+    long long total_emissions; 
     float emission_sensitivity_avg; 
     vector<float> emission_sensitivity_by_sector; 
-    vector<int> total_emissions_by_sector; 
+    vector<long long> total_emissions_by_sector; 
 
     // Unemployment status
     bool unemployed;

@@ -269,7 +269,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     bank_inflation_target = main_loop_parameters["bank_inflation_target"]; 
     bank_inflation_target_monthly=  main_loop_parameters["bank_inflation_target_monthly"];
     bank_risk_premium = main_loop_parameters["bank_risk_premium"];
-    bank_target_capital_ratio = main_loop_parameters["bank_target_capital_ratio"];
     bank_long_term_loan_length = main_loop_parameters["bank_long_term_loan_length"];
     bank_leverage_ratio_lower_threshold = main_loop_parameters["bank_leverage_ratio_lower_threshold"];
     bank_leverage_ratio_upper_threshold = main_loop_parameters["bank_leverage_ratio_upper_threshold"];
@@ -555,7 +554,6 @@ float bank_inflation_reaction = 1.5;
 float bank_inflation_target = 1.05; 
 float bank_inflation_target_monthly=  1.004;
 float bank_risk_premium = 1.0;
-float bank_target_capital_ratio = 10.0;
 int bank_short_term_loan_length = 12;
 int bank_long_term_loan_length = 100;
 float bank_leverage_ratio_lower_threshold = 60;

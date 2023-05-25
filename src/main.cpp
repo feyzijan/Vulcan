@@ -108,14 +108,6 @@ int main()
     std::cout.rdbuf(old_cout_buf);
     cout << "Program end :-)\n";
 
-    // Log short description of Simulation
-/*     string file_name= "Simulation_H_" + to_string(n_households) + "_Cons_" + to_string(n_consumer_firms) +"_Cap_" + to_string(n_capital_firms) + ".txt";
-    cout  << "File name: " << file_name << endl;
-    ofstream file( "DataLogs/" + file_name );
-    file << "Ran simulation with n_households = " << n_households << "n_consumer_firms = " << 
-    n_consumer_firms << "n_capital_firms = " << n_capital_firms << endl;
-    file.close();
- */
     return 0;
 }
 

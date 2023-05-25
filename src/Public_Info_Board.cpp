@@ -92,12 +92,12 @@ Public_Info_Board::Public_Info_Board(Public_Info_Board&){}
 */
 void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors){
     sector_count = num_sectors;
-    consumer_spending_by_sector = vector<float>(sector_count, 0.0);
-    planned_cons_spending_by_sector = vector<float>(sector_count, 0.0);
-    actual_production_by_sector = vector<int>(sector_count, 0);
-    planned_production_by_sector = vector<int>(sector_count, 0);
-    quantity_sold_by_sector = vector<int>(sector_count, 0);
-    inventory_by_sector = vector<int>(sector_count, 0);
+    consumer_spending_by_sector = vector<long long>(sector_count, 0.0);
+    planned_cons_spending_by_sector = vector<long long>(sector_count, 0.0);
+    actual_production_by_sector = vector<long long>(sector_count, 0);
+    planned_production_by_sector = vector<long long>(sector_count, 0);
+    quantity_sold_by_sector = vector<long long>(sector_count, 0);
+    inventory_by_sector = vector<long long>(sector_count, 0);
 
     average_unit_emissions_by_sector = vector<float>( sector_count, 0.0);
     total_consumer_emissions_by_sector = vector<int>(sector_count, 0);
@@ -122,7 +122,7 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
 /* Update the planned consumer spending on each sector by adding the planned spending array figures passed by the
 Household agent that calls this method
 */
-void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending){
+void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector<long long>& planned_spending){
     // loop through the planned_spending vector and add to the planned_cons_spending_by_sector vector
     for (int i = 0; i < sector_count; i++){
         planned_cons_spending_by_sector[i] += planned_spending[i];
@@ -134,7 +134,7 @@ void Public_Info_Board::Update_Planned_Consumer_Spending_by_Sector( const vector
 /* Update the actual consumer spending on each sector by adding the planned spending array figures passed by the
 Household agent that calls this method
 */
-void Public_Info_Board::Update_Actual_Consumer_Spending_by_Sector( const vector<float>& actual_spending ){
+void Public_Info_Board::Update_Actual_Consumer_Spending_by_Sector( const vector<long long>& actual_spending ){
     // loop though the actual_spending vector and add to the consumer_spending_by_sector vector
     for (int i = 0; i < sector_count; i++){
         consumer_spending_by_sector[i] += actual_spending[i];
@@ -161,7 +161,7 @@ void Public_Info_Board::Calculate_Average_Unit_Emissions_by_Sector(){
 void Public_Info_Board::Update_Interest_Rate() {r_rate = pBank->Get_Interest_Rate();} // Get latest interest rate from the bank
 
 //---- Updating emissions
-void Public_Info_Board::Update_Consumer_Emissions_By_Sector(const vector<int>& emissions_by_sector) {   
+void Public_Info_Board::Update_Consumer_Emissions_By_Sector(const vector<long long>& emissions_by_sector) {   
     for (int i = 0; i < sector_count; i++){
         total_consumer_emissions_by_sector[i] += emissions_by_sector[i];
     }
@@ -173,14 +173,14 @@ void Public_Info_Board::Update_Consumer_Emissions_By_Sector(const vector<int>& e
 
 /* Distribute initial emission allowances based on # employees
 */
-unsigned long int Public_Info_Board::Distribute_Initial_Emission_Allowances(int employee_count, int sector_id){
+long long Public_Info_Board::Distribute_Initial_Emission_Allowances(int employee_count, int sector_id){
     return employee_count/n_employed_workers * emission_allowances_by_sector[sector_id-1]; // CHECK THE DIVISION IS ACCURATE
 }
 
 /* Distribute emission allowances base don sales
 */
-unsigned long int Public_Info_Board::Distribute_Emission_Allowances(int sale_quantity, int sector_id){
-    float sale_ratio = float(sale_quantity)/float(quantity_sold_by_sector[sector_id-1]); // CHECK THE DIVISION IS ACCURATE
+long long Public_Info_Board::Distribute_Emission_Allowances(int sale_quantity, int sector_id){
+    float sale_ratio = static_cast<float>(sale_quantity) / quantity_sold_by_sector[sector_id - 1];
     return sale_ratio * emission_allowances_by_sector[sector_id-1]; 
 }
 
@@ -192,7 +192,7 @@ void Public_Info_Board::Update_Emission_Allowance_Amount() {
     float result = static_cast<float>(value) * (1.0f + emission_total_allowance_change);
     return static_cast<unsigned long int>(std::round(result));});
 
-    total_emission_allowance = static_cast<unsigned long int>(total_emission_allowance * (1.0 + emission_total_allowance_change));
+    total_emission_allowance = static_cast<long long>(total_emission_allowance * (1.0 + emission_total_allowance_change));
 }
 
 
@@ -227,14 +227,11 @@ void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood) {
     pConsumer_Goods_Market->Add_Consumer_Good_To_Market(pGood);
 }
 
-pair<vector<float>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector) {
-    return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector(budget, planned_expenditure_by_sector);
-}
-
 
 // Consumer Good Market 
-tuple<vector<float>, vector<int>, vector<int>> Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission(int budget, const vector<float>& planned_expenditure_by_sector, 
-const vector<float>& emission_sensitives_array) {
+tuple<vector<long long>, vector<long long>, vector<long long>> Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission
+(long long budget, const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array) 
+{
     return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector_And_Emission(budget, planned_expenditure_by_sector, emission_sensitives_array);
 }
 
@@ -296,7 +293,7 @@ consumer basket. Also updates consumer inflation records
 void Public_Info_Board::Update_Consumer_Price_Level(){
     cons_price_level_previous = cons_price_level_current; // update previous price level
     
-    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels();
+    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels_By_Sector();
 
     float sum = 0.0;
     float sum_weights = 0.0;
@@ -326,7 +323,7 @@ void Public_Info_Board::Update_Capital_Price_Level(){
 */
 void Public_Info_Board::Initialize_Price_Levels(){
     
-    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels();
+    consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels_By_Sector();
     float sum = 0.0;
     float sum_weights = 0.0;
     
@@ -382,8 +379,8 @@ void Public_Info_Board::Reset_Global_Data(){
     consumer_spending_planned = reset_value;
     consumption_budget = reset_value;
 
-    consumer_spending_by_sector = vector<float>(sector_count, 0);
-    planned_cons_spending_by_sector = vector<float>(sector_count, 0);
+    consumer_spending_by_sector = vector<long long>(sector_count, 0);
+    planned_cons_spending_by_sector = vector<long long>(sector_count, 0);
     
     // Production
     cap_goods_production = reset_value;
@@ -392,10 +389,10 @@ void Public_Info_Board::Reset_Global_Data(){
     cons_good_production = reset_value;
     cons_good_production_planned = reset_value;
 
-    actual_production_by_sector = vector<int>(sector_count, 0);
-    planned_production_by_sector = vector<int>(sector_count, 0);
-    inventory_by_sector = vector<int>(sector_count, 0);
-    quantity_sold_by_sector = vector<int>(sector_count, 0);
+    actual_production_by_sector = vector<long long>(sector_count, 0);
+    planned_production_by_sector = vector<long long>(sector_count, 0);
+    inventory_by_sector = vector<long long>(sector_count, 0);
+    quantity_sold_by_sector = vector<long long>(sector_count, 0);
     
     // Employment
     n_employed_workers = reset_value;

@@ -45,12 +45,12 @@ class Public_Info_Board{
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
     pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(int budget, const vector<float>& planned_expenditure_by_sector);
-    tuple<vector<float>, vector<int>, vector<int>> Buy_Consumer_Goods_By_Sector_And_Emission(
-        int budget, const vector<float>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
+    tuple<vector<long long>, vector<long long>, vector<long long>> Buy_Consumer_Goods_By_Sector_And_Emission(
+        long long budget, const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
 
     // Capital Good Market
     void Send_Cap_Good_To_Market(Capital_Good* pGood);
-    int*  Buy_Capital_Goods(int q_desired);
+    int* Buy_Capital_Goods(int q_desired);
     int Get_Cost_For_Desired_Cap_Goods(int q_desired);
     
     // ------ Updating Member Variables
@@ -62,8 +62,8 @@ class Public_Info_Board{
     void Update_Interest_Rate();
 
     // Distributing Emission allowances
-    unsigned long int Distribute_Initial_Emission_Allowances(int employee_count, int sector_id);
-    unsigned long int Distribute_Emission_Allowances(int sale_quantity, int sector_id);
+    long long Distribute_Initial_Emission_Allowances(int employee_count, int sector_id);
+    long long Distribute_Emission_Allowances(int sale_quantity, int sector_id);
     int Buy_Emission_Offsets(int quantity, int sector_id) { 
         offsets_sold_by_sector[sector_id-1] += quantity;
         return quantity * emission_offset_price;} // Returns cost, allowances always available
@@ -116,9 +116,9 @@ class Public_Info_Board{
 
 
     // Add a getter for figures by sector
-    const vector<int>& Get_Quantity_Sold_By_Sector() {return quantity_sold_by_sector;}
-    const vector<int>& Get_Planned_Production_By_Sector() {return planned_production_by_sector;}
-    const vector<int>& Get_Production_By_Sector() {return actual_production_by_sector;}
+    const vector<long long>& Get_Quantity_Sold_By_Sector() {return quantity_sold_by_sector;}
+    const vector<long long>& Get_Planned_Production_By_Sector() {return planned_production_by_sector;}
+    const vector<long long>& Get_Production_By_Sector() {return actual_production_by_sector;}
 
     // Setters
     void Set_Job_Market(Job_Market* ptr) { pJob_Market = ptr;}
@@ -134,37 +134,37 @@ class Public_Info_Board{
     void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount;}
     // Wages and Income
     void Update_Household_Wage_Income(int amount) { household_wage_income += amount; }
-    void Update_Household_Dividend_Income(int amount) {household_dividend_income += amount; }
+    void Update_Household_Dividend_Income(long long amount) {household_dividend_income += amount; }
     void Update_Household_Unemployment_Income(int amount) {household_unemployment_income += amount; }
-    void Update_Household_Total_Income(int amount) { household_total_income += amount; }
+    void Update_Household_Total_Income(long long amount) { household_total_income += amount; }
     // Capital Goods
     void Update_Machine_Orders(int amount) { machine_orders += amount; }
     void Update_Machine_Orders_Planned(int amount) { machine_orders_planned += amount; }
-    void Update_Machine_Spending(int amount) { machine_spending += amount; }
-    void Update_Machine_Spending_Planned(int amount) { machine_spending_planned += amount; }
+    void Update_Machine_Spending(long long amount) { machine_spending += amount; }
+    void Update_Machine_Spending_Planned(long long amount) { machine_spending_planned += amount; }
     void Update_Capital_Goods_Production(int amount) { cap_goods_production += amount;}
     void Update_Capital_Goods_Planned_Production(int amount) { cap_goods_production_planned += amount; }
     void Update_Capital_Goods_Sale_Quantities(int amount) { cap_goods_quantity_sold += amount;}
 
     //-- Consumer Goods and Consumption
     // Updates by Consumer Firms
-    void Update_Consumption_Budget(int amount) { consumption_budget += amount; }
-    void Update_Consumer_Goods_Production(int sector_id, int amount) { 
+    void Update_Consumption_Budget(long long amount) { consumption_budget += amount; }
+    void Update_Consumer_Goods_Production(int sector_id, long long amount) { 
         actual_production_by_sector[sector_id-1] += amount;
         cons_good_production += amount;}
-    void Update_Consumer_Goods_Production_Planned(int sector_id, int amount) { 
+    void Update_Consumer_Goods_Production_Planned(int sector_id, long long amount) { 
         planned_production_by_sector[sector_id-1] += amount;
         cons_good_production_planned += amount; }
-    void Update_Consumer_Goods_Sale_Quantities(int sector_id, int amount){ 
+    void Update_Consumer_Goods_Sale_Quantities(int sector_id, long long amount){ 
         quantity_sold_by_sector[sector_id-1] += amount;}
-    void Update_Consumer_Goods_Inventory(int sector_id, int amount){
+    void Update_Consumer_Goods_Inventory(int sector_id, long long amount){
         inventory_by_sector[sector_id-1] += amount;}
-    void Update_Firm_Emissions_By_Sector(int sector_id, int amount) {
+    void Update_Firm_Emissions_By_Sector(int sector_id, long long amount) {
         total_firm_emissions_by_sector[sector_id-1] += amount; }
 
     // Updates by Households
-    void Update_Planned_Consumer_Spending_by_Sector( const vector<float>& planned_spending);
-    void Update_Actual_Consumer_Spending_by_Sector(  const vector<float>& actual_spending );
+    void Update_Planned_Consumer_Spending_by_Sector( const vector<long long>& planned_spending);
+    void Update_Actual_Consumer_Spending_by_Sector(  const vector<long long>& actual_spending );
 
     // Labor Figures
     void Update_Employed_Worker_Count(int amount) { n_employed_workers += amount; }
@@ -181,7 +181,7 @@ class Public_Info_Board{
     void Update_Bankruptcies(bool is_cons_firm) { if (is_cons_firm) { n_bankrupt_cons_firms += 1;} else { n_bankrupt_cap_firms += 1;}}
 
     // Emissions
-    void Update_Consumer_Emissions_By_Sector(const vector<int>& emissions_by_sector);
+    void Update_Consumer_Emissions_By_Sector(const vector<long long>& emissions_by_sector);
 
 
     // ---- Calculate Global Aggregate Variables ----
@@ -220,7 +220,7 @@ class Public_Info_Board{
     vector<float> average_unit_emissions_by_sector; // Initialized, updated, no need for reset or logging
 
     // Emission Allowances
-    vector<unsigned long int> emission_allowances_by_sector; // Initialized, updated, logged
+    vector<long long> emission_allowances_by_sector; // Initialized, updated, logged
     unsigned long int total_emission_allowance; // Initialized, updated, logged
     float emission_offset_price; // Initialized, updated, logged
 
@@ -232,8 +232,8 @@ class Public_Info_Board{
 
     int household_unemployment_income; // Initialized, updated, reset, logged
     int household_wage_income;  // Initialized, updated, reset, logged
-    int household_dividend_income; // Initialized, updated, reset, logged
-    int household_total_income; // Initialized, updated, reset, logged
+    long long household_dividend_income; // Initialized, updated, reset, logged
+    long long household_total_income; // Initialized, updated, reset, logged
 
     int minimum_wage; // Initialized, updated, not reset, logged
 
@@ -256,16 +256,16 @@ class Public_Info_Board{
     // Capital expenditure
     int machine_orders; // Initialized, updated, reset, logged
     int machine_orders_planned; // Initialized, updated, reset, logged
-    int machine_spending; // Initialized, updated, reset, logged
-    int machine_spending_planned; // Initialized, updated, reset, logged
+    long long machine_spending; // Initialized, updated, reset, logged
+    long long machine_spending_planned; // Initialized, updated, reset, logged
 
     // Consumer expenditure
     int consumer_spending; // Initialized, updated, reset, logged
     int consumer_spending_planned; // Initialized, updated, reset, logged
-    int consumption_budget; // Initialized, updated, reset, logged
+    long long consumption_budget; // Initialized, updated, reset, logged
 
-    vector<float> planned_cons_spending_by_sector; // Initialized, updated, reset, logged
-    vector<float> consumer_spending_by_sector; // Initialized, updated, reset, logged
+    vector<long long> planned_cons_spending_by_sector; // Initialized, updated, reset, logged
+    vector<long long> consumer_spending_by_sector; // Initialized, updated, reset, logged
 
     int sector_count; // Initialized, no need for updating, reset, or logging
     
@@ -274,13 +274,13 @@ class Public_Info_Board{
     int cap_goods_production_planned; // Initialized, updated, reset, logged
     int cap_goods_quantity_sold; // Initialized, updated, reset, logged
 
-    vector<int> planned_production_by_sector; // Initialized, updated, reset, logged
-    vector<int> actual_production_by_sector; // Initialized, updated, logged
-    vector<int> inventory_by_sector; // Initialized, updated, reset, logged
-    vector<int> quantity_sold_by_sector; // Initialized, updated, reset, logged
+    vector<long long> planned_production_by_sector; // Initialized, updated, reset, logged
+    vector<long long> actual_production_by_sector; // Initialized, updated, logged
+    vector<long long> inventory_by_sector; // Initialized, updated, reset, logged
+    vector<long long> quantity_sold_by_sector; // Initialized, updated, reset, logged
 
-    int cons_good_production; // Initialized, updated, reset, not logged
-    int cons_good_production_planned; // Initialized, updated, reset, not logged
+    long long cons_good_production; // Initialized, updated, reset, not logged
+    long long cons_good_production_planned; // Initialized, updated, reset, not logged
 
     // Employment
     int n_employed_workers;  // Initialized, updated, reset, logged

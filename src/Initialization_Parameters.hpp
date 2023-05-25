@@ -294,7 +294,6 @@ extern float bank_inflation_reaction;
 extern float bank_inflation_target; // yearly inflation target
 extern float bank_inflation_target_monthly; // monthly inflation target
 extern float bank_risk_premium; // added yearly interest rate to charge per leverage ratio above threshold
-extern float bank_target_capital_ratio;
 extern int bank_short_term_loan_length;
 extern int bank_long_term_loan_length;
 extern float bank_leverage_ratio_lower_threshold;

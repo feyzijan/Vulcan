@@ -19,12 +19,14 @@ class Loan {
 
 
     // Calculating Payments 
-    int Calculate_Interest_Repayment() const {return principal_amount * interest_rate/12;}
-    int Calculate_Principal_Repayment() const;
+    long long Calculate_Interest_Repayment() const {return principal_amount * interest_rate/12.0;}
+    long long Calculate_Principal_Repayment() const;
     
     // Deducting Payments
     void Deduct_Principal_Repayment(int principal_repayment) {principal_amount -= principal_repayment;}
 
+    // Cleaning Loan ( Bankrupt Firm)
+    void Clean_Loan();
 
     // Getters
     float Get_Interest_Rate() const { return interest_rate;}
@@ -40,7 +42,7 @@ class Loan {
     protected:
     Firm_Agent* pBorrowing_Firm;
     float interest_rate;
-    int principal_amount;
+    long long principal_amount;
     int start_date;
     int end_date;
     bool loan_type; // 1 = short term, 0 = long term

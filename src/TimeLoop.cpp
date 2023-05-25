@@ -56,9 +56,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // STEP 1.5: Firms assess past period's sales data
     cout << " \n ------------ Step 1.5: Firms assess past period's sales data ----------------" <<endl;
     cout << "Capital firms have sold " << pPublic_Info_Board->Get_Capital_Goods_Sales() << " goods  " <<  endl;
-    const vector<int>& quantitySoldBySector =  pPublic_Info_Board->Get_Quantity_Sold_By_Sector();
+    const vector<long long>& quantitySoldBySector =  pPublic_Info_Board->Get_Quantity_Sold_By_Sector();
     for (int i = 0; i < quantitySoldBySector.size(); ++i) {
-        int quantity = quantitySoldBySector[i];
+        long long quantity = quantitySoldBySector[i];
         cout << "Consumer Sector " << i + 1<< ": Quantity sold = " << quantity << endl;
     }
     // STEP 1.6: Depreciate Firms' Good Inventories
@@ -66,9 +66,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     // STEP 1.7: Firms set new price and production targets
     cout << " \n ------------ Step 1.7: Firms set new price and production targets ----------------" <<endl;
     cout << "Capital Firms planning to produce " << pPublic_Info_Board->Get_Capital_Goods_Planned_Production() << " capital goods" << endl;
-    const vector<int>& plannedProductionBySector =  pPublic_Info_Board->Get_Planned_Production_By_Sector();
+    const vector<long long>& plannedProductionBySector =  pPublic_Info_Board->Get_Planned_Production_By_Sector();
     for (int i = 0; i < plannedProductionBySector.size(); ++i) {
-        int quantity = plannedProductionBySector[i];
+        long long quantity = plannedProductionBySector[i];
         cout << "Consumer Sector " << i + 1<< ": Planned production = " << quantity << endl;
     }
 
@@ -161,10 +161,10 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
     pConsumer_Goods_Market->Update_Price_Level();
 
-    const vector<int>& production_by_sector = pPublic_Info_Board->Get_Production_By_Sector();
+    const vector<long long>& production_by_sector = pPublic_Info_Board->Get_Production_By_Sector();
     for (int i = 0; i < production_by_sector.size(); ++i) {
-        int quantity = production_by_sector[i];
-        int quantity_p = plannedProductionBySector[i];
+        long long quantity = production_by_sector[i];
+        long long quantity_p = plannedProductionBySector[i];
         cout << "Consumer Sector " << i + 1<< ": Produced: " << quantity << " out of planned: " << quantity_p << endl;
     }
 

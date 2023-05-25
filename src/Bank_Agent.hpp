@@ -85,7 +85,6 @@ class Bank_Agent{
 
     // Solvency
     float capital_ratio;
-    float target_capital_ratio;
 
     // Risky loan evaluation
     float leverage_ratio_lower_threshold;

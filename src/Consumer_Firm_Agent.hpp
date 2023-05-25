@@ -37,9 +37,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
     // Getters
     virtual float Get_Unit_Emissions() override {return unit_emissions;}
     float Get_Adj_Unit_Emissions() {return unit_emissions_adj;}
-    virtual int Get_Total_Emissions() override {return total_emissions;}
-    int Get_Cumulative_Emissions() {return cumulative_emissions;}
-
+    virtual long long Get_Total_Emissions() override {return total_emissions;}
 
     protected:
     Consumer_Good* cons_goods_on_market;
@@ -47,11 +45,10 @@ class Consumer_Firm_Agent: public Firm_Agent{
     // CO2 Emissions
     float unit_emissions; // NEWLY ADDDED
     float unit_emissions_adj; // NEWLY ADDDED
-    int total_emissions; // NEWLY ADDDED
-    int cumulative_emissions; // NEWLY ADDDED
+    long long total_emissions; // NEWLY ADDDED
 
     // Emission allowances
-    unsigned long emission_total_allowance;
+    long long emission_total_allowance;
 
 };
 
