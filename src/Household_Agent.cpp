@@ -36,8 +36,7 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     //-- Set everything else to zero initiallly
 
     // Consumption and Expenditure
-    expenditure_consumption = 0;
-    expenditure_tax = 0;
+    consumption_budget = 0;
     // Savings
     savings_desired = 0;  
     // Income
@@ -45,7 +44,7 @@ Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info
     income_average = 0;
     income_wage = 0;
     income_unemployment_benefit = 0;
-    income_firm_owner_dividend = 0;
+    income_dividend = 0;
     // Emisisons
     total_emissions = 0;
     emission_sensitivity_avg = 0.0;
@@ -115,18 +114,18 @@ and set the current_job pointer to nullptr
 */
 void Household_Agent::Check_Employment_Status()
 {
-    if (current_job == nullptr && firm_owner == false){
+    if (current_job == nullptr && firm_owner == false){ // Set firm as unemployed
         unemployed = true;
         unemp_duration += 1;
     } else {
-        if (firm_owner){
+        if (firm_owner){ // Firm owners count as employed
             unemployed = false;
         } else if (current_job->Get_Status() == -1){ // Laid off by firm
             unemployed = true;
             unemp_duration = 1;
             delete current_job;
             current_job = nullptr;
-        } else { // Either has a job or is a firm owner
+        } else { // Has a job
             unemployed = false;
             unemp_duration = 0;
         }
@@ -208,6 +207,7 @@ void Household_Agent::Consumption_Savings_Decisions(){
         Update_Average_Income_T1();
     }
     Determine_Consumer_Sentiment();
+    Random_Experimentation();
     Determine_Consumption_Budget();
 }
 
@@ -221,25 +221,28 @@ TODO: Implement dividend income
 void Household_Agent::Update_Income()
 {
     income_current = 0; // Initialize to zero
+    income_wage = 0;
+    income_dividend = 0;
+    income_unemployment_benefit = 0;
 
-    // Check if the person is employed, if so get Wage
-    if (!unemployed && !firm_owner){
+    if (!unemployed && !firm_owner){ // Regular worker
         income_wage = current_job->Get_Wage();
         pPublic_Info_Board->Update_Household_Wage_Income(income_wage);
-        income_current += income_wage;
-    } else if (firm_owner){
-        income_firm_owner_dividend = owned_firm->Pay_Dividend();
-        pPublic_Info_Board->Update_Household_Dividend_Income(income_firm_owner_dividend);
-        income_current += income_firm_owner_dividend;
-    } else {
+        income_current = income_wage;
+    } else if (firm_owner){ // Firm owner
+        income_dividend = owned_firm->Get_Dividend();
+        pPublic_Info_Board->Update_Household_Dividend_Income(income_dividend);
+        income_current = income_dividend;
+    } else { // Unemployed
         income_wage = 0;
         income_unemployment_benefit = pPublic_Info_Board->Get_Unemployment_Benefit();
-        income_current += income_unemployment_benefit;
+        income_current = income_unemployment_benefit;
         pPublic_Info_Board->Update_Household_Unemployment_Income(income_unemployment_benefit);
     }
 
-    savings += income_current; // Increment cash_on_hand
-    pPublic_Info_Board->Update_Household_Total_Income(income_current);
+    if(income_current < 0 ){
+        std::cout << "ERROR: Negative income at Update_Income() - Household: " << this << " has income:  " << income_current << std::endl;
+    }
 }
 
 /* Function to calculate average income and fill in array at t=1
@@ -266,7 +269,7 @@ Households randomly adopt majority opinion, otherwise check employment status
 */
 void Household_Agent::Determine_Consumer_Sentiment()
 {
-    if (unemployed){
+    if (unemployed) {
         sentiment = 0;} 
     else{
         sentiment = 1;}
@@ -275,12 +278,14 @@ void Household_Agent::Determine_Consumer_Sentiment()
     if(adopt_majority){
         sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
 
-    if (sentiment){saving_propensity = saving_propensity_optimist;
-    } else{saving_propensity = saving_propensity_pessimist;}
+    if (sentiment){
+        saving_propensity = saving_propensity_optimist;
+    } else{
+        saving_propensity = saving_propensity_pessimist;}
 
     savings_desired = saving_propensity * income_average;// Set targets for cash on hand
 
-    pPublic_Info_Board->Update_Household_sentiment_sum(sentiment);
+    pPublic_Info_Board->Update_Household_sentiment_sum(static_cast<int>(sentiment));
 }
 
 
@@ -293,18 +298,18 @@ void Household_Agent::Determine_Consumption_Budget()
     savings_desired = household_targeted_savings_to_income_ratio * income_average;
     long long excess_savings = savings - savings_desired;
     if (excess_savings < 0){
-        expenditure_consumption = (1.0-saving_propensity) * income_current;
+        consumption_budget = (1.0-saving_propensity) * income_current;
     } else {
-        expenditure_consumption = (1.0-saving_propensity) * income_current + c_f * excess_savings;
+        consumption_budget = (1.0-saving_propensity) * income_current + c_f * excess_savings;
     }
 
-    if (expenditure_consumption < 0) { // make sure expenditure isnt negative
-        cout << "Error Expenditure consumption is negative" << endl;
-        expenditure_consumption = max(expenditure_consumption, static_cast<long long>(0.0)); 
+    if (consumption_budget < 0) { // make sure expenditure isnt negative
+        cout << "ERROR: Consumption budget at firm " << this << " is negative: " << consumption_budget << endl;
+        consumption_budget = max(consumption_budget, static_cast<long long>(0.0)); 
     }
 
     // Let the public board know how much the household has set aside to consume
-    pPublic_Info_Board->Update_Consumption_Budget(expenditure_consumption);
+    pPublic_Info_Board->Update_Consumption_Budget(consumption_budget);
 }
 
 
@@ -314,51 +319,54 @@ void Household_Agent::Determine_Consumption_Budget()
 */
 void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
 
-    // Multiply each element in spending_weight_by_sector by expenditure_consumption and form a new vector
+    // Multiply each element in spending_weight_by_sector by consumption_budget and form a new vector
     vector<long long> planned_expenditure_by_sector;
 
     // Fill this with the planned spending numbers
     for (int i = 0; i < spending_weight_by_sector.size(); ++i) {
         if (spending_weight_by_sector[i] < 0){
-            cout << "Error: Spending weight by sector is negative" << endl;
+            cout << "ERROR: in Buy_cons_goods: at firm "<< this << " Spending weight by sector is negative" << endl;
             spending_weight_by_sector[i] = max(spending_weight_by_sector[i], 0.0f);
         }
-        planned_expenditure_by_sector.push_back(spending_weight_by_sector[i] * expenditure_consumption);
+        planned_expenditure_by_sector.push_back(spending_weight_by_sector[i] * consumption_budget);
+        if (planned_expenditure_by_sector[i] <0){
+            cout << "ERROR: in Buy_cons_goods: at firm "<< this <<" - Planned expenditure is negative: " <<  planned_expenditure_by_sector[i] << " for sector : " << i+1 <<  endl;
+        }
     }
 
     // Buy consumer goods and receive leftover budget and quantity bought for each sector
-    tuple<vector<long long>, vector<long long>, vector<long long>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(expenditure_consumption, planned_expenditure_by_sector, emission_sensitivity_by_sector);
+    tuple<vector<long long>, vector<long long>, vector<long long>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(planned_expenditure_by_sector, emission_sensitivity_by_sector);
 
     vector<long long> remaining_consumption_budget =  std::get<0>(purchases_by_sector);
     vector<long long> goods_bought =  std::get<1>(purchases_by_sector);
     vector<long long> emissions_generated =  std::get<2>(purchases_by_sector);
-    vector<long long> actual_spending_by_sector(planned_expenditure_by_sector);
 
+    vector<long long> actual_spending_by_sector(planned_expenditure_by_sector); // TODO: Does this set them equal
 
     int sector_count = remaining_consumption_budget.size();
 
     long long total_goods_bought = 0;
-    savings = 0;
     total_emissions = 0;
-    total_emissions_by_sector = vector<long long>(sector_count, static_cast<long long>(0));
 
 
-    for (int i=0; i<sector_count; i++){
+    for (int i=0; i<sector_count; i++){ // Check each sector
         // Deal with the leftover budget in  remaining_consumption_budget 
-        expenditure_consumption -= remaining_consumption_budget[i];
-        savings += remaining_consumption_budget[i];
-        actual_spending_by_sector[i] -= remaining_consumption_budget[i];
-        // Add up tally of goods bought
+        consumption_budget -= remaining_consumption_budget[i]; 
+        savings += remaining_consumption_budget[i]; // Increment savings
+        actual_spending_by_sector[i] -= remaining_consumption_budget[i]; 
+
+        // Tally up goods bought by quantity
         total_goods_bought += goods_bought[i];
         if(remaining_consumption_budget[i] < 0){
             cout << "Error in Buy Consumer Goods: Remaining consumption budget negative: " << remaining_consumption_budget[i] << endl;
         }
+
         // Tally up emissions
-        total_emissions_by_sector[i] = emissions_generated[i]; // may directly copy this instead
         total_emissions += emissions_generated[i];
     }
 
     // Update the public board with relevant stuff
+    // Sold quantities are logged by firms themselves
     pPublic_Info_Board->Update_Actual_Consumer_Spending_by_Sector(actual_spending_by_sector);
     pPublic_Info_Board->Update_Planned_Consumer_Spending_by_Sector(planned_expenditure_by_sector);
     pPublic_Info_Board->Update_Consumer_Emissions_By_Sector(emissions_generated);
@@ -395,9 +403,9 @@ p_seek_better_job
 */
 void Household_Agent::Seek_Better_Jobs()
 {
-    // execute code with probabilty equal to p_seek_better_job
+    // execute code with probabilty equal to the initialization parameter
     bool seek_better_job = Uniform_Dist_Float(0,1)  < household_rand_job_search;
-    if ( !unemployed && seek_better_job && !firm_owner) {  
+    if ( !unemployed && seek_better_job && !firm_owner) {  // Only do this if you are already employed as a worker
         Job* best_job = pPublic_Info_Board->Get_Top_Job();
         if (best_job != NULL){
             if (best_job->Get_Wage() > current_job->Get_Wage()){
@@ -427,8 +435,7 @@ void Household_Agent::Notify_Of_Bankruptcy(){
 // String stream operator
 
 std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
-    os << "expenditure_consumption " << obj.expenditure_consumption << std::endl;
-    os << "expenditure_tax " << obj.expenditure_tax << std::endl;
+    os << "consumption_budget " << obj.consumption_budget << std::endl;
     os << "consumption_propensity " << obj.consumption_propensity << std::endl;
     os << "savings " << obj.savings << std::endl;
     os << "savings_desired " << obj.savings_desired << std::endl;
@@ -440,7 +447,7 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "income_average " << obj.income_average << std::endl;
     os << "income_wage " << obj.income_wage << std::endl;
     os << "income_unemployment_benefit " << obj.income_unemployment_benefit << std::endl;
-    os << "income_firm_owner_dividend " << obj.income_firm_owner_dividend << std::endl;
+    os << "income_dividend " << obj.income_dividend << std::endl;
 
     os << "total_emissions " << obj.total_emissions << std::endl;
     os << "emission_sensitivity_avg " << obj.emission_sensitivity_avg << std::endl;
@@ -452,7 +459,7 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "sentiment " << obj.sentiment << std::endl;
     os << "business_owner " << obj.firm_owner << std::endl;
     os << "c_f " << obj.c_f << std::endl;
-    os << "c_h " << obj.c_h << std::endl;
+    //os << "c_h " << obj.c_h << std::endl;
     os << "c_excess_money " << obj.c_excess_money << std::endl;
     os << "date " << obj.current_date << std::endl;
     return os;

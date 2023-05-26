@@ -83,8 +83,6 @@ class Bank_Agent{
     int short_term_loan_length;
     int long_term_loan_length;
 
-    // Solvency
-    float capital_ratio;
 
     // Risky loan evaluation
     float leverage_ratio_lower_threshold;

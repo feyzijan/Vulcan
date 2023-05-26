@@ -57,9 +57,6 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
     short_term_loan_length = bank_short_term_loan_length;
     long_term_loan_length = bank_long_term_loan_length;
 
-    // Solvency
-    capital_ratio = 1.0; // Unsure how to Initialize this
-
     // Risky loan evaluation
     leverage_ratio_lower_threshold = bank_leverage_ratio_lower_threshold;
     leverage_ratio_upper_threshold = bank_leverage_ratio_upper_threshold;
@@ -267,7 +264,6 @@ std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
     os << "outstanding_long_term_loans: " << obj.outstanding_long_term_loans << std::endl;
     os << "short_term_loan_length: " << obj.short_term_loan_length << std::endl;
     os << "long_term_loan_length: " << obj.long_term_loan_length << std::endl;
-    os << "capital_ratio: " << obj.capital_ratio << std::endl;
     os << "leverage_ratio_lower_threshold: " << obj.leverage_ratio_lower_threshold << std::endl;
     os << "leverage_ratio_upper_threshold: " << obj.leverage_ratio_upper_threshold << std::endl;
     os << "date: " << obj.current_date << std::endl;

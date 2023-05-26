@@ -117,7 +117,7 @@ void Capital_Firm_Agent::Update_Sentiment(){
     // Update the desired inventory?
 
 
-    pPublic_Info_Board->Update_Cap_firm_sentiment_sum(sentiment);
+    pPublic_Info_Board->Update_Cap_firm_sentiment_sum(static_cast<int>(sentiment));
 }
 
 
@@ -131,19 +131,22 @@ void Capital_Firm_Agent::Determine_New_Production(){
     float price_change =  firm_cap_fixed_price_change + Uniform_Dist_Float(0.0,firm_cap_rand_price_change_upper_limit); 
     float prod_change =  firm_cap_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cap_rand_prod_change_upper_limit); 
 
+    production_planned = production_current;
+
     // Case 1: Inventory low, Price high - > Maintain price, increase prod
     if (!inventory_high && price_high){
         production_planned*= (1.0+prod_change);  
 
     } // Case 2: Inventory low, Price low - > Increase Price slightly + increase  production slightly 
     else if( !inventory_high && !price_high){
+        production_planned *= (1.0+prod_change/2.0);
         good_price_current *= (1.0+price_change/2.0);
-        production_planned*= (1.0+prod_change/2.0);
 
     } // Case 3: Inventory high, Price high - > Decrease production slightly + decrease price slightly
     else if (inventory_high && price_high){
-        production_planned*= (1.0-prod_change/2.0);
+        production_planned *= (1.0-prod_change/2.0);
         good_price_current *= (1.0-price_change/2.0);
+        //good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
 
     } // Case 4: Inventory high, Price low -> Reduce Production
     else{
@@ -154,17 +157,18 @@ void Capital_Firm_Agent::Determine_New_Production(){
     // Set floor on prices at 0
     good_price_current = max(good_price_current, 0.0f);
 
-    /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments 
-    Additionally impose limit on how much they can tone down production
-    TODO:*/
-    /*production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
-    int production_planned_min = static_cast<int>(production_past*(1-firm_cap_max_production_climbdown));
-    int production_planned_max = static_cast<int>(production_past*(1+firm_cap_max_production_climbdown));
+    /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
+    production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
+    
+    /* //Additionally impose limit on how much they can change production targets if things become too volatile
+
+    int production_planned_min = static_cast<int>(production_current*(1-firm_cap_max_production_climbdown));
+    int production_planned_max = static_cast<int>(production_current*(1+firm_cap_max_production_climbdown));
     if(production_planned < production_planned_min){
         production_planned = production_planned_min;
     } else if (production_planned > production_planned_max){
         production_planned = production_planned_max;
-    } 
+    }
     */
 
     pPublic_Info_Board->Update_Capital_Goods_Planned_Production(production_planned);

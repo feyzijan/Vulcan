@@ -139,7 +139,7 @@ void Consumer_Firm_Agent::Update_Sentiment(){
 
     // Update the desired inventory?
 
-    pPublic_Info_Board->Update_Cons_firm_sentiment_sum(sentiment);
+    pPublic_Info_Board->Update_Cons_firm_sentiment_sum(static_cast<int>(sentiment));
 }
 
 
@@ -167,6 +167,8 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     Cases 1-4: Inventory low == Sales high, so no need to worry about emission
     */
 
+    production_planned = production_current;    
+
     // Cases 1 & 2 : Inventory low, price low, emissions low or high -> Increase production slightly +  increase price slightly 
     if (!price_high && !inventory_high) {
         production_planned*= (1.0+prod_change/2.0);
@@ -191,30 +193,34 @@ void Consumer_Firm_Agent::Determine_New_Production(){
      else if (price_high && inventory_high && !emission_high) {
         production_planned*= (1.0-prod_change/2.0);
         good_price_current *= (1.0-price_change/2.0);
+        //good_price_current = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
 
     } // Case 8: Inventory high, price high, emissions high -> Decrease production slightly + decrease price slightly
     else if (price_high && inventory_high && emission_high) {
         production_planned*= (1.0-prod_change/2.0);
         good_price_current *= (1.0-price_change/2.0);
-        // ** TODO: Maybe buy offsets here as well?
+        //good_price_current = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
     }
 
     
     // set floor on prices at 0
     good_price_current = max(good_price_current, 0.0f);
 
-    /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments 
-    Additionally impose limit on how much they can tone down production
-    TODO:*/
-    /*production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
-    int production_planned_min = static_cast<int>(production_past*(1-firm_cons_max_production_climbdown));
-    int production_planned_max = static_cast<int>(production_past*(1+firm_cons_max_production_climbdown));
+    /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
+    production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
+    
+    /* //Additionally impose limit on how much they can change production targets if things become too volatile
+
+    int production_planned_min = static_cast<int>(production_current*(1-firm_cons_max_production_climbdown));
+    int production_planned_max = static_cast<int>(production_current*(1+firm_cons_max_production_climbdown));
     if(production_planned < production_planned_min){
         production_planned = production_planned_min;
     } else if (production_planned > production_planned_max){
         production_planned = production_planned_max;
     }
     */
+    
+
     pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
 
 }
@@ -250,7 +256,7 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     // Update certain firm characteristics to match that of the sector
 
     output_per_machine = pSector_Struct->output_per_machine;
-    workers_per_machine = pSector_Struct->output_per_machine;
+    workers_per_machine = pSector_Struct->workers_per_machine;
     unit_good_cost = pSector_Struct->good_unit_cost;
     max_production_climbdown = pSector_Struct->max_production_climbdown;
     inv_depreciation_rate = pSector_Struct->inv_depr_rate;

@@ -41,8 +41,8 @@ firm_cons_init_cash_mean,10000.0
 firm_cons_init_cash_std,2500.0
 firm_cons_init_cash_min,1.0
 firm_cons_init_cash_max,999999999.0
-firm_cons_init_dividend_ratio_optimist,0.04
-firm_cons_init_dividend_ratio_pessimist,0.01
+firm_cons_init_dividend_ratio_optimist,0.01
+firm_cons_init_dividend_ratio_pessimist,0.005
 firm_cons_init_wage_offer_mean,1000.0
 firm_cons_init_wage_offer_std,300.0
 firm_cons_init_wage_offer_min,100.0

@@ -253,7 +253,7 @@ void Firm_Agent::Update_Average_Sales(){
 
 
 /* Pay dividends to firm owner- formula taken from Jamel*/
-long long Firm_Agent::Pay_Dividend(){ 
+long long Firm_Agent::Get_Dividend(){ 
     return dividend_payments; 
 }
 
@@ -731,7 +731,7 @@ void Firm_Agent::Pay_Liabilities(){
     }
 
     // Check for errors in accounting
-    if (cash_on_hand < 0 || total_assets < 0 || total_liabilities < 0 || tax_payments || dividend_payments < 0){
+    if (cash_on_hand < 0 || total_assets < 0 || total_liabilities < 0 || tax_payments < 0 || dividend_payments < 0){
         cout << "ERROR in Pay_Liabilities: Firm at: " << this << " has negative values: " << endl;
         cout << "\tcash_on_hand: " << cash_on_hand << " total_assets: " << total_assets << " total_liabilities: "
          << total_liabilities << " tax_payments: " << tax_payments << " dividend_payments: " << dividend_payments << endl;

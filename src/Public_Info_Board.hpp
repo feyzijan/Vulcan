@@ -44,9 +44,8 @@ class Public_Info_Board{
 
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
-    pair<vector<float>, vector<int>> Buy_Consumer_Goods_By_Sector(long long budget, const vector<float>& planned_expenditure_by_sector);
     tuple<vector<long long>, vector<long long>, vector<long long>> Buy_Consumer_Goods_By_Sector_And_Emission(
-        long long budget, const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
+        const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
 
     // Capital Good Market
     void Send_Cap_Good_To_Market(Capital_Good* pGood);
@@ -66,6 +65,7 @@ class Public_Info_Board{
     long long Distribute_Emission_Allowances(long long sale_quantity, int sector_id);
     long long Buy_Emission_Offsets(long long quantity, int sector_id) { 
         offsets_sold_by_sector[sector_id-1] += quantity;
+        total_offsets_sold += quantity;
         return quantity * emission_offset_price;} // Returns cost, allowances always available
 
     // Update emission allowance price and amount
@@ -91,7 +91,7 @@ class Public_Info_Board{
     float Get_Capital_Inflation() {return cap_inflation_current;}
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
     
-    float Get_Cons_Sector_Price_Level(int sector_id) { return consumer_sectors_price_levels[sector_id]; }
+    float Get_Cons_Sector_Price_Level(int sector_id) { return consumer_sectors_price_levels[sector_id-1]; }
     float Get_Capital_Good_Price_Level(){return cap_price_level_current;}
 
     float Get_Average_Wage_Market() { return average_wage_market;}
@@ -129,14 +129,13 @@ class Public_Info_Board{
 
     //-----------Update global aggregate variables ----------------
     // Sentiment sums
-    void Update_Household_sentiment_sum(bool amount) { household_sentiment_sum += amount;}
-    void Update_Cons_firm_sentiment_sum(bool amount) { cons_firm_sentiment_sum += amount;}
-    void Update_Cap_firm_sentiment_sum(bool amount) { cap_firm_sentiment_sum += amount;}
+    void Update_Household_sentiment_sum(int amount) { household_sentiment_sum += amount;}
+    void Update_Cons_firm_sentiment_sum(int amount) { cons_firm_sentiment_sum += amount;}
+    void Update_Cap_firm_sentiment_sum(int amount) { cap_firm_sentiment_sum += amount;}
     // Wages and Income
     void Update_Household_Wage_Income(int amount) { household_wage_income += amount; }
     void Update_Household_Dividend_Income(long long amount) {household_dividend_income += amount; }
     void Update_Household_Unemployment_Income(int amount) {household_unemployment_income += amount; }
-    void Update_Household_Total_Income(long long amount) { household_total_income += amount; }
     // Capital Goods
     void Update_Machine_Orders(long long amount) { machine_orders += amount; }
     void Update_Machine_Orders_Planned(long long amount) { machine_orders_planned += amount; }
@@ -189,9 +188,9 @@ class Public_Info_Board{
     void Calculate_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
     void Calculate_Average_Wage_Employed() { average_wage_employed = float(household_wage_income)/float(n_employed_workers-n_firms); }
     // Sentiments
-    void Calculate_Household_Sentiment_Percentage() { household_sentiment_percentage = float(household_sentiment_sum)/ float(n_households); }
-    void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = float(cons_firm_sentiment_sum)/float(n_consumer_firms); }
-    void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = float(cap_firm_sentiment_sum)/float(n_capital_firms); }
+    void Calculate_Household_Sentiment_Percentage() { household_sentiment_percentage = static_cast<float>(household_sentiment_sum)/ n_households; }
+    void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = static_cast<float>(cons_firm_sentiment_sum) / (n_consumer_firms - n_bankrupt_cons_firms); }
+    void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = static_cast<float>(cap_firm_sentiment_sum)/ (n_capital_firms - n_bankrupt_cap_firms); }
     // Unit emisisons
     void Calculate_Average_Unit_Emissions_by_Sector();
 
@@ -208,9 +207,9 @@ class Public_Info_Board{
 
     // General price level
     float cons_price_level_current; // Initialized, updated, not reset, logged
-    float cons_price_level_previous; // Initialized, updated, not reset, logged
+    float cons_price_level_previous; // Initialized, updated, not reset, not logged
     float cap_price_level_current; // Initialized, updated, not reset, logged
-    float cap_price_level_previous; // Initialized, updated, not reset, logged
+    float cap_price_level_previous; // Initialized, updated, not reset, not logged
     vector<float> consumer_sector_weights; // Initialized only
     vector<float> consumer_sectors_price_levels; // Initialized, updated, not reset, logged
 
@@ -220,11 +219,12 @@ class Public_Info_Board{
     vector<float> average_unit_emissions_by_sector; // Initialized, updated, no need for reset or logging
 
     // Emission Allowances
-    vector<long long> emission_allowances_by_sector; // Initialized, updated, logged
+    vector<long long> emission_allowances_by_sector; // Initialized, updated, not logged 
     long long total_emission_allowance; // Initialized, updated, logged
     float emission_offset_price; // Initialized, updated, logged
 
     vector<long long> offsets_sold_by_sector; // Initialized, updated, reset, logged
+    long long total_offsets_sold; // Initialized, updated, reset, logged
 
     // Income and wage figures
     float average_wage_market; // Average wage in the job market
@@ -233,7 +233,6 @@ class Public_Info_Board{
     int household_unemployment_income; // Initialized, updated, reset, logged
     int household_wage_income;  // Initialized, updated, reset, logged
     long long household_dividend_income; // Initialized, updated, reset, logged
-    long long household_total_income; // Initialized, updated, reset, logged
 
     int minimum_wage; // Initialized, updated, not reset, logged
 

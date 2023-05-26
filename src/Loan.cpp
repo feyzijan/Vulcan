@@ -30,7 +30,6 @@ void Loan::Clean_Loan(){
 }
 
 
-
 // --- Calculating Payments
 
 

@@ -61,8 +61,7 @@ class Household_Agent{
     Job * current_job;
     
     // Consumption and Expenditure
-    long long expenditure_consumption;
-    long long expenditure_tax;
+    long long consumption_budget;
     float consumption_propensity; //c eq(17) - characteristic
     vector<float> spending_weight_by_sector;
 
@@ -80,15 +79,14 @@ class Household_Agent{
     long long income_average;
     int income_wage; 
     int income_unemployment_benefit;
-    long long income_firm_owner_dividend;
+    long long income_dividend;
     queue<long long> past_incomes;
 
     // Emissions
     long long total_emissions; 
     float emission_sensitivity_avg; 
     vector<float> emission_sensitivity_by_sector; 
-    vector<long long> total_emissions_by_sector; 
-
+    
     // Unemployment status
     bool unemployed;
     int reservation_wage;

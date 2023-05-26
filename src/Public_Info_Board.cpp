@@ -20,8 +20,6 @@ Public_Info_Board::Public_Info_Board(){
     household_wage_income = 0;
     household_unemployment_income = 0;
     household_dividend_income = 0;
-    household_total_income = 0;
-
 
     // Inflation and interest rates
     r_rate = 0;
@@ -74,6 +72,7 @@ Public_Info_Board::Public_Info_Board(){
     // Emission allowances
     total_emission_allowance = emission_init_total_allowance; 
     emission_offset_price = emission_init_unit_price;
+    total_offsets_sold = 0;
 
     // Bankruptcy figures
     n_bankrupt_cap_firms = 0;
@@ -231,9 +230,9 @@ void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood) {
 
 // Consumer Good Market 
 tuple<vector<long long>, vector<long long>, vector<long long>> Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission
-(long long budget, const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array) 
+(const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array) 
 {
-    return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector_And_Emission(budget, planned_expenditure_by_sector, emission_sensitives_array);
+    return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector_And_Emission(planned_expenditure_by_sector, emission_sensitives_array);
 }
 
 
@@ -351,7 +350,6 @@ void Public_Info_Board::Reset_Global_Data(){
 
     household_wage_income = reset_value;
     household_dividend_income = reset_value;
-    household_total_income = reset_value;
     household_unemployment_income = reset_value;
 
     // Emissions
@@ -407,6 +405,9 @@ void Public_Info_Board::Reset_Global_Data(){
     new_job_postings = reset_value;
     removed_job_postings = reset_value;
     n_employees_quitting = reset_value;
+
+    // Emissions
+    total_offsets_sold = reset_value;
 }
 
 //-------------------------------------------------------------
@@ -419,9 +420,9 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "r_rate " << obj.r_rate << std::endl;
     os << "cons_inflation_current " << obj.cons_inflation_current << std::endl;
     os << "price_level_current " << obj.cons_price_level_current << std::endl;
-    os << "price_level_previous " << obj.cons_price_level_previous << std::endl;
+    //os << "price_level_previous " << obj.cons_price_level_previous << std::endl;
     os << "cap_price_level_current " << obj.cap_price_level_current << std::endl;
-    os << "cap_price_level_previous " << obj.cap_price_level_previous << std::endl;
+    //os << "cap_price_level_previous " << obj.cap_price_level_previous << std::endl;
 
     // Emission stuff
     os << "total_emission_allowance " << obj.total_emission_allowance << std::endl;
@@ -433,7 +434,6 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "household_wage_income " << obj.household_wage_income << std::endl;
     os << "household_dividend_income " << obj.household_dividend_income << std::endl;
     os << "household_unemployment_income " << obj.household_unemployment_income << std::endl;
-    os << "household_total_income " << obj.household_total_income << std::endl;
     
     os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;
     os << "household_sentiment_percentage " << obj.household_sentiment_percentage << std::endl;
@@ -465,6 +465,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
         os << "total_cons_emissions_by_sector_" << i+1 << " " << obj.total_consumer_emissions_by_sector[i] << std::endl;
         os << "total_firm_emissions_by_sector_" << i+1 << " " << obj.total_firm_emissions_by_sector[i] << std::endl;
     } 
+    os << "total_offsets_sold " << obj.total_offsets_sold << std::endl;
     
     os << "cap_goods_production " << obj.cap_goods_production << std::endl;
     os << "cap_goods_production_planned " << obj.cap_goods_production_planned << std::endl;
@@ -497,6 +498,14 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
 */
 vector<pair<string, float>>* Public_Info_Board::Log_Data() {
     current_date = global_date;
+    // Income and wage figures
+    if (global_date > 0){
+        household_wage_income /= n_employed_workers;
+        household_dividend_income /= (n_firms - n_bankrupt_cap_firms - n_bankrupt_cons_firms);
+        household_unemployment_income /= n_unemployed_workers;
+    }
+
+
     auto result = new vector<pair<string, float>>();
 
     // Get the names and values of all member variables
