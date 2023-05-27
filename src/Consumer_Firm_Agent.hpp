@@ -15,9 +15,13 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
     public:
     //Constructors and Destructor
-    Consumer_Firm_Agent(float float_vals[4], int int_vals[6]);
+    Consumer_Firm_Agent(float init_values[6]);
     Consumer_Firm_Agent(Consumer_Firm_Agent&); 
     ~Consumer_Firm_Agent() override;
+
+    // Initialization methods t = 1
+    virtual void Initialize_Production() override;
+    void Initialize_Emission_Allowances();
 
     // Main Loop methods
     virtual void Depreciate_Good_Inventory() override;

@@ -7,12 +7,12 @@ using namespace std;
 
 //----------- Constructors
 // New Constructor to use
-Household_Agent::Household_Agent(float propensities[7], int vals[3], Public_Info_Board* pPublic_Board )
+Household_Agent::Household_Agent(float propensities[7], int init_values[3], Public_Info_Board* pPublic_Board )
 {
     // -- Set Given starting parameters and propensities
-    savings= vals[0];
-    unemp_duration_upper_bound = vals[1];
-    reservation_wage = vals[2];
+    savings= init_values[0];
+    unemp_duration_upper_bound = init_values[1];
+    reservation_wage = init_values[2];
 
     consumption_propensity = propensities[0];
     saving_propensity_optimist = propensities[1];

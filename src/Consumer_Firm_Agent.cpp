@@ -4,7 +4,7 @@
 
 /* Constructors and Destructor
 */
-Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[2], int int_vals[5]): Firm_Agent::Firm_Agent(float_vals,int_vals)
+Consumer_Firm_Agent::Consumer_Firm_Agent(float init_values[6]): Firm_Agent::Firm_Agent(init_values)
 {
     is_cons_firm = true;
 
@@ -15,26 +15,13 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float float_vals[2], int int_vals[5]): 
     inv_reaction_factor = firm_cons_inv_reaction_factor;
     max_production_climbdown = firm_cons_max_production_climbdown;
     unit_emissions = firm_cons_init_emissions_per_unit;
-    
     dividend_ratio_optimist = firm_cons_init_dividend_ratio_optimist;
     dividend_ratio_pessimist =  firm_cons_init_dividend_ratio_pessimist;
-
-    production_current = max(working_capital_inventory * firm_cons_workers_per_machine * firm_cons_productivity,employee_count_desired / firm_cons_workers_per_machine * firm_cons_productivity);
-    production_planned = production_current;
-    inventory = production_current * target_inv_factor * int_vals[3]; // TODO ADD this as a param
-    quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
-    average_sale_quantity = quantity_sold;
-    revenue_sales = production_current * good_price_current;
-    average_profit = revenue_sales;
-
-
+    
     // Emissions - Set default values for now
     unit_emissions = 1; // TODO: Replace with variable
     total_emissions = 0;
 
-    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold, unit_emissions);
-    goods_on_market = cons_goods_on_market;
-    //Send_Goods_To_Market();
     sector_id = 1;
 }
 
@@ -47,13 +34,27 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(Consumer_Firm_Agent&){}
 /* Delete references to the consumer good object on the market produced by this firm 
 */
 Consumer_Firm_Agent::~Consumer_Firm_Agent() {
-
     // Consumer goods
     // Set quantity and seller pointer to 0
     cons_goods_on_market->Set_Quantity(0);
     cons_goods_on_market->Set_Seller_Pointer(nullptr);
-
 }
+
+
+/*
+*/
+void Consumer_Firm_Agent::Initialize_Production(){
+    Firm_Agent::Initialize_Production();
+    
+    // Post the goods to market
+    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold, unit_emissions);
+    goods_on_market = cons_goods_on_market;
+}
+
+void Consumer_Firm_Agent::Initialize_Emission_Allowances(){
+    emission_total_allowance = pPublic_Info_Board->Distribute_Emission_Allowances(employee_count, sector_id);
+}
+
 
 
 // ------- Main Loop Methods-----------------
@@ -63,7 +64,7 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent() {
 The depreciation rate is set exogenously in the initialization parameter for all firms
 */
 void Consumer_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(float(inventory)*(1.0-firm_cons_inv_depr_rate));
+    inventory  = static_cast<long long>(inventory*(1.0-firm_cons_inv_depr_rate));
 }
 
 
@@ -137,80 +138,75 @@ void Consumer_Firm_Agent::Update_Sentiment(){
     if (sentiment){dividend_ratio = dividend_ratio_optimist;
     } else{dividend_ratio = dividend_ratio_pessimist;}
 
-    // Update the desired inventory?
-
     pPublic_Info_Board->Update_Cons_firm_sentiment_sum(static_cast<int>(sentiment));
 }
 
 
 void Consumer_Firm_Agent::Determine_New_Production(){
     
-    // Check if price is high relative to the market
-    bool price_high = good_price_current >= pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
+    // Check if price is high relative to the market, and inventory is low relative to desired
+    float average_market_price = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
+    bool price_high = good_price_current >= average_market_price;
+    bool inventory_high = inventory >= desired_inventory; 
 
     // Check if emissiosn are high relative to the market
     float emission_overshoot = unit_emissions_adj - pPublic_Info_Board->Get_Average_Unit_Emissions_by_Sector(sector_id);
     bool emission_high = emission_overshoot > 0; 
 
     // Calculate how many offsets you need to buy to reach the average unit emissions
-    long long emission_offsets_needed = 0;
     // Add the amount we need to buy so that our inventory is at average emissions
-    emission_offsets_needed += static_cast<long long>(emission_overshoot * inventory);
+    long long emission_offsets_needed = static_cast<long long>(emission_overshoot * inventory);
 
-    bool inventory_high = inventory >= desired_inventory; 
+
     // Determine randomised price and production change factors
     float price_change =  firm_cons_fixed_price_change + Uniform_Dist_Float(0.0,firm_cons_rand_price_change_upper_limit); 
-    float prod_change =  firm_cons_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cons_rand_prod_change_upper_limit); 
-
+    //float prod_change =  firm_cons_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cons_rand_prod_change_upper_limit); 
 
     /* Change price, production, and emission based on data
     Cases 1-4: Inventory low == Sales high, so no need to worry about emission
     */
 
-    production_planned = production_current;    
-
     // Cases 1 & 2 : Inventory low, price low, emissions low or high -> Increase production slightly +  increase price slightly 
     if (!price_high && !inventory_high) {
-        production_planned*= (1.0+prod_change/2.0);
+        //production_planned*= (1.0+prod_change/2.0);
         good_price_current *= (1.0+price_change/2.0);
     
     } // Cases 3 & 4: Inventory low, price high, emissions low or high -> Increase production
     else if (price_high && !inventory_high) {
-        production_planned*= (1.0+prod_change);
+        //production_planned*= (1.0+prod_change);
         
     } // Case 5: Inventory high, price low, emissions low -> Reduce production
     else if (!price_high && inventory_high && !emission_high) {
-        production_planned*= (1.0-prod_change);
+        //production_planned*= (1.0-prod_change);
 
     } // Case 6: Inventory high, price low, emissions high -> Reduce emissions + reduce production slightly
     else if (!price_high && inventory_high && emission_high) {
-        production_planned*= (1.0-prod_change/2.0);
+        //production_planned*= (1.0-prod_change/2.0);
         // Add the amount we need to buy to offset the emissions of the goods we plan to produce
         emission_offsets_needed += static_cast<long long>(production_planned * unit_emissions_adj);
         Buy_Emission_Offsets(emission_offsets_needed);
         
     } // Case 7: Inventory high, price high, emissions low -> Decrease production slightly + decrease price slightly
      else if (price_high && inventory_high && !emission_high) {
-        production_planned*= (1.0-prod_change/2.0);
+        //production_planned*= (1.0-prod_change/2.0);
         good_price_current *= (1.0-price_change/2.0);
-        //good_price_current = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
+        //good_price_current = average_market_price * Uniform_Dist_Float(0.9,1.1);
 
     } // Case 8: Inventory high, price high, emissions high -> Decrease production slightly + decrease price slightly
     else if (price_high && inventory_high && emission_high) {
-        production_planned*= (1.0-prod_change/2.0);
+        //production_planned*= (1.0-prod_change/2.0);
         good_price_current *= (1.0-price_change/2.0);
+        //good_price_current = average_market_price * Uniform_Dist_Float(0.9,1.1);
         //good_price_current = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
     }
 
-    
-    // set floor on prices at 0
-    good_price_current = max(good_price_current, 0.0f);
+    // Set floor on prices at production cost
+    good_price_current = max(good_price_current, unit_good_cost);
 
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
     production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
     
     /* //Additionally impose limit on how much they can change production targets if things become too volatile
-
     int production_planned_min = static_cast<int>(production_current*(1-firm_cons_max_production_climbdown));
     int production_planned_max = static_cast<int>(production_current*(1+firm_cons_max_production_climbdown));
     if(production_planned < production_planned_min){
@@ -219,7 +215,6 @@ void Consumer_Firm_Agent::Determine_New_Production(){
         production_planned = production_planned_max;
     }
     */
-    
 
     pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
 

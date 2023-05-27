@@ -150,11 +150,6 @@ extern float firm_cons_init_inv_factor_mean;
 extern float firm_cons_init_inv_factor_std;
 extern float firm_cons_init_inv_factor_min;
 extern float firm_cons_init_inv_factor_max;
-// Working capital inventory
-extern float firm_cons_init_machine_inv_mean;
-extern float firm_cons_init_machine_inv_std;
-extern float firm_cons_init_machine_inv_min;
-extern float firm_cons_init_machine_inv_max;
 // Desired inventory factor ( characteristic)
 extern float firm_cons_init_target_inv_factor_mean;
 extern float firm_cons_init_target_inv_factor_std;
@@ -175,6 +170,7 @@ extern int firm_cons_workers_per_machine;
 extern float firm_cons_max_production_climbdown;
 extern float firm_cons_good_unit_cost;
 extern float firm_cons_inv_reaction_factor;
+extern float firm_cons_wage_change;
 
 
 // --- Consumer Firm randomness parameters
@@ -245,11 +241,6 @@ extern float firm_cap_init_inv_factor_mean;
 extern float firm_cap_init_inv_factor_std;
 extern float firm_cap_init_inv_factor_min;
 extern float firm_cap_init_inv_factor_max;
-// Working capital
-extern float firm_cap_init_machine_inv_mean;
-extern float firm_cap_init_machine_inv_std;
-extern float firm_cap_init_machine_inv_min;
-extern float firm_cap_init_machine_inv_max;
 // Desired inventory factor ( characteristic)
 extern float firm_cap_init_target_inv_factor_mean;
 extern float firm_cap_init_target_inv_factor_std;
@@ -271,6 +262,7 @@ extern int firm_cap_machine_lifespan;
 extern float firm_cap_max_production_climbdown;
 extern float firm_cap_good_unit_cost;
 extern float firm_cap_inv_reaction_factor;
+extern float firm_cap_wage_change;
 
 
 // --- Capital Firm randomness parameters

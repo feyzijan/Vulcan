@@ -2,6 +2,7 @@
 
 
 /* Constructor
+Value is set automatically
 */
 Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity,int life_span)
 {
@@ -30,7 +31,7 @@ Capital_Good::Capital_Good(const Capital_Good& other){
 NOTE: Depreciation may be off by 1 timestep because the division may not be exact, but this is not a big deal
 */
 void Capital_Good::Depreciate(){
-    value -= price/(depreciation_period*quantity);
+    value -= price*quantity/depreciation_period;
     if (value <= 0){ depreciated = true;}
 }
 

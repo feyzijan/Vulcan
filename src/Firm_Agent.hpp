@@ -19,18 +19,19 @@ class Firm_Agent{
     public:
     // Constructors and Destructor
     Firm_Agent() {}; 
-    Firm_Agent(float float_vals[2], int int_vals[6]);
+    Firm_Agent(float init_values[6]);
     virtual ~Firm_Agent();
 
     // Initialization methods t = 1
     void Update_Average_Profits_T1();
     void Update_Average_Sales_T1();
+    virtual void Initialize_Production();
 
     // Main Loop Methods 
     void Depreciate_And_Revalue_Capital_Goods();
     void Check_Employees_Quitting();
     void Cancel_Expired_Contracts();
-    virtual void Random_Experimentation();
+    virtual void Random_Experimentation() {};
     virtual void Check_Sales();
     virtual void Update_Sentiment();
     void Update_Average_Profit();
@@ -44,7 +45,7 @@ class Firm_Agent{
     void Layoff_Excess_Workers();
     void Post_Jobs();
     void Check_For_New_Employees();
-    void Make_Investment_Decision(); // Complete
+    void Make_Investment_Decision();
     virtual void Produce_Goods();
     virtual void Send_Goods_To_Market() {}; 
     virtual void Update_Goods_On_Market() {};
@@ -144,9 +145,9 @@ class Firm_Agent{
     int employee_count_desired;
     int n_active_job_postings;
     bool need_worker;
-    int w_target; //Desired labor capacity utilization - unused
+    //int w_target; //Desired labor capacity utilization - unused
     float labor_utilization; 
-    
+
     // Inventories
     long long inventory;
     long long working_capital_inventory;

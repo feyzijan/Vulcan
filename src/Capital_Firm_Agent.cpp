@@ -4,9 +4,9 @@
 
 
 
-Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[2], int int_vals[5]) : Firm_Agent::Firm_Agent(float_vals, int_vals)
+Capital_Firm_Agent::Capital_Firm_Agent(float init_values[6]) : Firm_Agent::Firm_Agent(init_values)
 {
-    //identifier
+    // Set parameters specific to capital firms from the global variables
     is_cons_firm = false;
     workers_per_machine = firm_cap_workers_per_machine; // global param
     output_per_machine = firm_cap_productivity; // global param
@@ -14,23 +14,9 @@ Capital_Firm_Agent::Capital_Firm_Agent(float float_vals[2], int int_vals[5]) : F
     inv_depreciation_rate = firm_cap_inv_depr_rate;
     inv_reaction_factor = firm_cap_inv_reaction_factor;
     max_production_climbdown = firm_cap_max_production_climbdown; // seems to be unused
-
     dividend_ratio_optimist = firm_cap_init_dividend_ratio_optimist;
     dividend_ratio_pessimist =  firm_cap_init_dividend_ratio_pessimist;
 
-    production_current = max(working_capital_inventory * firm_cap_workers_per_machine * firm_cap_productivity, employee_count_desired / firm_cap_workers_per_machine * firm_cap_productivity);
-    production_planned = production_current;
-    inventory = production_current * target_inv_factor * int_vals[3];
-    quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
-    average_sale_quantity = quantity_sold;
-    revenue_sales = production_current * good_price_current;
-    average_profit = revenue_sales;
-
-    
-    cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, firm_cap_machine_lifespan);
-    goods_on_market = cap_goods_on_market;
-    // Put goods on Market
-    //Send_Goods_To_Market();
     sector_id = 0;
 }
 
@@ -47,6 +33,21 @@ Capital_Firm_Agent::~Capital_Firm_Agent(){
     cap_goods_on_market->Set_Seller_Pointer(nullptr); 
 } 
 
+/*
+*/
+void Capital_Firm_Agent::Initialize_Production(){
+    // Call base class method
+    Firm_Agent::Initialize_Production();
+
+    // Post the goods to market
+    cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, firm_cap_machine_lifespan);
+    goods_on_market = cap_goods_on_market;
+    // Put goods on Market
+    //Send_Goods_To_Market();  
+}
+
+
+
 
 // ------- Main Loop Methods-----------------
 
@@ -55,10 +56,8 @@ The depreciation rate is set exogenously in the initialization parameter for all
 */
 
 void Capital_Firm_Agent::Depreciate_Good_Inventory(){
-    inventory  = int(float(inventory)*(1.0-firm_cap_inv_depr_rate));
+    inventory  = static_cast<long long>(inventory*(1.0-firm_cap_inv_depr_rate));
 }
-
-
 
 
 /* Increment Firm inventory by the number of machines, productivity per machine,
@@ -114,9 +113,6 @@ void Capital_Firm_Agent::Update_Sentiment(){
     if (sentiment){dividend_ratio = dividend_ratio_optimist;
     } else{dividend_ratio = dividend_ratio_pessimist;}
 
-    // Update the desired inventory?
-
-
     pPublic_Info_Board->Update_Cap_firm_sentiment_sum(static_cast<int>(sentiment));
 }
 
@@ -124,44 +120,42 @@ void Capital_Firm_Agent::Update_Sentiment(){
 /* Determine new production - call the base class method and don't do anything about sensing emissions*/
 void Capital_Firm_Agent::Determine_New_Production(){
     
-    bool price_high = good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
-
+    // Check if price is high relative to the market, and inventory is low relative to desired
+    float average_market_price = pPublic_Info_Board->Get_Capital_Good_Price_Level();
+    bool price_high = good_price_current >= average_market_price;
     bool inventory_high = inventory >= desired_inventory; 
+
     // Determine randomised price and production change factors
     float price_change =  firm_cap_fixed_price_change + Uniform_Dist_Float(0.0,firm_cap_rand_price_change_upper_limit); 
-    float prod_change =  firm_cap_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cap_rand_prod_change_upper_limit); 
-
-    production_planned = production_current;
+    //float prod_change =  firm_cap_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cap_rand_prod_change_upper_limit); 
 
     // Case 1: Inventory low, Price high - > Maintain price, increase prod
     if (!inventory_high && price_high){
-        production_planned*= (1.0+prod_change);  
+        //production_planned*= (1.0+prod_change);  
 
     } // Case 2: Inventory low, Price low - > Increase Price slightly + increase  production slightly 
     else if( !inventory_high && !price_high){
-        production_planned *= (1.0+prod_change/2.0);
+        //production_planned *= (1.0+prod_change/2.0);
         good_price_current *= (1.0+price_change/2.0);
 
     } // Case 3: Inventory high, Price high - > Decrease production slightly + decrease price slightly
     else if (inventory_high && price_high){
-        production_planned *= (1.0-prod_change/2.0);
+        //production_planned *= (1.0-prod_change/2.0);
         good_price_current *= (1.0-price_change/2.0);
         //good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
 
     } // Case 4: Inventory high, Price low -> Reduce Production
     else{
-        production_planned*= (1.0-prod_change);
+        //production_planned*= (1.0-prod_change);
     }
 
-    
     // Set floor on prices at 0
-    good_price_current = max(good_price_current, 0.0f);
+    good_price_current = max(good_price_current, unit_good_cost);
 
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
     production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
     
     /* //Additionally impose limit on how much they can change production targets if things become too volatile
-
     int production_planned_min = static_cast<int>(production_current*(1-firm_cap_max_production_climbdown));
     int production_planned_max = static_cast<int>(production_current*(1+firm_cap_max_production_climbdown));
     if(production_planned < production_planned_min){

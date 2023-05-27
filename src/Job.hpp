@@ -47,7 +47,7 @@ class Job{
     /* 1: Posted job has been taken by household,
        0: Posted job still on the market : default status when object is created
       -1: Firm notifies worker they have been fired
-      -2: Worker notifies firm they quite
+      -2: Worker notifies firm they quit
       -3: Firm requested the job be removed from market
     */
     void Set_Expiry_Date() {expiry_date = global_date + contract_length;}

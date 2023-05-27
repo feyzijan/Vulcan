@@ -17,6 +17,7 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     Initialize_Households(pHousehold_vector, pPublic_Board, n_households); 
     Initialize_Consumer_Firms( pConsumer_Firm_vector, pPublic_Board,  n_consumer_firms);
     Initialize_Capital_Firms(pCapital_Firm_vector, pPublic_Board,n_capital_firms);
+    // Loop through the consumer firm vector and call Initialize_Production();
 
 
     //----------- STEP 0.12 Initialize Firm Owners
@@ -28,20 +29,31 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     Initialize_Job_Market(pHousehold_vector,pConsumer_Firm_vector,pCapital_Firm_vector,pPublic_Board);
     cout << "Job market size: " << pJob_Market->Get_Size() << endl; 
 
-    //----------- STEP 0.14: Initialize consumer firm sectors
+    //---------- STEP 0.14: Initialize Production - Must be done after job market matching
+    cout << "STEP 0.4: Initialize Production based on Job Market matching" << endl;
+    for (auto it = pConsumer_Firm_vector->begin(); it != pConsumer_Firm_vector->end(); ++it){
+        (*it)->Initialize_Production(); }
+
+    for (auto it = pCapital_Firm_vector->begin(); it != pCapital_Firm_vector->end(); ++it){
+        (*it)->Initialize_Production(); }
+
+    //----------- STEP 0.15: Initialize consumer firm sectors
+    cout << "STEP 0.15: Initialize consumer firm sectors" << endl;
     int n_sectors =  Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector,
      pPublic_Board, pConsumer_Goods_Market, pHousehold_vector);
 
     
-    //----------- STEP 0.15: Initialize emissions
-    // Distribute initial emission allowances
+    //----------- STEP 0.16: Initialize emission allowances - This must be done after employees and sectors are set
+    cout << "STEP 0.16: Initialize emission allowances" << endl;
+    for (auto it = pConsumer_Firm_vector->begin(); it != pConsumer_Firm_vector->end(); ++it){
+        (*it)->Initialize_Emission_Allowances(); }
 
-    //----------- STEP 0.16: Send initial goods to markets and initialize price level
-    cout << "Step 0.16: Send initial goods to markets and initialize price level" << endl;
+
+    //----------- STEP 0.17: Send initial goods to markets and initialize price level
+    cout << "Step 0.17: Send initial goods to markets and initialize price level" << endl;
 
     Initialize_Markets(pConsumer_Firm_vector,  pCapital_Firm_vector, pConsumer_Goods_Market,
     pCapital_Goods_Market,pPublic_Board, n_sectors);
-
 
 }
 
@@ -61,28 +73,23 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
     Normal_Dist_Generator init_cash(firm_cons_init_cash_mean, firm_cons_init_cash_std, firm_cons_init_cash_min, firm_cons_init_cash_max);
     
     Normal_Dist_Generator init_worker_demand(firm_cons_init_worker_demand_mean, firm_cons_init_worker_demand_std, firm_cons_init_worker_demand_min, firm_cons_init_worker_demand_max);
-    Normal_Dist_Generator init_machines(firm_cons_init_machine_inv_mean, firm_cons_init_machine_inv_std, firm_cons_init_machine_inv_min, firm_cons_init_machine_inv_max);
     Normal_Dist_Generator init_inv_factor(firm_cons_init_inv_factor_mean, firm_cons_init_inv_factor_std, firm_cons_init_inv_factor_min, firm_cons_init_inv_factor_max);
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
     Normal_Dist_Generator init_cons_good_price(firm_cons_init_good_price_mean, firm_cons_init_good_price_std, firm_cons_init_good_price_min, firm_cons_init_good_price_max);
    
      for (int i=0; i<n_consumer_firms; i++) {
         //cout << " Cons firm initializing #" << i << endl;
-        float float_vals[] = {
+        float init_values[] = {
             init_target_inv_factor(), 
-            init_cons_good_price()
-        };
-
-        int int_vals[]{
-            int(init_cash()),
-            int(init_worker_demand()),
-            int(init_machines()),
-            int(init_inv_factor()),
-            int(init_wage_offer()),
+            init_cons_good_price(),
+            init_inv_factor(),
+            init_cash(),
+            init_worker_demand(),
+            init_wage_offer()
         };
 
         //cout << " set up arrays now passign them in " << endl;
-        pConsumer_Firm_vector->push_back(new Consumer_Firm_Agent(float_vals, int_vals));
+        pConsumer_Firm_vector->push_back(new Consumer_Firm_Agent(init_values));
         //cout << "Cons firm initialized! #" << i << endl;
         pConsumer_Firm_vector->at(i)->Set_Public_Info_Board(pPublic_Board);
         
@@ -114,28 +121,23 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     
     Normal_Dist_Generator init_cash(firm_cons_init_cash_mean, firm_cons_init_cash_std, firm_cons_init_cash_min, firm_cons_init_cash_max);
     Normal_Dist_Generator init_worker_demand(firm_cons_init_worker_demand_mean, firm_cons_init_worker_demand_std, firm_cons_init_worker_demand_min, firm_cons_init_worker_demand_max);
-    Normal_Dist_Generator init_machines(firm_cons_init_machine_inv_mean, firm_cons_init_machine_inv_std, firm_cons_init_machine_inv_min, firm_cons_init_machine_inv_max);
-    
+
     Normal_Dist_Generator init_inv_factor(firm_cap_init_inv_factor_mean, firm_cap_init_inv_factor_std, firm_cap_init_inv_factor_min, firm_cap_init_inv_factor_max);
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
     Normal_Dist_Generator init_cap_good_price(firm_cap_init_good_price_mean, firm_cap_init_good_price_std, firm_cap_init_good_price_min, firm_cap_init_good_price_max);
    
     for (int i=0; i<n_capital_firms; i++) {
         //cout << "cap firm initializing #: "<< i << endl;
-        float float_vals[] = {
+        float init_values[] = {
             init_target_inv_factor(), 
             init_cap_good_price(),
+            init_inv_factor(),
+            init_cash(),
+            init_worker_demand(),
+            init_wage_offer()
         };
-        int int_vals[]{
-            int(init_cash()),
-            int(init_worker_demand()),
-            int(init_machines()),
-            int(init_inv_factor()),
-            int(init_wage_offer()),
-        };
-
         
-        pCapital_Firm_vector->push_back(new Capital_Firm_Agent(float_vals, int_vals));
+        pCapital_Firm_vector->push_back(new Capital_Firm_Agent(init_values));
         //cout << "Cons firm initialized! #" << i << endl;
         pCapital_Firm_vector->at(i)->Set_Public_Info_Board(pPublic_Board);
     }
@@ -253,7 +255,7 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
     cout << "Now Capital firms are checking their job postings" << endl;
     for (Capital_Firm_Agent* firm_ptr : *pCapital_Firm_vector) {firm_ptr->Check_For_New_Employees();}
     cout << " Job Market Initialization Now Complete" << endl;
-    
+
 }
 
 

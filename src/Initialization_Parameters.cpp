@@ -144,11 +144,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_init_inv_factor_min = initialization_parameters["firm_cons_init_inv_factor_min"];
     firm_cons_init_inv_factor_max = initialization_parameters["firm_cons_init_inv_factor_max"];
 
-    // Working capital inventory
-    firm_cons_init_machine_inv_mean = initialization_parameters["firm_cons_init_machine_inv_mean"];
-    firm_cons_init_machine_inv_std = initialization_parameters["firm_cons_init_machine_inv_std"];
-    firm_cons_init_machine_inv_min = initialization_parameters["firm_cons_init_machine_inv_min"];
-    firm_cons_init_machine_inv_max = initialization_parameters["firm_cons_init_machine_inv_max"];
     // Desired inventory factor ( characteristic)
     firm_cons_init_target_inv_factor_mean = initialization_parameters["firm_cons_init_target_inv_factor_mean"];
     firm_cons_init_target_inv_factor_std = initialization_parameters["firm_cons_init_target_inv_factor_std"];
@@ -191,11 +186,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_init_inv_factor_max = initialization_parameters["firm_cap_init_inv_factor_max"];
 
     // --- Capital Firm initialization parameters
-    // Working capital
-    firm_cap_init_machine_inv_mean = initialization_parameters["firm_cap_init_machine_inv_mean"];
-    firm_cap_init_machine_inv_std = initialization_parameters["firm_cap_init_machine_inv_std"];
-    firm_cap_init_machine_inv_min = initialization_parameters["firm_cap_init_machine_inv_min"];
-    firm_cap_init_machine_inv_max = initialization_parameters["firm_cap_init_machine_inv_max"];
     // Desired inventory factor ( characteristics)
     firm_cap_init_target_inv_factor_mean = initialization_parameters["firm_cap_init_target_inv_factor_mean"];
     firm_cap_init_target_inv_factor_std = initialization_parameters["firm_cap_init_target_inv_factor_std"];
@@ -254,6 +244,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_good_unit_cost = main_loop_parameters["firm_cons_good_unit_cost"];
     firm_cons_max_production_climbdown = main_loop_parameters["firm_cons_max_production_climbdown"];
     firm_cons_inv_reaction_factor = main_loop_parameters["firm_cons_inv_reaction_factor"];
+    firm_cons_wage_change = main_loop_parameters["firm_cons_wage_change"];
 
     // --- Capital Firm dynamic parameters
     firm_cap_inv_depr_rate = main_loop_parameters["firm_cap_inv_depr_rate"];
@@ -263,6 +254,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_machine_lifespan = main_loop_parameters["firm_cap_machine_lifespan"];
     firm_cap_max_production_climbdown = main_loop_parameters["firm_cap_max_production_climbdown"];
     firm_cap_inv_reaction_factor = main_loop_parameters["firm_cap_inv_reaction_factor"];
+    firm_cap_wage_change = main_loop_parameters["firm_cap_wage_change"];
 
     // --- Bank dynamic Parameters
     bank_inflation_reaction = main_loop_parameters["bank_inflation_reaction"];
@@ -430,11 +422,6 @@ float firm_cons_init_inv_factor_mean = 1000;
 float firm_cons_init_inv_factor_std = 100;
 float firm_cons_init_inv_factor_min = 1;
 float firm_cons_init_inv_factor_max = 999999;
-// Working capital inventory
-float firm_cons_init_machine_inv_mean = 60;
-float firm_cons_init_machine_inv_std = 5;
-float firm_cons_init_machine_inv_min = 1;
-float firm_cons_init_machine_inv_max = 999999;
 // Desired inventory factor ( characteristic)
 float firm_cons_init_target_inv_factor_mean = 1.5;
 float firm_cons_init_target_inv_factor_std = 0.25;
@@ -455,6 +442,7 @@ int firm_cons_workers_per_machine = 1;
 float firm_cons_max_production_climbdown = 0.25;
 float firm_cons_good_unit_cost = 1.0;
 float firm_cons_inv_reaction_factor = 1.0;
+float firm_cons_wage_change;
 
 // --- Consumer Firm randomness parameters
 float firm_cons_rand_dividend_change = 0.1;
@@ -498,11 +486,6 @@ float firm_cap_init_inv_factor_mean = 1000;
 float firm_cap_init_inv_factor_std = 100;
 float firm_cap_init_inv_factor_min = 1;
 float firm_cap_init_inv_factor_max = 999999;
-// Working capital
-float firm_cap_init_machine_inv_mean = 60;
-float firm_cap_init_machine_inv_std = 5;
-float firm_cap_init_machine_inv_min = 1;
-float firm_cap_init_machine_inv_max = 999999;
 // Desired inventory factor ( characteristics)
 float firm_cap_init_target_inv_factor_mean = 1.5;
 float firm_cap_init_target_inv_factor_std = 0.25;
@@ -524,6 +507,7 @@ int firm_cap_machine_lifespan = 100;
 float firm_cap_max_production_climbdown = 0.25;
 float firm_cap_good_unit_cost = 20.0;
 float firm_cap_inv_reaction_factor = 1.0;
+float firm_cap_wage_change;
 
 // --- Capital Firm randomness parameters
 float firm_cap_rand_dividend_change = 0.1;

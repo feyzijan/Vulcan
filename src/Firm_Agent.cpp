@@ -2,25 +2,26 @@
 
 
 
-/* Create Firm agent with given characteristics and starting values
+/* Create Firm agent with given characteristics and starting values. Input variables are 
+ float init_values[] = { init_target_inv_factor(), init_cap_good_price(),init_inv_factor(),
+init_cash(),init_worker_demand(),init_wage_offer()};
 */
-Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
+Firm_Agent::Firm_Agent(float init_values[6])
 {
     // -- Set Given starting parameters and propensities
-    target_inv_factor = float_vals[0];
-    good_price_current = float_vals[1];
+    target_inv_factor = init_values[0];
+    good_price_current = init_values[1];
+    inv_factor = init_values[2];
 
-    cash_on_hand = static_cast<long long>(int_vals[0]);
-    employee_count_desired = int_vals[1];
-    working_capital_inventory = int_vals[2];
-    wage_offer = int_vals[4];
+    cash_on_hand = static_cast<long long>(init_values[3]);
+    employee_count_desired = static_cast<int>(init_values[4]);
+    wage_offer = static_cast<int>(init_values[5]);
 
     //-- Set default non_zero initialization values
     need_worker = 1;
     sentiment = 1;
     bankrupt = false;
     recapitalised = false;
-    inv_factor = 0;
     total_assets = cash_on_hand; // unsure how these two differed
     production_planned = 0; // assume they executed their plan perfectly
 
@@ -60,7 +61,7 @@ Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
     // Employees
     employee_count = 0; // correctly set
     n_active_job_postings = 0;
-    w_target = 0;
+    //w_target = 0;
     labor_utilization = 0.0;
 
     // Inventories
@@ -68,13 +69,6 @@ Firm_Agent::Firm_Agent(float float_vals[2], int int_vals[5])
     machine_utilization = 0.0;
     desired_machines = 0;
     pPublic_Info_Board = nullptr;
-    capital_goods_current_value = firm_cap_init_good_price_mean;
-
-    // Initialize capital good inventory
-    initial_capital_goods = new Capital_Good(nullptr,firm_cap_init_good_price_mean,working_capital_inventory,firm_cap_machine_lifespan);
-    //cout << " Created initial capital good " << endl;
-    capital_goods_list.push_back(initial_capital_goods);
-    //cout << "Passed capital good into list" << endl;; 
 
     current_date = 0;
 }
@@ -134,6 +128,30 @@ void Firm_Agent::Update_Average_Sales_T1(){
     average_sale_quantity = quantity_sold;
 }
 
+/* Give firm as many machines as needed for all workers to operate
+Initialize capital good list and initial production and inventory
+*/
+void Firm_Agent::Initialize_Production(){
+    // Initialize Initialize capital good inventory
+    working_capital_inventory = employee_count / workers_per_machine;
+    initial_capital_goods = new Capital_Good(nullptr,firm_cap_init_good_price_mean,working_capital_inventory,firm_cap_machine_lifespan);
+    capital_goods_list.push_back(initial_capital_goods);
+    capital_goods_current_value = firm_cap_init_good_price_mean * working_capital_inventory;
+
+    // Initialize production and inventory
+    production_current = working_capital_inventory* output_per_machine;
+    production_planned = production_current;
+    inventory = production_current * inv_factor;
+
+    // Initialize sales and revenue ( Note: Sales will be subtracted from inventory later at t=1 )
+    quantity_sold = inventory *  firm_cons_init_quantity_sold_ratio; 
+    average_sale_quantity = quantity_sold;
+    revenue_sales = production_current * good_price_current;
+    average_profit = revenue_sales;
+
+}
+
+
 //--------------------------------------------------------------
 
 
@@ -148,14 +166,15 @@ void Firm_Agent::Depreciate_And_Revalue_Capital_Goods(){
     auto it = capital_goods_list.begin();
 
     while(it !=  capital_goods_list.end()) {
-        (*it)->Depreciate(); 
+        (*it)->Depreciate();  // Decrease value 
         capital_goods_current_value += (*it)->Get_Value();
         if((*it)->Check_Depreciation() == true) { // Check if capital good has fully depreciated
-            working_capital_inventory -= (*it)->Get_Quantity();
+            working_capital_inventory -= (*it)->Get_Quantity(); // Deduct this from the inventory
             if (working_capital_inventory < 0) {
                 cout << "ERROR: Firm_Agent::Depreciate_And_Revalue_Capital_Goods() - working_capital_inventory < 0 at firm # " << this << endl;
                 working_capital_inventory = 0;
             } 
+            delete *it; // Delete the object pointed to by the iterator 
             it = capital_goods_list.erase(it);
         } else {it++;}
     }
@@ -169,12 +188,13 @@ void Firm_Agent::Check_Employees_Quitting(){
     int temp = 0;
     auto it = active_job_list.begin();
     while(it !=  active_job_list.end()) {
-        if((*it)->Get_Status() == -2) { 
+        if((*it)->Get_Status() == -2) {  // -2 means employee has quit
             temp ++;
             it = active_job_list.erase(it);
             employee_count -=1;
         } else {it++;}
     }
+    need_worker = employee_count < employee_count_desired;
     // Public Board is already updated by households when they quit
 }
 
@@ -198,16 +218,6 @@ void Firm_Agent::Cancel_Expired_Contracts(){
 }
 
 
-/*  Function to randomly alter some firm parameters, such as targeted leverage, markup
-    TODO: Read randomness parameters from Global Params
-    Add more characteristics to change */
-void Firm_Agent::Random_Experimentation(){
-    target_inv_factor *= Uniform_Dist_Float(1.0-firm_cons_rand_desired_inventory_factor_change
-    ,1.0 + firm_cons_rand_desired_inventory_factor_change);
-    dividend_ratio_optimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
-    dividend_ratio_pessimist *= Uniform_Dist_Float(1.0-firm_cons_rand_dividend_change, 1.0 + firm_cons_rand_dividend_change);
-}
-
 /* Function to calculate how many goods have been sold
     TODO: Check if this is correct, not sure what the inventory value is at this point
     it should be the inventory at the end of the last period*/
@@ -216,12 +226,12 @@ void Firm_Agent::Check_Sales(){
     inventory -= quantity_sold;
     revenue_sales = quantity_sold * good_price_current; 
 
-    if (revenue_sales < 0 || revenue_sales <0){ // DEBUG Lines
+    if (revenue_sales < 0 || quantity_sold <0){ // DEBUG Lines
         cout << "ERROR: negative values at Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << "at firm # " << this <<  endl;
     }
 
-    inv_factor = float(inventory) / float(production_current);
-    desired_inventory = target_inv_factor * production_current;
+    inv_factor = static_cast<float>(inventory) /  static_cast<float>(production_current);
+    desired_inventory = static_cast<float>(target_inv_factor * production_current);
 }
 
 
@@ -238,7 +248,7 @@ void Firm_Agent::Update_Sentiment(){
 /* Function to update the firm's average profit
 Remove the element from 12m ago and add the most recent data*/
 void Firm_Agent::Update_Average_Profit(){
-    average_profit += (revenue_sales - past_profits.front())/12;
+    average_profit += static_cast<long long>((revenue_sales - past_profits.front()) / 12.0);
     past_profits.pop();
     past_profits.push(revenue_sales);
 }
@@ -246,7 +256,7 @@ void Firm_Agent::Update_Average_Profit(){
 /* Function to update the firm's average quantity sold
 Remove the element from 12m ago and add the most recent data*/
 void Firm_Agent::Update_Average_Sales(){
-    average_sale_quantity += (quantity_sold - past_sale_quantities.front())/12;
+    average_sale_quantity += static_cast<long long>((quantity_sold - past_sale_quantities.front()) /12.0);
     past_sale_quantities.pop();
     past_sale_quantities.push(quantity_sold);
 }
@@ -274,19 +284,29 @@ TODO: Improve this as it is a bit too simplistic, maybe use JAMEL
 */
 void Firm_Agent::Adjust_Wage_Offers()
 {
-    float n_uniform = Uniform_Dist_Float(0.0,0.5); //Update this to take bounds from initialization params
+    // Random bound on wage change
+    // TODO: Let firms switch to the average wage
+    float n_uniform;
+    float rand_wage_change_limit;
+    if( is_cons_firm) { rand_wage_change_limit = firm_cons_wage_change; }
+    else { rand_wage_change_limit = firm_cap_wage_change; }
+
+    n_uniform = Uniform_Dist_Float(-rand_wage_change_limit,rand_wage_change_limit);
+    // Models firms' uncertainty in gauging the labor market wages
+
+    // Check if wage offer is relatively high
     int average_wage_market = pPublic_Info_Board->Get_Average_Wage_Market();
-    
     bool wage_high = wage_offer >= average_wage_market;
 
-    if (wage_high && need_worker){
-        wage_offer *= (1-n_uniform);
-    } else if(wage_high && !need_worker){
-        //wage_offer *= (1-n_uniform);
-    } else if(!wage_high && need_worker){
-        wage_offer *= (1+n_uniform);
-    } else{ // (!wage_high && !need_worker)
-        wage_offer *= (1+n_uniform);
+    if (wage_high && need_worker){ // Case 1: Need worker, and wage is high - Reduce to near average
+        wage_offer = average_wage_market * (1+n_uniform); 
+    } else if(wage_high && !need_worker){ // Case 2: Don't need worker, and wage is still high - do nothing
+        //wage_offer *= (1-Uniform_Dist_Float(0,rand_wage_change_limit));
+        //wage_offer = average_wage_market * (1+n_uniform) // Alternative: Reduce wages to average +- random factor
+    } else if(!wage_high && need_worker){ // Case 3: Need worker, and wage is low - raise wage offer to near average
+        wage_offer = average_wage_market * (1+n_uniform); 
+    } else{ // (!wage_high && !need_worker) // Case 4: Don't need worker, my wage is low -  do nothing
+        //wage_offer *= (1+n_uniform);
     }
 
     wage_offer = max(wage_offer, pPublic_Info_Board->Get_Minimum_Wage()); // Make sure it is not below minimum wage
@@ -304,9 +324,9 @@ TODO: Recheck equation
 */
 void Firm_Agent::Determine_Labor_Need(){
 
-    // Determine the workforce needed to meet production targets
-    int employees_to_meet_production = production_planned/ (firm_cons_productivity*firm_cons_workers_per_machine);
-    int employees_to_operate_current_machines = working_capital_inventory/firm_cons_workers_per_machine;
+    // Determine the workforce needed to meet production targets or utilize current machines
+    int employees_to_meet_production = production_planned/ (output_per_machine*workers_per_machine);
+    int employees_to_operate_current_machines = working_capital_inventory/workers_per_machine; // unused for now
 
     // Determine Employee demand
     //employee_count_desired = max(0, min(employees_to_meet_production, employees_to_operate_current_machines)) ;
@@ -319,7 +339,7 @@ void Firm_Agent::Determine_Labor_Need(){
     need_worker = employee_demand > 0;
     n_active_job_postings = posted_job_list.size();
     
-    // We have too many job postings - remove some
+    // If we have too many job postings remove some
     if (n_active_job_postings >  employee_demand){
         Remove_Job_Postings();
     }
@@ -339,14 +359,15 @@ void Firm_Agent::Determine_Labor_Need(){
     // If there is a short term funding gap, seek a loan
     if (short_term_funding_gap > 0){
         Seek_Short_Term_Loan(); 
+        if (short_term_funding_gap >0){
+            cout << "Error in Determine_Labor_Need: Firm " << this <<  "sill has short term funding gap" << short_term_funding_gap << endl;
+            short_term_funding_gap = 0;
+        }
     }
 
-    // If more job postings are needed and there is no short term funding gap, post jobs
-    if((short_term_funding_gap <= 0) & (n_active_job_postings <  max(0, employee_demand)) ){
-        // Update public records
-        pPublic_Info_Board->Update_New_Job_Postings(max(0,employee_demand) -  n_active_job_postings);
-        Post_Jobs();
-    }      
+    // Update public records and post jobs (if necessary)
+    pPublic_Info_Board->Update_New_Job_Postings(max(0,employee_demand) -  n_active_job_postings);
+    Post_Jobs();    
 }
 
 /* Function to remove job postings from the market
@@ -412,7 +433,7 @@ void Firm_Agent::Layoff_Excess_Workers(){
 */
 void Firm_Agent::Post_Jobs(){
     
-    int new_postings =  employee_count_desired - employee_count - n_active_job_postings ;
+    int new_postings =  max(employee_count_desired - employee_count - n_active_job_postings, 0) ;
     
     for(int i=0; i< new_postings;i++){
         Job* job = new Job(this,nullptr,wage_offer,0); // Get actual date from public board
@@ -433,7 +454,7 @@ void Firm_Agent::Check_For_New_Employees(){
         if((*it)->Get_Status() == 1) { 
             active_job_list.push_back(*it);
             employee_count +=1;
-            labor_wage_bill += (*it)->Get_Wage();
+            //labor_wage_bill += (*it)->Get_Wage();
             it = posted_job_list.erase(it);
             temp ++;
         } else {it++;}
@@ -448,7 +469,13 @@ TODO:
 - Jamel has a complicated method, for now I will use a simpler one
 */
 void Firm_Agent::Make_Investment_Decision(){
-    desired_machines = max(employee_count_desired/firm_cons_workers_per_machine - working_capital_inventory, static_cast<long long>(0));
+    // Set the # desired machines equal to the # machines needed to reach production targets
+    // Assume desired employee count will be reached
+    desired_machines = max(production_planned/output_per_machine - working_capital_inventory, static_cast<long long>(0));
+    
+    //int machines_for_full_labor_utilization = max(0,employee_count/workers_per_machine);
+    //desired_machines = max(employee_count_desired/workers_per_machine- working_capital_inventory, static_cast<long long>(0));
+    
     long long estimated_cost;
 
     // Check if there is enough money to buy the goods, and if not take a loan
@@ -456,7 +483,7 @@ void Firm_Agent::Make_Investment_Decision(){
         // Check how much it would cost to buy that many machines in the market right now
         estimated_cost = pPublic_Info_Board->Get_Cost_For_Desired_Cap_Goods(desired_machines);
         long_term_funding_gap =  max(estimated_cost - cash_on_hand,static_cast<long long>(0)); // Funding gap must be positive
-        if (long_term_funding_gap> 0){
+        if (long_term_funding_gap > 0){
             Seek_Long_Term_Loan();
         }
     }
@@ -474,8 +501,8 @@ void Firm_Agent::Make_Investment_Decision(){
 */
 void Firm_Agent::Produce_Goods(){
     
-    labor_utilization = min(float(working_capital_inventory*workers_per_machine) / (float)employee_count , float(1.0));
-    machine_utilization = min(float(employee_count/workers_per_machine)/ (float)working_capital_inventory , float(1.0));
+    labor_utilization = min(static_cast<float>(working_capital_inventory*workers_per_machine) / static_cast<float>(employee_count) , float(1.0));
+    machine_utilization = min(static_cast<float>(employee_count/workers_per_machine)/ (float)working_capital_inventory , float(1.0));
 
     // Check for erroneous values - debugging
     if ( labor_utilization < 0 || labor_utilization > 1){
@@ -489,11 +516,12 @@ void Firm_Agent::Produce_Goods(){
     // Calculate the production
 
     long long production_max = working_capital_inventory * output_per_machine;
-    
-    production_current = min(static_cast<long long>(production_max*labor_utilization), production_planned);
+    long long production_possible = min(production_max * labor_utilization, production_max * machine_utilization);
+    production_current = min(production_possible, production_planned);
 
     if ( production_current < 0 ){
         cout << "ERROR: Produce_Goods(): Production current is negative : p_current = " << production_current << "at firm # " << this << endl;
+        production_current = 0;
     } else if( production_max < 0){
         cout << "ERROR: Produce_Goods(): Production max is negative : p_max = " << production_max << " working_capital_inventory: " << 
         working_capital_inventory << " output_per_machine" << output_per_machine <<  "at firm # " << this <<  endl;
@@ -502,7 +530,7 @@ void Firm_Agent::Produce_Goods(){
 
     // Update the inventory
     inventory += production_current;
-    inv_factor = float(inventory) / float(average_sale_quantity);
+    inv_factor = static_cast<float>(inventory) / average_sale_quantity;
     production_costs = production_current * unit_good_cost;
 }
 
@@ -592,7 +620,6 @@ void Firm_Agent::Buy_Capital_Goods(){
         total_price_paid = arr[1];
         delete [] arr;
         
-
         // Create new capital good with given quantity and average price
         if (n_new_machines_bought > 0 || total_price_paid > 0) {
             average_price = total_price_paid/n_new_machines_bought;
@@ -600,13 +627,10 @@ void Firm_Agent::Buy_Capital_Goods(){
             capital_goods_list.push_back(new_capital_good);
             working_capital_inventory += n_new_machines_bought;
             capital_costs = total_price_paid;
-        } else if (n_new_machines_bought < 0) {
-            cout << "ERROR: Firm_Agent::Buy_Capital_Goods(): negative number of machines bought n = " << n_new_machines_bought << "at firm # " << this <<  endl;
+        } else if (n_new_machines_bought < 0 || total_price_paid < 0) {
+            cout << "ERROR: Firm_Agent::Buy_Capital_Goods(): number of machines bought n = " << n_new_machines_bought <<
+             " negative_price_paid: " << total_price_paid  << "at firm # " << this <<  endl;
             n_new_machines_bought = 0;
-        }
-        if (total_price_paid < 0){
-            cout << "ERROR: Firm_Agent::Buy_Capital_Goods(): negative price paid =  " << total_price_paid << "at firm # " << this << endl;
-            total_price_paid = 0;
         }
     }
 
@@ -629,7 +653,8 @@ void Firm_Agent::Update_Loan_List(){
     auto it = loan_book.begin();
     while(it !=  loan_book.end()) {
         if((*it)->Get_Principal_Amount() <= 0) { 
-            delete *it; // delete the loan object
+            //delete *it; // delete the loan object
+            (*it)->Clean_Loan(); // clean the loan object - setting everything to zero
             it = loan_book.erase(it); // delete the pointer from the vector
         } else {it++;}
     }
@@ -818,7 +843,7 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "desired_empl_count " << obj.employee_count_desired << std::endl;
     os << "active_job_postings " << obj.n_active_job_postings << std::endl;
     os << "need_worker " << obj.need_worker << std::endl;
-    os << "desired_labor_capacity_utilization " << obj.w_target << std::endl;
+    //os << "desired_labor_capacity_utilization " << obj.w_target << std::endl;
     os << "labor_utilization " << obj.labor_utilization << std::endl;
     os << "inventory " << obj.inventory << std::endl;
     os << "working_capital_inventory " << obj.working_capital_inventory << std::endl;

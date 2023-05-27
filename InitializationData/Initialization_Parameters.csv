@@ -59,10 +59,6 @@ firm_cons_init_inv_factor_mean,1.0
 firm_cons_init_inv_factor_std,0.25
 firm_cons_init_inv_factor_min,0.1
 firm_cons_init_inv_factor_max,2.0
-firm_cons_init_machine_inv_mean,60.0
-firm_cons_init_machine_inv_std,5.0
-firm_cons_init_machine_inv_min,1.0
-firm_cons_init_machine_inv_max,999999.0
 firm_cons_init_target_inv_factor_mean,1.5
 firm_cons_init_target_inv_factor_std,0.25
 firm_cons_init_target_inv_factor_min,0.1
@@ -84,7 +80,7 @@ firm_cap_init_worker_demand_mean,20.0
 firm_cap_init_worker_demand_std,5.0
 firm_cap_init_worker_demand_min,1.0
 firm_cap_init_worker_demand_max,100.0
-firm_cap_init_good_price_mean,1000.0
+firm_cap_init_good_price_mean,2000.0
 firm_cap_init_good_price_std,200.0
 firm_cap_init_good_price_min,100.0
 firm_cap_init_good_price_max,9999.0
@@ -92,10 +88,6 @@ firm_cap_init_inv_factor_mean,1.0
 firm_cap_init_inv_factor_std,0.25
 firm_cap_init_inv_factor_min,0.1
 firm_cap_init_inv_factor_max,2.0
-firm_cap_init_machine_inv_mean,60.0
-firm_cap_init_machine_inv_std,5.0
-firm_cap_init_machine_inv_min,1.0
-firm_cap_init_machine_inv_max,999999.0
 firm_cap_init_target_inv_factor_mean,1.5
 firm_cap_init_target_inv_factor_std,0.25
 firm_cap_init_target_inv_factor_min,0.1
