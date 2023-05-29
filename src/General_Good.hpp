@@ -30,9 +30,8 @@ class General_Good{
     // Setters
     void Add_Quantity(long long quantity_change) {quantity += quantity_change;}
     void Set_Quantity(long long new_quantity) {quantity = new_quantity;}
-    void Update_Price(float new_price) {price = new_price;}
+    void Set_Price(float new_price) {price = new_price;}
     void Set_Sector_ID(int sector) {sector_id = sector;}
-    
     
     protected:
     Firm_Agent * pSeller;

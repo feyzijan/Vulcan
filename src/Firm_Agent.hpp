@@ -23,8 +23,6 @@ class Firm_Agent{
     virtual ~Firm_Agent();
 
     // Initialization methods t = 1
-    void Update_Average_Profits_T1();
-    void Update_Average_Sales_T1();
     virtual void Initialize_Production();
 
     // Main Loop Methods 
@@ -47,7 +45,6 @@ class Firm_Agent{
     void Check_For_New_Employees();
     void Make_Investment_Decision();
     virtual void Produce_Goods();
-    virtual void Send_Goods_To_Market() {}; 
     virtual void Update_Goods_On_Market() {};
     void Seek_Short_Term_Loan();
     void Seek_Long_Term_Loan();
@@ -83,97 +80,89 @@ class Firm_Agent{
     Public_Info_Board* pPublic_Info_Board;
     General_Good* goods_on_market;
     Capital_Good* initial_capital_goods;
+    Household_Agent* owner;             //  Variable :Initialized
+
     vector<Capital_Good*> capital_goods_list;
-
     vector<Loan*> loan_book;
+    vector<Job*> active_job_list;       // Initialized automatically
+    vector<Job*> posted_job_list;       // Initialized automatically
 
-    queue<int> past_profits;
-    queue<int> past_sale_quantities;
-
+    queue<long long> past_profits;
+    queue<long long> past_sale_quantities;
     int sector_id; //0 for capital firms, 1-n for consumer goods firms
 
-    // Employees
-    vector<Job*> active_job_list;
-    vector<Job*> posted_job_list;
-
-    // Owner
-    Household_Agent* owner;
-
-
     // Production and sales figures
-    long long production_current; // Actual production at t
-    long long production_planned; // Production plan for t
-    long long quantity_sold; // Sales at t-1
+    long long production_current;       //  Variable :Initialized
+    long long production_planned;       //  Variable :Initialized
+    long long quantity_sold;            //  Variable :Initialized
     
     // Inflows
-    long long revenue_sales;
-    float good_price_current; // good price set for t
-    long long average_profit;  
-    long long average_sale_quantity; 
+    long long revenue_sales;            //  Variable :Initialized
+    float good_price_current;           //  Variable :Initialized
+    long long average_profit;           //  Variable :Initialized, updated
+    long long average_sale_quantity;    //  Variable :Initialized , updated
     
     // Loan Parameters
-    long long short_term_funding_gap; 
-    long long long_term_funding_gap; 
-    long long loan_issuance_to_date;
+    long long short_term_funding_gap;   //  Variable :Initialized 
+    long long long_term_funding_gap;    //  Variable :Initialized 
+    long long loan_issuance_to_date;    //  Variable :Initialized, updated
     
     // Expenditures
-    long long total_liabilities; //Comprises of evt below
-    long long labor_wage_bill;
-    long long capital_costs;
-    long long tax_payments;
-    long long debt_principal_payments;
-    long long debt_interest_payments;
-    long long dividend_payments;
-    long long production_costs;
-    long long expected_wage_bill; 
-    long long layoff_wage_savings; 
-    long long outstanding_debt_total;
+    long long total_liabilities;        //  Variable :Initialized
+    long long labor_wage_bill;          //  Variable :Initialized
+    long long capital_costs;            //  Variable :Initialized
+    long long tax_payments;             //  Variable :Initialized
+    long long debt_principal_payments;  //  Variable :Initialized
+    long long debt_interest_payments;   //  Variable :Initialized
+    long long dividend_payments;        //  Variable :Initialized
+    long long production_costs;         //  Variable :Initialized
+    long long expected_wage_bill;       //  Variable :Initialized
+    long long layoff_wage_savings;      //  Variable :Initialized
+    long long outstanding_debt_total;   //  Variable :Initialized
     
     // Assets and fianncials 
-    long long total_assets; // maybe this should be the same as cash in hand?
-    double leverage_ratio;
-    long long cash_on_hand;
+    long long total_assets;         // Variable : Initialized
+    double leverage_ratio;          // Variable: Initialized
+    long long cash_on_hand;         // Variable: Initialized
     
     // Dividend characteristics
-    float dividend_ratio;
-    float dividend_ratio_optimist; // characteristic
-    float dividend_ratio_pessimist; // characteristic
+    float dividend_ratio;           // Variable: Initialized
+    float dividend_ratio_optimist;  // Characteristic: Initialized
+    float dividend_ratio_pessimist; // Characteristic: Initialized
     
     // Employee
-    int employee_count; 
-    int wage_offer;
-    int employee_count_desired;
-    int n_active_job_postings;
-    bool need_worker;
-    //int w_target; //Desired labor capacity utilization - unused
-    float labor_utilization; 
+    int employee_count;             // Variable: Initialized,
+    int wage_offer;                 // Variable: Initialized,
+    int employee_count_desired;     // Variable: Initialized,
+    int n_active_job_postings;      // Variable: Initialized,
+    bool need_worker;               // Variable: Initialized,
+    float labor_utilization;        // Variable: Initialized,
 
     // Inventories
-    long long inventory;
-    long long working_capital_inventory;
-    float target_inv_factor; // Characteristic
-    long long desired_inventory; 
-    float inv_factor; 
-    float inv_reaction_factor;  
-    float machine_utilization;  
-    float inv_depreciation_rate; // NEWLY ADDDED
-    long long desired_machines; 
-
-    long long capital_goods_current_value; // NEWLY ADDED
+    long long inventory;                    // Variable: Initialized
+    long long working_capital_inventory;    // Variable: Initialized
+    float target_inv_factor;                // Characteristic: Initialized
+    long long desired_inventory;            // Initialized **
+    float inv_factor;                       // Variable: Initialized
+    float inv_reaction_factor;              // Characteristic: Initialised, used, not logged
+    float machine_utilization;              // Variable: Initialized, used, logged
+    long long desired_machines;             // Variable: Initialized
+    float inv_depreciation_rate;            // Initialized
+    long long capital_goods_current_value;  //  Variable: Initialized , not logged
 
     // productivities and stuff 
-    int workers_per_machine; // NEWLY ADDDED
-    int output_per_machine; // NEWLY ADDDED
-    float unit_good_cost; // NEWLY ADDDED
-    float max_production_climbdown; // NEWLY ADDDED
+    int workers_per_machine;        // Constant: Initialised,
+    int output_per_machine;         // Constant: Initialised,
+    float unit_good_cost;           // Constant: Initialised,
+    float max_production_climbdown; // Constant: Initialised,
 
     
     // Others
-    bool sentiment; // pessimistic, optimistic
-    bool bankrupt;
-    bool recapitalised;
-    bool is_cons_firm; // type identifier, may be useful
-    int current_date;
+    bool sentiment;                 // Variable: Initialized,
+    bool bankrupt;                  // Variable: Initialized,
+    bool recapitalised;             //  Variable: Initialized,
+    bool is_cons_firm;              //  Variable: Initialized,
+    int current_date;               //  Variable: Initialized,
 
 };
 

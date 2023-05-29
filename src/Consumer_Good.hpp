@@ -13,6 +13,7 @@ class Consumer_Good: public General_Good{
 
     public:
     // Constructor
+    Consumer_Good() {};
     Consumer_Good(Consumer_Firm_Agent*  seller_pointer, float seller_price, long long seller_quantity, int seller_sector);
     Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity);
     Consumer_Good(Consumer_Firm_Agent *  seller_pointer, float seller_price, long long seller_quantity, float emissions_per_unit);
@@ -30,7 +31,6 @@ class Consumer_Good: public General_Good{
     protected:
     Consumer_Firm_Agent*  pSeller;
     float unit_emissions;
-
 
 };
 #endif

@@ -25,7 +25,6 @@ class Capital_Firm_Agent: public Firm_Agent{
     virtual void Depreciate_Good_Inventory() override;
     virtual void Produce_Goods() override;
     virtual void Check_Sales() override;
-    virtual void Send_Goods_To_Market() override;
     virtual void Update_Goods_On_Market() override;
     virtual void Random_Experimentation() override;
     virtual void Update_Sentiment() override;
@@ -36,8 +35,7 @@ class Capital_Firm_Agent: public Firm_Agent{
     virtual long long Get_Total_Emissions() override {return 0;}
 
     protected:
-    Capital_Good* cap_goods_on_market;
-
+    Capital_Good* cap_goods_on_market; // Object: 
 
 };
 

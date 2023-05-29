@@ -39,7 +39,7 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
 
 // Functions to initialize Households
 void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_Info_Board* pPublic_Board, int size);
-void Initialize_Household_Firm_Owners(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector,
+void Initialize_Firm_Owners(vector<Household_Agent*> *pHousehold_vector, vector<Consumer_Firm_Agent*>* pConsumer_Firm_vector,
  vector<Capital_Firm_Agent*> *pCapital_Firm_vector);
 
 // Function to set up Job market at t=0

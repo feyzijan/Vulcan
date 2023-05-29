@@ -18,6 +18,11 @@ Capital_Firm_Agent::Capital_Firm_Agent(float init_values[6]) : Firm_Agent::Firm_
     dividend_ratio_pessimist =  firm_cap_init_dividend_ratio_pessimist;
 
     sector_id = 0;
+
+    // Initialize goods 
+    cap_goods_on_market = new Capital_Good(this, good_price_current, firm_cap_machine_lifespan); // will update quantity
+    goods_on_market = cap_goods_on_market;
+    //unit_good_cost = dynamic_cast<General_Good*>(cons_goods_on_market);
 }
 
 
@@ -26,8 +31,6 @@ Capital_Firm_Agent::Capital_Firm_Agent(Capital_Firm_Agent&){}
 
 // Destructor
 Capital_Firm_Agent::~Capital_Firm_Agent(){
-    
-    // Capital goods
     // Remove capital goods from the market by updating quantity to zero, and setting seller pointer to zero
     cap_goods_on_market->Set_Quantity(0);
     cap_goods_on_market->Set_Seller_Pointer(nullptr); 
@@ -39,11 +42,11 @@ void Capital_Firm_Agent::Initialize_Production(){
     // Call base class method
     Firm_Agent::Initialize_Production();
 
+    // Set the correct values to the capital good
+    cap_goods_on_market->Update_Quantity_And_Value(inventory - quantity_sold);
+
     // Post the goods to market
-    cap_goods_on_market = new Capital_Good(this, good_price_current,inventory-quantity_sold, firm_cap_machine_lifespan);
-    goods_on_market = cap_goods_on_market;
-    // Put goods on Market
-    //Send_Goods_To_Market();  
+    pPublic_Info_Board->Send_Cap_Good_To_Market(cap_goods_on_market);
 }
 
 
@@ -76,19 +79,11 @@ void Capital_Firm_Agent::Check_Sales(){
 }
 
 
-/* Post Produced goods to market - only do this once at the beinning
-*/
-void Capital_Firm_Agent::Send_Goods_To_Market(){
-    //cout << "Cap firm " << this <<" sending goods to market" << endl;
-    pPublic_Info_Board->Send_Cap_Good_To_Market(cap_goods_on_market);
-
-}
-
 /* Update goods on market - Update the attributes of the goods referred by the pointer
 cap_goods_on_market,  which should update the market as well */
 void Capital_Firm_Agent::Update_Goods_On_Market(){
     cap_goods_on_market->Set_Quantity(inventory);
-    cap_goods_on_market->Update_Price(good_price_current);
+    cap_goods_on_market->Set_Price(good_price_current);
     cap_goods_on_market->Update_Value(good_price_current);
 }
 

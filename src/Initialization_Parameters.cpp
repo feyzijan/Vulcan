@@ -71,22 +71,26 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     household_init_c_std = initialization_parameters["household_init_c_std"];
     household_init_c_min = initialization_parameters["household_init_c_min"];
     household_init_c_max = initialization_parameters["household_init_c_max"];
+    
     // Propensity to consume financial wealth, c_f
     household_init_c_f_mean = initialization_parameters["household_init_c_f_mean"];
     household_init_c_f_std = initialization_parameters["household_init_c_f_std"];
     household_init_c_f_min = initialization_parameters["household_init_c_f_min"];
     household_init_c_f_max = initialization_parameters["household_init_c_f_max"];
+    
     // Propensity to consume human wealth, c_h
     household_init_c_h_mean = initialization_parameters["household_init_c_h_mean"];
     household_init_c_h_std = initialization_parameters["household_init_c_h_std"];
     household_init_c_h_min = initialization_parameters["household_init_c_h_min"];
     household_init_c_h_max = initialization_parameters["household_init_c_h_max"];
+    
     // Propensity to consume excess money : c_excess_money
     household_init_c_excess_mean = initialization_parameters["household_init_c_excess_mean"];
     household_init_c_excess_std = initialization_parameters["household_init_c_excess_std"];
     household_init_c_excess_min = initialization_parameters["household_init_c_excess_min"];
     household_init_c_excess_max = initialization_parameters["household_init_c_excess_max"];
-   // Savings propensity - optimist : saving_propensity_optimist 
+    
+    // Savings propensity - optimist : saving_propensity_optimist 
     household_init_s_optimist_mean = initialization_parameters["household_init_s_optimist_mean"];
     household_init_s_optimist_std = initialization_parameters["household_init_s_optimist_std"];
     household_init_s_optimist_min = initialization_parameters["household_init_s_optimist_min"];
@@ -97,16 +101,19 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     household_init_s_pessimist_std = initialization_parameters["household_init_s_pessimist_std"];
     household_init_s_pessimist_min = initialization_parameters["household_init_s_pessimist_min"];
     household_init_s_pessimist_max = initialization_parameters["household_init_s_pessimist_max"];
+    
     // Starting wealth : wealth
     household_init_wealth_mean = initialization_parameters["household_init_wealth_mean"];
     household_init_wealth_std = initialization_parameters["household_init_wealth_std"];
     household_init_wealth_min = initialization_parameters["household_init_wealth_min"];
     household_init_wealth_max = initialization_parameters["household_init_wealth_max"];
+    
     // Maximum tolerable unemployment duration
     household_init_unemp_tolerance_mean = initialization_parameters["household_init_unemp_tolerance_mean"];
     household_init_unemp_tolerance_std = initialization_parameters["household_init_unemp_tolerance_std"];
     household_init_unemp_tolerance_min = initialization_parameters["household_init_unemp_tolerance_min"];
     household_init_unemp_tolerance_max = initialization_parameters["household_init_unemp_tolerance_max"];
+    
     // Reservation Wage
     household_init_res_wage_mean = initialization_parameters["household_init_res_wage_mean"];
     household_init_res_wage_std = initialization_parameters["household_init_res_wage_std"];
@@ -123,21 +130,25 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_init_cash_std = initialization_parameters["firm_cons_init_cash_std"];
     firm_cons_init_cash_min = initialization_parameters["firm_cons_init_cash_min"];
     firm_cons_init_cash_max = initialization_parameters["firm_cons_init_cash_max"];
+    
     // Starting wage offers
     firm_cons_init_wage_offer_mean = initialization_parameters["firm_cons_init_wage_offer_mean"];
     firm_cons_init_wage_offer_std = initialization_parameters["firm_cons_init_wage_offer_std"];
     firm_cons_init_wage_offer_min = initialization_parameters["firm_cons_init_wage_offer_min"];
     firm_cons_init_wage_offer_max = initialization_parameters["firm_cons_init_wage_offer_max"];
+    
     // Starting desired employees
     firm_cons_init_worker_demand_mean = initialization_parameters["firm_cons_init_worker_demand_mean"];
     firm_cons_init_worker_demand_std = initialization_parameters["firm_cons_init_worker_demand_std"];
     firm_cons_init_worker_demand_min = initialization_parameters["firm_cons_init_worker_demand_min"];
     firm_cons_init_worker_demand_max = initialization_parameters["firm_cons_init_worker_demand_max"];
+    
     // Initial good price
     firm_cons_init_good_price_mean = initialization_parameters["firm_cons_init_good_price_mean"];
     firm_cons_init_good_price_std = initialization_parameters["firm_cons_init_good_price_std"];
     firm_cons_init_good_price_min = initialization_parameters["firm_cons_init_good_price_min"];
     firm_cons_init_good_price_max = initialization_parameters["firm_cons_init_good_price_max"];
+    
     // Good inventory
     firm_cons_init_inv_factor_mean = initialization_parameters["firm_cons_init_inv_factor_mean"];
     firm_cons_init_inv_factor_std = initialization_parameters["firm_cons_init_inv_factor_std"];
@@ -157,28 +168,31 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_init_dividend_ratio_optimist = initialization_parameters["firm_cons_init_dividend_ratio_optimist"];
     firm_cons_init_dividend_ratio_pessimist = initialization_parameters["firm_cons_init_dividend_ratio_pessimist"];
 
-
     // --- Capital Firm initialization parameters
     // Starting total asset
     firm_cap_init_cash_mean = initialization_parameters["firm_cap_init_cash_mean"];
     firm_cap_init_cash_std = initialization_parameters["firm_cap_init_cash_std"];
     firm_cap_init_cash_min = initialization_parameters["firm_cap_init_cash_min"];
     firm_cap_init_cash_max = initialization_parameters["firm_cap_init_cash_max"];
+    
     // Starting wage offers
     firm_cap_init_wage_offer_mean = initialization_parameters["firm_cap_init_wage_offer_mean"];
     firm_cap_init_wage_offer_std = initialization_parameters["firm_cap_init_wage_offer_std"];
     firm_cap_init_wage_offer_min = initialization_parameters["firm_cap_init_wage_offer_min"];
     firm_cap_init_wage_offer_max = initialization_parameters["firm_cap_init_wage_offer_max"];
+    
     // Starting desired employees
     firm_cap_init_worker_demand_mean = initialization_parameters["firm_cap_init_worker_demand_mean"];
     firm_cap_init_worker_demand_std = initialization_parameters["firm_cap_init_worker_demand_std"];
     firm_cap_init_worker_demand_min = initialization_parameters["firm_cap_init_worker_demand_min"];
     firm_cap_init_worker_demand_max = initialization_parameters["firm_cap_init_worker_demand_max"];
+    
     // Initial good price
     firm_cap_init_good_price_mean = initialization_parameters["firm_cap_init_good_price_mean"];
     firm_cap_init_good_price_std = initialization_parameters["firm_cap_init_good_price_std"];
     firm_cap_init_good_price_min = initialization_parameters["firm_cap_init_good_price_min"];
     firm_cap_init_good_price_max = initialization_parameters["firm_cap_init_good_price_max"];
+    
     // Good inventory
     firm_cap_init_inv_factor_mean = initialization_parameters["firm_cap_init_inv_factor_mean"];
     firm_cap_init_inv_factor_std = initialization_parameters["firm_cap_init_inv_factor_std"];
@@ -199,7 +213,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_init_dividend_ratio_optimist = initialization_parameters["firm_cap_init_dividend_ratio_optimist"];
     firm_cap_init_dividend_ratio_pessimist = initialization_parameters["firm_cap_init_dividend_ratio_pessimist"];
 
-
     //--- Bank Initialization parameters
     bank_init_interest_rate = initialization_parameters["bank_init_interest_rate"];
 
@@ -212,8 +225,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     //--- Emission allowance parameters
     emission_init_total_allowance = initialization_parameters["emission_init_total_allowance"];
     emission_init_unit_price = initialization_parameters["emission_init_unit_price"];
-
-
 
 
     //---------- Main Loop Parameters ------------
@@ -290,8 +301,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_fixed_prod_change = randomness_parameters["firm_cons_fixed_prod_change"];
     firm_cons_rand_prod_change_upper_limit = randomness_parameters["firm_cons_rand_prod_change_upper_limit"];
 
-
-
     // Cons firm randomness parameters
     firm_cons_rand_dividend_change =  randomness_parameters["firm_cons_rand_dividend_change"];
     firm_cons_rand_sentiment_adoption = randomness_parameters["firm_cons_rand_sentiment_adoption"];
@@ -307,10 +316,8 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_rand_prod_change_upper_limit = randomness_parameters["firm_cap_rand_prod_change_upper_limit"];
 
 
-
-
-
-
+    cout << "This simulation is with the following parameters: n_households: " << n_households << " n_consumer_firms: " << n_consumer_firms 
+    << " n_capital_firms: " << n_capital_firms <<  " n_loops: " << n_loops  << endl;
 }
 
 

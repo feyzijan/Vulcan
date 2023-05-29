@@ -17,10 +17,16 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float init_values[6]): Firm_Agent::Firm
     unit_emissions = firm_cons_init_emissions_per_unit;
     dividend_ratio_optimist = firm_cons_init_dividend_ratio_optimist;
     dividend_ratio_pessimist =  firm_cons_init_dividend_ratio_pessimist;
+    dividend_ratio = dividend_ratio_optimist;
     
     // Emissions - Set default values for now
     unit_emissions = 1; // TODO: Replace with variable
     total_emissions = 0;
+
+    // Initialize goods 
+    cons_goods_on_market = new Consumer_Good(this, good_price_current,1, 1); // will update quantity and sector
+    goods_on_market = cons_goods_on_market;
+    //unit_good_cost = dynamic_cast<General_Good*>(cons_goods_on_market);
 
     sector_id = 1;
 }
@@ -44,15 +50,26 @@ Consumer_Firm_Agent::~Consumer_Firm_Agent() {
 /*
 */
 void Consumer_Firm_Agent::Initialize_Production(){
+    // Call base class method
     Firm_Agent::Initialize_Production();
-    
+
+    // Set the correct values to the consumer good : quantity, sector, emission
+    cons_goods_on_market->Set_Quantity(inventory-quantity_sold);
+    cons_goods_on_market->Set_Unit_Emission(unit_emissions);
+    cons_goods_on_market->Set_Sector_ID(sector_id);
+
     // Post the goods to market
-    cons_goods_on_market = new Consumer_Good(this, good_price_current,inventory-quantity_sold, unit_emissions);
-    goods_on_market = cons_goods_on_market;
+    pPublic_Info_Board->Send_Cons_Good_To_Market(cons_goods_on_market);
+    
+    // Initialize emissions
+    total_emissions = unit_emissions * inventory - total_emission_allowance;
+    unit_emissions_adj = total_emissions/inventory;
 }
 
+/* Get the initial emission allowance based on employee count and sector id
+*/
 void Consumer_Firm_Agent::Initialize_Emission_Allowances(){
-    emission_total_allowance = pPublic_Info_Board->Distribute_Emission_Allowances(employee_count, sector_id);
+    total_emission_allowance = pPublic_Info_Board->Distribute_Emission_Allowances(employee_count, sector_id);
 }
 
 
@@ -79,7 +96,7 @@ void Consumer_Firm_Agent::Produce_Goods(){
     total_emissions += 0;
     total_emissions += production_current * unit_emissions;
 
-    long long new_total_emissions = production_current * unit_emissions - emission_total_allowance;
+    long long new_total_emissions = production_current * unit_emissions - total_emission_allowance;
     long long past_production = inventory - production_current;
     long long past_total_emissions = past_production * unit_emissions_adj;
     unit_emissions_adj = (past_total_emissions + new_total_emissions) / inventory;
@@ -87,11 +104,11 @@ void Consumer_Firm_Agent::Produce_Goods(){
     // Update consumer good object to use this new adjusted emission
     cons_goods_on_market->Set_Unit_Emission(unit_emissions_adj);
 
+
     // Update the public info board
     pPublic_Info_Board->Update_Consumer_Goods_Production(sector_id, production_current);
     pPublic_Info_Board->Update_Consumer_Goods_Inventory(sector_id, production_planned);
     pPublic_Info_Board->Update_Firm_Emissions_By_Sector(sector_id, new_total_emissions);
-
 }
 
 
@@ -103,17 +120,11 @@ void Consumer_Firm_Agent::Check_Sales(){
 }
 
 
-/* Post Produced goods to market - Only do this in initialization period
-*/
-void Consumer_Firm_Agent::Send_Goods_To_Market(){
-    //cout << "cons firm " << this << " sending goods to market" << endl;
-    pPublic_Info_Board->Send_Cons_Good_To_Market(cons_goods_on_market);
-}
 
 /* Update the goods object via the stored pointer, the market already contains this pointer
 */
 void Consumer_Firm_Agent::Update_Goods_On_Market(){
-    goods_on_market->Update_Price(good_price_current);
+    goods_on_market->Set_Price(good_price_current);
     goods_on_market->Set_Quantity(inventory);
 }
 
@@ -204,7 +215,9 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     good_price_current = max(good_price_current, unit_good_cost);
 
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
-    production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
+    production_planned = max(static_cast<long long>(average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor), 0LL);
+    // At least operate all machines
+    
     
     /* //Additionally impose limit on how much they can change production targets if things become too volatile
     int production_planned_min = static_cast<int>(production_current*(1-firm_cons_max_production_climbdown));
@@ -245,25 +258,23 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
     // Update the sector of the firm
     sector_id = pSector_Struct->sector_id;
 
-    // Update the sector of the consumer goods the firm is producing
-    cons_goods_on_market->Set_Sector_ID(pSector_Struct->sector_id);
-
     // Update certain firm characteristics to match that of the sector
-
     output_per_machine = pSector_Struct->output_per_machine;
     workers_per_machine = pSector_Struct->workers_per_machine;
     unit_good_cost = pSector_Struct->good_unit_cost;
     max_production_climbdown = pSector_Struct->max_production_climbdown;
     inv_depreciation_rate = pSector_Struct->inv_depr_rate;
-    unit_emissions = pSector_Struct->emission_per_unit;
 
+    cons_goods_on_market->Set_Sector_ID(sector_id);
+
+    unit_emissions = pSector_Struct->emission_per_unit;
 }
 
 
 /* Call the public board to update emission allowances for the next time period
 */
 void Consumer_Firm_Agent::Update_Emission_Allowances(){
-    emission_total_allowance = pPublic_Info_Board->Distribute_Emission_Allowances(quantity_sold, unit_emissions);
+    total_emission_allowance = pPublic_Info_Board->Distribute_Emission_Allowances(quantity_sold, unit_emissions);
 }
 
 //--------------------------------------------------------------   

@@ -8,13 +8,25 @@ Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_pr
 {
     pSeller = seller_pointer;
     price = seller_price;
-    value = seller_price* seller_quantity;
     quantity = seller_quantity;
+    value = seller_price* quantity;
     depreciation_period = life_span;
     sold_date = global_date;
     expiry_date = sold_date + depreciation_period;
     sector_id = 0;
 }
+// Constructor used only in initialization
+Capital_Good::Capital_Good(Capital_Firm_Agent *  seller_pointer, float seller_price, int life_span){
+    pSeller = seller_pointer;
+    price = seller_price;
+    //value = seller_price* seller_quantity;
+    //quantity = seller_quantity;
+    depreciation_period = life_span;
+    sold_date = 0;
+    expiry_date = 1000; // should not expire since this is a good posted on the market
+    sector_id = 0;
+}
+
 
 /* Copy constructor*/
 Capital_Good::Capital_Good(const Capital_Good& other){
@@ -31,7 +43,7 @@ Capital_Good::Capital_Good(const Capital_Good& other){
 NOTE: Depreciation may be off by 1 timestep because the division may not be exact, but this is not a big deal
 */
 void Capital_Good::Depreciate(){
-    value -= price*quantity/depreciation_period;
+    value -= price*quantity/depreciation_period; // equal decrease every time period
     if (value <= 0){ depreciated = true;}
 }
 
