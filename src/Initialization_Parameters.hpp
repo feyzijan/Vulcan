@@ -44,6 +44,8 @@ extern int n_consumer_firms;
 extern int n_capital_firms;
 extern int n_firms;
 
+extern int sector_count;
+
 extern int time_period; // # timesteps that make a year - Unused right now
 extern int n_max_employees; //unused
 

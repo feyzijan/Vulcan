@@ -128,9 +128,9 @@ void Firm_Agent::Initialize_Production(){
     production_costs = production_current * unit_good_cost;
 
     // Initialize average profit and sales queues
-    for(int i=1; i<=12; i++){ past_profits.push(revenue_sales); }
+    for(int i = 0; i < 12; i++){ past_profits.push(revenue_sales); }
     average_profit = revenue_sales;
-    for(int i=1; i<=12; i++){ past_sale_quantities.push(quantity_sold); }
+    for(int i = 0 ; i < 12; i++){ past_sale_quantities.push(quantity_sold); }
     average_sale_quantity = quantity_sold;
 }
 

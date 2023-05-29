@@ -34,8 +34,8 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
 
     //----------- STEP 0.14: Initialize consumer firm sectors
     cout << "STEP 0.14: Initialize consumer firm sectors" << endl;
-    int n_sectors =  Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector,
-     pPublic_Board, pConsumer_Goods_Market, pHousehold_vector);
+    Initialize_Consumer_Firm_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector,
+        pPublic_Board, pConsumer_Goods_Market, pHousehold_vector);
 
 
     //----------- STEP 0.15: Initialize emission allowances - This must be done after employees and sectors are set
@@ -55,7 +55,7 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     //----------- STEP 0.17: Send initial goods to markets and initialize price level
     cout << "Step 0.17: Send initial goods to markets and initialize price level" << endl;
     Initialize_Markets(pConsumer_Firm_vector,  pCapital_Firm_vector, pConsumer_Goods_Market,
-    pCapital_Goods_Market,pPublic_Board, n_sectors);
+    pCapital_Goods_Market,pPublic_Board);
 }
 
 
@@ -249,10 +249,10 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
 /* Function to initialize consumer and capital markets 
 */
 void Initialize_Markets(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
-    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board, int n_sectors){
+    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board){
 
     // Set up the consumer goods market's sector lists and sort each sector by price
-    pConsumer_Goods_Market->Divide_Goods_Into_Sectors(n_sectors);
+    pConsumer_Goods_Market->Divide_Goods_Into_Sectors();
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
 
     // Set up the emission baskets in the consumer good market, and sort each by emission adjusted
@@ -272,17 +272,16 @@ void Initialize_Markets(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vec
 
 /* Function to initialize consumer firm sectors
 */
-int Initialize_Consumer_Firm_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,
+void Initialize_Consumer_Firm_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector,
 Public_Info_Board* pPublic_Info_Board, Consumer_Goods_Market* pConsumer_Goods_Market,
 vector<Household_Agent*> *pHousehold_vector){
     cout << "Initializing Consumer Firm Sectors" << endl;
     // Create the sectors
-    int n_sectors = Create_Sectors(pConsumer_Firm_Sector_vector);
-    cout << "Created " << n_sectors << " sectors" << endl;
+    Create_Sectors(pConsumer_Firm_Sector_vector);
     // Assign firms to sectors
     Allocate_Firms_to_Sectors(pConsumer_Firm_vector, pConsumer_Firm_Sector_vector);
     // Set up sectors in the public board
-    pPublic_Info_Board->Initialize_Consumer_Sectors(pConsumer_Firm_Sector_vector, n_sectors);
+    pPublic_Info_Board->Initialize_Consumer_Sectors(pConsumer_Firm_Sector_vector);
     
     // Notify Households
     for (Household_Agent* pHousehold : *pHousehold_vector){
@@ -290,21 +289,18 @@ vector<Household_Agent*> *pHousehold_vector){
         pHousehold->Initialize_Sector_Emission_Sensitivities(pConsumer_Firm_Sector_vector);
     }
  
-    cout << "There are " << n_sectors << " consumer sectors in this simulation" << endl;
-
-    return n_sectors;
+    cout << "There are " << sector_count << " consumer sectors in this simulation" << endl;
 }
 
 
 /* Function to create sectors and add them to the given vector
  * Returns the number of sectors created
 */
-int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) {
+void Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) {
     std::ifstream file("../InitializationData/Consumer_Firm_Sectors.csv"); // Open the file
 
     if (!file.is_open()) { // Check if file is open
         std::cout << "Error opening file" << std::endl;
-        return 0;
     }
 
     string line;
@@ -354,8 +350,7 @@ int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector) 
 
     file.close(); // Close the file
 
-    const int n_sectors = temp; // Set the number of sectors as a global parameter
-    return temp;
+    cout << "Create sectors function has created " << temp << " consumer sectors" << endl;
 }
 
 
@@ -388,7 +383,7 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
         float sector_weighing = weighing_pair.second;
         int firms_to_allocate = max(1, static_cast<int>(round(total_firms * sector_weighing)));
         int allocation_counter = 0;
-        cout << "Planning to allocate " << firms_to_allocate << " firms to sector #" << sector_id << endl;
+        cout << "Planning to allocate " << firms_to_allocate << " firms to sector # " << sector_id << endl;
 
         // Find the corresponding sector from the sector vector
         Consumer_Firm_Sector* target_sector = nullptr;
@@ -401,7 +396,7 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
 
         if (target_sector == nullptr) {
             // Sector not found, skip this iteration
-            cout << "Error: Sector "<< sector_id << " not found " << endl;
+            cout << "Error in Allocate_Firms_to_Sectors: Sector "<< sector_id << " not found " << endl;
             continue;
         }
 
@@ -425,7 +420,7 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
 
 
     if (total_allocation != n_consumer_firms) {
-        cout << "Problem: Not all firms have been allocated to a sector, allocating remaining firms to last sector " << endl;
+        cout << "Not all firms have been allocated to a sector, allocating remaining firms to last sector " << endl;
         // Allocate remaining firms to the first sector
         for (int i = start_index; i < pConsumer_Firm_vector->size(); ++i) {
             Consumer_Firm_Agent* selected_firm = (*pConsumer_Firm_vector)[i];

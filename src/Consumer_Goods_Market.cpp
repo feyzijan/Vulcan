@@ -25,19 +25,20 @@ void Consumer_Goods_Market::Add_Consumer_Good_To_Market(Consumer_Good * cons_goo
     The pair contains the sector_id and a vector of consumer goods
     The vector of consumer goods can be initially empty
 */
-void Consumer_Goods_Market::Divide_Goods_Into_Sectors(int n_sectors){
+void Consumer_Goods_Market::Divide_Goods_Into_Sectors(){
     
-    // Create the pairs to store the goods ** i starts from 1
-    for (int i = 1; i < n_sectors+1; i++){
+    cout << "Divind consumer goods into " << sector_count << " sectors" << endl;
+    // Create the pairs to store the goods ** Note that i starts from 1
+    for (int i = 0; i < sector_count; i++){
         cons_good_list_by_sector.push_back(std::make_pair(i, vector<Consumer_Good*>()));
     }
 
     // Loop through the cons_goods_list and add each good to the correct sector
     // May be slow but this is only done once at t = 0
-    // The sector id's used below start from 1
+    // *** The sector id's used below start from 1
     for (auto i = cons_goods_list.begin(); i != cons_goods_list.end(); i++){
-        int sector_id = (*i)->Get_Sector_ID();
-        for (auto j = cons_good_list_by_sector.begin(); j != cons_good_list_by_sector.end(); j++){
+        int sector_id = (*i)->Get_Sector_ID(); // Get sector of given good
+        for (auto j = cons_good_list_by_sector.begin(); j != cons_good_list_by_sector.end(); j++){ // find matching list
             if (sector_id == (*j).first){
                 (*j).second.push_back(*i);
             }
@@ -45,31 +46,16 @@ void Consumer_Goods_Market::Divide_Goods_Into_Sectors(int n_sectors){
     }
 }
 
+
 /* Divide the market into different brackets by their associated emission sensitivity
 and sort each one by emission adjusted prices
 */
 void Consumer_Goods_Market::Divide_Goods_Into_Emission_Adjusted_Price_Levels(){
     // Loop through each element of the default_emission_sensitivites vector, create an entry in the cons_goods_by_emission_adj_price
     // where the key is the sensitivity and the value is a copy of the cons_good_list_by_sector vector 
-    // No need to sort it by price just yet
-    for (int i = 0; i < default_emission_sensitivities.size(); ++i) {
-        float sensitivity = default_emission_sensitivities[i]; // Get the sensitivity
-        vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector_copy; // Create empty copy vector of pairs
-        
-        for (const auto& sector_and_goods : cons_good_list_by_sector) { // loop through each sector
-            const vector<Consumer_Good*>& goods = sector_and_goods.second; // select given set of goods in a sector
-            vector<Consumer_Good*> goods_copy;  
 
-            // Copy the goods vector for that sector
-            std::transform(goods.begin(), goods.end(), std::back_inserter(goods_copy),
-            [](Consumer_Good* good) {
-                return new Consumer_Good(*good); // Deep copy of Consumer_Good object
-            });
-
-            // Add the sorted vector to the copy of the cons_good_list_by_sector vector of pairs, along with the sector name
-            cons_good_list_by_sector_copy.emplace_back(sector_and_goods.first, goods_copy);
-        }
-        cons_goods_by_emission_adj_price[sensitivity] = cons_good_list_by_sector_copy; // Add the complete sorted vector of all sectors to the map
+    for (float sensitivity : default_emission_sensitivities) {
+        cons_goods_by_emission_adj_price[sensitivity] = cons_good_list_by_sector;
     }
 }
 
@@ -129,7 +115,7 @@ tuple<vector<long long>, vector<long long>, vector<long long>> Consumer_Goods_Ma
     //long long total_spending = 0;
 
     // loop through each sector ** i starts from 1!
-    for (int i = 1; i < spending_array.size()+1; ++i) {
+    for (int i = 0; i < spending_array.size(); i++) {
 
         // Round the emission sens value to the nearest threshold, i.e. nearest multiple of 0.05
         float emission_sensitivity = roundf(emission_sensitives_array[i] * 20.0) / 20.0;
@@ -187,7 +173,8 @@ void Consumer_Goods_Market::Update_Price_Level(){
     n_goods_by_sector.clear();
     price_level = 0;
 
-    for (int i = 0; i < cons_good_list_by_sector.size(); ++i) { // Loop through the sectors
+    // Loop through the sectors 
+    for (int i = 0; i < cons_good_list_by_sector.size(); i++) { 
         long long n_total_goods = 0;
         double total_weighed_price = 0;
         vector<Consumer_Good*>* pgoods_for_sector = &(cons_good_list_by_sector[i].second); // Get the goods for this sector

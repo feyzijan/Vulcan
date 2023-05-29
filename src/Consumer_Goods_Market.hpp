@@ -22,7 +22,7 @@ class Consumer_Goods_Market{
 
     // Market operations
     void Add_Consumer_Good_To_Market(Consumer_Good * cons_good);
-    void Divide_Goods_Into_Sectors(int n_sectors);
+    void Divide_Goods_Into_Sectors();
     void Divide_Goods_Into_Emission_Adjusted_Price_Levels();
 
     void Sort_Cons_Goods_By_Sector_By_Price();

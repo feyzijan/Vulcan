@@ -17,7 +17,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(float init_values[6]) : Firm_Agent::Firm_
     dividend_ratio_optimist = firm_cap_init_dividend_ratio_optimist;
     dividend_ratio_pessimist =  firm_cap_init_dividend_ratio_pessimist;
 
-    sector_id = 0;
+    sector_id = -1;
 
     // Initialize goods 
     cap_goods_on_market = new Capital_Good(this, good_price_current, firm_cap_machine_lifespan); // will update quantity

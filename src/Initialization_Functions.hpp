@@ -49,14 +49,14 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
 
 // Function to set up Consumer Goods market at t=0
 void Initialize_Markets( vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
-    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board, int n_sectors);
+    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board);
 
 // Function to do all the sector set up at t=0
-int Initialize_Consumer_Firm_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, 
+void Initialize_Consumer_Firm_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, 
 Public_Info_Board* pPublic_Info_Board, Consumer_Goods_Market* pConsumer_Goods_Market, vector<Household_Agent*> *pHousehold_vector);
 
 // Initialize Sectors
-int Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
+void Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
 
 // Allocate firms to sectors
 void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector,

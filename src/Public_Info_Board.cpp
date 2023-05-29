@@ -89,8 +89,8 @@ Public_Info_Board::Public_Info_Board(Public_Info_Board&){}
 
 /* Set the number of sectors, initialize spending by sector vectors with 0
 */
-void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors){
-    sector_count = num_sectors;
+void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
+
     consumer_spending_by_sector = vector<long long>(sector_count, 0.0);
     planned_cons_spending_by_sector = vector<long long>(sector_count, 0.0);
     actual_production_by_sector = vector<long long>(sector_count, 0);
@@ -114,7 +114,6 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
         emission_allowances_by_sector.push_back(pConsumer_Firm_Sector_vector->at(i)->emission_allowance);
         total_emission_allowance += pConsumer_Firm_Sector_vector->at(i)->emission_allowance;
     }
-
 }
 
 // ----- Updating Member variables
@@ -452,18 +451,18 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "consumption_budget " << obj.consumption_budget << std::endl;
     
     // Print the vectors
-    for (int i = 0; i < obj.sector_count; i++) {
-        os << "planned_spending_on_sector_" << i+1 << " " << obj.planned_cons_spending_by_sector[i] << std::endl;
-        os << "actual_spending_on_sector_" << i+1 << " " << obj.consumer_spending_by_sector[i] << std::endl;
-        os << "planned_production_on_sector_" << i+1 << " " << obj.planned_production_by_sector[i] << std::endl;
-        os << "actual_production_on_sector_" << i+1 << " " << obj.actual_production_by_sector[i] << std::endl;
-        os << "price_level_cons_sector_" << i+1 << " " << obj.consumer_sectors_price_levels[i] << std::endl;
-        os << "offsets_sold_by_sector_" << i+1 << " " << obj.offsets_sold_by_sector[i] << std::endl;
-        //os  << "emission_allowance_by_sector_" << i+1 << " " << obj.emission_allowances_by_sector[i] << std::endl;
-        os << "quantity_sold_by_sector_" << i+1 << " " << obj.quantity_sold_by_sector[i] << std::endl;
-        os << "inventory_by_sector_" << i+1 << " " << obj.inventory_by_sector[i] << std::endl;
-        os << "total_cons_emissions_by_sector_" << i+1 << " " << obj.total_consumer_emissions_by_sector[i] << std::endl;
-        os << "total_firm_emissions_by_sector_" << i+1 << " " << obj.total_firm_emissions_by_sector[i] << std::endl;
+    for (int i = 0; i < sector_count; i++) {
+        os << "planned_spending_on_sector_" << i << " " << obj.planned_cons_spending_by_sector[i] << std::endl;
+        os << "actual_spending_on_sector_" << i << " " << obj.consumer_spending_by_sector[i] << std::endl;
+        os << "planned_production_on_sector_" << i << " " << obj.planned_production_by_sector[i] << std::endl;
+        os << "actual_production_on_sector_" << i << " " << obj.actual_production_by_sector[i] << std::endl;
+        os << "price_level_cons_sector_" << i << " " << obj.consumer_sectors_price_levels[i] << std::endl;
+        os << "offsets_sold_by_sector_" << i << " " << obj.offsets_sold_by_sector[i] << std::endl;
+        //os  << "emission_allowance_by_sector_" << i << " " << obj.emission_allowances_by_sector[i] << std::endl;
+        os << "quantity_sold_by_sector_" << i << " " << obj.quantity_sold_by_sector[i] << std::endl;
+        os << "inventory_by_sector_" << i << " " << obj.inventory_by_sector[i] << std::endl;
+        os << "total_cons_emissions_by_sector_" << i << " " << obj.total_consumer_emissions_by_sector[i] << std::endl;
+        os << "total_firm_emissions_by_sector_" << i << " " << obj.total_firm_emissions_by_sector[i] << std::endl;
     } 
     os << "total_offsets_sold " << obj.total_offsets_sold << std::endl;
     

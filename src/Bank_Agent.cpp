@@ -22,7 +22,7 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
     cons_inflation_previous = 1.0;
 
     // Initialize cons_inflation_history
-    for(int i=1;i<=12;i++){
+    for(int i = 0; i < 12; i++){
         cons_inflation_previous *= bank_inflation_target_monthly; // preset Global param
         cons_inflation_history.push(bank_inflation_target_monthly);
     }
@@ -32,7 +32,8 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
     // Manufacturer inflation - start at 0 inflation
     cap_inflation_previous = 1.0;
     cap_inflation_past_month = 0;
-    for(int i=1;i<=12;i++){
+
+    for(int i = 0; i < 12;i++){
         cap_inflation_history.push(cap_inflation_previous);
     }
     

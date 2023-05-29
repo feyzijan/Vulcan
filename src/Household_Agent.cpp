@@ -249,7 +249,7 @@ void Household_Agent::Update_Income()
 */
 void Household_Agent::Update_Average_Income_T1()
 {
-    for(int i=1;i<=12;i++){past_incomes.push(income_current);}
+    for(int i = 0;i < 12; i++){past_incomes.push(income_current);}
     income_average = income_current;
 }
 
@@ -330,7 +330,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
         }
         planned_expenditure_by_sector.push_back(spending_weight_by_sector[i] * consumption_budget);
         if (planned_expenditure_by_sector[i] <0){
-            cout << "ERROR: in Buy_cons_goods: at firm "<< this <<" - Planned expenditure is negative: " <<  planned_expenditure_by_sector[i] << " for sector : " << i+1 <<  endl;
+            cout << "ERROR: in Buy_cons_goods: at firm "<< this <<" - Planned expenditure is negative: " <<  planned_expenditure_by_sector[i] << " for sector : " << i <<  endl;
         }
     }
 
@@ -342,8 +342,6 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
     vector<long long> emissions_generated =  std::get<2>(purchases_by_sector);
 
     vector<long long> actual_spending_by_sector(planned_expenditure_by_sector); // TODO: Does this set them equal
-
-    int sector_count = remaining_consumption_budget.size();
 
     long long total_goods_bought = 0;
     total_emissions = 0;

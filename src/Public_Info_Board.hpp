@@ -125,7 +125,7 @@ class Public_Info_Board{
     void Set_Consumer_Goods_Market(Consumer_Goods_Market* ptr) { pConsumer_Goods_Market = ptr;}
     void Set_Capital_Goods_Market(Capital_Goods_Market* ptr) { pCapital_Goods_Market = ptr;}
     void Set_Bank(Bank_Agent* ptr) { pBank = ptr;}
-    void Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector, int num_sectors);
+    void Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector);
 
     //-----------Update global aggregate variables ----------------
     // Sentiment sums
@@ -266,8 +266,6 @@ class Public_Info_Board{
     vector<long long> planned_cons_spending_by_sector; // Initialized, updated, reset, logged
     vector<long long> consumer_spending_by_sector; // Initialized, updated, reset, logged
 
-    int sector_count; // Initialized, no need for updating, reset, or logging
-    
     // Production
     long long cap_goods_production; // Initialized, updated, reset, logged
     long long cap_goods_production_planned; // Initialized, updated, reset, logged

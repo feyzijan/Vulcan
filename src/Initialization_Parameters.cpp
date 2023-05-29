@@ -234,6 +234,7 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     n_consumer_firms = main_loop_parameters["n_consumer_firms"];
     n_capital_firms = main_loop_parameters["n_capital_firms"];
     n_firms = main_loop_parameters["n_firms"]; 
+    sector_count = main_loop_parameters["n_consumer_sectors"];
     n_max_employees = main_loop_parameters["n_max_employees"]; 
     time_period = main_loop_parameters["time_period"]; 
 
@@ -329,6 +330,8 @@ int n_households = 1000;
 int n_consumer_firms = 45;
 int n_capital_firms = 5;
 int n_firms = 50; 
+
+int sector_count = 12;
 
 int time_period = 12; 
 int n_max_employees = 100; 

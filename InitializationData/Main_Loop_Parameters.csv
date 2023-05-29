@@ -2,7 +2,7 @@ n_loops,60.0
 n_households,10000.0
 n_consumer_firms,300.0
 n_capital_firms,50.0
-n_firms,350.0
+n_consumer_sectors,12.0
 n_max_employees,100.0
 time_period,12.0
 household_n_res_wage_decrease,0.05

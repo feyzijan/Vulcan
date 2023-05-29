@@ -62,7 +62,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     const vector<long long>& quantitySoldBySector =  pPublic_Info_Board->Get_Quantity_Sold_By_Sector();
     for (int i = 0; i < quantitySoldBySector.size(); ++i) {
         long long quantity = quantitySoldBySector[i];
-        cout << "Consumer Sector " << i + 1<< ": Quantity sold = " << quantity << endl;
+        cout << "Consumer Sector " << i<< ": Quantity sold = " << quantity << endl;
     }
     // STEP 1.6: Depreciate Firms' Good Inventories
     cout << "\n------------ Step 1.6: Depreciating Good inventories ----------------" <<endl;
@@ -72,7 +72,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     const vector<long long>& plannedProductionBySector =  pPublic_Info_Board->Get_Planned_Production_By_Sector();
     for (int i = 0; i < plannedProductionBySector.size(); ++i) {
         long long quantity = plannedProductionBySector[i];
-        cout << "Consumer Sector " << i + 1<< ": Planned production = " << quantity << endl;
+        cout << "Consumer Sector " << i << ": Planned production = " << quantity << endl;
     }
 
 
@@ -168,7 +168,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     for (int i = 0; i < production_by_sector.size(); ++i) {
         long long quantity = production_by_sector[i];
         long long quantity_p = plannedProductionBySector[i];
-        cout << "Consumer Sector " << i + 1<< ": Produced: " << quantity << " out of planned: " << quantity_p << endl;
+        cout << "Consumer Sector " << i << ": Produced: " << quantity << " out of planned: " << quantity_p << endl;
     }
 
     cout << "Capital goods market after firms post goods ( after resetting market): " << endl;

@@ -24,11 +24,10 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float init_values[6]): Firm_Agent::Firm
     total_emissions = 0;
 
     // Initialize goods 
+    sector_id = 0;
     cons_goods_on_market = new Consumer_Good(this, good_price_current,1, 1); // will update quantity and sector
     goods_on_market = cons_goods_on_market;
-    //unit_good_cost = dynamic_cast<General_Good*>(cons_goods_on_market);
-
-    sector_id = 1;
+    cons_goods_on_market->Set_Sector_ID(sector_id);
 }
 
 
