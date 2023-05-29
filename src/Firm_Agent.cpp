@@ -13,7 +13,7 @@ Firm_Agent::Firm_Agent(float init_values[6])
     good_price_current = init_values[1];
     inv_factor = init_values[2];
 
-    cash_on_hand = static_cast<long long>(init_values[3]);
+    cash_on_hand = max(static_cast<long long>(init_values[3]), 0ll);
     employee_count_desired = static_cast<int>(init_values[4]);
     wage_offer = static_cast<int>(init_values[5]);
 
@@ -27,7 +27,7 @@ Firm_Agent::Firm_Agent(float init_values[6])
     //-- Set everything else to zero or 1 initially
     // Inflows
     loan_issuance_to_date = 0; 
-    average_sale_quantity = 0;
+    average_sale_quantity = 1;
     
     // Loan Parameters
     short_term_funding_gap = 0;
@@ -122,10 +122,13 @@ void Firm_Agent::Initialize_Production(){
     // Initialize sales and revenue ( Note: Sales will be subtracted from inventory later at t=1 )
     float init_sales = is_cons_firm ? firm_cons_init_quantity_sold_ratio : firm_cap_init_quantity_sold_ratio;
     quantity_sold = production_current *  init_sales; 
-    average_sale_quantity = quantity_sold;
     revenue_sales = production_current * good_price_current;
-    average_profit = revenue_sales;
     production_costs = production_current * unit_good_cost;
+
+    if(quantity_sold > inventory){
+        cout << "ERROR: Firm_Agent::Initialize_Production() - quantity_sold > inventory at firm # " << this << endl;
+        quantity_sold = inventory/2;
+    }
 
     // Initialize average profit and sales queues
     for(int i = 0; i < 12; i++){ past_profits.push(revenue_sales); }
@@ -173,6 +176,7 @@ void Firm_Agent::Check_Employees_Quitting(){
     while(it !=  active_job_list.end()) {
         if((*it)->Get_Status() == -2) {  // -2 means employee has quit
             temp ++;
+            delete *it; // Delete the job to free memory ( household has already erased the pointer)
             it = active_job_list.erase(it);
             employee_count -=1;
         } else {it++;}
@@ -192,7 +196,7 @@ void Firm_Agent::Cancel_Expired_Contracts(){
     while(it !=  active_job_list.end()) {
         if((*it)->Get_Expiry_Status() == 1) { 
             temp ++;
-            (*it)->Update_Status(-1); // Let household know it has been laid off
+            (*it)->Update_Status(-1); // Let household know it has been laid off ** Do not delete the job object
             it = active_job_list.erase(it);
             employee_count -=1;
         } else {it++;}
@@ -206,6 +210,10 @@ void Firm_Agent::Cancel_Expired_Contracts(){
     it should be the inventory at the end of the last period*/
 void Firm_Agent::Check_Sales(){
     quantity_sold = inventory -  goods_on_market->Get_Quantity(); // Originally the amount on market was equal to the inventory
+    if(quantity_sold < 0){
+        cout << "ERROR: Firm_Agent::Check_Sales() - negative quantity_sold: "<< quantity_sold << " at firm # " << this << endl;
+        quantity_sold = 0;
+    }
     inventory -= quantity_sold;
     revenue_sales = quantity_sold * good_price_current; 
 
@@ -213,7 +221,14 @@ void Firm_Agent::Check_Sales(){
         cout << "ERROR: negative values at Firm Agent.Check_Sales(): Sales: " << quantity_sold << " and price:" << good_price_current << endl << " and revenue " << revenue_sales << "at firm # " << this <<  endl;
     }
 
-    inv_factor = static_cast<float>(inventory) /  static_cast<float>(production_current);
+    if(production_current !=0){
+        inv_factor = static_cast<float>(inventory) /  static_cast<float>(production_current);
+    } else if ( average_sale_quantity != 0){
+        inv_factor = static_cast<float>(inventory) /  static_cast<float>(average_sale_quantity); // Unsure about this
+    } else {
+        inv_factor = target_inv_factor/10.0;
+    }
+
     desired_inventory = static_cast<long long>(target_inv_factor * production_current);
 }
 
@@ -234,6 +249,7 @@ void Firm_Agent::Update_Average_Profit(){
     average_profit += static_cast<long long>((revenue_sales - past_profits.front()) / 12.0);
     past_profits.pop();
     past_profits.push(revenue_sales);
+    average_profit = max(average_profit,1ll);
 }
 
 /* Function to update the firm's average quantity sold
@@ -390,7 +406,7 @@ void Firm_Agent::Layoff_Excess_Workers(){
         cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() == 0 at firm # " << this << endl;
         return;
     } else if ( active_job_list.size() != employee_count){
-        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() != employee_count at firm # " << this << endl;
+        cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - active_job_list.size() != employee_count at firm # " << this << "- Employee count: " << employee_count << " job list size: " << active_job_list.size() <<  endl;
         return;
     } else if ( layoff_count > active_job_list.size() ){
         cout << "ERROR: Firm_Agent::Layoff_Excess_Workers() - layoff_count > active_job_list.size() at firm # " << this << endl;
@@ -477,8 +493,8 @@ void Firm_Agent::Make_Investment_Decision(){
     // temporary override
     //desired_machines = Uniform_Dist_Int(forced_machine_purchases_min,forced_machine_purchases_max);
     
-    pPublic_Info_Board->Update_Machine_Orders_Planned(desired_machines);
-    pPublic_Info_Board->Update_Machine_Spending_Planned(estimated_cost);
+    pPublic_Info_Board->Update_Cap_Good_Orders_Planned(desired_machines);
+    pPublic_Info_Board->Update_Capital_Spending_Planned(estimated_cost);
 }
 
 
@@ -619,16 +635,22 @@ void Firm_Agent::Buy_Capital_Goods(){
              " negative_price_paid: " << total_price_paid  << "at firm # " << this <<  endl;
             n_new_machines_bought = 0;
         }
+         
+        if(n_new_machines_bought > 0 && total_price_paid <= 0){
+            cout << "ERROR: Firm_Agent::Buy_Capital_Goods(): number of machines bought n = " << n_new_machines_bought <<
+             " zero or negative_price_paid: " << total_price_paid  << "at firm # " << this <<  endl;
+        }
+    
     }
 
     // Check if demand was not satisfied
     if (n_new_machines_bought < desired_machines) {
-        cout << "Firm_Agent::Buy_Capital_Goods() - Capital good demand not satisfied - only bought " << n_new_machines_bought << " out of " << desired_machines << endl;
+        //cout << "Firm_Agent::Buy_Capital_Goods() - Capital good demand not satisfied - only bought " << n_new_machines_bought << " out of " << desired_machines << endl;
     }
 
     // Update public records
-    pPublic_Info_Board->Update_Machine_Spending(total_price_paid);
-    pPublic_Info_Board->Update_Machine_Orders(n_new_machines_bought);
+    pPublic_Info_Board->Update_Capital_Spending(total_price_paid);
+    pPublic_Info_Board->Update_Cap_Good_Orders(n_new_machines_bought);
 }
 
 
@@ -712,7 +734,6 @@ void Firm_Agent::Pay_Liabilities(){
         // Seek loans to pay for the bills
         Seek_Long_Term_Loan();
         if (long_term_funding_gap > 0){ // Bank rejected loan
-            
             if(Avoid_Bankruptcy()){
                 cout << "Firm Agent at address: " << this << " avoided bankruptcy by recapitalising" << endl;
                 bankrupt = false;
@@ -728,6 +749,9 @@ void Firm_Agent::Pay_Liabilities(){
     if (bankrupt == false){
         // Pay bills
         cash_on_hand -= total_liabilities;
+        if(cash_on_hand < 0){
+            cout << "ERROR: Firm_Agent::Pay_Liabilities() - negative cash on hand at firm # " << this << " of " << cash_on_hand << endl;
+        }
 
         // Pay dividends and taxes
         long long excess_profits = max(static_cast<long long>(0),revenue_sales - total_liabilities); // Calculate excess profits
@@ -759,25 +783,32 @@ void Firm_Agent::Pay_Liabilities(){
 bool Firm_Agent::Avoid_Bankruptcy(){
     if ( recapitalised == false && total_assets > total_liabilities){ // Sell everything, recapitalise
         // Everything is converted to cash
-        cash_on_hand =  total_assets - total_liabilities; 
-        total_assets = cash_on_hand;
+        cash_on_hand =  total_assets;
         long_term_funding_gap = 0;
-        // Sell all inventory and capital goods
+    
+        // Sell all inventories but one
         inventory = 0;
-        goods_on_market->Set_Quantity(0);
+        goods_on_market->Set_Quantity(1);
+        
         // Sell all but one capital good
         capital_goods_list.clear();
         capital_goods_current_value = 0;
         working_capital_inventory = 1;
-        // Layoff all workers but one ( they are still paid for the preceeding period)
-        int layoff_count = employee_count - 1; 
-        // Fire employees and calc how much you save on wage bills
-        for (int i=0; i<layoff_count; i++){
+        
+        // Fire all but one employees and calc how much you save on wage bills
+        int lay_off_count = max(employee_count - 2,0);
+        for (int i=0; i < lay_off_count; i++){
             active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
             active_job_list.pop_back();
         }
-        employee_count = 1;
-        pPublic_Info_Board->Update_Employee_Firings(layoff_count);
+        pPublic_Info_Board->Update_Employee_Firings(lay_off_count);
+        employee_count = active_job_list.size();
+
+        if(employee_count != active_job_list.size()){
+           cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - active_job_list.size() != employee_count at firm # " << this << "- Employee count: " << employee_count << " job list size: " << active_job_list.size() <<  endl;
+        } else if( employee_count !=1 ){
+            cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - employee_count != 1 at firm # " << this << " it is " << employee_count << endl;
+        }
         
         recapitalised = true;
         return true;

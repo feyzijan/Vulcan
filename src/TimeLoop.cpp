@@ -220,7 +220,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Buy_Capital_Goods();}
     
 
-    cout << "Firms have spent " << pPublic_Info_Board->Get_Machine_Spending() << " on capital goods to buy " << pPublic_Info_Board->Get_Machine_Orders() << " capital goods" << endl;
+    cout << "Firms have spent " << pPublic_Info_Board->Get_Capital_Spending() << " on capital goods to buy " << pPublic_Info_Board->Get_Machine_Orders() << " capital goods" << endl;
 
 
     // STEP 1.95: Firms pay liabilities

@@ -29,7 +29,7 @@ class Capital_Good: public General_Good{
     bool Check_Depreciation() const {return depreciated;}
 
     // Setters
-    void Update_Value(float new_value) {value = new_value;}
+    void Update_Value(float new_price) {value = new_price * quantity;}
     void Set_Seller_Pointer(Capital_Firm_Agent * new_seller) {pSeller = new_seller;}
     void Update_Quantity_And_Value(long long new_quantity){
         quantity = new_quantity;

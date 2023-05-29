@@ -94,8 +94,8 @@ class Public_Info_Board{
 
     float Get_Average_Wage_Market() { return average_wage_market;}
 
-    long long Get_Machine_Orders() { return machine_orders;}
-    long long Get_Machine_Spending() { return machine_spending;}
+    long long Get_Machine_Orders() { return cap_good_orders;}
+    long long Get_Capital_Spending() { return capital_spending;}
     long long Get_Consumer_Spending() { return consumer_spending;}
     long long Get_Consumption_Budget() { return consumption_budget;}
     long long Get_Capital_Goods_Production() { return cap_goods_production;}
@@ -135,10 +135,10 @@ class Public_Info_Board{
     void Update_Household_Dividend_Income(long long amount) {household_dividend_income += amount; }
     void Update_Household_Unemployment_Income(int amount) {household_unemployment_income += amount; }
     // Capital Goods
-    void Update_Machine_Orders(long long amount) { machine_orders += amount; }
-    void Update_Machine_Orders_Planned(long long amount) { machine_orders_planned += amount; }
-    void Update_Machine_Spending(long long amount) { machine_spending += amount; }
-    void Update_Machine_Spending_Planned(long long amount) { machine_spending_planned += amount; }
+    void Update_Cap_Good_Orders(long long amount) { cap_good_orders += amount; }
+    void Update_Cap_Good_Orders_Planned(long long amount) { cap_good_orders_planned += amount; }
+    void Update_Capital_Spending(long long amount) { capital_spending += amount; }
+    void Update_Capital_Spending_Planned(long long amount) { machine_spending_planned += amount; }
     void Update_Capital_Goods_Production(long long amount) { cap_goods_production += amount;}
     void Update_Capital_Goods_Planned_Production(long long amount) { cap_goods_production_planned += amount; }
     void Update_Capital_Goods_Sale_Quantities(long long amount) { cap_goods_quantity_sold += amount;}
@@ -251,9 +251,9 @@ class Public_Info_Board{
     float cap_firm_sentiment_percentage; // Initialized, updated, reset, logged
 
     // Capital expenditure
-    long long machine_orders; // Initialized, updated, reset, logged
-    long long machine_orders_planned; // Initialized, updated, reset, logged
-    long long machine_spending; // Initialized, updated, reset, logged
+    long long cap_good_orders; // Initialized, updated, reset, logged
+    long long cap_good_orders_planned; // Initialized, updated, reset, logged
+    long long capital_spending; // Initialized, updated, reset, logged
     long long machine_spending_planned; // Initialized, updated, reset, logged
 
     // Consumer expenditure

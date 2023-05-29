@@ -32,21 +32,21 @@ void Capital_Goods_Market::Sort_Capital_Goods_By_Price()
 
 /* Function to return how much it would cost to buy q number of goods
 */
-long long Capital_Goods_Market::Get_Cost_For_Given_Quantity(int q_desired){
-    int q_current = 0;
+long long Capital_Goods_Market::Get_Cost_For_Given_Quantity(long long q_desired){
+    int q_bought_total = 0;
     double total_price = 0;
 
     if (!cap_goods_list.empty()) {
         for(auto i=cap_goods_list.begin(); i!=cap_goods_list.end();i++){
             int q = (*i)->Get_Quantity(); 
             float price = (*i)->Get_Price();
-            q_current += q; // current quantity we have "bought"
-            if(q_current >= q_desired){ // we have bought enough
-                q = q_desired - q_current; // quantity of this specific good we are "buying"
-                q_current = q_desired;
+            q_bought_total += q; // current quantity we have "bought"
+            if(q_bought_total >= q_desired){ // we have bought enough
+                q = q_desired - q_bought_total; // quantity of this specific good we are "buying"
+                q_bought_total = q_desired;
             }
             total_price += price * q; // total price we will need to pay
-            if(q_current==q_desired){
+            if(q_bought_total==q_desired){
                 return  static_cast<long long>(total_price); 
             } else{
                 continue;
@@ -61,11 +61,11 @@ long long Capital_Goods_Market::Get_Cost_For_Given_Quantity(int q_desired){
 /* New simpler method to buy capital goods
 */
 
-long long* Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
-    long long q_current = 0; // quantity the firm is purchasing
+long long* Capital_Goods_Market::Buy_Capital_Goods(long long q_desired){
+    long long q_bought_total = 0; // quantity the firm is purchasing
     double total_price = 0; // total price paid
 
-    if (n_total_goods ==0){
+    if (n_total_goods == 0){
         long long* arr = new long long[2];
         arr[0] = 0;
         arr[1] = 0;
@@ -75,30 +75,38 @@ long long* Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
         for (vector<Capital_Good*>::iterator it = cap_goods_list.begin(); it != cap_goods_list.end(); ++it) 
         { // Loop through the capital goods list
             Capital_Good* cap_good = *it; // select current good
-            long long q_on_market = cap_good->Get_Quantity();
-            long long q_sold = 0; // how much of this one good we are buying
-            float price = cap_good->Get_Price(); 
-            if (q_on_market > 0) 
+            long long q_good_on_market = cap_good->Get_Quantity();
+            long long q_good_bought = 0; // how much of this one good we are buying
+            double price = static_cast<double>(cap_good->Get_Price()); 
+            if (q_good_on_market > 0) // There is smt to buy
             {
-                if (q_current + q_on_market >= q_desired) // This posting is enough to satisfy all our demand
+                if (q_bought_total + q_good_on_market >= q_desired) // This posting is enough to satisfy all our demand
                 {  
-                    q_sold = q_desired - q_current; // We buy only enough to satisfy our demand
-                    q_current = q_desired; // all demand is satisfied
+                    q_good_bought = q_desired - q_bought_total; // We buy only enough to satisfy our demand
+                    q_bought_total = q_desired; // all demand is satisfied
                     
-                    cap_good->Add_Quantity(-q_sold); // Deduct quantity from the original good on the market
-                    n_total_goods -= q_sold; // Deduct quantity from market
+                    cap_good->Set_Quantity(q_good_on_market - q_good_bought); // Deduct quantity from the original good on the market
+                    n_total_goods -= q_good_bought; // Deduct from the aggreate market quantity 
 
-                } else { // Not enough to satisfy our demand, so we will buy all and move on
-                    q_current += q_on_market; // Update number of goods purchased by firm
+                    total_price += price * q_good_bought; // Update total price paid
+
+                } else { // There isn't enough to satisfy our demand, so we will buy all and move on
+                    q_good_bought = q_good_on_market; // We buy all that is available
+                    q_bought_total += q_good_bought; // Update number of goods purchased by firm
+
                     cap_good->Set_Quantity(0); // Deduct quantity from the original good on the market 
-                    n_total_goods -= q_on_market;
+                    n_total_goods -= q_good_on_market; // Deduct from the aggreate market quantity
+
+                    total_price += price * q_good_bought; // Update total price paid
                 }
 
-                if (q_current == q_desired || n_total_goods == 0 ) // We satisfied our demand or the shop is now empty so lets return
+
+                // We satisfied our demand or the shop is now empty so lets return
+                if (q_bought_total == q_desired || n_total_goods == 0 ) 
                 {
                     long long* arr = new long long[2];  // allocate array of size 2 on the heap
-                    arr[0] = q_current;  // store first integer in array
-                    arr[1] = static_cast<long long>(total_price);  // store second integer in array
+                    arr[0] = q_bought_total; 
+                    arr[1] = static_cast<long long>(total_price); 
                     return arr;
                 } else {
                     continue;
@@ -107,7 +115,7 @@ long long* Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
                 continue;
             }
         } //  We have looped through the entire market, so return whatever we have
-        long long* arr = new long long[2]{q_current, static_cast<long long>(total_price)};
+        long long* arr = new long long[2]{q_bought_total, static_cast<long long>(total_price)};
         return arr;
     }
 }

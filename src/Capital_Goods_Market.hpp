@@ -21,8 +21,8 @@ class Capital_Goods_Market{
     // Market operations
     void Add_Capital_Good_To_Market(Capital_Good * cap_good);
     void Sort_Capital_Goods_By_Price();
-    long long Get_Cost_For_Given_Quantity(int q_desired);
-    long long* Buy_Capital_Goods(int q_desired);
+    long long Get_Cost_For_Given_Quantity(long long q_desired);
+    long long* Buy_Capital_Goods(long long q_desired);
     void Update_Price_Level();
     void Reset_Market(); 
 

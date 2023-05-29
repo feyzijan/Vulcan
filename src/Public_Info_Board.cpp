@@ -36,9 +36,9 @@ Public_Info_Board::Public_Info_Board(){
     cap_firm_sentiment_percentage = 0.0;
 
     // Capital expenditure
-    machine_orders = 0;
-    machine_spending = 0;
-    machine_orders_planned = 0;
+    cap_good_orders = 0;
+    capital_spending = 0;
+    cap_good_orders_planned = 0;
     machine_spending_planned = 0;
     // Consumer expenditure
     consumer_spending = 0;
@@ -362,9 +362,9 @@ void Public_Info_Board::Reset_Global_Data(){
     cap_firm_sentiment_percentage = reset_value;
 
     // Capital expenditure
-    machine_orders = reset_value;
-    machine_orders_planned = reset_value;
-    machine_spending = reset_value;
+    cap_good_orders = reset_value;
+    cap_good_orders_planned = reset_value;
+    capital_spending = reset_value;
     machine_spending_planned = reset_value;
 
     // Consumer expenditure
@@ -436,9 +436,9 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "cap_firm_sentiment_sum " << obj.cap_firm_sentiment_sum << std::endl;
     os << "cap_firm_sentiment_percentage " << obj.cap_firm_sentiment_percentage << std::endl;
     
-    os << "machine_orders " << obj.machine_orders << std::endl;
-    os << "machine_orders_planned " << obj.machine_orders_planned << std::endl;
-    os << "machine_spending " << obj.machine_spending << std::endl;
+    os << "cap_good_orders " << obj.cap_good_orders << std::endl;
+    os << "cap_good_orders_planned " << obj.cap_good_orders_planned << std::endl;
+    os << "capital_spending " << obj.capital_spending << std::endl;
     os << "machine_spending_planned " << obj.machine_spending_planned << std::endl;
     
     os << "consumer_spending " << obj.consumer_spending << std::endl;
@@ -495,7 +495,7 @@ vector<pair<string, float>>* Public_Info_Board::Log_Data() {
     // Income and wage figures
     if (global_date > 0){
         household_wage_income /= n_employed_workers;
-        household_dividend_income /= (n_firms - n_bankrupt_cap_firms - n_bankrupt_cons_firms);
+        household_dividend_income /= (n_capital_firms + n_consumer_firms - n_bankrupt_cap_firms - n_bankrupt_cons_firms);
         household_unemployment_income /= n_unemployed_workers;
     }
 

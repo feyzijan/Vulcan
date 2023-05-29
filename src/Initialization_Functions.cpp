@@ -203,7 +203,7 @@ void Initialize_Firm_Owners(vector<Household_Agent*> *pHousehold_vector, vector<
             temp--;  // Decrement the number of households left to set as firm owners
         }
     }
-    cout << "Finished setting firm owners" << n_consumer_firms + n_firms - temp << " households are owners" << endl;
+    cout << "Finished setting firm owners" << n_consumer_firms + n_capital_firms - temp << " households are owners" << endl;
 }
 
 

@@ -327,9 +327,9 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
 //-------------------- Simulation Size Parameters ---------------
 int n_loops = 36;
 int n_households = 1000;
-int n_consumer_firms = 45;
-int n_capital_firms = 5;
-int n_firms = 50; 
+int n_consumer_firms = 300;
+int n_capital_firms = 50;
+int n_firms = 350; 
 
 int sector_count = 12;
 
