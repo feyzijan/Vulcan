@@ -55,7 +55,7 @@ vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     //----------- STEP 0.17: Send initial goods to markets and initialize price level
     cout << "Step 0.17: Send initial goods to markets and initialize price level" << endl;
     Initialize_Markets(pConsumer_Firm_vector,  pCapital_Firm_vector, pConsumer_Goods_Market,
-    pCapital_Goods_Market,pPublic_Board);
+    pCapital_Goods_Market,pPublic_Board, pConsumer_Firm_Sector_vector);
 }
 
 
@@ -254,16 +254,17 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
 /* Function to initialize consumer and capital markets 
 */
 void Initialize_Markets(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vector, vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
-    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board){
+    Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Goods_Market,Public_Info_Board* pPublic_Info_Board,
+    vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
 
     // Set up the consumer goods market's sector lists and sort each sector by price
-    pConsumer_Goods_Market->Divide_Goods_Into_Sectors();
+    pConsumer_Goods_Market->Divide_Goods_Into_Sectors(pConsumer_Firm_Sector_vector);
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price();
 
     // Set up the emission baskets in the consumer good market, and sort each by emission adjusted
     pConsumer_Goods_Market->Divide_Goods_Into_Emission_Adjusted_Price_Levels(); 
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
-    
+
     // Update the price levels in each sector
     pConsumer_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Update_Price_Level();

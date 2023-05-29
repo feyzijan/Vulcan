@@ -151,32 +151,36 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     pConsumer_Goods_Market->Update_Price_Level();
     pCapital_Goods_Market->Update_Price_Level();
 
-    cout << "Consumer goods market before firms post goods (what remains of the previous market): " << 
-    pConsumer_Goods_Market->Get_Size() << " goods with an average price of " <<  pConsumer_Goods_Market->Get_Price_Level() << endl;
-    cout << "Capital goods market before firms post goods ( what remains of the previous market): " <<
-    pCapital_Goods_Market->Get_Size() << " goods with an average price of " << pCapital_Goods_Market->Get_Price_Level() << endl;
+    cout << "Consumer goods market before firms post goods (what remains of the previous market after depreciation): " << endl;
+    pConsumer_Goods_Market->Print();
+    cout << "Capital goods market before firms post goods ( what remains of the previous market after depreciation) ): " << endl;
+    pCapital_Goods_Market->Print();
     
+    // Produce the goods
     for (Firm_Agent * firm_ptr : *pFirm_vector){
         firm_ptr->Produce_Goods();
         firm_ptr->Update_Goods_On_Market();}
 
-    cout << "Consumer goods market after firms post goods (after resetting market): " << endl;
+    // Update markets
     pConsumer_Goods_Market->Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
     pConsumer_Goods_Market->Update_Price_Level();
+    pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
+    pCapital_Goods_Market->Update_Price_Level();
 
+    cout << "Consumer firms produced goods" << endl;
     const vector<long long>& production_by_sector = pPublic_Info_Board->Get_Production_By_Sector();
     for (int i = 0; i < production_by_sector.size(); ++i) {
         long long quantity = production_by_sector[i];
         long long quantity_p = plannedProductionBySector[i];
         cout << "Consumer Sector " << i << ": Produced: " << quantity << " out of planned: " << quantity_p << endl;
     }
-
-    cout << "Capital goods market after firms post goods ( after resetting market): " << endl;
-    pCapital_Goods_Market->Sort_Capital_Goods_By_Price();
-    pCapital_Goods_Market->Update_Price_Level();
-    cout << "Capital market total goods: " << pCapital_Goods_Market->Get_Size() << " Price level: "<<  pCapital_Goods_Market->Get_Price_Level() << endl;
-    cout << "Capital Firms have produced " << pPublic_Info_Board->Get_Capital_Goods_Production() << " out of planned: " << pPublic_Info_Board->Get_Capital_Goods_Planned_Production() << endl;
+    cout << "Consumer goods market after firms produced goods: " << endl;
+    pConsumer_Goods_Market->Print();
     
+    cout << "Capital firms produced goods" << endl;
+    cout << "Capital Firms have produced " << pPublic_Info_Board->Get_Capital_Goods_Production() << " out of planned: " << pPublic_Info_Board->Get_Capital_Goods_Planned_Production() << endl;
+    pCapital_Goods_Market->Print();
+
 
     // STEP 1.92: Households receive wage and make saving/consumption plans
     cout << " \n ------------ Step 1.92: Households receive wage and make saving/consumption plans ----------------" <<endl;
@@ -199,11 +203,12 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
     cout << "Households have spent " << pPublic_Info_Board->Get_Consumer_Spending() << " on consumer goods"  << endl;
     //cout <<  float(pPublic_Info_Board->Get_Consumer_Spending()) / float(pPublic_Info_Board->Get_Consumption_Budget())*100 << "% of household budgets have been spent " << endl;
-    pConsumer_Goods_Market->Update_Price_Level();
 
+    pConsumer_Goods_Market->Update_Price_Level();
+    pConsumer_Goods_Market->Print();
 
     // STEP 1.94: Capital good market commences
-    cout << " \n ------------ Step 1.94: Investment good market commences ----------------" <<endl;
+    cout << " \n ------------ Step 1.94: Capital good market commences ----------------" <<endl;
     
     cout << "Firms have now posted capital goods " << endl;
 
@@ -270,6 +275,7 @@ void Delete_Bankrupt_Firms(vector<Firm_Agent*>* pFirm_vector,vector<Consumer_Fir
             ++capitalIt;
         }
     }
+
     cout << "Deleted " << temp << " capital firms" << endl;
     temp = 0;
 

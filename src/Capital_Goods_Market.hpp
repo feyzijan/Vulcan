@@ -5,10 +5,11 @@
 
 #include "Capital_Good.hpp"
 
-
 #include "vector"
 #include "algorithm"
- 
+
+using namespace std;
+
 class Capital_Goods_Market{
 
     public:
@@ -27,14 +28,17 @@ class Capital_Goods_Market{
 
     // Getters
     float Get_Price_Level(){return price_level;}
-    int Get_Size(){return n_total_goods;}
+    long long Get_Size(){return n_total_goods;}
     
     // Setters
     void Set_Price_Level(float price_level) {this->price_level = price_level;}
 
+    // Printing and debugging
+    void Print();
+
     private:
     vector<Capital_Good*> cap_goods_list;
-    int n_total_goods;
+    long long n_total_goods;
     double total_weighed_price;
     float price_level;
 

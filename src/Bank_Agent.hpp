@@ -28,9 +28,10 @@ class Bank_Agent{
     Loan* Issue_Long_Term_Loan(Firm_Agent* pFirm);
 
     float Calculate_Emission_Penalty(Firm_Agent* pFirm);
+    float Calculate_Leverage_Penalty(float leverage_ratio);
 
     // Getters
-    float Get_Interest_Rate() {return r_rate;};
+    float Get_Interest_Rate() {return r_rate;}
 
     // Printing and debugging
     friend std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj);

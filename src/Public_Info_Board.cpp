@@ -288,20 +288,14 @@ void Public_Info_Board::Update_Average_Wage_Job_Market(){
 /* Function to calculate consumer price level given each sector's price level and weighing in the 
 consumer basket. Also updates consumer inflation records
 */
-void Public_Info_Board::Update_Consumer_Price_Level(){
-    cons_price_level_previous = cons_price_level_current; // update previous price level
+void Public_Info_Board::Update_Consumer_Price_Level()
+{
+    cons_price_level_previous = cons_price_level_current; // Set current price lvel to previous
     
+    // Get Data from consumer goods market
     consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels_By_Sector();
+    cons_price_level_current = pConsumer_Goods_Market->Get_Price_Level();
 
-    float sum = 0.0;
-    float sum_weights = 0.0;
-    for (int i = 0; i < sector_count; i++){
-        sum += consumer_sectors_price_levels[i] * consumer_sector_weights[i];
-        sum_weights += consumer_sector_weights[i];
-    }
-    cons_price_level_current = sum/sum_weights; // incase the sums don't match due to rounding errors
-
-    pConsumer_Goods_Market->Set_Price_Level(cons_price_level_current);
     // Update inflation 
     cons_inflation_current = 1.0 + (cons_price_level_current - cons_price_level_previous)/cons_price_level_previous;
 }
@@ -319,19 +313,16 @@ void Public_Info_Board::Update_Capital_Price_Level(){
 
 /* Initialize price levels at t=0 , without updating inflation
 */
-void Public_Info_Board::Initialize_Price_Levels(){
-    
+void Public_Info_Board::Initialize_Price_Levels()
+{    
     consumer_sectors_price_levels = pConsumer_Goods_Market->Get_Price_Levels_By_Sector();
-    float sum = 0.0;
-    float sum_weights = 0.0;
-    
-    for (int i = 0; i < sector_count; i++){
-        sum += consumer_sectors_price_levels[i] * consumer_sector_weights[i];
-        sum_weights += consumer_sector_weights[i];
-    }
-    
-    cons_price_level_current = sum/sum_weights; // incase the sums don't match due to rounding errors
+    cons_price_level_current = pConsumer_Goods_Market->Get_Price_Level();
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
+    cout << "Initialized price levels: cons: " << cons_price_level_current << " cap: " << cap_price_level_current << endl;
+    // print the price lvel by sector
+    for (int i = 0; i < sector_count; i++){
+        cout << "Sector " << i << " price level: " << consumer_sectors_price_levels[i] << endl;
+    }
 }
 
 

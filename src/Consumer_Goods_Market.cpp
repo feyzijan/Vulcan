@@ -1,5 +1,6 @@
 #include "Consumer_Goods_Market.hpp"
 
+
 /* Constructor
 */
 Consumer_Goods_Market::Consumer_Goods_Market(){
@@ -25,12 +26,13 @@ void Consumer_Goods_Market::Add_Consumer_Good_To_Market(Consumer_Good * cons_goo
     The pair contains the sector_id and a vector of consumer goods
     The vector of consumer goods can be initially empty
 */
-void Consumer_Goods_Market::Divide_Goods_Into_Sectors(){
+void Consumer_Goods_Market::Divide_Goods_Into_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector){
     
     cout << "Divind consumer goods into " << sector_count << " sectors" << endl;
     // Create the pairs to store the goods ** Note that i starts from 1
     for (int i = 0; i < sector_count; i++){
         cons_good_list_by_sector.push_back(std::make_pair(i, vector<Consumer_Good*>()));
+        this->sector_weights.push_back(pConsumer_Firm_Sector_vector->at(i)->weighing);
     }
 
     // Loop through the cons_goods_list and add each good to the correct sector
@@ -195,34 +197,59 @@ void Consumer_Goods_Market::Update_Price_Level(){
     price_level_by_sector.clear();
     n_goods_by_sector.clear();
     price_level = 0;
+    n_total_goods = 0;
 
     // Loop through the sectors 
     for (int i = 0; i < cons_good_list_by_sector.size(); i++) { 
-        long long n_total_goods = 0;
+        long long n_sector_goods = 0;
+        float sector_price_level = 0;
         double total_weighed_price = 0;
+
         vector<Consumer_Good*>* pgoods_for_sector = &(cons_good_list_by_sector[i].second); // Get the goods for this sector
 
-        for(Consumer_Good* pgood : *pgoods_for_sector){ // Loop through the goods list, from cheapest to most expensive
-            int q = pgood->Get_Quantity();
-            float p = pgood->Get_Price();
-            n_total_goods += q;
-            total_weighed_price += float(p*q);
+        for(Consumer_Good* pgood : *pgoods_for_sector){ // Loop through each good
+        // Get the quantity and price of the good
+            long long n = pgood->Get_Quantity(); 
+            if (n <0){
+                cout << "ERROR in Update_Price_Level in Cons market, n : " << n << endl;
+            }
+            double p = pgood->Get_Price();
+            n_sector_goods += n;
+            total_weighed_price += static_cast<double>( p * n);
         }
-        price_level_by_sector.push_back(total_weighed_price/(float)n_total_goods);
-        n_goods_by_sector.push_back(n_total_goods);
+    
+        if (n_sector_goods > 0){
+            sector_price_level = static_cast<float>(total_weighed_price/n_sector_goods);
+        } // if n_sector_goods = 0 then price level will be 0
+
+        n_total_goods += n_sector_goods;
+
+        if ( total_weighed_price < 0 || sector_price_level < 0){
+            cout << "ERROR in Update_Price_Level in Cons market for sector: " << i << "sector_price_level: " << sector_price_level << " total_weighed_price: " << total_weighed_price << endl;
+        }
+
+        // Update the vectors
+        price_level_by_sector.push_back(sector_price_level);
+        n_goods_by_sector.push_back(n_sector_goods);
     }
 
-    // Calculate the price level for the whole market
-
+    // Calculate the weighted average of the sector price levels
+    double sum = 0.0;
+    double sum_weights = 0.0;
+    for (int i = 0; i < sector_count; i++){
+        sum += price_level_by_sector[i] * sector_weights[i];
+        sum_weights += sector_weights[i];
+    }
+    price_level = sum/sum_weights; // incase the sums don't match due to rounding errors
 }
 
 
 
-
-/* Reset the market
-*/
-void Consumer_Goods_Market::Reset_Market(){
-    cons_goods_list.clear();
-    n_total_goods = 0;
-    price_level = 0.0;
+/* Print the market*/
+void Consumer_Goods_Market::Print(){
+    cout << "Consumer Goods Market: " << endl;
+    for(int i=0 ;i < sector_count; i++){
+        cout << "\tSector " << i << " price level: " << price_level_by_sector[i] << " n_goods: "<< n_goods_by_sector[i] << endl;
+    }
+    cout << "\tAverage price level: " << price_level << " with total n_goods: " << n_total_goods << endl;
 }

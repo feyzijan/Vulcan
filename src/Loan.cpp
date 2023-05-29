@@ -2,15 +2,16 @@
 
 //---- Constructors
 
-Loan::Loan(Firm_Agent* pborrowing_firm, float interest_rate, long long principal_amount, int duration, bool short_term_loan)
+Loan::Loan(Firm_Agent* _pborrowing_firm, float _interest_rate, long long _principal_amount,int _duration, bool _short_term_loan)
 {
-    pBorrowing_Firm = pborrowing_firm;
-    this->interest_rate = interest_rate;
-    this->principal_amount = principal_amount;
-    this->start_date = global_date;
-    this->end_date = start_date + duration;
-    this->loan_type = short_term_loan;
-    this->expired = false;
+    pBorrowing_Firm = _pborrowing_firm;
+    interest_rate = _interest_rate;
+    principal_amount = _principal_amount;
+    original_issuance_amount = _principal_amount;
+    start_date = global_date;
+    end_date = start_date + _duration;
+    loan_type = _short_term_loan;
+    expired = false;
 }
 
 Loan::~Loan(){}
@@ -33,6 +34,26 @@ void Loan::Clean_Loan(){
 // --- Calculating Payments
 
 
+long long Loan::Calculate_Interest_Repayment() const {
+
+    long long payment;
+
+    if (loan_type == 1) { // short term loan
+        payment = 0;
+    } else if (principal_amount > 0){ // long term loan with remaining balance
+        payment = static_cast<long long>((principal_amount/12.0) * interest_rate);
+        if( payment < 0){
+            cout << "ERROR: Negative interest payment calculated: payment is " << payment << " interest rate is: " << interest_rate << endl;
+            payment = 0;
+        }
+    } else {
+        payment = 0;
+    }
+
+    return payment;
+}
+
+
 /* Function called by firmsto calculate principal to be paid on a loan
 */
 long long Loan::Calculate_Principal_Repayment() const
@@ -41,7 +62,9 @@ long long Loan::Calculate_Principal_Repayment() const
     {
         return principal_amount;
     } else if (loan_type==0){
-        return static_cast<long long>(principal_amount * (end_date - start_date) * 1.001); // round up by .1% to counteract int rounding 
-    } else {
-    return 0;} 
+        long long payment = static_cast<long long>(principal_amount / (end_date - start_date) * 1.001); // round up by .1% to counteract int rounding
+        return payment; 
+    } else { // Short term loan, not end date yet
+    return 0;
+    } 
 }

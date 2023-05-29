@@ -117,14 +117,17 @@ long long* Capital_Goods_Market::Buy_Capital_Goods(int q_desired){
 /* Update price level fo the market */
 void Capital_Goods_Market::Update_Price_Level(){
     n_total_goods = 0;
-    total_weighed_price = 0.0;
+    double total_weighed_price = 0.0;
     for(auto i=cap_goods_list.begin(); i!=cap_goods_list.end();i++){
-        int q = (*i)->Get_Quantity();
-        int p = (*i)->Get_Price();
-        n_total_goods += q;
-        total_weighed_price += float(p*q);
+        long long n = (*i)->Get_Quantity();
+        float p = (*i)->Get_Price();
+        n_total_goods += n;
+        total_weighed_price += p * n;
     }
-    price_level = total_weighed_price/(float)n_total_goods;
+    price_level = static_cast<float>(total_weighed_price/n_total_goods);
+    if ( total_weighed_price <0 || price_level <0){
+        cout << "ERROR in Update_Price_Level in Cap market, sector_price_level: " << price_level << " total_weighed_price: " << total_weighed_price << endl;
+    }
 }
 
 
@@ -140,3 +143,10 @@ void Capital_Goods_Market::Reset_Market(){
 
 
 
+
+/* Printing 
+*/
+void Capital_Goods_Market::Print(){
+    cout << "Capital Goods Market: " << endl;
+    cout << "\tAverage price level: " << price_level << " with total n_goods: " << n_total_goods << endl;
+}

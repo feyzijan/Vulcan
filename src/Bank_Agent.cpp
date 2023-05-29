@@ -175,20 +175,24 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
 
     if(leverage_ratio < leverage_ratio_upper_threshold){
         // Create Loan with new risky rate
-        double excess_leverage = leverage_ratio - leverage_ratio_lower_threshold;
+
         float emission_penalty;
         if (pFirm->Get_Cons_Firm_Status()){
             emission_penalty = Calculate_Emission_Penalty(pFirm);
         } else {
             emission_penalty = 0;
         }
+        float risk_penalty = Calculate_Leverage_Penalty(leverage_ratio);
         
-        float loan_rate = r_rate + risk_premium*excess_leverage + emission_penalty;
+        float loan_rate = r_rate + risk_penalty + emission_penalty;
+        if (loan_rate < 0){
+            cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_rate < 0 - firm #" << pFirm << endl;
+        }
+
         long long loan_amount = long_term_funding_gap + long_term_funding_gap * extra_funding;
 
         if (loan_amount == 0){
-            cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_amount < 0 - firm #" << pFirm << endl;
-            cout << "Firm has long term funding gap "  << long_term_funding_gap<< endl;
+            cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_amount < 0 - firm # " << pFirm << "Firm has long term funding gap "  << long_term_funding_gap<< endl;
         }
         
         Loan* new_loan = new Loan(pFirm,loan_rate, loan_amount , long_term_loan_length,0);
@@ -234,6 +238,21 @@ float Bank_Agent::Calculate_Emission_Penalty(Firm_Agent *pFirm){
         }
     }
 }
+
+/*
+*/
+float Bank_Agent::Calculate_Leverage_Penalty(float leverage_ratio){
+    if(leverage_ratio <= leverage_ratio_lower_threshold){
+        return 0;
+    } else if (leverage_ratio >= leverage_ratio_upper_threshold){
+        return  risk_premium;
+    } else {
+        return risk_premium * (leverage_ratio - leverage_ratio_lower_threshold) / (leverage_ratio_upper_threshold - leverage_ratio_lower_threshold);
+    }
+
+}
+
+
 
 
 // ------- Printing and Logging Methods
