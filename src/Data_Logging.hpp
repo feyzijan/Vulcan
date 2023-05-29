@@ -11,11 +11,10 @@
 #include <type_traits>
 
 
-
+#include "Initialization_Parameters.hpp"
 #include "Household_Agent.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
-#include "Initialization_Parameters.hpp"
 #include "Public_Info_Board.hpp"
 
 using namespace std;

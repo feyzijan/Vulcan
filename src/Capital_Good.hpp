@@ -3,8 +3,9 @@
 
 #include <iostream>
 
-#include "General_Good.hpp"
 #include "Initialization_Parameters.hpp"
+#include "General_Good.hpp"
+
 
 class Capital_Firm_Agent; // Forward Declaration of Capital Firm Agent
 

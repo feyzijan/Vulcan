@@ -68,7 +68,7 @@ void Consumer_Firm_Agent::Initialize_Production(){
 /* Get the initial emission allowance based on employee count and sector id
 */
 void Consumer_Firm_Agent::Initialize_Emission_Allowances(){
-    total_emission_allowance = pPublic_Info_Board->Distribute_Emission_Allowances(employee_count, sector_id);
+    total_emission_allowance = pPublic_Info_Board->Distribute_Initial_Emission_Allowances(employee_count, sector_id);
 }
 
 
@@ -95,10 +95,18 @@ void Consumer_Firm_Agent::Produce_Goods(){
     total_emissions += 0;
     total_emissions += production_current * unit_emissions;
 
+    // Emissions from new production - allowance
     long long new_total_emissions = production_current * unit_emissions - total_emission_allowance;
+    // Emissions from past production
     long long past_production = inventory - production_current;
     long long past_total_emissions = past_production * unit_emissions_adj;
-    unit_emissions_adj = (past_total_emissions + new_total_emissions) / inventory;
+    // Unit emissions ( average of current and past production)
+    if (inventory == 0){ 
+        unit_emissions_adj = 0;}
+    else{ 
+        unit_emissions_adj = (past_total_emissions + new_total_emissions) / inventory;
+    }
+
 
     // Update consumer good object to use this new adjusted emission
     cons_goods_on_market->Set_Unit_Emission(unit_emissions_adj);

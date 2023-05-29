@@ -2,10 +2,11 @@
 #ifndef CONSUMER_GOODS_MARKET_HPP
 #define CONSUMER_GOODS_MARKET_HPP
 
-#include "Consumer_Good.hpp"
 #include "Initialization_Parameters.hpp"
-#include "vector"
-#include "algorithm"
+#include "Consumer_Good.hpp"
+#include <vector>
+#include <algorithm>
+#include <cmath>
 #include <cmath>
 #include <tuple>
 
@@ -24,7 +25,6 @@ class Consumer_Goods_Market{
     void Add_Consumer_Good_To_Market(Consumer_Good * cons_good);
     void Divide_Goods_Into_Sectors();
     void Divide_Goods_Into_Emission_Adjusted_Price_Levels();
-
     void Sort_Cons_Goods_By_Sector_By_Price();
     void Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
     
@@ -32,11 +32,12 @@ class Consumer_Goods_Market{
         (const vector<long long>& spending_array, const vector<float>& emission_sensitives_array);
     
 
+    // Round emission sensitivities
+    float Round_Emission_Sensitivity(float original_emission_sensitivity);
+
     // Price level operations
     void Update_Price_Level();
-
     void Reset_Market(); 
-
 
     // Getters 
     const vector<float>& Get_Price_Levels_By_Sector() {return price_level_by_sector;}
@@ -46,7 +47,7 @@ class Consumer_Goods_Market{
     // Setters
     void Set_Price_Level(float price_level) {this->price_level = price_level;}
 
-    private:
+    protected:
     vector<Consumer_Good*> cons_goods_list; // goods for one sector
     vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector; // goods for all sectors
     // goods for all emission sensitivity levels, for all sectors

@@ -2,20 +2,6 @@
 #define PUBLIC_INFO_BOARD_HPP
 
 
-class Job_Market;
-class Bank_Agent;
-class Consumer_Goods_Market;
-
-#include "Job_Market.hpp"
-#include "Job.hpp"
-#include "Consumer_Goods_Market.hpp"
-#include "Capital_Goods_Market.hpp"
-#include "Bank_Agent.hpp"
-#include "Loan.hpp"
-
-//#include "Firm_Agent.hpp"
-#include "Initialization_Parameters.hpp"
-
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -23,6 +9,18 @@ class Consumer_Goods_Market;
 #include <sstream>
 #include <string>
 #include <utility>
+
+class Job_Market;
+class Bank_Agent;
+class Consumer_Goods_Market;
+
+#include "Initialization_Parameters.hpp"
+#include "Job_Market.hpp"
+#include "Job.hpp"
+#include "Consumer_Goods_Market.hpp"
+#include "Capital_Goods_Market.hpp"
+#include "Bank_Agent.hpp"
+#include "Loan.hpp"
 
 using namespace std;
 
@@ -64,7 +62,7 @@ class Public_Info_Board{
     long long Distribute_Initial_Emission_Allowances(int employee_count, int sector_id);
     long long Distribute_Emission_Allowances(long long sale_quantity, int sector_id);
     long long Buy_Emission_Offsets(long long quantity, int sector_id) { 
-        offsets_sold_by_sector[sector_id-1] += quantity;
+        offsets_sold_by_sector[sector_id] += quantity;
         total_offsets_sold += quantity;
         return quantity * emission_offset_price;} // Returns cost, allowances always available
 
@@ -91,7 +89,7 @@ class Public_Info_Board{
     float Get_Capital_Inflation() {return cap_inflation_current;}
     int Get_Unemployment_Benefit() { return public_unemployment_benefit;}
     
-    float Get_Cons_Sector_Price_Level(int sector_id) { return consumer_sectors_price_levels[sector_id-1]; }
+    float Get_Cons_Sector_Price_Level(int sector_id) { return consumer_sectors_price_levels[sector_id]; }
     float Get_Capital_Good_Price_Level(){return cap_price_level_current;}
 
     float Get_Average_Wage_Market() { return average_wage_market;}
@@ -111,7 +109,7 @@ class Public_Info_Board{
     int Get_Contract_Expiries() { return contract_expiries;}
     int Get_Removed_Job_Postings() { return removed_job_postings;}
     int Get_Minimum_Wage() { return minimum_wage;}
-    float Get_Average_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emissions_by_sector[sector_id-1];} 
+    float Get_Average_Unit_Emissions_by_Sector(int sector_id) {return average_unit_emissions_by_sector[sector_id];} 
     float Get_Emission_Offset_Price() {return emission_offset_price;}
 
 
@@ -149,17 +147,17 @@ class Public_Info_Board{
     // Updates by Consumer Firms
     void Update_Consumption_Budget(long long amount) { consumption_budget += amount; }
     void Update_Consumer_Goods_Production(int sector_id, long long amount) { 
-        actual_production_by_sector[sector_id-1] += amount;
+        actual_production_by_sector[sector_id] += amount;
         cons_good_production += amount;}
     void Update_Consumer_Goods_Production_Planned(int sector_id, long long amount) { 
-        planned_production_by_sector[sector_id-1] += amount;
+        planned_production_by_sector[sector_id] += amount;
         cons_good_production_planned += amount; }
     void Update_Consumer_Goods_Sale_Quantities(int sector_id, long long amount){ 
-        quantity_sold_by_sector[sector_id-1] += amount;}
+        quantity_sold_by_sector[sector_id] += amount;}
     void Update_Consumer_Goods_Inventory(int sector_id, long long amount){
-        inventory_by_sector[sector_id-1] += amount;}
+        inventory_by_sector[sector_id] += amount;}
     void Update_Firm_Emissions_By_Sector(int sector_id, long long amount) {
-        total_firm_emissions_by_sector[sector_id-1] += amount; }
+        total_firm_emissions_by_sector[sector_id] += amount; }
 
     // Updates by Households
     void Update_Planned_Consumer_Spending_by_Sector( const vector<long long>& planned_spending);

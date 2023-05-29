@@ -234,7 +234,12 @@ void Initialize_Job_Market(vector<Household_Agent*> *pHousehold_vector,
     std::mt19937 g(rd());
     std::shuffle(pHousehold_vector->begin(), pHousehold_vector->end(), g);
 
-    for (Household_Agent* household_ptr : *pHousehold_vector) {household_ptr->Seek_Jobs();}
+    for (Household_Agent* household_ptr : *pHousehold_vector) {
+        household_ptr->Seek_Jobs();
+        household_ptr->Update_Public_Board_On_Employment();
+        
+        }
+
     cout << "Household job initialization - end" << endl;
 
     // All firms Check for their new employees
@@ -300,7 +305,7 @@ void Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector)
     std::ifstream file("../InitializationData/Consumer_Firm_Sectors.csv"); // Open the file
 
     if (!file.is_open()) { // Check if file is open
-        std::cout << "Error opening file" << std::endl;
+        std::cout << "ERROR opening file in Create_Sectors()" << std::endl;
     }
 
     string line;
@@ -396,7 +401,7 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
 
         if (target_sector == nullptr) {
             // Sector not found, skip this iteration
-            cout << "Error in Allocate_Firms_to_Sectors: Sector "<< sector_id << " not found " << endl;
+            cout << "ERROR: in Allocate_Firms_to_Sectors: Sector "<< sector_id << " not found " << endl;
             continue;
         }
 

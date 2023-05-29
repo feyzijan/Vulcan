@@ -3,7 +3,6 @@
 
 class Firm_Agent; 
 
-//#include "Firm_Agent.hpp"
 #include "Initialization_Parameters.hpp"
 #include <iostream>
 using namespace std;

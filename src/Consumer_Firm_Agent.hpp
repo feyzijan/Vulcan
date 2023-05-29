@@ -1,11 +1,11 @@
 #ifndef CONSUMER_FIRM_AGENT_HPP
 #define CONSUMER_FIRM_AGENT_HPP
 
+#include "Initialization_Parameters.hpp"
 #include "Firm_Agent.hpp"
 #include "Consumer_Good.hpp"
 #include "Capital_Good.hpp"
 #include "Random_Functions.hpp"
-#include "Initialization_Parameters.hpp"
 
 #include <iostream>
 #include <vector>

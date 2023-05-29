@@ -5,10 +5,11 @@
 
 
 class Public_Info_Board;
+#include "Initialization_Parameters.hpp"
 #include "Public_Info_Board.hpp"
 #include "Job.hpp"
 #include "Random_Functions.hpp"
-#include "Initialization_Parameters.hpp"
+
 
 #define income_lookback_period 10
 

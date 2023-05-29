@@ -1,18 +1,17 @@
 #ifndef TIMELOOP_HPP
 #define TIMELOOP_HPP
 
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <random>
 
+#include "Initialization_Parameters.hpp"
 #include "Firm_Agent.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
 #include "Household_Agent.hpp"
 #include "Public_Info_Board.hpp"
-#include "Initialization_Parameters.hpp"
 #include "Random_Functions.hpp"
 #include "Consumer_Goods_Market.hpp"
 #include "Capital_Goods_Market.hpp"

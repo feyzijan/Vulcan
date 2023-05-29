@@ -3,6 +3,7 @@
 
 class Public_Info_Board; // Forward declaration
 
+#include "Initialization_Parameters.hpp"
 #include "Loan.hpp"
 #include "General_Good.hpp"
 #include "Capital_Good.hpp"
@@ -11,7 +12,6 @@ class Public_Info_Board; // Forward declaration
 #include "Public_Info_Board.hpp"
 #include "Random_Functions.hpp"
 #include "Household_Agent.hpp"
-#include "Initialization_Parameters.hpp"
 
 using namespace std;
 class Firm_Agent{

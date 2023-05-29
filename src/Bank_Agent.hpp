@@ -3,8 +3,8 @@
 
 
 class Public_Info_Board;
-#include "Public_Info_Board.hpp"
 #include "Initialization_Parameters.hpp"
+#include "Public_Info_Board.hpp"
 #include "Loan.hpp"
 #include "Firm_Agent.hpp"
 

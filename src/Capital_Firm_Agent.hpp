@@ -2,11 +2,10 @@
 #define CAPITAL_FIRM_AGENT_HPP
 
 
+#include "Initialization_Parameters.hpp"
 #include "Capital_Good.hpp"
 #include "Firm_Agent.hpp"
-
 #include "Random_Functions.hpp"
-#include "Initialization_Parameters.hpp"
 
 
 

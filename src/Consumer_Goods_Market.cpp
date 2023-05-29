@@ -117,8 +117,8 @@ tuple<vector<long long>, vector<long long>, vector<long long>> Consumer_Goods_Ma
     // loop through each sector ** i starts from 1!
     for (int i = 0; i < spending_array.size(); i++) {
 
-        // Round the emission sens value to the nearest threshold, i.e. nearest multiple of 0.05
-        float emission_sensitivity = roundf(emission_sensitives_array[i] * 20.0) / 20.0;
+        // Round the emission sens value to the nearest threshold
+        float emission_sensitivity = Round_Emission_Sensitivity(emission_sensitives_array[i]);
 
         // Select the appropriate sorted goods list - index by sensitivity and sector id
         vector<Consumer_Good*>& goods_for_sector = cons_goods_by_emission_adj_price[emission_sensitivity][i].second;
@@ -158,6 +158,29 @@ tuple<vector<long long>, vector<long long>, vector<long long>> Consumer_Goods_Ma
 
     tuple<vector<long long>, vector<long long>, vector<long long>> result = make_tuple(remaining_budget_by_sector, quantity_bought_by_sector, emission_by_sector);
     return result;
+}
+
+
+float Consumer_Goods_Market::Round_Emission_Sensitivity(float original_emission_sensitivity) {
+    // Assuming default_emission_sensitivities, emission_sensitivities_min, and emission_sensitivity_max are defined and populated
+
+    // Clamp the original value
+    original_emission_sensitivity = max(emission_sensitivity_min, original_emission_sensitivity);
+    original_emission_sensitivity = min(emission_sensitivity_max, original_emission_sensitivity);
+
+    // Find the closest value in default_emission_sensitivities
+    float closest_sensitivity = default_emission_sensitivities[0];
+
+    float min_difference = fabs(closest_sensitivity - original_emission_sensitivity);
+    for (float sensitivity : default_emission_sensitivities) {
+        float difference = fabs(sensitivity - original_emission_sensitivity);
+        if (difference < min_difference) {
+            min_difference = difference;
+            closest_sensitivity = sensitivity;
+        }
+    }
+
+    return closest_sensitivity;
 }
 
 

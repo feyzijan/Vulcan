@@ -7,8 +7,10 @@ class Job;
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "Job.hpp"
+
 #include "Initialization_Parameters.hpp"
+#include "Job.hpp"
+
 
 //#define job_market_size 1000
 

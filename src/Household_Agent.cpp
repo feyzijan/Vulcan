@@ -77,7 +77,7 @@ void Household_Agent::Initialize_Sector_Weights(vector<Consumer_Firm_Sector*> *p
         temp = std::round(temp * 1000) / 1000.0; // round to the nearest three decimals
         spending_weight_by_sector.push_back(temp);
         if (temp < 0){
-            cout << "Error Sector weight is negative" << endl;
+            cout << "ERROR in Initialize_Sector_Weights: Sector weight for sector " << i << " is negative" << endl;
         }
     }
 }

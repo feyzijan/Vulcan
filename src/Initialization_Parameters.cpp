@@ -317,8 +317,8 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_rand_prod_change_upper_limit = randomness_parameters["firm_cap_rand_prod_change_upper_limit"];
 
 
-    cout << "This simulation is with the following parameters: n_households: " << n_households << " n_consumer_firms: " << n_consumer_firms 
-    << " n_capital_firms: " << n_capital_firms <<  " n_loops: " << n_loops  << endl;
+    cout << "This simulation is with the following parameters: n_households: " << n_households << " n_consumer_firms: " << n_consumer_firms <<
+    " n_consumer_sectors: " << sector_count <<  " n_capital_firms: " << n_capital_firms <<  " n_loops: " << n_loops  << endl;
 }
 
 

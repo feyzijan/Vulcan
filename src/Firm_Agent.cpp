@@ -346,7 +346,7 @@ void Firm_Agent::Determine_Labor_Need(){
     if (short_term_funding_gap > 0){
         Seek_Short_Term_Loan(); 
         if (short_term_funding_gap >0){
-            cout << "Error in Determine_Labor_Need: Firm " << this <<  "sill has short term funding gap" << short_term_funding_gap << endl;
+            cout << "ERROR in Determine_Labor_Need: Firm " << this <<  "sill has short term funding gap" << short_term_funding_gap << endl;
             short_term_funding_gap = 0;
         }
     }

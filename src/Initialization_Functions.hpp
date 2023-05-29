@@ -14,13 +14,12 @@
 #include <ctime>
 #include <utility>
 
-
+#include "Initialization_Parameters.hpp"
 #include "Firm_Agent.hpp"
 #include "Consumer_Firm_Agent.hpp"
 #include "Capital_Firm_Agent.hpp"
 #include "Household_Agent.hpp"
 #include "Public_Info_Board.hpp"
-#include "Initialization_Parameters.hpp"
 #include "Random_Functions.hpp"
 
 

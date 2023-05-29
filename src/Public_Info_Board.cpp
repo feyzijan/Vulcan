@@ -44,7 +44,6 @@ Public_Info_Board::Public_Info_Board(){
     consumer_spending = 0;
     consumer_spending_planned = 0;
     consumption_budget = 0;
-    sector_count = 0;
 
     // Production
     cap_goods_production = 0;
@@ -98,7 +97,7 @@ void Public_Info_Board::Initialize_Consumer_Sectors(vector<Consumer_Firm_Sector*
     quantity_sold_by_sector = vector<long long>(sector_count, 0);
     inventory_by_sector = vector<long long>(sector_count, 0);
 
-    average_unit_emissions_by_sector = vector<float>( sector_count, 0.0);
+    average_unit_emissions_by_sector = vector<float>(sector_count, 0.0);
     total_consumer_emissions_by_sector = vector<long long>(sector_count, 0);
     offsets_sold_by_sector = vector<long long>(sector_count, 0);
     total_firm_emissions_by_sector = vector<long long> (sector_count, 0);
@@ -173,14 +172,14 @@ void Public_Info_Board::Update_Consumer_Emissions_By_Sector(const vector<long lo
 /* Distribute initial emission allowances based on # employees
 */
 long long Public_Info_Board::Distribute_Initial_Emission_Allowances(int employee_count, int sector_id){
-    return employee_count/n_employed_workers * emission_allowances_by_sector[sector_id-1]; // CHECK THE DIVISION IS ACCURATE
+    return employee_count/n_employed_workers * emission_allowances_by_sector[sector_id]; // CHECK THE DIVISION IS ACCURATE
 }
 
 /* Distribute emission allowances base don sales
 */
 long long Public_Info_Board::Distribute_Emission_Allowances(long long sale_quantity, int sector_id){
-    double sale_ratio = static_cast<double>(sale_quantity) / static_cast<double>(quantity_sold_by_sector[sector_id - 1]);
-    return static_cast<long>(sale_ratio * emission_allowances_by_sector[sector_id-1]); 
+    double sale_ratio = static_cast<double>(sale_quantity) / static_cast<double>(quantity_sold_by_sector[sector_id]);
+    return static_cast<long>(sale_ratio * emission_allowances_by_sector[sector_id]); 
 }
 
 // Updating emission allowance amounts
