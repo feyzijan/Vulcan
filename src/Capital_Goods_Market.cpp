@@ -120,6 +120,11 @@ void Capital_Goods_Market::Update_Price_Level(){
     double total_weighed_price = 0.0;
     for(auto i=cap_goods_list.begin(); i!=cap_goods_list.end();i++){
         long long n = (*i)->Get_Quantity();
+        if (n <0){
+                cout << "ERROR in Update_Price_Level in Cap market, n : " << n << endl;
+            }
+        n = max(n, static_cast<long long>(1)); // assume at least 1 good exists so we can calculate the price level if the market is empty
+        
         float p = (*i)->Get_Price();
         n_total_goods += n;
         total_weighed_price += p * n;

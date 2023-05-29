@@ -148,7 +148,8 @@ void Capital_Firm_Agent::Determine_New_Production(){
     good_price_current = max(good_price_current, unit_good_cost);
 
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
-    production_planned = average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor;
+    production_planned = static_cast<long long>(average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor);
+    production_planned = max(production_planned, static_cast<long long>(1)); // Floor at 1
     
     /* //Additionally impose limit on how much they can change production targets if things become too volatile
     int production_planned_min = static_cast<int>(production_current*(1-firm_cap_max_production_climbdown));

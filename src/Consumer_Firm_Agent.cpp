@@ -222,8 +222,9 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     good_price_current = max(good_price_current, unit_good_cost);
 
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
-    production_planned = max(static_cast<long long>(average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor), 0LL);
-    // At least operate all machines
+    production_planned = static_cast<long long>(average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor);
+    production_planned = max(production_planned, static_cast<long long>(1)); // Floor at 1
+    // At least operate all machines ?
     
     
     /* //Additionally impose limit on how much they can change production targets if things become too volatile
@@ -235,9 +236,8 @@ void Consumer_Firm_Agent::Determine_New_Production(){
         production_planned = production_planned_max;
     }
     */
-
+   
     pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
-
 }
 
 

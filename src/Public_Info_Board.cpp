@@ -298,16 +298,21 @@ void Public_Info_Board::Update_Consumer_Price_Level()
 
     // Update inflation 
     cons_inflation_current = 1.0 + (cons_price_level_current - cons_price_level_previous)/cons_price_level_previous;
+    cons_inflation_current = max(cons_inflation_current, 1.001f); // Make sure inflation is slighly positive
 }
 
 /* Function to update capital price level by simply getting the data from the market
     Also updates capital inflation records
 */
 void Public_Info_Board::Update_Capital_Price_Level(){
-    cap_price_level_previous = cap_price_level_current;
+    cap_price_level_previous = cap_price_level_current; // Set current price lvel to previous
+
+    // Get Data from market
     cap_price_level_current = pCapital_Goods_Market->Get_Price_Level();
-    pCapital_Goods_Market->Set_Price_Level(cap_price_level_current);
+
+    // Update inflation
     cap_inflation_current = 1.0 + (cap_price_level_current - cap_price_level_previous)/cap_price_level_previous;
+    cap_inflation_current = max(cap_inflation_current, 1.001f); // Make sure inflation is slighly positive
 }
 
 

@@ -29,12 +29,14 @@ Bank_Agent::Bank_Agent(Public_Info_Board* pPublic_Info_Board){
 
     cons_inflation_current = cons_inflation_previous;
 
-    // Manufacturer inflation - start at 0 inflation
+    // Manufacturer inflation - start  off same as consumer inflation
+    float cap_inflation_target = bank_inflation_target; // not actually used
+    cap_inflation_past_month = bank_inflation_target_monthly; // preset Global param
     cap_inflation_previous = 1.0;
-    cap_inflation_past_month = 0;
 
     for(int i = 0; i < 12;i++){
-        cap_inflation_history.push(cap_inflation_previous);
+        cap_inflation_previous *= bank_inflation_target_monthly; // preset Global param
+        cap_inflation_history.push(bank_inflation_target_monthly);
     }
     
     // Repayments
@@ -85,9 +87,15 @@ void Bank_Agent::Update_Inflation(){
     // Update inflation to match trailing 12m
     cons_inflation_current = cons_inflation_previous / cons_inflation_history.front() * cons_inflation_past_month;
     cap_inflation_current = cap_inflation_previous / cap_inflation_history.front() * cap_inflation_past_month;
+
+    if(cons_inflation_current < 0){
+        cout << "ERROR: Bank_Agent::Update_Inflation() - cons_inflation_current < 0" << endl;
+    }
+
     // Update inflation_histories
     cons_inflation_history.pop();
     cons_inflation_history.push(cons_inflation_past_month);
+
     cap_inflation_history.pop();
     cap_inflation_history.push(cap_inflation_past_month);
 }
@@ -99,10 +107,11 @@ void Bank_Agent::Update_Inflation(){
 */
 void Bank_Agent::Update_Interest_Rate(){
 
-    float inflation_overshoot = cons_inflation_current - cons_inflation_target;
+    float inflation_overshoot = max(cons_inflation_current - cons_inflation_target, float(0.0));
 
     // Set interest rate proportional to inflation overshoot
-    r_rate = max( float(r_reaction* inflation_overshoot), float(0.0)); 
+    r_rate = max( float(r_reaction* inflation_overshoot), float(0.01)); // minimum interest rate of 1%
+    r_rate = min(r_rate, 0.4f) ; // maximum interest rate of 40%
 
     // Update historical records
     interest_rate_history.push(r_rate);
@@ -185,8 +194,8 @@ Loan* Bank_Agent::Issue_Long_Term_Loan(Firm_Agent* pFirm){
         float risk_penalty = Calculate_Leverage_Penalty(leverage_ratio);
         
         float loan_rate = r_rate + risk_penalty + emission_penalty;
-        if (loan_rate < 0){
-            cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_rate < 0 - firm #" << pFirm << endl;
+        if (loan_rate < 0 || loan_rate > 1){
+            cout << "ERROR: Bank_Agent::Issue_Long_Term_Loan() - loan_rate is " << loan_rate << endl;
         }
 
         long long loan_amount = long_term_funding_gap + long_term_funding_gap * extra_funding;

@@ -213,6 +213,7 @@ void Consumer_Goods_Market::Update_Price_Level(){
             if (n <0){
                 cout << "ERROR in Update_Price_Level in Cons market, n : " << n << endl;
             }
+            n = max(n, static_cast<long long>(1)); // assume at least 1 good exists so we can calculate the price level if the market is empty
             double p = pgood->Get_Price();
             n_sector_goods += n;
             total_weighed_price += static_cast<double>( p * n);

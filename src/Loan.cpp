@@ -2,15 +2,19 @@
 
 //---- Constructors
 
-Loan::Loan(Firm_Agent* _pborrowing_firm, float _interest_rate, long long _principal_amount,int _duration, bool _short_term_loan)
+Loan::Loan(Firm_Agent* _pborrowing_firm, float _interest_rate, long long _principal_amount,int _duration, bool _is_short_term_loan)
 {
     pBorrowing_Firm = _pborrowing_firm;
     interest_rate = _interest_rate;
+    if (interest_rate < 0){
+        cout << "ERROR: Negative interest rate calculated in Loan creation: interest rate is " << interest_rate << endl;
+        interest_rate = 0.02;
+    }
     principal_amount = _principal_amount;
     original_issuance_amount = _principal_amount;
     start_date = global_date;
     end_date = start_date + _duration;
-    loan_type = _short_term_loan;
+    is_short_term_loan = _is_short_term_loan;
     expired = false;
 }
 
@@ -26,7 +30,7 @@ void Loan::Clean_Loan(){
     principal_amount = 0;
     start_date = 0;
     end_date = 0;
-    loan_type = 0;
+    is_short_term_loan = 0;
     expired = true;
 }
 
@@ -38,10 +42,9 @@ long long Loan::Calculate_Interest_Repayment() const {
 
     long long payment;
 
-    if (loan_type == 1) { // short term loan
-        payment = 0;
-    } else if (principal_amount > 0){ // long term loan with remaining balance
-        payment = static_cast<long long>((principal_amount/12.0) * interest_rate);
+    if (principal_amount > 0){ // long term loan with remaining balance
+        payment = static_cast<long long>(principal_amount/12.0);
+        payment = static_cast<long long>(payment * this->interest_rate);
         if( payment < 0){
             cout << "ERROR: Negative interest payment calculated: payment is " << payment << " interest rate is: " << interest_rate << endl;
             payment = 0;
@@ -58,10 +61,10 @@ long long Loan::Calculate_Interest_Repayment() const {
 */
 long long Loan::Calculate_Principal_Repayment() const
 {
-    if ((loan_type == 1) && (end_date == global_date)) // short term loan, not amortized
+    if ((is_short_term_loan == 1) && (end_date == global_date)) // short term loan, not amortized
     {
         return principal_amount;
-    } else if (loan_type==0){
+    } else if (is_short_term_loan==0){
         long long payment = static_cast<long long>(principal_amount / (end_date - start_date) * 1.001); // round up by .1% to counteract int rounding
         return payment; 
     } else { // Short term loan, not end date yet

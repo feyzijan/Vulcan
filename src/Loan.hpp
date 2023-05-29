@@ -12,7 +12,7 @@ class Loan {
     public:
     // Constructors and Destructors
     Loan(Firm_Agent* _pborrowing_firm, float _interest_rate, long long _principal_amount,
-    int _duration, bool _short_term_loan);
+    int _duration, bool _is_short_term_loan);
     Loan(Loan&);
     ~Loan();
 
@@ -45,7 +45,7 @@ class Loan {
     long long original_issuance_amount;
     int start_date;
     int end_date;
-    bool loan_type; // 1 = short term, 0 = long term
+    bool is_short_term_loan; // 1 = short term, 0 = long term
     bool expired;
 };
 
