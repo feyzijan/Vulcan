@@ -5,14 +5,8 @@ household_rand_job_search,0.1
 firm_cons_rand_dividend_change,0.1
 firm_cons_rand_sentiment_adoption,0.1
 firm_cons_rand_desired_inventory_factor_change,0.1
-firm_cons_fixed_price_change,0.0
 firm_cons_rand_price_change_upper_limit,0.2
-firm_cons_fixed_prod_change,0.0
-firm_cons_rand_prod_change_upper_limit,0.2
 firm_cons_rand_dividend_change,0.1
 firm_cap_rand_sentiment_adoption,0.1
 firm_cap_rand_desired_inventory_factor_change,0.1
-firm_cons_fixed_price_change,0.0
-firm_cons_rand_price_change_upper_limit,0.2
-firm_cons_fixed_prod_change,0.0
-firm_cons_rand_prod_change_upper_limit,0.2
+firm_cap_rand_price_change_upper_limit,0.2

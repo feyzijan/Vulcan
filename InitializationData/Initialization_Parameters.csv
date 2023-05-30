@@ -7,10 +7,6 @@ household_init_c_f_mean,0.5
 household_init_c_f_std,0.1
 household_init_c_f_min,0.1
 household_init_c_f_max,0.9
-household_init_c_h_mean,0.2
-household_init_c_h_std,0.05
-household_init_c_h_min,0.0
-household_init_c_h_max,0.4
 household_init_c_excess_mean,0.3
 household_init_c_excess_std,0.05
 household_init_c_excess_min,0.0

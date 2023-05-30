@@ -85,7 +85,7 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
             init_cash(),
             init_worker_demand(),
             init_wage_offer(),
-            object_id
+            static_cast<float>(object_id)
         };
         pConsumer_Firm_vector->push_back(new Consumer_Firm_Agent(init_values));
         //cout << "Cons firm initialized! #" << i << endl;
@@ -131,7 +131,7 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
             init_cash(),
             init_worker_demand(),
             init_wage_offer(),
-            object_id
+            static_cast<float>(object_id)
         };
         pCapital_Firm_vector->push_back(new Capital_Firm_Agent(init_values));
         //cout << "Cons firm initialized! #" << i << endl;

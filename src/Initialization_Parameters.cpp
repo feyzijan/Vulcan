@@ -291,24 +291,19 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     household_rand_sector_spending_weight_change = randomness_parameters["household_rand_sector_spending_weight_change"];
     household_rand_emission_sensitivity_change = randomness_parameters["household_rand_emission_sensitivity_change"];
     household_rand_job_search = randomness_parameters["household_rand_job_search"];
-    firm_cons_fixed_price_change = randomness_parameters["firm_cons_fixed_price_change"];
-    firm_cons_rand_price_change_upper_limit = randomness_parameters["firm_cons_rand_price_change_upper_limit"];
-    firm_cons_fixed_prod_change = randomness_parameters["firm_cons_fixed_prod_change"];
-    firm_cons_rand_prod_change_upper_limit = randomness_parameters["firm_cons_rand_prod_change_upper_limit"];
+
 
     // Cons firm randomness parameters
     firm_cons_rand_dividend_change =  randomness_parameters["firm_cons_rand_dividend_change"];
     firm_cons_rand_sentiment_adoption = randomness_parameters["firm_cons_rand_sentiment_adoption"];
     firm_cons_rand_desired_inventory_factor_change = randomness_parameters["firm_cons_rand_desired_inventory_factor_change"];
+    firm_cons_rand_price_change_upper_limit = randomness_parameters["firm_cons_rand_price_change_upper_limit"];
     
     // Cap firm randomness parameters
     firm_cap_rand_dividend_change = randomness_parameters["firm_cap_rand_dividend_change"];
     firm_cap_rand_sentiment_adoption = randomness_parameters["firm_cap_rand_sentiment_adoption"];
     firm_cap_rand_desired_inventory_factor_change = randomness_parameters["firm_cap_rand_desired_inventory_factor_change"];
-    firm_cap_fixed_price_change = randomness_parameters["firm_cap_fixed_price_change"];
     firm_cap_rand_price_change_upper_limit = randomness_parameters["firm_cap_rand_price_change_upper_limit"];
-    firm_cap_fixed_prod_change = randomness_parameters["firm_cap_fixed_prod_change"];
-    firm_cap_rand_prod_change_upper_limit = randomness_parameters["firm_cap_rand_prod_change_upper_limit"];
 
 
     cout << "This simulation is with the following parameters: n_households: " << n_households << " n_consumer_firms: " << n_consumer_firms <<
@@ -447,10 +442,7 @@ float firm_cons_wage_change;
 float firm_cons_rand_dividend_change = 0.1;
 float firm_cons_rand_sentiment_adoption = 0.1;
 float firm_cons_rand_desired_inventory_factor_change = 0.1;
-float firm_cons_fixed_price_change = 0;
 float firm_cons_rand_price_change_upper_limit = 0.2;
-float firm_cons_fixed_prod_change = 0;
-float firm_cons_rand_prod_change_upper_limit = 0.2;
 
 
 
@@ -512,10 +504,7 @@ float firm_cap_wage_change;
 float firm_cap_rand_dividend_change = 0.1;
 float firm_cap_rand_sentiment_adoption = 0.1;
 float firm_cap_rand_desired_inventory_factor_change = 0.1;
-float firm_cap_fixed_price_change = 0;
 float firm_cap_rand_price_change_upper_limit = 0.2;
-float firm_cap_fixed_prod_change = 0;
-float firm_cap_rand_prod_change_upper_limit = 0.2;
 
 
 //---------------------------------------------

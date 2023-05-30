@@ -177,23 +177,24 @@ void Consumer_Firm_Agent::Determine_New_Production(){
 
 
     // Determine randomised price and production change factors
-    float price_change =  firm_cons_fixed_price_change + Uniform_Dist_Float(0.0,firm_cons_rand_price_change_upper_limit); 
-    //float prod_change =  firm_cons_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cons_rand_prod_change_upper_limit); 
+    float rand_price_change =  Uniform_Dist_Float(1.0-firm_cons_rand_price_change_upper_limit,1.0+ firm_cons_rand_price_change_upper_limit); 
+    float rand_price_increase = Uniform_Dist_Float(1.0, 1.0+ firm_cons_rand_price_change_upper_limit);
+    float rand_price_decrease = Uniform_Dist_Float(1.0- firm_cons_rand_price_change_upper_limit, 1.0);
 
     /* Change price, production, and emission based on data
     Cases 1-4: Inventory low == Sales high, so no need to worry about emission
     */
 
-    // Cases 1 & 2 : Inventory low, price low, emissions low or high -> Increase production slightly +  increase price slightly 
+    // Cases 1 & 2 : Inventory low, price low, emissions low or high -> Increase production slightly +  increase price slightly to around avearge
     if (!price_high && !inventory_high) {
         //production_planned*= (1.0+prod_change/2.0);
-        good_price_current *= (1.0+price_change/2.0);
+        good_price_current = average_market_price * rand_price_change;
     
-    } // Cases 3 & 4: Inventory low, price high, emissions low or high -> Increase production
+    } // Cases 3 & 4: Inventory low, price high, emissions low or high -> Increase production + maintain price
     else if (price_high && !inventory_high) {
         //production_planned*= (1.0+prod_change);
         
-    } // Case 5: Inventory high, price low, emissions low -> Reduce production
+    } // Case 5: Inventory high, price low, emissions low -> Reduce production - maintain price
     else if (!price_high && inventory_high && !emission_high) {
         //production_planned*= (1.0-prod_change);
 
@@ -207,19 +208,19 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     } // Case 7: Inventory high, price high, emissions low -> Decrease production slightly + decrease price slightly
      else if (price_high && inventory_high && !emission_high) {
         //production_planned*= (1.0-prod_change/2.0);
-        good_price_current *= (1.0-price_change/2.0);
+        good_price_current *= rand_price_decrease;
         //good_price_current = average_market_price * Uniform_Dist_Float(0.9,1.1);
 
-    } // Case 8: Inventory high, price high, emissions high -> Decrease production slightly + decrease price slightly
+    } // Case 8: Inventory high, price high, emissions high -> Decrease production slightly + decrease price slightly to around average
     else if (price_high && inventory_high && emission_high) {
         //production_planned*= (1.0-prod_change/2.0);
-        good_price_current *= (1.0-price_change/2.0);
+        good_price_current = average_market_price * rand_price_change;
         //good_price_current = average_market_price * Uniform_Dist_Float(0.9,1.1);
         //good_price_current = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
     }
 
     // Set floor on prices at production cost
-    good_price_current = max(good_price_current, unit_good_cost);
+    good_price_current = max(good_price_current, unit_good_cost*1.1f);
 
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
     production_planned = static_cast<long long>(average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor);

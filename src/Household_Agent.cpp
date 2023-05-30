@@ -188,6 +188,26 @@ void Household_Agent::Random_Experimentation(){
         emission_sensitivity_by_sector[i] = emission_sensitivity_by_sector[i] * (weighing_change);}
 
     emission_sensitivity_avg = std::inner_product(emission_sensitivity_by_sector.begin(), emission_sensitivity_by_sector.end(), spending_weight_by_sector.begin(), 0.0);
+
+    // Random majority sentiment adoption
+    bool old_sentiment = sentiment;
+
+    bool adopt_majority = Uniform_Dist_Float(0,1)  < household_rand_sentiment_adoption;
+    if(adopt_majority){
+        sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
+
+    // Take the necessary actiosn based on sentiment
+    saving_propensity = (sentiment) ? saving_propensity_optimist : saving_propensity_pessimist;
+    savings_desired = saving_propensity * income_average; // Set targets for cash on hand
+
+    // Update public board if sentiment changed
+    if (old_sentiment == 1 && sentiment == 0){ // sentiment became negative
+        pPublic_Info_Board->Update_Household_sentiment_sum(-1);
+    } else if(old_sentiment == 0 && sentiment ==1){
+        pPublic_Info_Board->Update_Household_sentiment_sum(1);
+    } else {
+        // Do nothing
+    }
 }
 
 /* Aggregate function to make consumption and savings decisions
@@ -208,6 +228,7 @@ void Household_Agent::Consumption_Savings_Decisions(){
         Update_Average_Income_T1();
     }
     Determine_Consumer_Sentiment();
+    pPublic_Info_Board->Calculate_Household_Sentiment_Percentage();
     Random_Experimentation();
     Determine_Consumption_Budget();
 }
@@ -275,16 +296,9 @@ void Household_Agent::Determine_Consumer_Sentiment()
     else{
         sentiment = 1;}
 
-    bool adopt_majority = Uniform_Dist_Float(0,1)  < household_rand_sentiment_adoption;
-    if(adopt_majority){
-        sentiment = (pPublic_Info_Board->Get_Household_Sentiment() > 0.50); }
-
-    if (sentiment){
-        saving_propensity = saving_propensity_optimist;
-    } else{
-        saving_propensity = saving_propensity_pessimist;}
-
-    savings_desired = saving_propensity * income_average;// Set targets for cash on hand
+    // Take the necessary actiosn based on sentiment
+    saving_propensity = (sentiment) ? saving_propensity_optimist : saving_propensity_pessimist;
+    savings_desired = saving_propensity * income_average; // Set targets for cash on hand
 
     pPublic_Info_Board->Update_Household_sentiment_sum(static_cast<int>(sentiment));
 }

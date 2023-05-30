@@ -134,10 +134,7 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
 
 
     // Step 1.84: Update Sentiments
-    cout << " \n ------------ Step 1.84: Update Agent sentiments ----------------" <<endl;
-    pPublic_Info_Board->Calculate_Household_Sentiment_Percentage();
-    cout << "Household Sentiment Percentage: " << pPublic_Info_Board->Get_Household_Sentiment() << endl;
-    cout << "Household Sentiment Sum: " << pPublic_Info_Board->Get_Household_Sentiment_Sum() << endl;
+    cout << " \n ------------ Step 1.84: Update Firm Agents sentiments ----------------" <<endl;
     pPublic_Info_Board->Calculate_Cons_Firm_Sentiment_Percentage();
     cout << "Consumer Firm Sentiment Percentage: " << pPublic_Info_Board->Get_Cons_Firm_Sentiment() << endl;
     pPublic_Info_Board->Calculate_Cap_Firm_Sentiment_Percentage();
@@ -188,6 +185,9 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
     for (Household_Agent* household_ptr : *pHousehold_vector){
         household_ptr->Consumption_Savings_Decisions();}
 
+    pPublic_Info_Board->Calculate_Household_Sentiment_Percentage();
+    cout << "Household Sentiment Percentage: " << pPublic_Info_Board->Get_Household_Sentiment() << endl;
+    cout << "Household Sentiment Sum: " << pPublic_Info_Board->Get_Household_Sentiment_Sum() << endl;
 
     pPublic_Info_Board->Calculate_Average_Wage_Employed(); // update average wage data after households update their wages
     

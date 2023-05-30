@@ -582,7 +582,7 @@ void Firm_Agent::Seek_Long_Term_Loan(){
             cout << "ERROR: Firm_Agent::Seek_Long_Term_Loan() - principal < 0 at firm # "<< this << endl;
         }
     } else{
-        cout << " Firm_Agent::Seek_Long_Term_Loan() - Loan rejected" << endl;
+        //cout << " Firm_Agent::Seek_Long_Term_Loan() - Loan rejected" << endl;
     }
 }
 
@@ -685,10 +685,12 @@ void Firm_Agent::Pay_Liabilities(){
     double average_good_price_cap = pPublic_Info_Board->Get_Capital_Good_Price_Level();
     double average_good_price = is_cons_firm ? average_good_price_cons : average_good_price_cap;
     long long inventory_book_value = inventory * average_good_price/2.0;
-    if(inventory_book_value<0){ cout << "ERROR: Firm_Agent::Pay_Liabilities() - negative inventory book value at firm # " << this << " of " << inventory_book_value << endl;}
+    if(inventory_book_value<0){ 
+        cout << "ERROR: Firm_Agent::Pay_Liabilities() - negative inventory book value at firm # " << this << " of " << inventory_book_value << endl;}
     // Calculate book value of capital goods
     long long machines_book_value =  working_capital_inventory * average_good_price_cap/2.0;
-    if(machines_book_value<0){ cout << "ERROR: Firm_Agent::Pay_Liabilities() - negative machines book value at firm # " << this << " of " << machines_book_value << endl;}
+    if(machines_book_value<0){ 
+        cout << "ERROR: Firm_Agent::Pay_Liabilities() - negative machines book value at firm # " << this << " of " << machines_book_value << endl;}
     // Income
     cash_on_hand += revenue_sales;
     // Total assets
@@ -791,8 +793,9 @@ bool Firm_Agent::Avoid_Bankruptcy(){
         long_term_funding_gap = 0;
     
         // Sell all inventories but one
-        inventory = 0;
+        inventory = 1;
         goods_on_market->Set_Quantity(1);
+        //production_current = 0;
         
         // Sell all but one capital good
         capital_goods_list.clear();
@@ -800,7 +803,7 @@ bool Firm_Agent::Avoid_Bankruptcy(){
         working_capital_inventory = 1;
         
         // Fire all but one employees and calc how much you save on wage bills
-        int lay_off_count = max(employee_count - 2,0);
+        int lay_off_count = max(employee_count - 1,0);
         for (int i=0; i < lay_off_count; i++){
             active_job_list.back()->Update_Status(-1); // Household will see they are laid off on next update
             active_job_list.pop_back();
@@ -810,8 +813,8 @@ bool Firm_Agent::Avoid_Bankruptcy(){
 
         if(employee_count != active_job_list.size()){
            cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - active_job_list.size() != employee_count at firm # " << this << "- Employee count: " << employee_count << " job list size: " << active_job_list.size() <<  endl;
-        } else if( employee_count !=1 ){
-            cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - employee_count != 1 at firm # " << this << " it is " << employee_count << endl;
+        } else if( employee_count !=1 ){ // not actually an error if the firm had 0 employees to begin with
+            //cout << "ERROR: Firm_Agent::Avoid_Bankruptcy() - employee_count != 1 at firm # " << this << " it is " << employee_count << endl;
         }
         
         recapitalised = true;

@@ -174,10 +174,7 @@ extern float firm_cons_wage_change;
 extern float firm_cons_rand_dividend_change;
 extern float firm_cons_rand_sentiment_adoption;
 extern float firm_cons_rand_desired_inventory_factor_change;
-extern float firm_cons_fixed_price_change;
 extern float firm_cons_rand_price_change_upper_limit;
-extern float firm_cons_fixed_prod_change;
-extern float firm_cons_rand_prod_change_upper_limit;
 
 
 
@@ -266,10 +263,7 @@ extern float firm_cap_wage_change;
 extern float firm_cap_rand_dividend_change;
 extern float firm_cap_rand_sentiment_adoption;
 extern float firm_cap_rand_desired_inventory_factor_change;
-extern float firm_cap_fixed_price_change;
 extern float firm_cap_rand_price_change_upper_limit;
-extern float firm_cap_fixed_prod_change;
-extern float firm_cap_rand_prod_change_upper_limit;
 
 
 //---------------------------------------------

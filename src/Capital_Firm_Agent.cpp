@@ -121,22 +121,23 @@ void Capital_Firm_Agent::Determine_New_Production(){
     bool inventory_high = inventory >= desired_inventory; 
 
     // Determine randomised price and production change factors
-    float price_change =  firm_cap_fixed_price_change + Uniform_Dist_Float(0.0,firm_cap_rand_price_change_upper_limit); 
-    //float prod_change =  firm_cap_fixed_prod_change + Uniform_Dist_Float(0.0,firm_cap_rand_prod_change_upper_limit); 
+    float rand_price_change = Uniform_Dist_Float(1.0- firm_cap_rand_price_change_upper_limit, 1.0+ firm_cap_rand_price_change_upper_limit); 
+    float rand_price_increase = Uniform_Dist_Float(1.0, 1.0+ firm_cap_rand_price_change_upper_limit);
+    float rand_price_decrease = Uniform_Dist_Float(1.0- firm_cap_rand_price_change_upper_limit, 1.0);
 
     // Case 1: Inventory low, Price high - > Maintain price, increase prod
     if (!inventory_high && price_high){
         //production_planned*= (1.0+prod_change);  
 
-    } // Case 2: Inventory low, Price low - > Increase Price slightly + increase  production slightly 
+    } // Case 2: Inventory low, Price low - > Increase Price slightly, to around  average, + increase  production slightly 
     else if( !inventory_high && !price_high){
         //production_planned *= (1.0+prod_change/2.0);
-        good_price_current *= (1.0+price_change/2.0);
-
-    } // Case 3: Inventory high, Price high - > Decrease production slightly + decrease price slightly
+        good_price_current = average_market_price * rand_price_change;
+    
+    } // Case 3: Inventory high, Price high - > Decrease production slightly + decrease price slightly to around average
     else if (inventory_high && price_high){
         //production_planned *= (1.0-prod_change/2.0);
-        good_price_current *= (1.0-price_change/2.0);
+        good_price_current = average_market_price * rand_price_change;
         //good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
 
     } // Case 4: Inventory high, Price low -> Reduce Production
@@ -145,7 +146,7 @@ void Capital_Firm_Agent::Determine_New_Production(){
     }
 
     // Set floor on prices at 0
-    good_price_current = max(good_price_current, unit_good_cost);
+    good_price_current = max(good_price_current, unit_good_cost*1.1f);
 
     /* Alternative quantity adjustment formula  from jamel paper - overrides above quantity adjustments */
     production_planned = static_cast<long long>(average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor);
