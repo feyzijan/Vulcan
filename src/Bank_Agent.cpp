@@ -269,15 +269,15 @@ float Bank_Agent::Calculate_Leverage_Penalty(float leverage_ratio){
 /* String stream operator overload*/
 std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
     os << "r_rate: " << obj.r_rate << std::endl;
-    os << "r_reaction: " << obj.r_reaction << std::endl;
-    os << "risk_premium: " << obj.risk_premium << std::endl;
-    os << "cons_inflation_target: " << obj.cons_inflation_target << std::endl;
+    //os << "r_reaction: " << obj.r_reaction << std::endl;
+    //os << "risk_premium: " << obj.risk_premium << std::endl;
+    //os << "cons_inflation_target: " << obj.cons_inflation_target << std::endl;
     os << "cons_inflation_current: " << obj.cons_inflation_current << std::endl;
-    os << "cons_inflation_previous: " << obj.cons_inflation_previous << std::endl;
-    os << "cons_inflation_past_month: " << obj.cons_inflation_past_month << std::endl;
-    os << "cap_inflation_current: " << obj.cap_inflation_current << std::endl;
-    os << "cap_inflation_previous: " << obj.cap_inflation_previous << std::endl;
-    os << "cap_inflation_past_month: " << obj.cap_inflation_past_month << std::endl;
+    //os << "cons_inflation_previous: " << obj.cons_inflation_previous << std::endl;
+    //os << "cons_inflation_past_month: " << obj.cons_inflation_past_month << std::endl;
+    //os << "cap_inflation_current: " << obj.cap_inflation_current << std::endl;
+    //os << "cap_inflation_previous: " << obj.cap_inflation_previous << std::endl;
+    //os << "cap_inflation_past_month: " << obj.cap_inflation_past_month << std::endl;
     os << "new_principal_repayments: " << obj.new_principal_repayments << std::endl;
     os << "new_interest_repayments: " << obj.new_interest_repayments << std::endl;
     os << "total_principal_repayments: " << obj.total_principal_repayments << std::endl;
@@ -291,10 +291,10 @@ std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj) {
     os << "total_outstanding_loans: " << obj.total_outstanding_loans << std::endl;
     os << "outstanding_short_term_loans: " << obj.outstanding_short_term_loans << std::endl;
     os << "outstanding_long_term_loans: " << obj.outstanding_long_term_loans << std::endl;
-    os << "short_term_loan_length: " << obj.short_term_loan_length << std::endl;
-    os << "long_term_loan_length: " << obj.long_term_loan_length << std::endl;
-    os << "leverage_ratio_lower_threshold: " << obj.leverage_ratio_lower_threshold << std::endl;
-    os << "leverage_ratio_upper_threshold: " << obj.leverage_ratio_upper_threshold << std::endl;
+    //os << "short_term_loan_length: " << obj.short_term_loan_length << std::endl;
+    //os << "long_term_loan_length: " << obj.long_term_loan_length << std::endl;
+    //os << "leverage_ratio_lower_threshold: " << obj.leverage_ratio_lower_threshold << std::endl;
+    //os << "leverage_ratio_upper_threshold: " << obj.leverage_ratio_upper_threshold << std::endl;
     os << "date: " << obj.current_date << std::endl;
     return os;
 }

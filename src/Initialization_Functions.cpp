@@ -145,7 +145,6 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
     Normal_Dist_Generator init_s_optimist(household_init_s_optimist_mean, household_init_s_optimist_std, household_init_s_optimist_min, household_init_s_optimist_max);
     Normal_Dist_Generator init_s_pessimist(household_init_s_pessimist_mean, household_init_s_pessimist_std, household_init_s_pessimist_min, household_init_s_pessimist_max);
     Normal_Dist_Generator init_c_f(household_init_c_f_mean, household_init_c_f_std, household_init_c_f_min, household_init_c_f_max);
-    Normal_Dist_Generator init_c_h(household_init_c_h_mean, household_init_c_h_std, household_init_c_h_min, household_init_c_h_max);
     Normal_Dist_Generator init_c_excess(household_init_c_excess_mean, household_init_c_excess_std, household_init_c_excess_min, household_init_c_excess_max);
     
     Normal_Dist_Generator init_wealth(household_init_wealth_mean, household_init_wealth_std, household_init_wealth_min, household_init_wealth_max);
@@ -158,7 +157,6 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
             init_s_optimist(), // saving_propensity_optimist 
             init_s_pessimist(), // saving_propensity_pessimist
             init_c_f(), // c_f
-            init_c_h(), // c_h
             init_c_excess(), // c_excess_money
          };
 

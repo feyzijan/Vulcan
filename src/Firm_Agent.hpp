@@ -155,7 +155,6 @@ class Firm_Agent{
     int output_per_machine;         // Constant: Initialised,
     float unit_good_cost;           // Constant: Initialised,
     float max_production_climbdown; // Constant: Initialised,
-
     
     // Others
     bool sentiment;                 // Variable: Initialized,

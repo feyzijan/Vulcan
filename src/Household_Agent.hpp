@@ -18,7 +18,7 @@ class Household_Agent{
 
     public:
     // Constructors and destructor
-    Household_Agent(float propensities[7], int vals[3], Public_Info_Board* pPublic_Board );
+    Household_Agent(float propensities[5], int vals[3], Public_Info_Board* pPublic_Board );
 
     // Initialization methods
     void Set_Firm_Owner(Firm_Agent* firm_ptr);
@@ -49,8 +49,7 @@ class Household_Agent{
     //Getters
     int Get_Wage() {return income_wage;};
     bool Get_Employment_Status() {return !unemployed;}
-    float Get_C_f() {return c_f;}
-    float Get_C_h() {return c_h;}
+
     Public_Info_Board* Get_Public_Board() {return pPublic_Info_Board;};
     
     // Printing and Logging
@@ -103,7 +102,6 @@ class Household_Agent{
     
     // Pre-set constants
     float c_f; // propensity to consume financial wealth
-    float c_h; // propensity to consume human wealth
     float c_excess_money; // propensity yo consume excess money balance 
     
     int current_date;

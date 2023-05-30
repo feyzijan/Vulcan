@@ -7,7 +7,7 @@ using namespace std;
 
 //----------- Constructors
 // New Constructor to use
-Household_Agent::Household_Agent(float propensities[7], int init_values[3], Public_Info_Board* pPublic_Board )
+Household_Agent::Household_Agent(float propensities[5], int init_values[3], Public_Info_Board* pPublic_Board )
 {
     // -- Set Given starting parameters and propensities
     savings= init_values[0];
@@ -18,8 +18,7 @@ Household_Agent::Household_Agent(float propensities[7], int init_values[3], Publ
     saving_propensity_optimist = propensities[1];
     saving_propensity_pessimist = propensities[2];
     c_f = propensities[3];
-    c_h = propensities[4];
-    c_excess_money = propensities[5];
+    c_excess_money = propensities[4];
 
     // Set Pointers
     // Public_Info_Board* pPublic_Info_Board = pPublic_Board;
@@ -296,12 +295,11 @@ void Household_Agent::Determine_Consumption_Budget()
 {
     // Determine shortfall from target savings
     savings_desired = household_targeted_savings_to_income_ratio * income_average;
-    long long excess_savings = savings - savings_desired;
-    if (excess_savings < 0){
-        consumption_budget = (1.0-saving_propensity) * income_current;
-    } else {
-        consumption_budget = (1.0-saving_propensity) * income_current + c_f * excess_savings;
-    }
+    long long excess_savings = max(savings - savings_desired,0ll);
+    long long excess_income = max(income_current - income_average,0ll);
+
+
+    consumption_budget = (1.0-saving_propensity) * income_current + c_f * excess_savings + c_excess_money * excess_income;
 
     if (consumption_budget < 0) { // make sure expenditure isnt negative
         cout << "ERROR: Consumption budget at firm " << this << " is negative: " << consumption_budget << endl;
@@ -457,7 +455,6 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "sentiment " << obj.sentiment << std::endl;
     os << "business_owner " << obj.firm_owner << std::endl;
     os << "c_f " << obj.c_f << std::endl;
-    //os << "c_h " << obj.c_h << std::endl;
     os << "c_excess_money " << obj.c_excess_money << std::endl;
     os << "date " << obj.current_date << std::endl;
     return os;

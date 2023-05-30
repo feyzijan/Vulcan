@@ -78,12 +78,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     household_init_c_f_min = initialization_parameters["household_init_c_f_min"];
     household_init_c_f_max = initialization_parameters["household_init_c_f_max"];
     
-    // Propensity to consume human wealth, c_h
-    household_init_c_h_mean = initialization_parameters["household_init_c_h_mean"];
-    household_init_c_h_std = initialization_parameters["household_init_c_h_std"];
-    household_init_c_h_min = initialization_parameters["household_init_c_h_min"];
-    household_init_c_h_max = initialization_parameters["household_init_c_h_max"];
-    
     // Propensity to consume excess money : c_excess_money
     household_init_c_excess_mean = initialization_parameters["household_init_c_excess_mean"];
     household_init_c_excess_std = initialization_parameters["household_init_c_excess_std"];
@@ -355,11 +349,6 @@ float household_init_c_f_mean = 0.5;
 float household_init_c_f_std = 0.1;
 float household_init_c_f_min = 0.1;
 float household_init_c_f_max = 0.9;
-// Propensity to consume human wealth, c_h
-float household_init_c_h_mean = 0.2;
-float household_init_c_h_std = 0.05;
-float household_init_c_h_min = 0.0;
-float household_init_c_h_max = 0.4;
 // Propensity to consume excess money : c_excess_money
 float household_init_c_excess_mean = 0.3;
 float household_init_c_excess_std = 0.05;

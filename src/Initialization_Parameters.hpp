@@ -62,11 +62,6 @@ extern float household_init_c_f_mean;
 extern float household_init_c_f_std;
 extern float household_init_c_f_min;
 extern float household_init_c_f_max;
-// Propensity to consume human wealth, c_h
-extern float household_init_c_h_mean ;
-extern float household_init_c_h_std ;
-extern float household_init_c_h_min ;
-extern float household_init_c_h_max ;
 // Propensity to consume excess money : c_excess_money
 extern float household_init_c_excess_mean ;
 extern float household_init_c_excess_std ;

@@ -175,7 +175,10 @@ class Public_Info_Board{
     void Update_Employees_Quitting() { n_employees_quitting += 1; }
 
     // Bankruptcies
-    void Update_Bankruptcies(bool is_cons_firm) { if (is_cons_firm) { n_bankrupt_cons_firms += 1;} else { n_bankrupt_cap_firms += 1;}}
+    void Update_Bankruptcies(bool is_cons_firm) { if (is_cons_firm) { 
+        n_bankrupt_cons_firms += 1;} 
+        else { n_bankrupt_cap_firms += 1;}
+        n_active_firms -=1;}
 
     // Emissions
     void Update_Consumer_Emissions_By_Sector(const vector<long long>& emissions_by_sector);
@@ -184,11 +187,14 @@ class Public_Info_Board{
     // ---- Calculate Global Aggregate Variables ----
     // Labor Figures
     void Calculate_Unemployment_Rate() { unemployment_rate = float(n_unemployed_workers)/float(n_households); }
-    void Calculate_Average_Wage_Employed() { average_wage_employed = float(household_wage_income)/float(n_employed_workers-n_firms); }
+    void Calculate_Average_Wage_Employed() { average_wage_employed = float(household_wage_income)/float(max(n_employed_workers,1)); }
     // Sentiments
-    void Calculate_Household_Sentiment_Percentage() { household_sentiment_percentage = static_cast<float>(household_sentiment_sum)/ n_households; }
-    void Calculate_Cons_Firm_Sentiment_Percentage() { cons_firm_sentiment_percentage = static_cast<float>(cons_firm_sentiment_sum) / (n_consumer_firms - n_bankrupt_cons_firms); }
-    void Calculate_Cap_Firm_Sentiment_Percentage() { cap_firm_sentiment_percentage = static_cast<float>(cap_firm_sentiment_sum)/ (n_capital_firms - n_bankrupt_cap_firms); }
+    void Calculate_Household_Sentiment_Percentage() { 
+        household_sentiment_percentage = static_cast<float>(household_sentiment_sum)/ float(n_households); }
+    void Calculate_Cons_Firm_Sentiment_Percentage() { 
+        cons_firm_sentiment_percentage = static_cast<float>(cons_firm_sentiment_sum) / (n_consumer_firms - n_bankrupt_cons_firms); }
+    void Calculate_Cap_Firm_Sentiment_Percentage() { 
+        cap_firm_sentiment_percentage = static_cast<float>(cap_firm_sentiment_sum)/ (n_capital_firms - n_bankrupt_cap_firms); }
     // Unit emisisons
     void Calculate_Average_Unit_Emissions_by_Sector();
 
@@ -291,6 +297,7 @@ class Public_Info_Board{
     int public_unemployment_benefit; // Initialized, not updated, not reset, logged
 
     // Bankruptcy figures
+    int n_active_firms; // Initialized, updated, not reset, logged
     int n_bankrupt_cap_firms;  // Initialized, updated, not reset, logged
     int n_bankrupt_cons_firms;   // Initialized, updated, not reset, logged
 

@@ -76,6 +76,7 @@ Public_Info_Board::Public_Info_Board(){
     // Bankruptcy figures
     n_bankrupt_cap_firms = 0;
     n_bankrupt_cons_firms = 0;
+    n_active_firms = n_firms;
 
     current_date = 0;
 }
@@ -423,7 +424,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "emission_offset_price " << obj.emission_offset_price << std::endl;
 
     os << "average_wage_market " << obj.average_wage_market << std::endl;
-    os << "average_wage_employed" << obj.average_wage_employed << std::endl;
+    os << "average_wage_employed " << obj.average_wage_employed << std::endl;
     
     os << "household_wage_income " << obj.household_wage_income << std::endl;
     os << "household_dividend_income " << obj.household_dividend_income << std::endl;
@@ -494,9 +495,9 @@ vector<pair<string, float>>* Public_Info_Board::Log_Data() {
     current_date = global_date;
     // Income and wage figures
     if (global_date > 0){
-        household_wage_income /= n_employed_workers;
-        household_dividend_income /= (n_capital_firms + n_consumer_firms - n_bankrupt_cap_firms - n_bankrupt_cons_firms);
-        household_unemployment_income /= n_unemployed_workers;
+        household_wage_income /= max(n_employed_workers,1);
+        household_dividend_income /= max((n_active_firms),1);
+        household_unemployment_income /= max(n_unemployed_workers,1);
     }
 
 

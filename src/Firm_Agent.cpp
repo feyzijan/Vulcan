@@ -229,7 +229,8 @@ void Firm_Agent::Check_Sales(){
         inv_factor = target_inv_factor/10.0;
     }
 
-    desired_inventory = static_cast<long long>(target_inv_factor * production_current);
+    desired_inventory = max( static_cast<long long>(target_inv_factor * production_current),static_cast<long long>(target_inv_factor * average_sale_quantity) );
+    //desired_inventory = static_cast<long long>(target_inv_factor * production_current);
 }
 
 
@@ -868,7 +869,7 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "target_inv_factor " << obj.target_inv_factor << std::endl;
     os << "desired_inventory " << obj.desired_inventory << std::endl;
     os << "inv_factor " << obj.inv_factor << std::endl;
-    os << "inv_reaction_factor " << obj.inv_reaction_factor << std::endl;
+    //os << "inv_reaction_factor " << obj.inv_reaction_factor << std::endl;
     os << "machine_utilization " << obj.machine_utilization << std::endl;
     os << "desired_machines " << obj.desired_machines << std::endl;
     os << "sentiment " << obj.sentiment << std::endl;
