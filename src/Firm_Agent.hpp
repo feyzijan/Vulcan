@@ -19,7 +19,7 @@ class Firm_Agent{
     public:
     // Constructors and Destructor
     Firm_Agent() {}; 
-    Firm_Agent(float init_values[6]);
+    Firm_Agent(float init_values[7]);
     virtual ~Firm_Agent();
 
     // Initialization methods t = 1
@@ -162,6 +162,7 @@ class Firm_Agent{
     bool recapitalised;             //  Variable: Initialized,
     bool is_cons_firm;              //  Variable: Initialized,
     int current_date;               //  Variable: Initialized,
+    int id;                  //  Constant: Initialized,
 
 };
 

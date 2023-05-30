@@ -7,12 +7,14 @@ using namespace std;
 
 //----------- Constructors
 // New Constructor to use
-Household_Agent::Household_Agent(float propensities[5], int init_values[3], Public_Info_Board* pPublic_Board )
+Household_Agent::Household_Agent(float propensities[5], int init_values[3], int object_id, Public_Info_Board* pPublic_Board )
 {
     // -- Set Given starting parameters and propensities
     savings= init_values[0];
     unemp_duration_upper_bound = init_values[1];
     reservation_wage = init_values[2];
+
+    id = object_id;
 
     consumption_propensity = propensities[0];
     saving_propensity_optimist = propensities[1];
@@ -453,10 +455,11 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "unemp_duration " << obj.unemp_duration << std::endl;
     os << "unemp_duration_upper_bound " << obj.unemp_duration_upper_bound << std::endl;
     os << "sentiment " << obj.sentiment << std::endl;
-    os << "business_owner " << obj.firm_owner << std::endl;
+    os << "firm_owner " << obj.firm_owner << std::endl;
     os << "c_f " << obj.c_f << std::endl;
     os << "c_excess_money " << obj.c_excess_money << std::endl;
     os << "date " << obj.current_date << std::endl;
+    os << "id " << obj.id  << std::endl;
     return os;
 }
 

@@ -4,7 +4,7 @@
 
 /* Constructors and Destructor
 */
-Consumer_Firm_Agent::Consumer_Firm_Agent(float init_values[6]): Firm_Agent::Firm_Agent(init_values)
+Consumer_Firm_Agent::Consumer_Firm_Agent(float init_values[7]): Firm_Agent::Firm_Agent(init_values)
 {
     is_cons_firm = true;
 

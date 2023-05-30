@@ -13,7 +13,7 @@ class Capital_Firm_Agent: public Firm_Agent{
 
     public:
     // Constructors and Destructor
-    Capital_Firm_Agent(float init_values[6]);
+    Capital_Firm_Agent(float init_values[7]);
     Capital_Firm_Agent(Capital_Firm_Agent&); 
     ~Capital_Firm_Agent() override;
 

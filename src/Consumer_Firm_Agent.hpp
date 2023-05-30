@@ -15,7 +15,7 @@ class Consumer_Firm_Agent: public Firm_Agent{
 
     public:
     // Constructors and Destructor
-    Consumer_Firm_Agent(float init_values[6]);
+    Consumer_Firm_Agent(float init_values[7]);
     Consumer_Firm_Agent(Consumer_Firm_Agent&); 
     ~Consumer_Firm_Agent() override;
 

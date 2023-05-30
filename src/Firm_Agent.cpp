@@ -6,8 +6,9 @@
  float init_values[] = { init_target_inv_factor(), init_cap_good_price(),init_inv_factor(),
 init_cash(),init_worker_demand(),init_wage_offer()};
 */
-Firm_Agent::Firm_Agent(float init_values[6])
+Firm_Agent::Firm_Agent(float init_values[7])
 {
+
     // -- Set Given starting parameters and propensities
     target_inv_factor = init_values[0];
     good_price_current = init_values[1];
@@ -16,6 +17,8 @@ Firm_Agent::Firm_Agent(float init_values[6])
     cash_on_hand = max(static_cast<long long>(init_values[3]), 0ll);
     employee_count_desired = static_cast<int>(init_values[4]);
     wage_offer = static_cast<int>(init_values[5]);
+
+    id = init_values[6];
 
     //-- Set default non_zero initialization values
     need_worker = true;
@@ -877,6 +880,7 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "recapitalised " << obj.recapitalised << std::endl;
     os << "is_cons_firm " << obj.is_cons_firm << std::endl;
     os << "date " << obj.current_date << std::endl;
+    os << "id " << obj.id << std::endl;
     return os;
 }
 

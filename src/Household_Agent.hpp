@@ -18,7 +18,7 @@ class Household_Agent{
 
     public:
     // Constructors and destructor
-    Household_Agent(float propensities[5], int vals[3], Public_Info_Board* pPublic_Board );
+    Household_Agent(float propensities[5], int vals[3], int object_id, Public_Info_Board* pPublic_Board );
 
     // Initialization methods
     void Set_Firm_Owner(Firm_Agent* firm_ptr);
@@ -105,6 +105,7 @@ class Household_Agent{
     float c_excess_money; // propensity yo consume excess money balance 
     
     int current_date;
+    int id;
 };
 
 

@@ -75,7 +75,8 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
     Normal_Dist_Generator init_cons_good_price(firm_cons_init_good_price_mean, firm_cons_init_good_price_std, firm_cons_init_good_price_min, firm_cons_init_good_price_max);
    
-     for (int i=0; i<n_consumer_firms; i++) {
+    int object_id = 0;
+    for (int i=0; i<n_consumer_firms; i++) {
         //cout << " Cons firm initializing #" << i << endl;
         float init_values[] = {
             init_target_inv_factor(), 
@@ -83,12 +84,14 @@ void Initialize_Consumer_Firms(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
             init_inv_factor(),
             init_cash(),
             init_worker_demand(),
-            init_wage_offer()
+            init_wage_offer(),
+            object_id
         };
         pConsumer_Firm_vector->push_back(new Consumer_Firm_Agent(init_values));
         //cout << "Cons firm initialized! #" << i << endl;
         pConsumer_Firm_vector->at(i)->Set_Public_Info_Board(pPublic_Board);  
     }
+    object_id += 1;
     //cout << "Consumer Firms initialized" << endl;
 }
 
@@ -118,6 +121,7 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
     Normal_Dist_Generator init_wage_offer(firm_cons_init_wage_offer_mean, firm_cons_init_wage_offer_std, firm_cons_init_wage_offer_min, firm_cons_init_wage_offer_max);
     Normal_Dist_Generator init_cap_good_price(firm_cap_init_good_price_mean, firm_cap_init_good_price_std, firm_cap_init_good_price_min, firm_cap_init_good_price_max);
    
+    int object_id = 0;
     for (int i=0; i<n_capital_firms; i++) {
         //cout << "cap firm initializing #: "<< i << endl;
         float init_values[] = {
@@ -126,12 +130,14 @@ void Initialize_Capital_Firms(vector<Capital_Firm_Agent*> *pCapital_Firm_vector,
             init_inv_factor(),
             init_cash(),
             init_worker_demand(),
-            init_wage_offer()
+            init_wage_offer(),
+            object_id
         };
         pCapital_Firm_vector->push_back(new Capital_Firm_Agent(init_values));
         //cout << "Cons firm initialized! #" << i << endl;
         pCapital_Firm_vector->at(i)->Set_Public_Info_Board(pPublic_Board);
     }
+    object_id += 1;
     //cout << "Capital firms initialized" << endl;
 }
 
@@ -151,6 +157,7 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
     Normal_Dist_Generator init_unemp_tolerance(household_init_unemp_tolerance_mean, household_init_unemp_tolerance_std, household_init_unemp_tolerance_min, household_init_unemp_tolerance_max);
     Normal_Dist_Generator init_res_wage(household_init_res_wage_mean, household_init_res_wage_std, household_init_res_wage_min, household_init_res_wage_max);
 
+    int object_id = 1;
     for (int i=0; i<size; i++) {
         float propensities[] = { 
             init_c(), // consumption propensity
@@ -165,7 +172,8 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
             int(init_unemp_tolerance()),
             int(init_res_wage())
         };
-        pHousehold_vector->push_back(new Household_Agent(propensities, vals,pPublic_Board));
+        pHousehold_vector->push_back(new Household_Agent(propensities, vals, object_id, pPublic_Board));
+        object_id +=1;
     }
 }
 

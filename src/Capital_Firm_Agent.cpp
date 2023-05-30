@@ -4,7 +4,7 @@
 
 
 
-Capital_Firm_Agent::Capital_Firm_Agent(float init_values[6]) : Firm_Agent::Firm_Agent(init_values)
+Capital_Firm_Agent::Capital_Firm_Agent(float init_values[7]) : Firm_Agent::Firm_Agent(init_values)
 {
     // Set parameters specific to capital firms from the global variables
     is_cons_firm = false;
