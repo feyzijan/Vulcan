@@ -93,8 +93,9 @@ Firm_Agent::~Firm_Agent() {
     // Loans
     // Loop through all loans in the loan book and set the pointers to zero
     for (auto it = loan_book.begin(); it != loan_book.end(); ++it){
-        (*it)->Clean_Loan();
+        (*it)->Clean_Loan(bankrupt);
     } 
+
 
     // Notify firm owner
     owner->Notify_Of_Bankruptcy();
@@ -667,7 +668,7 @@ void Firm_Agent::Update_Loan_List(){
     while(it !=  loan_book.end()) {
         if((*it)->Get_Principal_Amount() <= 0) { 
             //delete *it; // delete the loan object
-            (*it)->Clean_Loan(); // clean the loan object - setting everything to zero
+            (*it)->Clean_Loan(bankrupt); // clean the loan object - setting everything to zero
             it = loan_book.erase(it); // delete the pointer from the vector
         } else {it++;}
     }
@@ -846,7 +847,7 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "average_profit " << obj.average_profit << std::endl;
     os << "average_sale_quantity " << obj.average_sale_quantity << std::endl;
     //os << "short_term_funding_gap " << obj.short_term_funding_gap << std::endl;
-    os << "long_term_funding_gap " << obj.long_term_funding_gap << std::endl;
+    //os << "long_term_funding_gap " << obj.long_term_funding_gap << std::endl;
     os << "total_liabilities " << obj.total_liabilities << std::endl;
     os << "labor_wage_bill " << obj.labor_wage_bill << std::endl;
     os << "capital_costs " << obj.capital_costs << std::endl;

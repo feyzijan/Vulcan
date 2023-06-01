@@ -24,8 +24,8 @@ class Loan {
     // Deducting Payments
     void Deduct_Principal_Repayment(long long principal_repayment) {principal_amount -= principal_repayment;}
 
-    // Cleaning Loan ( Bankrupt Firm)
-    void Clean_Loan();
+    // Cleaning Loan ( Bankrupt Firm or fully repaid loan)
+    void Clean_Loan(bool is_bankrupt);
 
     // Getters
     float Get_Interest_Rate() const { return interest_rate;}
@@ -33,6 +33,8 @@ class Loan {
     int Get_Start_Date() const {return start_date;}
     int Get_End_Date() const {return end_date;}
     Firm_Agent* Get_Borrowing_Firm() const {return pBorrowing_Firm; }
+    bool Get_Expiration_Status() const {return expired;}
+    bool Get_Bankruptcy_Status() const {return bankrupt_firm;}
 
     // Setters
     void Set_Borrowing_Firm_To_Null() {pBorrowing_Firm = nullptr;}
@@ -47,6 +49,7 @@ class Loan {
     int end_date;
     bool is_short_term_loan; // 1 = short term, 0 = long term
     bool expired;
+    bool bankrupt_firm;
 };
 
 #endif

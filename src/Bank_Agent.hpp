@@ -30,6 +30,9 @@ class Bank_Agent{
     float Calculate_Emission_Penalty(Firm_Agent* pFirm);
     float Calculate_Leverage_Penalty(float leverage_ratio);
 
+    // Loan repayments
+    void Check_Loans();
+
     // Getters
     float Get_Interest_Rate() {return r_rate;}
 

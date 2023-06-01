@@ -1,7 +1,7 @@
 n_loops,60.0
-n_households,100000.0
-n_consumer_firms,4500.0
-n_capital_firms,500.0
+n_households,10000.0
+n_consumer_firms,450.0
+n_capital_firms,50.0
 n_consumer_sectors,12.0
 n_max_employees,100.0
 time_period,12.0
@@ -35,6 +35,8 @@ bank_short_term_loan_length,6.0
 bank_long_term_loan_length,24.0
 bank_leverage_ratio_lower_threshold,10.0
 bank_leverage_ratio_upper_threshold,40.0
+bank_max_interest_rate,1.0
+bank_max_interest_rate_change,0.05
 bank_emission_penalty_max,0.02
 bank_total_emission_penalty,1.0
 bank_unit_emission_penalty,0.0

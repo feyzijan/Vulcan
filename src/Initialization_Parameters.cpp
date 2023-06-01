@@ -265,11 +265,21 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     // --- Bank dynamic Parameters
     bank_inflation_reaction = main_loop_parameters["bank_inflation_reaction"];
     bank_inflation_target = main_loop_parameters["bank_inflation_target"]; 
-    bank_inflation_target_monthly=  main_loop_parameters["bank_inflation_target_monthly"];
+    bank_inflation_target_monthly =  main_loop_parameters["bank_inflation_target_monthly"];
     bank_risk_premium = main_loop_parameters["bank_risk_premium"];
     bank_long_term_loan_length = main_loop_parameters["bank_long_term_loan_length"];
     bank_leverage_ratio_lower_threshold = main_loop_parameters["bank_leverage_ratio_lower_threshold"];
     bank_leverage_ratio_upper_threshold = main_loop_parameters["bank_leverage_ratio_upper_threshold"];
+   
+    // the following parameters were added later hence we need to check if they exist in the map
+    auto it = main_loop_parameters.find("bank_max_interest_rate");
+    if (it != main_loop_parameters.end() || it->first == "bank_max_interest_rate") {
+        bank_max_interest_rate = it->second;} 
+    
+    it = main_loop_parameters.find("bank_max_interest_rate_change");
+    if (it != main_loop_parameters.end() || it->first == "bank_max_interest_rate_change") {
+        bank_max_interest_rate_change = it->second;}
+
 
     //---- Bank Emission Penalty Parameters
     bank_total_emission_penalty = main_loop_parameters["bank_total_emission_penalty"];
@@ -521,7 +531,7 @@ int forced_machine_purchases_max = 5;
 // Bank Initialization parameters
 float bank_init_interest_rate = 0.02;
 
-// Dynamic Bank Parameters 
+// Bank Dynamic Parameters 
 float bank_inflation_reaction = 1.5;
 float bank_inflation_target = 1.05; 
 float bank_inflation_target_monthly=  1.004;
@@ -530,6 +540,8 @@ int bank_short_term_loan_length = 12;
 int bank_long_term_loan_length = 100;
 float bank_leverage_ratio_lower_threshold = 60;
 float bank_leverage_ratio_upper_threshold = 100;
+float bank_max_interest_rate = 0.4;
+float bank_max_interest_rate_change = 0.1;
 
 //---------------------------------------------
 

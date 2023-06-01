@@ -281,6 +281,8 @@ extern int bank_short_term_loan_length;
 extern int bank_long_term_loan_length;
 extern float bank_leverage_ratio_lower_threshold;
 extern float bank_leverage_ratio_upper_threshold;
+extern float bank_max_interest_rate;
+extern float bank_max_interest_rate_change;
 
 //---------------------------------------------
 

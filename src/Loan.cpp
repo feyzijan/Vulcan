@@ -16,15 +16,16 @@ Loan::Loan(Firm_Agent* _pborrowing_firm, float _interest_rate, long long _princi
     end_date = start_date + _duration;
     is_short_term_loan = _is_short_term_loan;
     expired = false;
+    bankrupt_firm = false;
 }
 
 Loan::~Loan(){}
 Loan::Loan(Loan&){}
 //-------------------------------------------
 
-/* Clean loan if firm is bankrupt
+/* Clean loan if firm is bankrupt or has fully repaid
 */
-void Loan::Clean_Loan(){
+void Loan::Clean_Loan(bool is_bankrupt){
     pBorrowing_Firm = nullptr;
     interest_rate = 0;
     principal_amount = 0;
@@ -32,6 +33,7 @@ void Loan::Clean_Loan(){
     end_date = 0;
     is_short_term_loan = 0;
     expired = true;
+    bankrupt_firm = is_bankrupt;
 }
 
 
@@ -65,7 +67,7 @@ long long Loan::Calculate_Principal_Repayment() const
     {
         return principal_amount;
     } else if (is_short_term_loan==0){
-        long long payment = static_cast<long long>(principal_amount / (end_date - start_date) * 1.001); // round up by .1% to counteract int rounding
+        long long payment = static_cast<long long>(principal_amount / (bank_long_term_loan_length) * 1.001); // round up by .1% to counteract int rounding
         return payment; 
     } else { // Short term loan, not end date yet
     return 0;

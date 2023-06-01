@@ -230,6 +230,11 @@ Consumer_Goods_Market* pConsumer_Goods_Market, Capital_Goods_Market* pCapital_Go
         firm_ptr->Pay_Liabilities();}
 
 
+    // STEP 1.95.1 : Bank checks repayments
+    cout << " \n ------------ Step 1.95.1: Bank checks repayments ----------------" <<endl;
+    pBank->Check_Loans();
+
+
     // STEP 1.96: Update Public board before logging data
     // Update emission allowance prices and amounts
     pPublic_Info_Board->Update_Emission_Allowance_Amount();

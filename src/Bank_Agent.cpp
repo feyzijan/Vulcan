@@ -109,16 +109,20 @@ void Bank_Agent::Update_Interest_Rate(){
 
     float inflation_overshoot = max(cons_inflation_current - cons_inflation_target, float(0.0));
 
+    float r_current = r_rate;
+
     // Set interest rate proportional to inflation overshoot
     r_rate = max( float(r_reaction* inflation_overshoot), float(0.01)); // minimum interest rate of 1%
-    r_rate = min(r_rate, 0.4f) ; // maximum interest rate of 40%
+
+    // Impose maximum increase limit
+    if (r_rate > r_current + bank_max_interest_rate_change){
+        r_rate = r_current + bank_max_interest_rate_change;
+    }
+    // Check for max interest rate limit
+    r_rate = min(r_rate, bank_max_interest_rate) ; // maximum interest rate of 40%
 
     // Update historical records
     interest_rate_history.push(r_rate);
-
-    /* Alternative interest rate rule with output target:
-    r_rate = max(r_target + a*(cons_inflation_current - cons_inflation_target) + b*(output_current - output_target),0)
-    */
 }
 
 
@@ -261,6 +265,60 @@ float Bank_Agent::Calculate_Leverage_Penalty(float leverage_ratio){
 
 }
 
+
+/* Loop through the loan list
+- if the loan is expired, erase it from the list and delete the object
+- if the loan is not expired, calculate interest and principal payments, and add them appropriately
+*/
+void Bank_Agent::Check_Loans(){
+    new_interest_repayments = 0;
+    new_principal_repayments = 0;
+    auto it = long_term_loan_book.begin();
+    while(it != long_term_loan_book.end()){
+        if ( (*it)->Get_Bankruptcy_Status()){ // firm is bankrupt, no repayments
+            delete *it; // delete the loan object
+            it = long_term_loan_book.erase(it); // delete the pointer from the vector
+
+        } else if ((*it)->Get_Expiration_Status()  && !(*it)->Get_Bankruptcy_Status()){   // Firm has finished repaying
+            new_interest_repayments += (*it)->Calculate_Interest_Repayment();
+            new_principal_repayments += (*it)->Calculate_Principal_Repayment();
+            total_outstanding_loans -= (*it)->Get_Principal_Amount();
+            outstanding_long_term_loans -= (*it)->Get_Principal_Amount();
+            delete *it; // delete the loan object
+            it = long_term_loan_book.erase(it); // delete the pointer from the vector
+
+        }  else { // Firm has not finished repaying
+            new_interest_repayments += (*it)->Calculate_Interest_Repayment();
+            new_principal_repayments += (*it)->Calculate_Principal_Repayment();
+            it++;
+        }
+    }
+
+    it = short_term_loan_book.begin();
+    while (it != short_term_loan_book.end()){
+        if ( (*it)->Get_Bankruptcy_Status()){ // firm is bankrupt, no repayments
+            delete *it; // delete the loan object
+            it = short_term_loan_book.erase(it); // delete the pointer from the vector
+
+        } else if ((*it)->Get_Expiration_Status()  && !(*it)->Get_Bankruptcy_Status()){   // Firm has finished repaying
+            new_interest_repayments += (*it)->Calculate_Interest_Repayment();
+            new_principal_repayments += (*it)->Calculate_Principal_Repayment();
+            total_outstanding_loans -= (*it)->Get_Principal_Amount();
+            outstanding_short_term_loans -= (*it)->Get_Principal_Amount();
+            delete *it; // delete the loan object
+            it = short_term_loan_book.erase(it); // delete the pointer from the vector
+
+        }  else { // Firm has not finished repaying
+            new_interest_repayments += (*it)->Calculate_Interest_Repayment();
+            new_principal_repayments += (*it)->Calculate_Principal_Repayment();
+            it++;
+        }
+    }
+
+    // Tally up total figures
+    total_interest_repayments += new_interest_repayments;
+    total_principal_repayments += new_principal_repayments;
+}
 
 
 

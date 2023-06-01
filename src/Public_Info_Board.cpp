@@ -77,6 +77,8 @@ Public_Info_Board::Public_Info_Board(){
     n_bankrupt_cap_firms = 0;
     n_bankrupt_cons_firms = 0;
     n_active_firms = n_firms;
+    p_bankrupt_cons_firms = 0;
+    p_bankrupt_cap_firms = 0;
 
     current_date = 0;
 }
@@ -430,11 +432,11 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "household_dividend_income " << obj.household_dividend_income << std::endl;
     os << "household_unemployment_income " << obj.household_unemployment_income << std::endl;
     
-    os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;
+    //os << "household_sentiment_sum " << obj.household_sentiment_sum << std::endl;
     os << "household_sentiment_percentage " << obj.household_sentiment_percentage << std::endl;
-    os << "cons_firm_sentiment_sum " << obj.cons_firm_sentiment_sum << std::endl;
+    //os << "cons_firm_sentiment_sum " << obj.cons_firm_sentiment_sum << std::endl;
     os << "cons_firm_sentiment_percentage " << obj.cons_firm_sentiment_percentage << std::endl;
-    os << "cap_firm_sentiment_sum " << obj.cap_firm_sentiment_sum << std::endl;
+    //os << "cap_firm_sentiment_sum " << obj.cap_firm_sentiment_sum << std::endl;
     os << "cap_firm_sentiment_percentage " << obj.cap_firm_sentiment_percentage << std::endl;
     
     os << "cap_good_orders " << obj.cap_good_orders << std::endl;
@@ -466,8 +468,10 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "cap_goods_production_planned " << obj.cap_goods_production_planned << std::endl;
     os << "cap_goods_quantity_sold " << obj.cap_goods_quantity_sold << std::endl;
 
-    os << "n_bankrupt_cap_firms " << obj.n_bankrupt_cap_firms << std::endl;
-    os << "n_bankrupt_cons_firms " << obj.n_bankrupt_cons_firms << std::endl;
+    //os << "n_bankrupt_cap_firms " << obj.n_bankrupt_cap_firms << std::endl;
+    os << "p_bankrupt_cap_firms " << obj.p_bankrupt_cap_firms << std::endl;
+    //os << "n_bankrupt_cons_firms " << obj.n_bankrupt_cons_firms << std::endl;
+    os << "p_bankrupt_cons_firms " << obj.p_bankrupt_cons_firms << std::endl;
 
     os << "n_employed " << obj.n_employed_workers << std::endl;
     os << "n_unemployed " << obj.n_unemployed_workers << std::endl;
@@ -499,6 +503,8 @@ vector<pair<string, float>>* Public_Info_Board::Log_Data() {
         household_dividend_income /= max((n_active_firms),1);
         household_unemployment_income /= max(n_unemployed_workers,1);
     }
+    p_bankrupt_cons_firms = static_cast<float>(n_bankrupt_cons_firms)/n_consumer_firms;
+    p_bankrupt_cap_firms = static_cast<float>(n_bankrupt_cap_firms)/n_capital_firms;
 
 
     auto result = new vector<pair<string, float>>();
