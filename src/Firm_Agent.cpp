@@ -885,6 +885,7 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
     os << "is_cons_firm " << obj.is_cons_firm << std::endl;
     os << "date " << obj.current_date << std::endl;
     os << "id " << obj.id << std::endl;
+    os << "sector_id " << obj.sector_id << std::endl;
     return os;
 }
 

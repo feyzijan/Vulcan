@@ -300,8 +300,10 @@ class Public_Info_Board{
     int n_active_firms; // Initialized, updated, not reset, logged
     int n_bankrupt_cap_firms;  // Initialized, updated, not reset, logged
     int n_bankrupt_cons_firms;   // Initialized, updated, not reset, logged
+
     float p_bankrupt_cap_firms; // Initialized, updated, not reset, logged
     float p_bankrupt_cons_firms; // Initialized, updated, not reset, logged
+    float p_bankrupt_firms;
 
     // Current date
     int current_date; // Initialized, updated while logging, not reset, logged

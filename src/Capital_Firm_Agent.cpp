@@ -33,7 +33,7 @@ Capital_Firm_Agent::Capital_Firm_Agent(Capital_Firm_Agent&){}
 Capital_Firm_Agent::~Capital_Firm_Agent(){
     // Remove capital goods from the market by updating quantity to zero, and setting seller pointer to zero
     cap_goods_on_market->Set_Quantity(0);
-_   cap_goods_on_market->Set_Seller_Pointer(nullptr); 
+    cap_goods_on_market->Set_Seller_Pointer(nullptr); 
 } 
 
 /*
