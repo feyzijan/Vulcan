@@ -291,7 +291,7 @@ void Firm_Agent::Adjust_Wage_Offers()
     // Random bound on wage change
     // TODO: Let firms switch to the average wage
     float n_uniform;
-    float rand_wage_change_limit = is_cons_firm ? firm_cons_wage_change : firm_cap_wage_change;
+    float rand_wage_change_limit = is_cons_firm ? firm_cons_rand_wage_change : firm_cap_rand_wage_change;
 
     n_uniform = Uniform_Dist_Float(-rand_wage_change_limit,rand_wage_change_limit);
     // Models firms' uncertainty in gauging the labor market wages
@@ -495,8 +495,6 @@ void Firm_Agent::Make_Investment_Decision(){
         }
     }
 
-    // temporary override
-    //desired_machines = Uniform_Dist_Int(forced_machine_purchases_min,forced_machine_purchases_max);
     
     pPublic_Info_Board->Update_Cap_Good_Orders_Planned(desired_machines);
     pPublic_Info_Board->Update_Capital_Spending_Planned(estimated_cost);

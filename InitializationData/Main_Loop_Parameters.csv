@@ -1,7 +1,8 @@
 n_loops,60.0
-n_households,10000.0
-n_consumer_firms,450.0
-n_capital_firms,50.0
+n_households,250000.0
+n_consumer_firms,10000.0
+n_capital_firms,2000.0
+n_firms,12000.0
 n_consumer_sectors,12.0
 n_max_employees,100.0
 time_period,12.0

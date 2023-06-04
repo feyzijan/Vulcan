@@ -18,7 +18,7 @@ class Household_Agent{
 
     public:
     // Constructors and destructor
-    Household_Agent(float propensities[5], int vals[3], int object_id, Public_Info_Board* pPublic_Board );
+    Household_Agent(float propensities[4], int vals[3], int object_id, Public_Info_Board* pPublic_Board );
 
     // Initialization methods
     void Set_Firm_Owner(Firm_Agent* firm_ptr);
@@ -62,7 +62,6 @@ class Household_Agent{
     
     // Consumption and Expenditure
     long long consumption_budget;
-    float consumption_propensity; //c eq(17) - characteristic
     vector<float> spending_weight_by_sector;
 
     // Savings

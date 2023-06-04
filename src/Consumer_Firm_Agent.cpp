@@ -13,7 +13,6 @@ Consumer_Firm_Agent::Consumer_Firm_Agent(float init_values[7]): Firm_Agent::Firm
     unit_good_cost = firm_cons_good_unit_cost;
     inv_depreciation_rate = firm_cons_inv_depr_rate;
     inv_reaction_factor = firm_cons_inv_reaction_factor;
-    max_production_climbdown = firm_cons_max_production_climbdown;
     unit_emissions = firm_cons_init_emissions_per_unit;
     dividend_ratio_optimist = firm_cons_init_dividend_ratio_optimist;
     dividend_ratio_pessimist =  firm_cons_init_dividend_ratio_pessimist;
@@ -160,6 +159,8 @@ void Consumer_Firm_Agent::Update_Sentiment(){
 }
 
 
+/* Function to determine production target: Choose from one of two approaches by uncommenting lines
+*/
 void Consumer_Firm_Agent::Determine_New_Production(){
     
     // Check if price is high relative to the market, and inventory is low relative to desired
@@ -188,7 +189,8 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     // Cases 1 & 2 : Inventory low, price low, emissions low or high -> Increase production slightly +  increase price slightly to around avearge
     if (!price_high && !inventory_high) {
         //production_planned*= (1.0+prod_change/2.0);
-        good_price_current = average_market_price * rand_price_change;
+        //good_price_current = average_market_price * rand_price_change;
+        good_price_current *= rand_price_increase;
     
     } // Cases 3 & 4: Inventory low, price high, emissions low or high -> Increase production + maintain price
     else if (price_high && !inventory_high) {
@@ -214,7 +216,7 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     } // Case 8: Inventory high, price high, emissions high -> Decrease production slightly + decrease price slightly to around average
     else if (price_high && inventory_high && emission_high) {
         //production_planned*= (1.0-prod_change/2.0);
-        good_price_current = average_market_price * rand_price_change;
+        good_price_current *= rand_price_decrease;
         //good_price_current = average_market_price * Uniform_Dist_Float(0.9,1.1);
         //good_price_current = pPublic_Info_Board->Get_Cons_Sector_Price_Level(sector_id);
     }
@@ -227,17 +229,6 @@ void Consumer_Firm_Agent::Determine_New_Production(){
     production_planned = max(production_planned, static_cast<long long>(1)); // Floor at 1
     // At least operate all machines ?
     
-    
-    /* //Additionally impose limit on how much they can change production targets if things become too volatile
-    int production_planned_min = static_cast<int>(production_current*(1-firm_cons_max_production_climbdown));
-    int production_planned_max = static_cast<int>(production_current*(1+firm_cons_max_production_climbdown));
-    if(production_planned < production_planned_min){
-        production_planned = production_planned_min;
-    } else if (production_planned > production_planned_max){
-        production_planned = production_planned_max;
-    }
-    */
-   
     pPublic_Info_Board->Update_Consumer_Goods_Production_Planned(sector_id, production_planned);
 }
 
@@ -268,9 +259,7 @@ void Consumer_Firm_Agent::Assign_Sector(Consumer_Firm_Sector* pSector_Struct){
 
     // Update certain firm characteristics to match that of the sector
     output_per_machine = pSector_Struct->output_per_machine;
-    workers_per_machine = pSector_Struct->workers_per_machine;
-    unit_good_cost = pSector_Struct->good_unit_cost;
-    max_production_climbdown = pSector_Struct->max_production_climbdown;
+    unit_good_cost = pSector_Struct->good_unit_cost;;
     inv_depreciation_rate = pSector_Struct->inv_depr_rate;
 
     cons_goods_on_market->Set_Sector_ID(sector_id);

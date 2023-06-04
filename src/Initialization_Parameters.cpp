@@ -66,11 +66,6 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     // Initialization Parameters
 
     // --- Household initialization parameters
-    // General consumption propensity : c
-    household_init_c_mean = initialization_parameters["household_init_c_mean"];
-    household_init_c_std = initialization_parameters["household_init_c_std"];
-    household_init_c_min = initialization_parameters["household_init_c_min"];
-    household_init_c_max = initialization_parameters["household_init_c_max"];
     
     // Propensity to consume financial wealth, c_f
     household_init_c_f_mean = initialization_parameters["household_init_c_f_mean"];
@@ -229,28 +224,21 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     n_capital_firms = main_loop_parameters["n_capital_firms"];
     n_firms = main_loop_parameters["n_firms"]; 
     sector_count = main_loop_parameters["n_consumer_sectors"];
-    n_max_employees = main_loop_parameters["n_max_employees"]; 
-    time_period = main_loop_parameters["time_period"]; 
 
     // ---- Household dynamic parameters
     household_n_res_wage_decrease = main_loop_parameters["household_n_res_wage_decrease"]; 
     household_targeted_savings_to_income_ratio = main_loop_parameters["household_targeted_savings_to_income_ratio"];
-    household_household_tax_rate = main_loop_parameters["household_household_tax_rate"];
 
     // ---- General Firm dynamic parameters
     standard_employment_contract_length = main_loop_parameters["standard_employment_contract_length"];
     firm_tax_rate = main_loop_parameters["firm_tax_rate"];
-    forced_machine_purchases_min = main_loop_parameters["forced_machine_purchases_min"]; 
-    forced_machine_purchases_max = main_loop_parameters["forced_machine_purchases_max"]; 
 
     // --- Consumer Firm dynamic parameters
     firm_cons_inv_depr_rate = main_loop_parameters["firm_cons_inv_depr_rate"];
     firm_cons_productivity = main_loop_parameters["firm_cons_productivity"]; // # units produced per worker machine pairing
     firm_cons_workers_per_machine = main_loop_parameters["firm_cons_workers_per_machine"];
     firm_cons_good_unit_cost = main_loop_parameters["firm_cons_good_unit_cost"];
-    firm_cons_max_production_climbdown = main_loop_parameters["firm_cons_max_production_climbdown"];
     firm_cons_inv_reaction_factor = main_loop_parameters["firm_cons_inv_reaction_factor"];
-    firm_cons_wage_change = main_loop_parameters["firm_cons_wage_change"];
 
     // --- Capital Firm dynamic parameters
     firm_cap_inv_depr_rate = main_loop_parameters["firm_cap_inv_depr_rate"];
@@ -258,9 +246,8 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cap_workers_per_machine = main_loop_parameters["firm_cap_workers_per_machine"];
     firm_cap_good_unit_cost = main_loop_parameters["firm_cap_good_unit_cost"];
     firm_cap_machine_lifespan = main_loop_parameters["firm_cap_machine_lifespan"];
-    firm_cap_max_production_climbdown = main_loop_parameters["firm_cap_max_production_climbdown"];
     firm_cap_inv_reaction_factor = main_loop_parameters["firm_cap_inv_reaction_factor"];
-    firm_cap_wage_change = main_loop_parameters["firm_cap_wage_change"];
+
 
     // --- Bank dynamic Parameters
     bank_inflation_reaction = main_loop_parameters["bank_inflation_reaction"];
@@ -308,12 +295,14 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
     firm_cons_rand_sentiment_adoption = randomness_parameters["firm_cons_rand_sentiment_adoption"];
     firm_cons_rand_desired_inventory_factor_change = randomness_parameters["firm_cons_rand_desired_inventory_factor_change"];
     firm_cons_rand_price_change_upper_limit = randomness_parameters["firm_cons_rand_price_change_upper_limit"];
+    firm_cons_rand_wage_change = randomness_parameters["firm_cons_rand_wage_change"];
     
     // Cap firm randomness parameters
     firm_cap_rand_dividend_change = randomness_parameters["firm_cap_rand_dividend_change"];
     firm_cap_rand_sentiment_adoption = randomness_parameters["firm_cap_rand_sentiment_adoption"];
     firm_cap_rand_desired_inventory_factor_change = randomness_parameters["firm_cap_rand_desired_inventory_factor_change"];
     firm_cap_rand_price_change_upper_limit = randomness_parameters["firm_cap_rand_price_change_upper_limit"];
+    firm_cap_rand_wage_change = randomness_parameters["firm_cap_wage_change"];
 
 
     cout << "This simulation is with the following parameters: n_households: " << n_households << " n_consumer_firms: " << n_consumer_firms <<
@@ -332,9 +321,6 @@ int n_firms = 350;
 
 int sector_count = 12;
 
-int time_period = 12; 
-int n_max_employees = 100; 
-
 
 //---- Public parameters----------------------
 // Wage parameters
@@ -344,11 +330,6 @@ int household_init_minimum_wage = 600;
 
 //--------------- Household parameters ---------------
 // --- Household initialization parameters
-// General consumption propensity : c
-float household_init_c_mean =0.5;
-float household_init_c_std =0.15;
-float household_init_c_min =0.1;
-float household_init_c_max =0.9;
 // Propensity to consume financial wealth, c_f
 float household_init_c_f_mean = 0.5;
 float household_init_c_f_std = 0.1;
@@ -388,7 +369,6 @@ float household_init_res_wage_max = 999999;
 // ---- Household dynamic parameters
 float household_n_res_wage_decrease = 0.05; 
 float household_targeted_savings_to_income_ratio = 3.0;
-float household_household_tax_rate = 0.2;
 
 // --- Household randomness parameters
 float household_rand_sentiment_adoption = 0.1;
@@ -443,16 +423,15 @@ float firm_cons_init_dividend_ratio_pessimist = 0.02;
 float firm_cons_inv_depr_rate = 0.01;
 float firm_cons_productivity = 1000; // # units produced per worker machine pairing
 int firm_cons_workers_per_machine = 1;
-float firm_cons_max_production_climbdown = 0.25;
 float firm_cons_good_unit_cost = 1.0;
 float firm_cons_inv_reaction_factor = 1.0;
-float firm_cons_wage_change;
 
 // --- Consumer Firm randomness parameters
 float firm_cons_rand_dividend_change = 0.1;
 float firm_cons_rand_sentiment_adoption = 0.1;
 float firm_cons_rand_desired_inventory_factor_change = 0.1;
 float firm_cons_rand_price_change_upper_limit = 0.2;
+float firm_cons_rand_wage_change = 0.25;
 
 
 
@@ -505,24 +484,22 @@ float firm_cap_inv_depr_rate = 0.01;
 float firm_cap_productivity = 10; // # units produced per worker machine pairing
 int firm_cap_workers_per_machine = 1;
 int firm_cap_machine_lifespan = 100;
-float firm_cap_max_production_climbdown = 0.25;
 float firm_cap_good_unit_cost = 20.0;
 float firm_cap_inv_reaction_factor = 1.0;
-float firm_cap_wage_change;
+
 
 // --- Capital Firm randomness parameters
 float firm_cap_rand_dividend_change = 0.1;
 float firm_cap_rand_sentiment_adoption = 0.1;
 float firm_cap_rand_desired_inventory_factor_change = 0.1;
 float firm_cap_rand_price_change_upper_limit = 0.2;
+float firm_cap_rand_wage_change = 0.25;
 
 
 //---------------------------------------------
 // ---- Parameters for all Firms
 int standard_employment_contract_length = 6;
 float firm_tax_rate = 0.2;
-int forced_machine_purchases_min = 5; 
-int forced_machine_purchases_max = 5;
 
 
 //---------------------------------------------

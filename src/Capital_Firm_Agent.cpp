@@ -13,7 +13,6 @@ Capital_Firm_Agent::Capital_Firm_Agent(float init_values[7]) : Firm_Agent::Firm_
     unit_good_cost = firm_cap_good_unit_cost; // global param
     inv_depreciation_rate = firm_cap_inv_depr_rate;
     inv_reaction_factor = firm_cap_inv_reaction_factor;
-    max_production_climbdown = firm_cap_max_production_climbdown; // seems to be unused
     dividend_ratio_optimist = firm_cap_init_dividend_ratio_optimist;
     dividend_ratio_pessimist =  firm_cap_init_dividend_ratio_pessimist;
 
@@ -132,12 +131,14 @@ void Capital_Firm_Agent::Determine_New_Production(){
     } // Case 2: Inventory low, Price low - > Increase Price slightly, to around  average, + increase  production slightly 
     else if( !inventory_high && !price_high){
         //production_planned *= (1.0+prod_change/2.0);
-        good_price_current = average_market_price * rand_price_change;
+        //good_price_current = average_market_price * rand_price_change;
+        good_price_current *= rand_price_increase;
     
     } // Case 3: Inventory high, Price high - > Decrease production slightly + decrease price slightly to around average
     else if (inventory_high && price_high){
         //production_planned *= (1.0-prod_change/2.0);
-        good_price_current = average_market_price * rand_price_change;
+        //good_price_current = average_market_price * rand_price_change;
+        good_price_current *= rand_price_decrease;
         //good_price_current >= pPublic_Info_Board->Get_Capital_Good_Price_Level();
 
     } // Case 4: Inventory high, Price low -> Reduce Production
@@ -152,17 +153,6 @@ void Capital_Firm_Agent::Determine_New_Production(){
     production_planned = static_cast<long long>(average_sale_quantity - (inventory - desired_inventory)/inv_reaction_factor);
     production_planned = max(production_planned, static_cast<long long>(1)); // Floor at 1
     
-    
-    /* //Additionally impose limit on how much they can change production targets if things become too volatile
-    int production_planned_min = static_cast<int>(production_current*(1-firm_cap_max_production_climbdown));
-    int production_planned_max = static_cast<int>(production_current*(1+firm_cap_max_production_climbdown));
-    if(production_planned < production_planned_min){
-        production_planned = production_planned_min;
-    } else if (production_planned > production_planned_max){
-        production_planned = production_planned_max;
-    }
-    */
-
     pPublic_Info_Board->Update_Capital_Goods_Planned_Production(production_planned);
 }
 

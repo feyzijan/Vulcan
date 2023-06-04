@@ -7,7 +7,7 @@ using namespace std;
 
 //----------- Constructors
 // New Constructor to use
-Household_Agent::Household_Agent(float propensities[5], int init_values[3], int object_id, Public_Info_Board* pPublic_Board )
+Household_Agent::Household_Agent(float propensities[4], int init_values[3], int object_id, Public_Info_Board* pPublic_Board )
 {
     // -- Set Given starting parameters and propensities
     savings= init_values[0];
@@ -16,11 +16,10 @@ Household_Agent::Household_Agent(float propensities[5], int init_values[3], int 
 
     id = object_id;
 
-    consumption_propensity = propensities[0];
-    saving_propensity_optimist = propensities[1];
-    saving_propensity_pessimist = propensities[2];
-    c_f = propensities[3];
-    c_excess_money = propensities[4];
+    saving_propensity_optimist = propensities[0];
+    saving_propensity_pessimist = propensities[1];
+    c_f = propensities[2];
+    c_excess_money = propensities[3];
 
     // Set Pointers
     // Public_Info_Board* pPublic_Info_Board = pPublic_Board;
@@ -198,7 +197,7 @@ void Household_Agent::Random_Experimentation(){
 
     // Take the necessary actiosn based on sentiment
     saving_propensity = (sentiment) ? saving_propensity_optimist : saving_propensity_pessimist;
-    savings_desired = saving_propensity * income_average; // Set targets for cash on hand
+    //savings_desired = saving_propensity * income_average; // Set targets for cash on hand
 
     // Update public board if sentiment changed
     if (old_sentiment == 1 && sentiment == 0){ // sentiment became negative
@@ -298,7 +297,7 @@ void Household_Agent::Determine_Consumer_Sentiment()
 
     // Take the necessary actiosn based on sentiment
     saving_propensity = (sentiment) ? saving_propensity_optimist : saving_propensity_pessimist;
-    savings_desired = saving_propensity * income_average; // Set targets for cash on hand
+    //savings_desired = saving_propensity * income_average; // Set targets for cash on hand
 
     pPublic_Info_Board->Update_Household_sentiment_sum(static_cast<int>(sentiment));
 }
@@ -448,7 +447,6 @@ void Household_Agent::Notify_Of_Bankruptcy(){
 
 std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     os << "consumption_budget " << obj.consumption_budget << std::endl;
-    os << "consumption_propensity " << obj.consumption_propensity << std::endl;
     os << "savings " << obj.savings << std::endl;
     os << "savings_desired " << obj.savings_desired << std::endl;
     os << "saving_propensity " << obj.saving_propensity << std::endl;

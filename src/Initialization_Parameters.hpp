@@ -46,17 +46,10 @@ extern int n_firms;
 
 extern int sector_count;
 
-extern int time_period; // # timesteps that make a year - Unused right now
-extern int n_max_employees; //unused
 
 //--------------- Household parameters ---------------
 // --- Household initialization parameters
 // Below values are used to generate distributions of initial parameters for households
-// General consumption propensity : c
-extern float household_init_c_mean ;
-extern float household_init_c_std ;
-extern float household_init_c_min ;
-extern float household_init_c_max ;
 // Propensity to consume financial wealth, c_f
 extern float household_init_c_f_mean;
 extern float household_init_c_f_std;
@@ -100,7 +93,6 @@ extern int household_init_minimum_wage;
 // ---- Household dynamic parameters
 extern float household_n_res_wage_decrease; // Household reservation wages are updated with *1-n_uniform*this_value
 extern float household_targeted_savings_to_income_ratio;
-extern float household_household_tax_rate;
 
 // --- Household randomness parameters
 extern float household_rand_sentiment_adoption;
@@ -115,8 +107,6 @@ extern int standard_employment_contract_length;
 extern float firm_tax_rate;
 // Below parameters define lower and upper bound of a uniform distribution 
 // that forces machine purchases on companies
-extern int forced_machine_purchases_min; 
-extern int forced_machine_purchases_max;
 
 //---------------------------------------------
 
@@ -164,10 +154,8 @@ extern float firm_cons_init_dividend_ratio_pessimist;
 extern float firm_cons_inv_depr_rate;
 extern float firm_cons_productivity; // # units produced per worker machine pairing
 extern int firm_cons_workers_per_machine;
-extern float firm_cons_max_production_climbdown;
 extern float firm_cons_good_unit_cost;
 extern float firm_cons_inv_reaction_factor;
-extern float firm_cons_wage_change;
 
 
 // --- Consumer Firm randomness parameters
@@ -175,6 +163,7 @@ extern float firm_cons_rand_dividend_change;
 extern float firm_cons_rand_sentiment_adoption;
 extern float firm_cons_rand_desired_inventory_factor_change;
 extern float firm_cons_rand_price_change_upper_limit;
+extern float firm_cons_rand_wage_change;
 
 
 
@@ -187,20 +176,16 @@ struct Consumer_Firm_Sector {
     float weighing; // % of consumption that goes to this sector
     float inv_depr_rate;
     int output_per_machine;
-    int workers_per_machine;
     float good_unit_cost;
-    float max_production_climbdown;
     float emission_per_unit; // NEWLY ADDED
     float emission_sensitivity_mean; // NEWLY ADDED
     int emission_allowance;
 
     Consumer_Firm_Sector(string p_name, int p_sector_id, float p_weighing, float p_inv_depr_rate, int p_output_per_machine, 
-    int p_workers_per_machine, float p_good_unit_cost, float p_max_production_climbdown, float p_emissions_per_unit, 
+    float p_good_unit_cost, float p_emissions_per_unit, 
     float p_emission_sensitivity_mean, int p_emission_allowance)
     : sector_name(p_name), sector_id(p_sector_id), weighing(p_weighing),
-    inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine),
-    workers_per_machine(p_workers_per_machine), good_unit_cost(p_good_unit_cost), 
-    max_production_climbdown(p_max_production_climbdown), emission_per_unit(p_emissions_per_unit), 
+    inv_depr_rate(p_inv_depr_rate), output_per_machine(p_output_per_machine), good_unit_cost(p_good_unit_cost), emission_per_unit(p_emissions_per_unit), 
     emission_sensitivity_mean(p_emission_sensitivity_mean), emission_allowance(p_emission_allowance)
     {}
 };
@@ -253,10 +238,9 @@ extern float firm_cap_inv_depr_rate;
 extern float firm_cap_productivity; // # units produced per worker machine pairing
 extern int firm_cap_workers_per_machine;
 extern int firm_cap_machine_lifespan;
-extern float firm_cap_max_production_climbdown;
 extern float firm_cap_good_unit_cost;
 extern float firm_cap_inv_reaction_factor;
-extern float firm_cap_wage_change;
+
 
 
 // --- Capital Firm randomness parameters
@@ -264,6 +248,7 @@ extern float firm_cap_rand_dividend_change;
 extern float firm_cap_rand_sentiment_adoption;
 extern float firm_cap_rand_desired_inventory_factor_change;
 extern float firm_cap_rand_price_change_upper_limit;
+extern float firm_cap_rand_wage_change;
 
 
 //---------------------------------------------

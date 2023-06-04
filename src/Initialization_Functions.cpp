@@ -147,7 +147,6 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
     cout << "\nInitializing " << size << " households" << endl;
     
     //Set up Random Generators
-    Normal_Dist_Generator init_c(household_init_c_mean, household_init_c_std, household_init_c_min, household_init_c_max);
     Normal_Dist_Generator init_s_optimist(household_init_s_optimist_mean, household_init_s_optimist_std, household_init_s_optimist_min, household_init_s_optimist_max);
     Normal_Dist_Generator init_s_pessimist(household_init_s_pessimist_mean, household_init_s_pessimist_std, household_init_s_pessimist_min, household_init_s_pessimist_max);
     Normal_Dist_Generator init_c_f(household_init_c_f_mean, household_init_c_f_std, household_init_c_f_min, household_init_c_f_max);
@@ -160,7 +159,6 @@ void Initialize_Households(vector<Household_Agent*> *pHousehold_vector, Public_I
     int object_id = 1;
     for (int i=0; i<size; i++) {
         float propensities[] = { 
-            init_c(), // consumption propensity
             init_s_optimist(), // saving_propensity_optimist 
             init_s_pessimist(), // saving_propensity_pessimist
             init_c_f(), // c_f
@@ -327,9 +325,7 @@ void Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector)
         string weighing_str;
         string inv_depr_rate_str;
         string output_per_machine_str;
-        string workers_per_machine_str;
         string good_unit_cost_str;
-        string max_production_climbdown_str;
         string emission_per_unit_str;
         string emission_sensitivity_mean_str;
         string emission_allowance_str;
@@ -337,24 +333,22 @@ void Create_Sectors(vector<Consumer_Firm_Sector*> *pConsumer_Firm_Sector_vector)
         // Parse the comma separated values into separate variables
         if (std::getline(ss, sector_name, ',') && std::getline(ss, sector_id_str, ',') && std::getline(ss, weighing_str, ',')
             && std::getline(ss, inv_depr_rate_str, ',') && std::getline(ss, output_per_machine_str, ',') 
-            && std::getline(ss, workers_per_machine_str, ',') && std::getline(ss, good_unit_cost_str, ',') 
-            && std::getline(ss, max_production_climbdown_str, ',') && std::getline(ss, emission_per_unit_str, ',')
+            && std::getline(ss, good_unit_cost_str, ',') 
+            && std::getline(ss, emission_per_unit_str, ',')
             && std::getline(ss, emission_sensitivity_mean_str, ',') && std::getline(ss, emission_allowance_str, ',')) {
             // Convert strings to float and int
             int sector_id = std::stoi(sector_id_str);
             float weighing = std::stof(weighing_str); 
             float inv_depr_rate = std::stof(inv_depr_rate_str);
             int output_per_machine = std::stoi(output_per_machine_str);
-            int workers_per_machine = std::stoi(workers_per_machine_str);
             float good_unit_cost = std::stof(good_unit_cost_str);
-            float max_production_climbdown = std::stof(max_production_climbdown_str);
             float emission_per_unit = std::stof(emission_per_unit_str);
             float emission_sensitivity_mean = std::stof(emission_sensitivity_mean_str);
             int emission_allowance = std::stoul(emission_allowance_str);
     
             // Create new instance of Consumer_Firm_Sector struct
             Consumer_Firm_Sector *pSector = new Consumer_Firm_Sector(sector_name, sector_id, weighing, inv_depr_rate, output_per_machine,
-            workers_per_machine, good_unit_cost, max_production_climbdown, emission_per_unit, emission_sensitivity_mean, emission_allowance); 
+            good_unit_cost, emission_per_unit, emission_sensitivity_mean, emission_allowance); 
             pConsumer_Firm_Sector_vector->push_back(pSector); // Add it to the vector
             temp ++;
         }
