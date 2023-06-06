@@ -1,8 +1,4 @@
 bank_init_interest_rate,0.02
-household_init_c_std,0.15
-household_init_c_min,0.1
-household_init_c_max,0.9
-household_init_c_mean,0.5
 household_init_c_f_mean,0.5
 household_init_c_f_std,0.1
 household_init_c_f_min,0.1
@@ -61,7 +57,7 @@ firm_cons_init_target_inv_factor_min,0.1
 firm_cons_init_target_inv_factor_max,10.0
 firm_cons_init_production_current_ratio,0.4
 firm_cons_init_quantity_sold_ratio,0.25
-firm_cap_init_emissions_per_unit,10.0
+firm_cons_init_emissions_per_unit,10.0
 firm_cap_init_cash_mean,10000.0
 firm_cap_init_cash_std,2500.0
 firm_cap_init_cash_min,1.0

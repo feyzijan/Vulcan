@@ -292,6 +292,7 @@ void Firm_Agent::Adjust_Wage_Offers()
     // TODO: Let firms switch to the average wage
     float n_uniform;
     float rand_wage_change_limit = is_cons_firm ? firm_cons_rand_wage_change : firm_cap_rand_wage_change;
+    float fixed_wage_change = is_cons_firm ? firm_cons_fixed_wage_change : firm_cap_fixed_wage_change;
 
     n_uniform = Uniform_Dist_Float(-rand_wage_change_limit,rand_wage_change_limit);
     // Models firms' uncertainty in gauging the labor market wages
@@ -301,12 +302,12 @@ void Firm_Agent::Adjust_Wage_Offers()
     bool wage_high = wage_offer >= average_wage_market;
 
     if (wage_high && need_worker){ // Case 1: Need worker, and wage is high - Reduce to near average
-        wage_offer = average_wage_market * (1+n_uniform); 
+        wage_offer = average_wage_market * (1 + fixed_wage_change + n_uniform); 
     } else if(wage_high && !need_worker){ // Case 2: Don't need worker, and wage is still high - do nothing
         //wage_offer *= (1-Uniform_Dist_Float(0,rand_wage_change_limit));
         //wage_offer = average_wage_market * (1+n_uniform) // Alternative: Reduce wages to average +- random factor
     } else if(!wage_high && need_worker){ // Case 3: Need worker, and wage is low - raise wage offer to near average
-        wage_offer = average_wage_market * (1+n_uniform); 
+        wage_offer = average_wage_market * (1 + fixed_wage_change + n_uniform); 
     } else{ // (!wage_high && !need_worker) // Case 4: Don't need worker, my wage is low -  do nothing
         //wage_offer *= (1+n_uniform);
     }

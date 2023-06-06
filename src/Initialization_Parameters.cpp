@@ -268,6 +268,17 @@ map<string, float>& main_loop_parameters, map<string, float>& randomness_paramet
         bank_max_interest_rate_change = it->second;}
 
 
+   // do the same for fixed price and wage change params for cons and cap firms
+    it = main_loop_parameters.find("firm_cons_fixed_price_change");
+    if (it != main_loop_parameters.end() || it->first == "firm_cons_fixed_price_change") { firm_cons_fixed_price_change = it->second;} 
+    it = main_loop_parameters.find("firm_cons_fixed_wage_change");
+    if (it != main_loop_parameters.end() || it->first == "firm_cons_fixed_wage_change") { firm_cons_fixed_wage_change = it->second;}
+    it = main_loop_parameters.find("firm_cap_fixed_price_change");
+    if (it != main_loop_parameters.end() || it->first == "firm_cap_fixed_price_change") { firm_cap_fixed_price_change = it->second;}
+    it = main_loop_parameters.find("firm_cap_fixed_wage_change");
+    if (it != main_loop_parameters.end() || it->first == "firm_cap_fixed_wage_change") { firm_cap_fixed_wage_change = it->second;}
+    
+
     //---- Bank Emission Penalty Parameters
     bank_total_emission_penalty = main_loop_parameters["bank_total_emission_penalty"];
     bank_unit_emission_penalty = main_loop_parameters["bank_unit_emission_penalty"];
@@ -425,6 +436,8 @@ float firm_cons_productivity = 1000; // # units produced per worker machine pair
 int firm_cons_workers_per_machine = 1;
 float firm_cons_good_unit_cost = 1.0;
 float firm_cons_inv_reaction_factor = 1.0;
+float firm_cons_fixed_price_change = 0.05;
+float firm_cons_fixed_wage_change = 0.05;
 
 // --- Consumer Firm randomness parameters
 float firm_cons_rand_dividend_change = 0.1;
@@ -486,6 +499,8 @@ int firm_cap_workers_per_machine = 1;
 int firm_cap_machine_lifespan = 100;
 float firm_cap_good_unit_cost = 20.0;
 float firm_cap_inv_reaction_factor = 1.0;
+float firm_cap_fixed_price_change = 0.05;
+float firm_cap_fixed_wage_change = 0.05;
 
 
 // --- Capital Firm randomness parameters

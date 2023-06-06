@@ -48,7 +48,7 @@ Public_Info_Board::Public_Info_Board(){
     // Production
     cap_goods_production = 0;
     cap_goods_production_planned = 0;
-    //cap_goods_quantity_sold = 0;
+    cap_goods_quantity_sold = 0;
     cons_good_production = 0;
     cons_good_production_planned = 0;
 
@@ -62,6 +62,7 @@ Public_Info_Board::Public_Info_Board(){
     contract_expiries = 0;
     new_job_postings = 0;
     removed_job_postings = 0;
+    n_active_job_postings = 0;
     n_employees_quitting = 0;
 
     // not using this as of yet
@@ -400,6 +401,7 @@ void Public_Info_Board::Reset_Global_Data(){
     employee_firings = reset_value;
     contract_expiries = reset_value;
     new_job_postings = reset_value;
+    n_active_job_postings = reset_value;
     removed_job_postings = reset_value;
     n_employees_quitting = reset_value;
 
@@ -483,6 +485,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
     os << "empl_contract_expiries " << obj.contract_expiries << std::endl;
     os << "n_new_job_postings " << obj.new_job_postings << std::endl;
     os << "n_removed_job_postings " << obj.removed_job_postings << std::endl;
+    os << "n_active_job_postings " << obj.n_active_job_postings << std::endl;
     
     //os << "unempl_benefits " << obj.public_unemployment_benefit << std::endl;
     //os << "minimum_wage " << obj.minimum_wage << std::endl;
@@ -508,6 +511,12 @@ vector<pair<string, float>>* Public_Info_Board::Log_Data() {
     p_bankrupt_cons_firms = static_cast<float>(n_bankrupt_cons_firms)/n_consumer_firms;
     p_bankrupt_cap_firms = static_cast<float>(n_bankrupt_cap_firms)/n_capital_firms;
     p_bankrupt_firms = static_cast<float>(n_bankrupt_cap_firms + n_bankrupt_cons_firms)/n_firms;
+
+    // Job postings
+    n_active_job_postings = pJob_Market->Get_Size();
+
+
+
 
     auto result = new vector<pair<string, float>>();
 

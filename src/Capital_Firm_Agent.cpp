@@ -120,9 +120,10 @@ void Capital_Firm_Agent::Determine_New_Production(){
     bool inventory_high = inventory >= desired_inventory; 
 
     // Determine randomised price and production change factors
-    float rand_price_change = Uniform_Dist_Float(1.0- firm_cap_rand_price_change_upper_limit, 1.0+ firm_cap_rand_price_change_upper_limit); 
-    float rand_price_increase = Uniform_Dist_Float(1.0, 1.0+ firm_cap_rand_price_change_upper_limit);
-    float rand_price_decrease = Uniform_Dist_Float(1.0- firm_cap_rand_price_change_upper_limit, 1.0);
+    float rand_price_change = Uniform_Dist_Float(1.0- firm_cap_fixed_price_change- firm_cap_rand_price_change_upper_limit, 
+        1.0 + firm_cap_fixed_price_change + firm_cap_rand_price_change_upper_limit); 
+    float rand_price_increase = Uniform_Dist_Float(1.0, 1.0 + firm_cap_fixed_price_change + firm_cap_rand_price_change_upper_limit);
+    float rand_price_decrease = Uniform_Dist_Float(1.0- firm_cap_fixed_price_change - firm_cap_rand_price_change_upper_limit, 1.0);
 
     // Case 1: Inventory low, Price high - > Maintain price, increase prod
     if (!inventory_high && price_high){

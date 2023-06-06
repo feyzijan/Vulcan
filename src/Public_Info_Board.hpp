@@ -294,6 +294,7 @@ class Public_Info_Board{
     int n_employees_quitting; // Initialized, updated, reset, logged
     int new_job_postings; // Initialized, updated, reset, logged
     int removed_job_postings; // Initialized, updated, reset, logged
+    int n_active_job_postings;  // Initialized, updated, reset, logged
     int public_unemployment_benefit; // Initialized, not updated, not reset, logged
 
     // Bankruptcy figures

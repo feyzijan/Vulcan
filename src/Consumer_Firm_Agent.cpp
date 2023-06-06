@@ -178,9 +178,10 @@ void Consumer_Firm_Agent::Determine_New_Production(){
 
 
     // Determine randomised price and production change factors
-    float rand_price_change =  Uniform_Dist_Float(1.0-firm_cons_rand_price_change_upper_limit,1.0+ firm_cons_rand_price_change_upper_limit); 
-    float rand_price_increase = Uniform_Dist_Float(1.0, 1.0+ firm_cons_rand_price_change_upper_limit);
-    float rand_price_decrease = Uniform_Dist_Float(1.0- firm_cons_rand_price_change_upper_limit, 1.0);
+    float rand_price_change =  Uniform_Dist_Float(1.0 - firm_cons_fixed_price_change -firm_cons_rand_price_change_upper_limit,
+        1.0+ firm_cons_fixed_price_change +firm_cons_rand_price_change_upper_limit); 
+    float rand_price_increase = Uniform_Dist_Float(1.0, 1.0 + firm_cons_fixed_price_change + firm_cons_rand_price_change_upper_limit);
+    float rand_price_decrease = Uniform_Dist_Float(1.0- firm_cons_fixed_price_change - firm_cons_rand_price_change_upper_limit, 1.0);
 
     /* Change price, production, and emission based on data
     Cases 1-4: Inventory low == Sales high, so no need to worry about emission

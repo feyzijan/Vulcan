@@ -156,7 +156,8 @@ extern float firm_cons_productivity; // # units produced per worker machine pair
 extern int firm_cons_workers_per_machine;
 extern float firm_cons_good_unit_cost;
 extern float firm_cons_inv_reaction_factor;
-
+extern float firm_cons_fixed_price_change;
+extern float firm_cons_fixed_wage_change;
 
 // --- Consumer Firm randomness parameters
 extern float firm_cons_rand_dividend_change;
@@ -240,6 +241,10 @@ extern int firm_cap_workers_per_machine;
 extern int firm_cap_machine_lifespan;
 extern float firm_cap_good_unit_cost;
 extern float firm_cap_inv_reaction_factor;
+extern float firm_cap_fixed_price_change;
+extern float firm_cap_fixed_wage_change;
+
+
 
 
 

@@ -1,12 +1,14 @@
 household_rand_sentiment_adoption,0.1
 household_rand_sector_spending_weight_change,0.1
 household_rand_emission_sensitivity_change,0.1
-household_rand_job_search,0.1
+household_rand_job_search,0.25
 firm_cons_rand_dividend_change,0.1
 firm_cons_rand_sentiment_adoption,0.1
 firm_cons_rand_desired_inventory_factor_change,0.1
-firm_cons_rand_price_change_upper_limit,0.2
+firm_cons_rand_price_change_upper_limit,0.1
+firm_cons_rand_wage_change,0.25
 firm_cons_rand_dividend_change,0.1
 firm_cap_rand_sentiment_adoption,0.1
 firm_cap_rand_desired_inventory_factor_change,0.1
-firm_cap_rand_price_change_upper_limit,0.2
+firm_cap_rand_price_change_upper_limit,0.1
+firm_cap_rand_wage_change,0.25
