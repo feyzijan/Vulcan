@@ -54,7 +54,7 @@ class Household_Agent{
     
     // Printing and Logging
     friend std::ostream& operator<<(std::ostream& os, const Household_Agent& obj);
-    vector<std::pair<string, float>>* Log_Data();
+    vector<std::pair<string, float> >* Log_Data();
 
     protected:
     Public_Info_Board* pPublic_Info_Board;

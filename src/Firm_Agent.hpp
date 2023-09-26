@@ -73,7 +73,7 @@ class Firm_Agent{
 
     //Print and logging methods
     friend std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj);
-    vector<std::pair<string, float>>*  Log_Data();
+    vector<std::pair<string, float> >*  Log_Data();
 
     
     protected:

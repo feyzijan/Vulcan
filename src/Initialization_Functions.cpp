@@ -375,7 +375,7 @@ void Allocate_Firms_to_Sectors(vector<Consumer_Firm_Agent*> *pConsumer_Firm_vect
     std::shuffle(pConsumer_Firm_vector->begin(), pConsumer_Firm_vector->end(), std::default_random_engine(std::time(0)));
     
     // Create a vector of pairs of sector_id and sector_weighing ****************
-    vector<pair<int, float>> vec_Sector_Weights;
+    vector<pair<int, float> > vec_Sector_Weights;
     for (Consumer_Firm_Sector* sector : *pConsumer_Firm_Sector_vector) {
         vec_Sector_Weights.push_back(make_pair(sector->sector_id, sector->weighing));
     }

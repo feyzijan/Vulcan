@@ -38,7 +38,7 @@ class Bank_Agent{
 
     // Printing and debugging
     friend std::ostream& operator<<(std::ostream& os, const Bank_Agent& obj);
-    vector<std::pair<string, float>>*  Log_Data();
+    vector<std::pair<string, float> >*  Log_Data();
 
     protected:
     Public_Info_Board* pPublic_Board;

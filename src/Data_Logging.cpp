@@ -3,10 +3,10 @@
 using namespace std;
 
 
-void write_csv(string filename, vector<pair<string, vector<float>>> dataset){
+void write_csv(string filename, vector<pair<string, vector<float> >> dataset){
     // Make a CSV file with one or more columns of integer
     // Each column of data is represented by the pair <column name, column data>
-    // as std::pair<string, vector<int>>
+    // as std::pair<string, vector<int> >
     // The dataset is represented as a vector of these columns
     // Note that all columns should be the same size
     
@@ -54,7 +54,7 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
     // If file is empty, write the header row
     if (!header_written && log_file.tellp() == 0) {
         // Get the header row TODO: May need to change thsi float to dobule
-        vector<pair<string, float>>* header_data = pPublic_Info_Board->Log_Data();
+        vector<pair<string, float> >* header_data = pPublic_Info_Board->Log_Data();
         string header;
         for (auto it = header_data->begin(); it != header_data->end(); ++it) {
             header += it->first + ",";
@@ -68,7 +68,7 @@ void Log_Public_Info_Board(Public_Info_Board* pPublic_Info_Board) {
     }
 
     // Get the data row
-    vector<pair<string, float>>* data = pPublic_Info_Board->Log_Data();
+    vector<pair<string, float> >* data = pPublic_Info_Board->Log_Data();
     string row;
     for (auto it = data->begin(); it != data->end(); ++it) {
         row += std::to_string(it->second) + ",";
@@ -92,7 +92,7 @@ void Log_Bank(Bank_Agent *pBank){
     // If file is empty, write the header row
     if (!header_written && log_file.tellp() == 0) {
         // Get the header row
-        vector<pair<string, float>>* header_data = pBank->Log_Data();
+        vector<pair<string, float> >* header_data = pBank->Log_Data();
         string header;
         for (auto it = header_data->begin(); it != header_data->end(); ++it) {
             header += it->first + ",";
@@ -106,7 +106,7 @@ void Log_Bank(Bank_Agent *pBank){
     }
 
     // Get the data row
-    vector<pair<string, float>>* data = pBank->Log_Data();
+    vector<pair<string, float> >* data = pBank->Log_Data();
     string row;
     for (auto it = data->begin(); it != data->end(); ++it) {
         row += std::to_string(it->second) + ",";
@@ -135,7 +135,7 @@ void Log_Households(vector<Household_Agent*>* pHousehold_vector) {
     // If file is empty, write the header row
     if (!header_written && log_file.tellp() == 0) {
         // Get the header row from the first firm
-        vector<pair<string, float>>* header_data = (*pHousehold_vector)[0]->Log_Data();
+        vector<pair<string, float> >* header_data = (*pHousehold_vector)[0]->Log_Data();
         string header;
         for (auto it = header_data->begin(); it != header_data->end(); ++it) {
             header += it->first + ",";
@@ -150,7 +150,7 @@ void Log_Households(vector<Household_Agent*>* pHousehold_vector) {
 
     // Write data rows for elements in the vector
     for (auto h_ptr : *pHousehold_vector) {
-        vector<pair<string, float>>* data = h_ptr->Log_Data();
+        vector<pair<string, float> >* data = h_ptr->Log_Data();
         string row;
         for (auto it = data->begin(); it != data->end(); ++it) {
             row += std::to_string(it->second) + ",";

@@ -11,6 +11,7 @@
 #include <queue>
 #include <numeric>
 #include <vector>
+#include <tuple>
 
 #include <random>
 #include <algorithm>

@@ -31,7 +31,7 @@ class Consumer_Goods_Market{
     // Market operations
     void Sort_Cons_Goods_By_Sector_By_Price_and_Emissions();
     
-    tuple<vector<long long>, vector<long long>, vector<long long>>  Buy_Consumer_Goods_By_Sector_And_Emission
+    tuple<vector<long long>, vector<long long>, vector<long long> >  Buy_Consumer_Goods_By_Sector_And_Emission
         (const vector<long long>& spending_array, const vector<float>& emission_sensitives_array);
     
 
@@ -55,9 +55,9 @@ class Consumer_Goods_Market{
     protected:
 
     vector<Consumer_Good*> cons_goods_list; // goods for one sector
-    vector<pair<int, vector<Consumer_Good*>>> cons_good_list_by_sector; // goods for all sectors
+    vector<pair<int, vector<Consumer_Good*> >> cons_good_list_by_sector; // goods for all sectors
     // goods for all emission sensitivity levels, for all sectors
-    map<float, vector<pair<int, vector<Consumer_Good*>>>> cons_goods_by_emission_adj_price; 
+    map<float, vector<pair<int, vector<Consumer_Good*> >> > cons_goods_by_emission_adj_price; 
     
     vector<float> price_level_by_sector;
     vector<long long> n_goods_by_sector;

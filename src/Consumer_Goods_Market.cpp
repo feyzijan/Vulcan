@@ -87,7 +87,7 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price_and_Emissions(){
     // Loop through each entry of the  cons_goods_by_emission_adj_price map, and sort the associated vector of pairs by emission adjsuted price
     for (auto& sensitivity_and_sector : cons_goods_by_emission_adj_price) {
         // The second element of the pair is the vector of pairs of sector and Consumer_Good pointers
-        vector<pair<int, vector<Consumer_Good*>>>& sector_and_goods = sensitivity_and_sector.second;
+        vector<pair<int, vector<Consumer_Good*> >>& sector_and_goods = sensitivity_and_sector.second;
 
         // Loop through each sector
         for (auto& sector_and_goods : sector_and_goods) {
@@ -106,7 +106,7 @@ void Consumer_Goods_Market::Sort_Cons_Goods_By_Sector_By_Price_and_Emissions(){
 /* Function to buy goods from each consumer sector based on emission sensitivities
 TO DO: Edit this to work
 */
-tuple<vector<long long>, vector<long long>, vector<long long>> Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector_And_Emission(
+tuple<vector<long long>, vector<long long>, vector<long long> > Consumer_Goods_Market::Buy_Consumer_Goods_By_Sector_And_Emission(
     const vector<long long>& spending_array, const vector<float>& emission_sensitives_array){
     
     // Initialize vectors to be returned
@@ -158,7 +158,7 @@ tuple<vector<long long>, vector<long long>, vector<long long>> Consumer_Goods_Ma
         //total_spending += sector_budget - sector_budget_remaining;
     }   
 
-    tuple<vector<long long>, vector<long long>, vector<long long>> result = make_tuple(remaining_budget_by_sector, quantity_bought_by_sector, emission_by_sector);
+    tuple<vector<long long>, vector<long long>, vector<long long> > result = make_tuple(remaining_budget_by_sector, quantity_bought_by_sector, emission_by_sector);
     return result;
 }
 

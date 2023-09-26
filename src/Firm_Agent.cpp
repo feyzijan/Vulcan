@@ -892,10 +892,10 @@ std::ostream& operator<<(std::ostream& os, const Firm_Agent& obj) {
 
 */
 
-vector<std::pair<string, float>>*  Firm_Agent::Log_Data() {
+vector<std::pair<string, float> >*  Firm_Agent::Log_Data() {
     current_date = global_date;
 
-    auto result = new vector<std::pair<string, float>>();
+    auto result = new vector<std::pair<string, float> >();
         // Get the names and values of all member variables
         std::stringstream ss;
         ss << *this;
@@ -903,7 +903,7 @@ vector<std::pair<string, float>>*  Firm_Agent::Log_Data() {
         while (std::getline(ss, line)) {
             string name;
             float value;
-            std::stringstream(line) >> name >> value;
+            std::stringstream(line) > > name > > value;
             result->emplace_back(name, value);
         }
         return result;

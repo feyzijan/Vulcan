@@ -348,7 +348,7 @@ void Household_Agent::Buy_Consumer_Goods_By_Sector_And_Emissions(){
     }
 
     // Buy consumer goods and receive leftover budget and quantity bought for each sector
-    tuple<vector<long long>, vector<long long>, vector<long long>> purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(planned_expenditure_by_sector, emission_sensitivity_by_sector);
+    tuple<vector<long long>, vector<long long>, vector<long long> > purchases_by_sector = pPublic_Info_Board->Buy_Consumer_Goods_By_Sector_And_Emission(planned_expenditure_by_sector, emission_sensitivity_by_sector);
 
     vector<long long> remaining_consumption_budget =  std::get<0>(purchases_by_sector);
     vector<long long> goods_bought =  std::get<1>(purchases_by_sector);
@@ -475,9 +475,9 @@ std::ostream& operator<<(std::ostream& os, const Household_Agent& obj) {
     return os;
 }
 
-vector<std::pair<string, float>>* Household_Agent::Log_Data() {
+vector<std::pair<string, float> >* Household_Agent::Log_Data() {
         current_date = global_date;
-        auto result = new vector<std::pair<std::string, float>>();
+        auto result = new vector<std::pair<std::string, float> >();
 
         // Get the names and values of all member variables
         std::stringstream ss;
@@ -486,7 +486,7 @@ vector<std::pair<string, float>>* Household_Agent::Log_Data() {
         while (std::getline(ss, line)) {
             string name;
             float value;
-            std::stringstream(line) >> name >> value;
+            std::stringstream(line) > > name > > value;
             result->emplace_back(name, value);
         }
 

@@ -42,7 +42,7 @@ class Public_Info_Board{
 
     // Consumer Good Market
     void Send_Cons_Good_To_Market(Consumer_Good* pGood);
-    tuple<vector<long long>, vector<long long>, vector<long long>> Buy_Consumer_Goods_By_Sector_And_Emission(
+    tuple<vector<long long>, vector<long long>, vector<long long> > Buy_Consumer_Goods_By_Sector_And_Emission(
         const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array);
 
     // Capital Good Market
@@ -200,7 +200,7 @@ class Public_Info_Board{
 
     // Printing and Debugging
     friend std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj); // String stream operator
-    vector<pair<string, float>>*  Log_Data();     // Data Logging
+    vector<pair<string, float> >*  Log_Data();     // Data Logging
 
 
     protected:

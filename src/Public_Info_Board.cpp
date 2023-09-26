@@ -232,7 +232,7 @@ void Public_Info_Board::Send_Cons_Good_To_Market(Consumer_Good* pGood) {
 
 
 // Consumer Good Market 
-tuple<vector<long long>, vector<long long>, vector<long long>> Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission
+tuple<vector<long long>, vector<long long>, vector<long long> > Public_Info_Board::Buy_Consumer_Goods_By_Sector_And_Emission
 (const vector<long long>& planned_expenditure_by_sector, const vector<float>& emission_sensitives_array) 
 {
     return pConsumer_Goods_Market->Buy_Consumer_Goods_By_Sector_And_Emission(planned_expenditure_by_sector, emission_sensitives_array);
@@ -500,7 +500,7 @@ std::ostream& operator<<(std::ostream& os, const Public_Info_Board& obj) {
 
 /* Function to log all data: Create a vector of pairs where each entry has the member name and the value
 */
-vector<pair<string, float>>* Public_Info_Board::Log_Data() {
+vector<pair<string, float> >* Public_Info_Board::Log_Data() {
     current_date = global_date;
     // Income and wage figures
     if (global_date > 0){
@@ -518,7 +518,7 @@ vector<pair<string, float>>* Public_Info_Board::Log_Data() {
 
 
 
-    auto result = new vector<pair<string, float>>();
+    auto result = new vector<pair<string, float> >();
 
     // Get the names and values of all member variables
     stringstream ss;
@@ -527,7 +527,7 @@ vector<pair<string, float>>* Public_Info_Board::Log_Data() {
     while (std::getline(ss, line)) {
         string name;
         float value;
-        stringstream(line) >> name >> value;
+        stringstream(line) > > name > > value;
         result->emplace_back(name, value);
     }
     return result;
