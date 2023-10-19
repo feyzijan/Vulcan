@@ -903,7 +903,7 @@ vector<std::pair<string, float> >*  Firm_Agent::Log_Data() {
         while (std::getline(ss, line)) {
             string name;
             float value;
-            std::stringstream(line) > > name > > value;
+            std::stringstream(line) >> name >> value;
             result->emplace_back(name, value);
         }
         return result;

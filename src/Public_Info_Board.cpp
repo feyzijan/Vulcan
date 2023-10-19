@@ -527,7 +527,7 @@ vector<pair<string, float> >* Public_Info_Board::Log_Data() {
     while (std::getline(ss, line)) {
         string name;
         float value;
-        stringstream(line) > > name > > value;
+        stringstream(line) >> name >> value;
         result->emplace_back(name, value);
     }
     return result;

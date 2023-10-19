@@ -1,7 +1,6 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
-//#include <Windows.h>
 #include <string>
 
 #include "Initialization_Parameters.hpp"
@@ -25,6 +24,11 @@ using namespace std;
 int main()
 {
     cout << "************* Program has started ***************" <<endl;
+
+#if debug
+    cout << "[ debugging mode ]" << endl;
+#endif
+
     auto start = std::chrono::high_resolution_clock::now(); // Time program
 
     // Output print lines to file
@@ -32,7 +36,8 @@ int main()
     std::streambuf* old_cout_buf = std::cout.rdbuf(); // save old cout buffer
     std::cout.rdbuf(output_file.rdbuf()); // redirect cout to file
 
-    // std::cout.rdbuf(old_cout_buf); // uncomment this line if you want to output to console
+    // snm
+    std::cout.rdbuf(old_cout_buf); // uncomment this line if you want to output to console
 
 
     //  ------------------ STEP 0 INITIALIZATION --------------------- 

@@ -31,7 +31,7 @@
 *.out
 *.app
 #ignore data fiels in wrk
-wrk/vulcan
+wrk/vulcan.exe
 wrk/*.log
 
 BackupDeletedCode/*

@@ -1,44 +1,38 @@
-#CC=mpic++
-CC=g++
+# compilers
+CC=c++
 
-#default flags
-CFLAGS= 
-LFLAGS= 
+OPT_FLAGS= -O2
+DBG_FLAGS=  -Wall -Wextra -pedantic
 
-#default directories
-LDIR =
-RUNDIR = ../wrk
+# compiling flags
+CFLAGS= $(OPT_FLAGS) --std=c++17
+# linking flags
+LFLAGS += -lstdc++
 
-EXE= vulcan
-
-OBJ = main.o Household_Agent.o Job.o Public_Info_Board.o Initialization_Parameters.o \
-Firm_Agent.o Consumer_Firm_Agent.o Consumer_Good.o Loan.o  General_Good.o\
-Job.o Job_Market.o Capital_Firm_Agent.o Capital_Good.o Initialization_Functions.o Random_Functions.o\
-Data_Logging.o Bank_Agent.o Consumer_Goods_Market.o Capital_Goods_Market.o
-
-#library rules
-$(OBJ): Household_Agent.hpp Job.hpp Public_Info_Board.hpp Initialization_Parameters.hpp  \
-Firm_Agent.hpp Consumer_Firm_Agent.hpp Consumer_Good.hpp Loan.hpp  General_Good.hpp \
-Capital_Firm_Agent.hpp Capital_Good.hpp Initialization_Functions.hpp Random_Functions.hpp \
-Data_Logging.hpp Bank_Agent.hpp Consumer_Goods_Market.hpp Capital_Goods_Market.hpp
-
-
-#options
 ifeq ($(DEBUG),1)
-  CFLAGS += -Ddebug
-  CFLAGS += -O0
-else
-  CFLAGS += -O2
-endif
+ CFLAGS+= $(DBG_FLAGS) -Ddebug
+endif 
 
+LDIR =
+RUNDIR = ../wrk/
+
+EXE = vulcan.exe
+
+include files.mak
+
+cppsource+= main.cpp
+# objects
+OBJCPP = $(sort $(cppsource:.cpp=.o))
+
+
+OBJ = $(OBJCPP)
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -g -c --std=c++14 -o $@ $< $(INCLUDE_PATH)
+	$(CC) $(CFLAGS) -g -c -o $@ $< $(INCLUDE_PATH)
 
 $(EXE): $(OBJ)
 	$(CC) -o $@ $^ $(LFLAGS) $(LIBS_PATH) $(LIBS)
 	mv $(EXE) $(RUNDIR)
-	$(call echogreen," SUCCESS")
 
 all: $(EXE)
 
@@ -46,47 +40,43 @@ prepare:
 	mkdir -p $(RUNDIR)
 
 run: all
-	mpirun --oversubscribe -np 2 $(RUNDIR)/$(EXE)
-
-debug:
-	../../../gdbgui/launch_mpi_debugger 2 $(RUNDIR)/$(EXE)
+	mpirun --oversubscribe -np 2 $(RUNDIR)$(EXE)
 
 .PHONY: clean all run
 
 clean:
-	rm -f *.o *~ core $(RUNDIR)/$(EXE)
+	rm -f *.o *~ core $(RUNDIR)$(EXE)
+	rm -f $(RUNDIR)*.txt 
 
 flags:
-	$(call echoblue," RUNDIR =  ")
-	@echo $(RUNDIR)
-	$(call echoblue," compile flags  CFLAGS=  ")
-	@echo $(CFLAGS)
-	$(call echoblue," linking flags  LFLAGS=  ")
-	@echo "LFLAGS = $(LFLAGS) "
+	@echo "RUNDIR=" $(RUNDIR) 
+	@echo "CFLAGS=" $(CFLAGS) 
+	@echo "LFLAGS=" $(LFLAGS) 
+objects:
+#	@echo "OBJ=" $(OBJ)
+	@echo "files=" $(cppsource)
+	
 
-#=============== color schemes 
+##########
 define echored
-      @tput setaf 1
-      @echo $1
-      @tput sgr0
+    @tput setaf 1
+    @echo $1
+    @tput sgr0
 endef
 define echogreen
-      @tput setaf 2
-      @echo $1
-      @tput sgr0
+    @tput setaf 2
+    @echo $1
+    @tput sgr0
 endef
 define echoblue
-      @tput setaf 4
-      @echo $1
-      @tput sgr0
-endef
-define echocyan
-      @tput setaf 6
-      @echo $1
-      @tput sgr0
+    @tput setaf 4
+    @echo $1
+    @tput sgr0
 endef
 define echoinfo
-      @tput setaf 2
-      @echo $1 "  :  "  `tput setaf 0` $2
-      @tput sgr0
-endef	 
+    @tput setaf 2
+    @echo $1 "  :  "  `tput setaf 0` $2
+    @tput sgr0
+endef
+
+
