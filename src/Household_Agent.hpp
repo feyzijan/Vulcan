@@ -1,9 +1,6 @@
 #ifndef HOUSEHOLD_AGENT_HPP
 #define HOUSEHOLD_AGENT_HPP
 
-
-
-
 class Public_Info_Board;
 #include "Initialization_Parameters.hpp"
 #include "Public_Info_Board.hpp"
@@ -106,16 +103,6 @@ class Household_Agent{
     int current_date;
     int id;
 };
-
-
-/* Unused variables that have been removed
-// Wealth
-//long long wealth_financial; //W_f in equations 
-//long long wealth_human; //W_h in equations * Unsure if this is needed
-//int cash_on_hand_real_desired; // M_Total
-
-
-*/
 
 
 #endif
