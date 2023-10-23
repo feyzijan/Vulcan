@@ -1,0 +1,21 @@
+cppsource += Bank_Agent.cpp
+cppsource += Firm_Agent.cpp
+cppsource += Capital_Firm_Agent.cpp
+cppsource += Capital_Good.cpp
+cppsource += Capital_Goods_Market.cpp
+cppsource += Consumer_Firm_Agent.cpp
+cppsource += Consumer_Good.cpp
+cppsource += Consumer_Goods_Market.cpp
+cppsource += Data_Logging.cpp
+cppsource += Firm_Agent.cpp
+cppsource += General_Good.cpp
+cppsource += Household_Agent.cpp
+cppsource += Initialization_Functions.cpp
+cppsource += Initialization_Parameters.cpp
+cppsource += Job.cpp
+cppsource += Job_Market.cpp
+cppsource += Loan.cpp
+cppsource += Public_Info_Board.cpp
+cppsource += Random_Functions.cpp
+cppsource += TimeLoop.cpp
+######

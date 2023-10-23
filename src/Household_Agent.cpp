@@ -326,7 +326,7 @@ void Household_Agent::Determine_Consumption_Budget()
 }
 
 
-/* /*  Interact with the market through the public board to buy goods
+/* Interact with the market through the public board to buy goods
 - Pass in the consumption budget along with the vector with the sector weights
 - Receive back a pair of two vectors, leftover budget and goods bought for each sector
 */
@@ -486,7 +486,7 @@ vector<std::pair<string, float> >* Household_Agent::Log_Data() {
         while (std::getline(ss, line)) {
             string name;
             float value;
-            std::stringstream(line) > > name > > value;
+            std::stringstream(line) >> name >> value;
             result->emplace_back(name, value);
         }
 
